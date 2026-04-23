@@ -4,7 +4,6 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import { remarkMermaid } from "@/lib/remark-mermaid";
-import { ChapterSidebar } from "@/app/components/chapter-sidebar";
 import { PageToc } from "@/app/components/page-toc";
 import { PageTocMobile } from "@/app/components/page-toc-mobile";
 import { mdxComponents } from "@/app/components/mdx-components";
@@ -47,11 +46,7 @@ export default async function ChapterPage({
   const l = labels[validLocale];
 
   return (
-    <div className="grid gap-10 md:grid-cols-[220px_minmax(0,1fr)] lg:grid-cols-[220px_minmax(0,1fr)_200px]">
-      <aside className="md:sticky md:top-10 h-fit">
-        <ChapterSidebar locale={validLocale} currentSlug={slug} />
-      </aside>
-
+    <>
       <main className="min-w-0">
         <article className="max-w-2xl landing-rise">
           <p
@@ -133,6 +128,6 @@ export default async function ChapterPage({
       <aside className="hidden lg:block lg:sticky lg:top-10 h-fit">
         <PageToc headings={toc} locale={validLocale} />
       </aside>
-    </div>
+    </>
   );
 }
