@@ -169,6 +169,17 @@ Five names, five URLs. An hour a week across them is enough to stay oriented.
 
 This whole guide — website, chapters, samples, companion skill — is open source at **[github.com/ondrej-svec/claude-code-lab](https://github.com/ondrej-svec/claude-code-lab)**. If something was wrong, if the Czech is off, if you have a pattern worth adding: open an issue or a PR. Star it if it helped — that's the signal to keep improving it.
 
+
+## Practice: continue your sample
+
+Working through the lab in order? Take what this chapter taught to the sample you started in chapter 2 — or to a codebase of your own, where it'll land harder.
+
+1. Run `/security-review` in your project folder. Read the findings — don't treat them as pass/fail, treat them as a map of what a reviewer would flag. On the samples, expect a small set. On your own repo, the list is longer and more interesting.
+2. Add a tracer-bullet test for the endpoint you wrote in chapter 2. Prompt: "Write a failing end-to-end test for `GET /health` that asserts 200 and `{ ok: true }`." Let the test fail first, then flip it to passing. You now have a real test for a real route.
+3. Optional: fork the repo (or install in your own) and wire `anthropics/claude-code-action@v1` on the default branch. Tag `@claude` on your next PR and watch it auto-review against your `CLAUDE.md`.
+
+When it works: your sample has a security scan you actually read, a tracer-bullet test that passes, and optionally a Claude reviewer watching every PR. That's the harness posture in practice — verification without eyes on every diff. Take the same moves to a real project tomorrow.
+
 ## Last word
 
 Nothing here is required. Treat this chapter as a save point. Come back when you've felt the limits of what you know, pick one thing to try.

@@ -169,6 +169,17 @@ Pět jmen, pět URL. Hodina týdně napříč nimi stačí, aby ses neztratil.
 
 Celý tenhle průvodce — web, kapitoly, ukázky, doprovodný skill — je open source na **[github.com/ondrej-svec/claude-code-lab](https://github.com/ondrej-svec/claude-code-lab)**. Pokud něco nesedělo, pokud je čeština vedle, pokud máš pattern, který stojí za přidání: otevři issue nebo PR. Hvězda pomáhá — je to signál, abych to dál zlepšoval.
 
+
+## Praxe: pokračuj se svou ukázkou
+
+Procházíš lab popořadě? Vezmi, co tě tahle kapitola naučila, k ukázce, se kterou jsi začal v kapitole 2 — nebo rovnou ke svému vlastnímu codebase, kde to sedne hlouběji.
+
+1. Pusť `/security-review` ve složce projektu. Přečti si, co ti to vyhodí — neber to jako pass/fail, ale jako mapu toho, co by zvednul lidský reviewer. U ukázek čekej malý seznam; u vlastního repa je delší a zajímavější.
+2. Přidej tracer-bullet test pro endpoint, který jsi napsal v kapitole 2. Prompt: „Napiš failing end-to-end test pro `GET /health`, který ověří 200 a `{ ok: true }`.“ Nejdřív ať test padá, pak ho nech projít. Máš reálný test na reálnou route.
+3. Volitelně: forkni repo (nebo nainstaluj ve vlastním) a napoj `anthropics/claude-code-action@v1` na default branch. Na příští PR tagni `@claude` a koukni, jak to auto-review proti tvému `CLAUDE.md`.
+
+Když to funguje: tvoje ukázka má security scan, který sis přečetl, tracer-bullet test, co prochází, a volitelně Claude reviewera, který sleduje každý PR. Tak vypadá harness v praxi — ověřování bez očí na každém diffu. Stejné pohyby vezmi zítra na skutečný projekt.
+
 ## Poslední slovo
 
 Nic tady není povinné. Ber tuhle kapitolu jako save point. Vrať se, až nahmatáš limity toho, co víš, a vyber si jednu věc na vyzkoušení.
