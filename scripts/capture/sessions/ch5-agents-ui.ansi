@@ -1,0 +1,17 @@
+[38;5;75m>[0m /agents
+
+[38;5;245m┌─[0m [1mAgents[0m [38;5;245m──────────────────────────────────────────────────┐[0m
+[38;5;245m│[0m [38;5;245mProject[0m                                                    [38;5;245m│[0m
+[38;5;245m│[0m   [38;5;216m▶[0m [1mcode-reviewer[0m       Reviews diffs against CLAUDE.md    [38;5;245m│[0m
+[38;5;245m│[0m     [1mtest-writer[0m         Writes unit tests for changes      [38;5;245m│[0m
+[38;5;245m│[0m     [1mdoc-editor[0m          Keeps CLAUDE.md tidy               [38;5;245m│[0m
+[38;5;245m│[0m                                                            [38;5;245m│[0m
+[38;5;245m│[0m [38;5;245mPersonal[0m                                                   [38;5;245m│[0m
+[38;5;245m│[0m     [1mexplorer[0m            Maps unfamiliar codebases          [38;5;245m│[0m
+[38;5;245m│[0m     [1mplanner[0m             Breaks work into plans             [38;5;245m│[0m
+[38;5;245m│[0m                                                            [38;5;245m│[0m
+[38;5;245m│[0m [38;5;245mLibrary[0m                                                    [38;5;245m│[0m
+[38;5;245m│[0m     [2m... browse 40+ more[0m                                    [38;5;245m│[0m
+[38;5;245m│[0m                                                            [38;5;245m│[0m
+[38;5;245m│[0m [2m↑↓ navigate · enter select · c create · esc close[0m          [38;5;245m│[0m
+[38;5;245m└────────────────────────────────────────────────────────────┘[0m

@@ -1,0 +1,10 @@
+[38;5;75m>[0m #migrations must be reversible — write the down migration alongside the up one
+
+[1;36m●[0m Added to memory.
+
+  [1mFile[0m    CLAUDE.md   [38;5;245m(project scope)[0m
+  [1mRule[0m    migrations must be reversible — write the down migration
+          alongside the up one
+  [1mReason[0m  Inferred: relates to project conventions, not user preferences
+
+[1;32m✓[0m Saved. It'll apply from the next prompt on.

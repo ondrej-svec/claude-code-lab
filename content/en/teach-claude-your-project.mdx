@@ -74,6 +74,12 @@ When Claude does something you correct, you don't have to stop and edit `CLAUDE.
 
 > #migrations must be reversible — write the down migration alongside the up one
 
+<Screenshot
+  src="/screenshots/ch3-memory-prefix.png"
+  alt="Claude Code confirming a memory addition, showing the target file, the rule, and the inferred scope"
+  caption="The `#` prefix adds the rule to the right `CLAUDE.md`. You stayed in flow."
+/>
+
 That's the **memory-add prefix**. Claude takes the line after `#`, decides which scope (project / user / local) it fits best, and appends it to the right `CLAUDE.md`. You stayed in flow, the rule got captured.
 
 <Callout variant="tip">

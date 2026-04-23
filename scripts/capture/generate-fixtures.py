@@ -193,4 +193,47 @@ ch6 = f"""\
 write("ch6-plan-output", ch6)
 
 
+# --- ch3-memory-prefix — Ch 3 Teach Claude (shot #6) ---------------------
+# `#` memory prefix adds a rule to the right CLAUDE.md.
+ch3_memory = f"""\
+{USER}>{R} #migrations must be reversible — write the down migration alongside the up one
+
+{CYAN}●{R} Added to memory.
+
+  {B}File{R}    CLAUDE.md   {MUTED}(project scope){R}
+  {B}Rule{R}    migrations must be reversible — write the down migration
+          alongside the up one
+  {B}Reason{R}  Inferred: relates to project conventions, not user preferences
+
+{GREEN}✓{R} Saved. It'll apply from the next prompt on.
+"""
+write("ch3-memory-prefix", ch3_memory)
+
+
+# --- ch5-agents-ui — Ch 5 Ecosystem (shot #9) ----------------------------
+# `/agents` UI listing available subagents.
+agents_lines = [
+    f"{MUTED}Project{R}",
+    f"  {ACCENT}▶{R} {B}code-reviewer{R}       Reviews diffs against CLAUDE.md",
+    f"    {B}test-writer{R}         Writes unit tests for changes",
+    f"    {B}doc-editor{R}          Keeps CLAUDE.md tidy",
+    "",
+    f"{MUTED}Personal{R}",
+    f"    {B}explorer{R}            Maps unfamiliar codebases",
+    f"    {B}planner{R}             Breaks work into plans",
+    "",
+    f"{MUTED}Library{R}",
+    f"    {D}... browse 40+ more{R}",
+    "",
+    f"{D}↑↓ navigate · enter select · c create · esc close{R}",
+]
+agents_box = box("Agents", agents_lines, inner_width=58)
+ch5 = f"""\
+{USER}>{R} /agents
+
+{agents_box}
+"""
+write("ch5-agents-ui", ch5)
+
+
 print(f"\nGenerated {len(list(OUT.glob('*.ansi')))} fixture(s) in {OUT.relative_to(HERE.parent.parent)}/")
