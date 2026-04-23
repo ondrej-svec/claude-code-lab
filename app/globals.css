@@ -214,6 +214,16 @@ kbd {
 }
 
 /* ——— Reduced motion ——— */
+/* Landing hero image — dark mode only. Rosé Pine Moon palette matches;
+   on Dawn the cream background reads cleaner without it. */
+.hero-image-wrap {
+  display: none;
+}
+
+.dark .hero-image-wrap {
+  display: block;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .motion-card,
   .motion-link,
