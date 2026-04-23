@@ -177,6 +177,16 @@ Not a standalone Claude Code — a **controller** for Remote Control sessions an
 
 → [Remote Control docs](https://code.claude.com/docs/en/remote-control) · [Claude Code on the Web](https://code.claude.com/docs/en/claude-code-on-the-web)
 
+## Practice: continue your sample
+
+Working through the lab in order? Take what this chapter taught to the sample you started in chapter 2 — or to a codebase of your own, where it'll land harder.
+
+1. Install one of the meta-skills from this chapter: `/plugin install skill-creator` from `anthropics/skills`, or the Heart of Gold toolkit for `/craft-skill`. Pick one.
+2. Run it and let it walk you through authoring a skill called `scaffold-endpoint`. Purpose: add a new `GET /<name>` route matching your project's framework conventions — minimal-API `MapGet` in Varianta A, `@app.get` in Varianta B, or whatever your own repo uses. Trigger phrases: `scaffold endpoint`, `add a new route`.
+3. Once saved, trigger the skill in your project — ask it to add `GET /ping` returning `{ "pong": true }`. Review the output. If the scaffolding is off, edit the skill, not the output. That's the feedback loop.
+
+When it works: you have a reusable skill you didn't hand-write, living in `~/.claude/skills/` or your project's `.claude/skills/`. The next chapter's practice runs the full Compound Engineering loop on one real feature.
+
 ---
 
 The ecosystem is a menu, not a checklist. Install what actually saves you time. Everything else can wait.

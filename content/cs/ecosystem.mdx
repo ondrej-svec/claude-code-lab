@@ -177,6 +177,16 @@ Ne samostatný Claude Code — **ovladač** pro Remote Control session a Claude
 
 → [Remote Control docs](https://code.claude.com/docs/en/remote-control) · [Claude Code na Webu](https://code.claude.com/docs/en/claude-code-on-the-web)
 
+## Praxe: pokračuj se svou ukázkou
+
+Procházíš lab popořadě? Vezmi, co tě tahle kapitola naučila, k ukázce, se kterou jsi začal v kapitole 2 — nebo rovnou ke svému vlastnímu codebase, kde to sedne hlouběji.
+
+1. Nainstaluj si jeden z meta-skillů z téhle kapitoly: `/plugin install skill-creator` z `anthropics/skills`, nebo Heart of Gold toolkit kvůli `/craft-skill`. Vyber si jeden.
+2. Pusť ho a nech se provést psaním skillu `scaffold-endpoint`. Účel: přidat nový `GET /<name>` route podle konvence tvého frameworku — minimal-API `MapGet` u Varianty A, `@app.get` u Varianty B, nebo cokoliv používá tvoje vlastní repo. Trigger fráze: `scaffold endpoint`, `add a new route`.
+3. Jakmile se skill uloží, pusť ho v projektu — požádej, ať přidá `GET /ping` vracející `{ "pong": true }`. Prohlédni si výstup. Pokud scaffolding sedí vedle, uprav skill, ne výstup. Tak vypadá smyčka.
+
+Když to funguje: máš znovupoužitelný skill, který jsi ručně nepsal, žijící v `~/.claude/skills/` nebo v projektovém `.claude/skills/`. Praxe v další kapitole pouští celou Compound Engineering smyčku na jedné reálné featuře.
+
 ---
 
 Ekosystém je nabídka, ne povinnost. Instaluj, co ti skutečně ušetří čas. Zbytek může počkat.
