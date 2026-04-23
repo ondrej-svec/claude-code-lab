@@ -14,12 +14,12 @@ export default async function LabIndex({
   const headings = {
     en: {
       eyebrow: "The lab",
-      title: "Seven chapters. One practice.",
+      title: "Eight chapters. One practice.",
       lede: "Go top to bottom, or pick what you need. Every chapter ends with something you can try immediately.",
     },
     cs: {
       eyebrow: "Lab",
-      title: "Sedm kapitol. Jedna praxe.",
+      title: "Osm kapitol. Jedna praxe.",
       lede: "Projdi odshora dolů, nebo si vyber, co ti zrovna sedí. Každá kapitola končí něčím, co můžeš hned zkusit.",
     },
   };
@@ -27,7 +27,7 @@ export default async function LabIndex({
   const m = headings[validLocale];
 
   return (
-    <>
+    <div className="grid gap-10 md:grid-cols-[220px_minmax(0,1fr)]">
       <aside className="md:sticky md:top-10 h-fit">
         <ChapterSidebar locale={validLocale} />
       </aside>
@@ -88,6 +88,6 @@ export default async function LabIndex({
           </ol>
         </div>
       </main>
-    </>
+    </div>
   );
 }

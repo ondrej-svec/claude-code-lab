@@ -43,7 +43,7 @@ export default async function LabLayout({
         </div>
       </header>
 
-      <div className="flex-1 max-w-6xl mx-auto w-full px-6 py-10 grid gap-10 md:grid-cols-[220px_minmax(0,1fr)]">
+      <div className="flex-1 max-w-6xl mx-auto w-full px-6 py-10">
         {children}
       </div>
     </div>
