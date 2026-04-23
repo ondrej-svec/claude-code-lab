@@ -20,7 +20,7 @@ export default async function LabIndex({
     cs: {
       eyebrow: "Lab",
       title: "Sedm kapitol. Jedna praxe.",
-      lede: "V pondělní sessionu projdeme odshora dolů. Zbytek týdne si prochází vlastním tempem. Každá kapitola končí něčím, co můžeš hned zkusit.",
+      lede: "V pondělí projdeme společně odshora dolů. Zbytek týdne si prochází vlastním tempem. Každá kapitola končí něčím, co můžeš hned zkusit.",
     },
   };
 
