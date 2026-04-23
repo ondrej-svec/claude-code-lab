@@ -2,19 +2,19 @@
 
 Otevři ukázkový projekt, nech Claude udělat jednu reálnou změnu, koukni, co se stane — na tvém stacku.
 
-Dole máš dva paralelní proudy — vyber si ten, který sedí k tvému dennímu stacku, a druhý přeskoč. Oba nepotřebuješ.
+Dole máš dvě paralelní varianty — vyber si tu, která sedí k tvému dennímu stacku, a druhou přeskoč. Obě nepotřebuješ.
 
-- **Proud A — .NET Core** · ASP.NET Core minimal API. Pro C# / .NET vývojáře.
-- **Proud B — Python + React** · FastAPI backend, React frontend. Pro Python / JS vývojáře.
+- **Varianta A — .NET Core** · ASP.NET Core minimal API. Pro C# / .NET vývojáře.
+- **Varianta B — Python + React** · FastAPI backend, React frontend. Pro Python / JS vývojáře.
 
-Naklonuj repo jednou a pak skoč do svého proudu:
+Naklonuj repo jednou a pak skoč do své varianty:
 
 ```bash
 git clone https://github.com/ondrej-svec/claude-code-lab.git
 cd claude-code-lab
 ```
 
-## Proud A — .NET Core
+## Varianta A — .NET Core
 
 Otevři `samples/dotnet-core/` v Claudu. Cíl: přidat `GET /health` endpoint do minimal API. Jedna konkrétní změna, celou smyčkou.
 
@@ -63,7 +63,7 @@ Máš běžící feature, kterou můžeš commitnout.
 - Build spadne? Vlož chybu zpátky: „build selhal: `[paste]` — oprav to.“ Claude vidí svoji vlastní změnu v kontextu a obvykle to opraví jedním krokem.
 - Curl vrací 500? Vlož server log. Nehádej; ukaž Claudovi, co rozbil.
 
-## Proud B — Python + React
+## Varianta B — Python + React
 
 Otevři `samples/python-react/` v Claudu. Cíl: totéž — přidat `GET /health` endpoint do FastAPI backendu. Jedna konkrétní změna, celou smyčkou.
 
@@ -116,7 +116,7 @@ Máš běžící feature, kterou můžeš commitnout.
 
 ## Co jsi právě procítil
 
-Oba proudy šly stejným tvarem: **popiš → naplánuj → diff → spusť**. Tenhle tvar je páteří každé agentní session. Zbytek labu si své místo zaslouží tím, že každý z těch čtyř kroků postupně dělá líp.
+Obě varianty šly stejným tvarem: **popiš → naplánuj → diff → spusť**. Tenhle tvar je páteří každé agentní session. Zbytek labu si své místo zaslouží tím, že každý z těch čtyř kroků postupně dělá líp.
 
 Pár signálů, které stojí za pojmenování teď, ať je později poznáš:
 
