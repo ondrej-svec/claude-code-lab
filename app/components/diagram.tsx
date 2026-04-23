@@ -56,6 +56,9 @@ export function Diagram({ chart, caption }: Props) {
           setError(null);
         }
       } catch (err) {
+        // Log full stack for debugging; surface just the message.
+        // eslint-disable-next-line no-console
+        console.error("[Diagram] render failed", err);
         const message =
           err instanceof Error ? err.message : String(err);
         if (!cancelled) setError(message);
