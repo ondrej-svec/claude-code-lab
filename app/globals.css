@@ -237,3 +237,33 @@ kbd {
     transition: none !important;
   }
 }
+
+/* Chapter tables — zebra + hover + seamless inline code in cells.
+   Applied via classes so Tailwind's preflight doesn't override. */
+.chapter-table-wrap table {
+  /* base rhythm */
+}
+
+.chapter-table-wrap tbody .chapter-table-row {
+  transition: background-color 150ms ease;
+}
+
+.chapter-table-wrap tbody .chapter-table-row:nth-child(even) {
+  background-color: rgba(87, 82, 121, 0.035);
+}
+
+.dark .chapter-table-wrap tbody .chapter-table-row:nth-child(even) {
+  background-color: rgba(224, 222, 244, 0.035);
+}
+
+.chapter-table-wrap tbody .chapter-table-row:hover {
+  background-color: rgba(87, 82, 121, 0.06);
+}
+
+.dark .chapter-table-wrap tbody .chapter-table-row:hover {
+  background-color: rgba(224, 222, 244, 0.06);
+}
+
+.chapter-table-wrap tbody .chapter-table-row:not(:last-child) .chapter-table-cell {
+  border-bottom: 1px solid var(--border);
+}

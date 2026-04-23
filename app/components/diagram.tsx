@@ -60,28 +60,91 @@ export function Diagram({ chart, b64, caption, children }: Props) {
 
         const isDark = resolvedTheme === "dark";
 
+        // Rose Pine palette — Moon (dark) / Dawn (light).
+        // https://rosepinetheme.com/palette/
+        const darkVars = {
+          background: "transparent",
+          mainBkg: "#2a283e",
+          primaryColor: "#2a283e",
+          primaryTextColor: "#e0def4",
+          primaryBorderColor: "#44415a",
+          secondaryColor: "#393552",
+          secondaryTextColor: "#e0def4",
+          secondaryBorderColor: "#44415a",
+          tertiaryColor: "#232136",
+          tertiaryTextColor: "#908caa",
+          tertiaryBorderColor: "#44415a",
+          lineColor: "#908caa",
+          textColor: "#e0def4",
+          nodeTextColor: "#e0def4",
+          edgeLabelBackground: "#2a273f",
+          clusterBkg: "rgba(57, 53, 82, 0.35)",
+          clusterBorder: "#44415a",
+          titleColor: "#e0def4",
+          defaultLinkColor: "#908caa",
+          fontFamily: '"Manrope", "Inter", system-ui, sans-serif',
+        };
+
+        const lightVars = {
+          background: "transparent",
+          mainBkg: "#fffaf3",
+          primaryColor: "#fffaf3",
+          primaryTextColor: "#575279",
+          primaryBorderColor: "#d7cec5",
+          secondaryColor: "#f2e9e1",
+          secondaryTextColor: "#575279",
+          secondaryBorderColor: "#d7cec5",
+          tertiaryColor: "#faf4ed",
+          tertiaryTextColor: "#797593",
+          tertiaryBorderColor: "#d7cec5",
+          lineColor: "#797593",
+          textColor: "#575279",
+          nodeTextColor: "#575279",
+          edgeLabelBackground: "#f2e9e1",
+          clusterBkg: "rgba(242, 233, 225, 0.55)",
+          clusterBorder: "#d7cec5",
+          titleColor: "#575279",
+          defaultLinkColor: "#797593",
+          fontFamily: '"Manrope", "Inter", system-ui, sans-serif',
+        };
+
+        // Small polish layer on top of mermaid's base theme: rounded
+        // corners on rectangles, medium-weight labels, uniform stroke.
+        const themeCSS = `
+          .node rect, .node polygon {
+            stroke-width: 1.25px;
+            rx: 6; ry: 6;
+          }
+          .node .label foreignObject,
+          .node .label div,
+          .edgeLabel foreignObject,
+          .edgeLabel div {
+            font-family: "Manrope", "Inter", system-ui, sans-serif !important;
+            font-size: 13px !important;
+            font-weight: 500 !important;
+            letter-spacing: 0.01em;
+          }
+          .flowchart-link, .path {
+            stroke-width: 1.25px;
+          }
+          .cluster rect { rx: 10; ry: 10; stroke-width: 1px; }
+        `;
+
         mermaid.initialize({
           startOnLoad: false,
           theme: "base",
           securityLevel: "loose",
-          fontFamily: "Inter, system-ui, sans-serif",
-          themeVariables: isDark
-            ? {
-                background: "transparent",
-                primaryColor: "#2a273f",
-                primaryTextColor: "#e0def4",
-                primaryBorderColor: "#6e6a86",
-                lineColor: "#908caa",
-                textColor: "#e0def4",
-              }
-            : {
-                background: "transparent",
-                primaryColor: "#fffaf3",
-                primaryTextColor: "#575279",
-                primaryBorderColor: "#9893a5",
-                lineColor: "#797593",
-                textColor: "#575279",
-              },
+          fontFamily: '"Manrope", "Inter", system-ui, sans-serif',
+          flowchart: {
+            curve: "basis",
+            nodeSpacing: 48,
+            rankSpacing: 56,
+            padding: 12,
+            htmlLabels: true,
+            useMaxWidth: true,
+          },
+          themeVariables: isDark ? darkVars : lightVars,
+          themeCSS,
         });
 
         if (!source) {

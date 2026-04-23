@@ -198,18 +198,22 @@ function HR() {
 }
 
 function Table({ children }: { children?: ReactNode }) {
+  // Wrapper owns the rounded border + overflow; the <table> itself uses
+  // border-collapse so inner rules are tight. Putting the radius on the
+  // wrapper sidesteps the border-collapse / border-radius incompatibility.
   return (
-    <div className="my-5 overflow-x-auto">
-      <table
-        className="w-full text-sm border-collapse"
-        style={{
-          background: "var(--surface-elevated)",
-          border: "1px solid var(--border)",
-          borderRadius: "8px",
-        }}
-      >
-        {children}
-      </table>
+    <div
+      className="chapter-table-wrap my-6 overflow-hidden"
+      style={{
+        border: "1px solid var(--border)",
+        borderRadius: "10px",
+        background: "var(--surface-elevated)",
+        boxShadow: "var(--hero-shadow-soft, 0 6px 18px rgba(0,0,0,0.04))",
+      }}
+    >
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm border-collapse">{children}</table>
+      </div>
     </div>
   );
 }
@@ -217,7 +221,10 @@ function Table({ children }: { children?: ReactNode }) {
 function THead({ children }: { children?: ReactNode }) {
   return (
     <thead
-      style={{ background: "var(--surface-panel)" }}
+      style={{
+        background: "var(--surface-panel)",
+        borderBottom: "1px solid var(--border-strong, var(--border))",
+      }}
       className="text-left"
     >
       {children}
@@ -228,10 +235,9 @@ function THead({ children }: { children?: ReactNode }) {
 function TH({ children }: { children?: ReactNode }) {
   return (
     <th
-      className="px-3 py-2 font-semibold text-xs uppercase tracking-wide"
+      className="px-4 py-3 font-semibold text-[11px] uppercase tracking-[0.08em]"
       style={{
-        color: "var(--text-secondary)",
-        borderBottom: "1px solid var(--border)",
+        color: "var(--text-muted, var(--text-secondary))",
       }}
     >
       {children}
@@ -242,11 +248,8 @@ function TH({ children }: { children?: ReactNode }) {
 function TD({ children }: { children?: ReactNode }) {
   return (
     <td
-      className="px-3 py-2 align-top"
-      style={{
-        color: "var(--text-primary)",
-        borderBottom: "1px solid var(--border)",
-      }}
+      className="chapter-table-cell px-4 py-3 align-top leading-relaxed"
+      style={{ color: "var(--text-primary)" }}
     >
       {children}
     </td>
@@ -254,7 +257,7 @@ function TD({ children }: { children?: ReactNode }) {
 }
 
 function TR({ children }: { children?: ReactNode }) {
-  return <tr>{children}</tr>;
+  return <tr className="chapter-table-row">{children}</tr>;
 }
 
 function Strong({ children }: { children?: ReactNode }) {
