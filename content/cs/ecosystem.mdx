@@ -26,6 +26,84 @@ Jako reference: [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-
 
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 
+## Postav si svůj první skill
+
+Než si nainstaluješ další od ostatních, napiš jeden. Změní ti to pohled na zbytek ekosystému.
+
+Jako příklad si vezmi **visualize** — je dost malý na přečtení, dost konkrétní na okopírování.
+
+### Anatomie
+
+Skill je jeden markdown soubor plus volitelné skripty. A to je celé.
+
+```
+~/.claude/skills/visualize/
+├── SKILL.md
+└── scripts/
+    ├── render-mindmap.sh
+    └── smart-render.js
+```
+
+`SKILL.md` má YAML frontmatter a pod ním prózu. Tři pole ve frontmatteru nesou váhu:
+
+```yaml
+---
+name: visualize
+description: >
+  Create shareable HTML visual artifacts from markdown, plans,
+  architecture docs, brainstorms, and other structured content.
+  Triggers: visualize, mindmap, mind map, show me the structure,
+  draw a map, make this clear, make this visual.
+allowed-tools:
+  - Read
+  - Bash
+  - Glob
+  - Grep
+---
+```
+
+- **name** — kebab-case, shoduje se s názvem adresáře.
+- **description** — to, co Claude vidí ve svém seznamu skillů. První věta je pitch. Řádek `Triggers:` je zásadní: ty fráze skill automaticky vyvolají, když se objeví v konverzaci. Bez dobrých triggerů se tvůj skill nikdy nenačte.
+- **allowed-tools** — ohraničená plocha schopností. Whitelist jenom toho, co skill reálně používá. Skill, který nepotřebuje `Write`, by ho neměl dostat.
+
+### Próza je provozní manuál
+
+Pod frontmatterem napiš dokument, který by externista potřeboval první den: Mission, Boundaries, Core Principle, rozhodovací stromy pro časté rozcestí. Ne tutoriál — referenci, kterou si skill může citovat.
+
+Mise pro visualize, zkráceně:
+
+> Vytvoř jeden srozumitelný, sdílitelný vizuální artefakt, který odpovídá reálné potřebě uživatele, působí záměrně navržený, nejdřív shrnuje a pak detailuje, primárně cílí na HTML v prohlížeči.
+
+Jeho Boundaries:
+
+- **MAY** — číst soubory, generovat terminálové mind mapy, zapisovat dočasné HTML, spouštět renderer skripty přes bash
+- **MAY NOT** — modifikovat projektové soubory, vytvářet trvalé soubory mimo výstupní artefakt, instalovat nesouvisející balíčky
+
+Celou prózu drž pod ~300 řádků. Dlouhé skilly se Claudovi hůř načítají a hůř se v nich orientuje. Když ti narůstá, rozděl ho — triggery druhého skillu přechytí přetečení.
+
+### Helper skripty bydlí vedle SKILL.md
+
+Cokoliv deterministického — renderer, templater, převodník — žije jako skript v `scripts/`. Odkazuj na ně z `SKILL.md` relativní cestou, ať je Claude spouští přes bash. Tady se leverage skillu skládá: drahé myšlení proběhne jednou, ve skriptu; každé další volání ho dostane zadarmo.
+
+`scripts/smart-render.js` u visualize vezme markdown soubor a cílovou rodinu artefaktů („mind map", „architecture brief", „roadmap") a vygeneruje HTML. Próza skillu Claudovi říká, *kdy* po něm sáhnout; skript dělá deterministickou část.
+
+### Instalace a iterace
+
+Dvě cesty instalace:
+
+- **Lokální cesta** — naklonuj nebo napiš skill lokálně, nasměruj Clauda na adresář. Nejrychlejší iterace — uprav, reloaduj, hotovo.
+- **Plugin marketplace** — publikuj spolu s dalšími souvisejícími skilly. Uživatelé instalují přes `/plugin install`. Tohle je tvar, který má Heart of Gold.
+
+A pak *ho týden používej*. Pokaždé, když zjistíš, že vysvětluješ něco, co skill neodchytl, přidej to do prózy. Pokaždé, když opakuješ manuální krok, přidej helper skript. Skill odráží tvoje tacitní know-how — nenapíšeš ho celý předem, objevuješ ho tím, že vypustíš tenkou verzi a používáš ji.
+
+### Co postavit první
+
+Vyber si něco, co děláš každý týden a dá se to popsat jednou větou. *„Převeď brainstorm na plán." „Shrň PR do Slacku." „Odbav nový issue."* Jedna práce, jeden skill, jeden dodržený slib.
+
+První skill je vždycky horší než třetí. Vypusť ho tak jako tak.
+
+→ [Agent Skills otevřený formát](https://agentskills.io) · [Anthropic skills repo](https://github.com/anthropics/skills) · [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit)
+
 ## MCPs — Claudeovy ruce na externích službách
 
 **Model Context Protocol** je otevřený standard pro propojení Clauda s nástroji, které žijí mimo konverzaci — filesystem, databáze, prohlížeče, API. Pokud skilly rozšiřují to, co Claude **ví**, MCPs rozšiřují to, co Claude **umí**.

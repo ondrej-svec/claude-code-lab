@@ -26,6 +26,84 @@ As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec
 
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 
+## Build your first skill
+
+Before you install more of other people's, write one. It changes how you see the rest of the ecosystem.
+
+Use **visualize** as the walkthrough — it's small enough to read, concrete enough to copy.
+
+### Anatomy
+
+A skill is one markdown file plus optional scripts. That's it.
+
+```
+~/.claude/skills/visualize/
+├── SKILL.md
+└── scripts/
+    ├── render-mindmap.sh
+    └── smart-render.js
+```
+
+`SKILL.md` has YAML frontmatter and prose below. Three frontmatter fields carry weight:
+
+```yaml
+---
+name: visualize
+description: >
+  Create shareable HTML visual artifacts from markdown, plans,
+  architecture docs, brainstorms, and other structured content.
+  Triggers: visualize, mindmap, mind map, show me the structure,
+  draw a map, make this clear, make this visual.
+allowed-tools:
+  - Read
+  - Bash
+  - Glob
+  - Grep
+---
+```
+
+- **name** — kebab-case, matches the directory.
+- **description** — what Claude sees in its skill index. The first sentence is the pitch. The `Triggers:` line is critical: those phrases auto-invoke the skill when they appear in conversation. Without good triggers, your skill never loads.
+- **allowed-tools** — the bounded capability surface. Whitelist only what the skill actually uses. A skill that doesn't need `Write` shouldn't get it.
+
+### The prose is an operating manual
+
+Under the frontmatter, write the document a contractor would need on day 1: Mission, Boundaries, Core Principle, decision trees for common forks. Not a tutorial — a reference the skill can quote back to itself.
+
+Visualize's Mission, paraphrased:
+
+> Create one clear, shareable visual artifact that matches the user's actual need, feels intentionally designed, summarises before detailing, prefers browser HTML as the primary medium.
+
+Its Boundaries:
+
+- **MAY** — read files, generate terminal mind maps, write temporary HTML, run renderer scripts via bash
+- **MAY NOT** — modify project files, create persistent files outside the output artifact, install unrelated packages
+
+Keep the whole prose under ~300 lines. Long skills are harder for Claude to load and reason over. If yours is bloating, split it — the second skill's triggers pick up the overflow.
+
+### Helpers live next to SKILL.md
+
+Anything deterministic — a renderer, a templater, a converter — lives as a script in `scripts/`. Reference them from `SKILL.md` by relative path, let Claude invoke them via bash. This is where the skill's leverage compounds: the expensive thinking happens once, in the script; every invocation gets it for free.
+
+Visualize's `scripts/smart-render.js` takes a markdown file and a target family ("mind map", "architecture brief", "roadmap") and emits HTML. The skill prose tells Claude *when* to reach for it; the script handles the deterministic part.
+
+### Install and iterate
+
+Two install paths:
+
+- **Local path** — clone or write the skill locally, point Claude at the directory. Fastest for iteration — edit, reload, done.
+- **Plugin marketplace** — publish alongside related skills. Users install with `/plugin install`. This is the shape Heart of Gold takes.
+
+Then *use it for a week*. Every time you catch yourself explaining something the skill missed, add it to the prose. Every time you repeat a manual step, add a helper script. A skill reflects your tacit knowledge — you don't write it all up front, you discover it by shipping a thin version and using it.
+
+### What to build first
+
+Pick something you do weekly that you can describe in one sentence. *"Convert a brainstorm into a plan doc." "Summarise a PR for Slack." "Triage a new issue."* One job, one skill, one kept promise.
+
+The first skill is always worse than the third one. Ship it anyway.
+
+→ [Agent Skills open format](https://agentskills.io) · [Anthropic skills repo](https://github.com/anthropics/skills) · [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit)
+
 ## MCPs — Claude's hands on external services
 
 **Model Context Protocol** is the open standard for wiring Claude to tools that live outside its conversation — filesystems, databases, browsers, APIs. If skills extend what Claude *knows*, MCPs extend what Claude can *do*.
