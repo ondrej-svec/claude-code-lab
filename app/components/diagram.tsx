@@ -120,26 +120,29 @@ export function Diagram({ chart, b64, caption, children }: Props) {
     );
   }
 
+  const wrapperClass =
+    "flex justify-center p-6 rounded-xl overflow-x-auto";
+  const wrapperStyle = {
+    background: "var(--surface-elevated)",
+    border: "1px solid var(--border)",
+  };
+
   return (
     <figure className="my-6">
-      <div
-        ref={ref}
-        className="flex justify-center p-6 rounded-xl overflow-x-auto"
-        style={{
-          background: "var(--surface-elevated)",
-          border: "1px solid var(--border)",
-        }}
-        dangerouslySetInnerHTML={svg ? { __html: svg } : undefined}
-      >
-        {!svg && (
-          <span
-            className="text-xs"
-            style={{ color: "var(--text-muted)" }}
-          >
+      {svg ? (
+        <div
+          ref={ref}
+          className={wrapperClass}
+          style={wrapperStyle}
+          dangerouslySetInnerHTML={{ __html: svg }}
+        />
+      ) : (
+        <div ref={ref} className={wrapperClass} style={wrapperStyle}>
+          <span className="text-xs" style={{ color: "var(--text-muted)" }}>
             Rendering…
           </span>
-        )}
-      </div>
+        </div>
+      )}
       {caption && (
         <figcaption
           className="text-xs text-center mt-2"
