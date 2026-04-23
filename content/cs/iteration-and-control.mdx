@@ -66,17 +66,9 @@ Jakmile s Claude Code pracuješ denně, tenhle postoj se stává úzkým hrdlem
 
 Lepší cesta: **postav si kolem Claude Code harness, který dělá jeho práci ověřitelnou bez toho, aby tvé oči byly na každém řádku.** Tvoje role se posune z reviewera na architekta harnessu.
 
-Jak ten harness v praxi vypadá:
+Jak ten harness v praxi vypadá: testovací disciplína (tracer bullets, TDD, mutační kontroly), review vedené agentem (`/security-review`, `claude-code-action`, Semgrep nebo Snyk v CI), bezpečnostní postoj proti lethal trifectě a automatizace (hooky, Playwright, benchmark asserce). [Kapitola 7](/cs/lab/next-steps) je místo, kde je tohle rozvedené — vyber jednu věc, přečti si odkazy, zkus ji na skutečném úkolu.
 
-- **Tracer-bullet testy** — jeden failing end-to-end test dřív, než feature existuje. Když projde, potrubí funguje. (Pattern je v kapitole 7.)
-- **TDD smyčky** — red, green, refactor jako tři samostatné prompty. Testy dokazují kód.
-- **Chrome DevTools MCP** — Claude otevře stránku, pustí Lighthouse, potvrdí, že LCP se zlepšilo. (Instalace je v kapitole 5.)
-- **Playwright E2E** — full-stack happy path před mergem. Claude ti je napíše.
-- **Security scany** — `/security-review` před commitem; specializované pentest skilly na rizikových cestách.
-- **Performance asserce** — load testy, benchmark snapshoty napojené na CI.
-- **Claude v CI** — `anthropics/claude-code-action` automaticky review PR, chytí drift, který bys živě přehlédl. (Kapitola 7.)
-
-S harnessem na místě se otázka mění z *„udělal Claude v tomhle diffu chybu?"* na *„chytil by to harness, kdyby ano?"* Čtení diffu se stává spot-checkem, ne povinností. Ty jsi rychlejší. Agent získává důvěru. Oboje roste společně.
+S harnessem na místě se otázka mění z *„udělal Claude v tomhle diffu chybu?“* na *„chytil by to harness, kdyby ano?“* Čtení diffu se stává spot-checkem, ne povinností. Ty jsi rychlejší. Agent získává důvěru. Oboje roste společně.
 
 Jestli teprve začínáš: čti diffy pečlivě a vybuduj si reflexy. Jak harness kolem tebe roste, čti jich míň. Ta progrese je pointa.
 
@@ -113,7 +105,7 @@ Kdy se plan mode vyplatí:
 
 - Změny napříč soubory, kde chceš vidět tvar, než se commitne
 - Cokoliv s destruktivním krokem (migrace, delete, rewrite)
-- Úkoly, kde „co" je stejně důležité jako „jak"
+- Úkoly, kde „co“ je stejně důležité jako „jak“
 
 Kdy se nevyplatí:
 
@@ -123,4 +115,4 @@ Kdy se nevyplatí:
 
 ## Doporučený flow, až budeš připravený
 
-Tahle kapitola je o denních návycích. [Kapitola 6](/cs/lab/compound-engineering) je **praxe**, která je balí do opakovatelné smyčky: brainstorm → plan → work → review → compound. Compound Engineering plugin si nainstaluj, až budeš připravený — je to nejkratší cesta z *„iteruju po jednom promptu"* k *„mám praxi, která vyrábí spolehlivě dobrou práci."*
+Tahle kapitola je o denních návycích. [Kapitola 6](/cs/lab/compound-engineering) je **praxe**, která je balí do opakovatelné smyčky: brainstorm → plan → work → review → compound. Compound Engineering plugin si nainstaluj, až budeš připravený — je to nejkratší cesta z *„iteruju po jednom promptu“* k *„mám praxi, která vyrábí spolehlivě dobrou práci.“*

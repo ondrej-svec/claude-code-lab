@@ -66,15 +66,7 @@ As you work with Claude Code daily, that posture becomes the bottleneck. You can
 
 The better path: **build a harness around Claude Code that makes its work verifiable without your eyes on every line.** Your role shifts from reviewer to harness architect.
 
-What the harness looks like in practice:
-
-- **Tracer-bullet tests** — one failing end-to-end test before the feature exists. When it passes, the plumbing works. (Chapter 7 has the pattern.)
-- **TDD loops** — red, green, refactor as three separate prompts. Tests prove the code.
-- **Chrome DevTools MCP** — Claude opens the page, runs Lighthouse, confirms LCP improved. (Chapter 5 shows the install.)
-- **Playwright E2E** — full-stack happy-path before merge. Claude writes them for you.
-- **Security scans** — `/security-review` before commit; dedicated pentest skills on high-risk paths.
-- **Performance assertions** — load tests, benchmark snapshots wired into CI.
-- **Claude in CI** — `anthropics/claude-code-action` auto-reviews PRs, catches drift you'd miss live. (Chapter 7.)
+What the harness looks like in practice: testing discipline (tracer bullets, TDD, mutation checks), agent-driven review (`/security-review`, `claude-code-action`, Semgrep or Snyk in CI), security posture against the lethal trifecta, and automation (hooks, Playwright, benchmark assertions). [Chapter 7](/en/lab/next-steps) is the depth source — pick one, read the references, try it on a real task.
 
 With the harness in place, the question changes from *"did Claude make a mistake in this diff?"* to *"did the harness catch it if it did?"* Diff review becomes a spot-check, not a mandate. You get faster. The agent gets trusted. Both grow together.
 
