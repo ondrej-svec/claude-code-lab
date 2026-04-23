@@ -2,7 +2,7 @@
 
 Claude Code sám o sobě je dobrý agent. S ekosystémem se stává platformou, kterou rozšiřuješ, místo aby ses na něco čekal.
 
-Tahle kapitola je rozhlídnutí, ne tutoriál. Projdi, označ, co tě zajímá, vrať se pro hloubku později.
+Tahle kapitola je rozhlídnutí, ale s dost kroky na to, abys každý díl rovnou zkusil. Projdi, vyber si jednu věc, vrať se pro hloubku později.
 
 ## Skilly
 
@@ -10,71 +10,115 @@ Tahle kapitola je rozhlídnutí, ne tutoriál. Projdi, označ, co tě zajímá, 
 
 **Příklad, který stojí za prozkoumání:** [`visualize`](https://github.com/ondrej-svec/heart-of-gold-toolkit). Vezme libovolný markdown — plán, brainstorm, architekturu — a udělá z něj uhlazený, sdílitelný HTML artefakt. Jedna dobře ohraničená úloha, dobře napsané instrukce, pár pomocných skriptů. Tvar dobrého skillu.
 
-### Postav si vlastní
+**Otevřený standard.** Skilly jedou podle [Agent Skills otevřeného formátu](https://agentskills.io) — specifikace je veřejná, skilly jsou přenositelné mezi Claude Code a dalšími nástroji, které standard přijímají. Anthropic udržuje [referenční repo](https://github.com/anthropics/skills) se 17 produkčními skilly, ze kterých se dá číst jako z exempláře.
 
-Tři kroky:
+Kapitola 6 ukazuje, jak necháš Claude, aby ti jeden takový napsal.
 
-1. **Vyber si jednu konkrétní úlohu**, kterou děláš opakovaně. Ne „pomoz mi s kódem" — třeba *„převeď tenhle plán na sdílitelný HTML artefakt"* nebo *„napiš release note naším hlasem."*
-2. **Napiš `SKILL.md`** s krátkým frontmatter blokem a jasnými instrukcemi:
-
-   ```md
-   ---
-   name: muj-skill
-   description: Jedna věta — kdy to má Claude aktivovat?
-   ---
-
-   # Můj skill
-
-   Když tě někdo požádá o X, udělej tohle:
-
-   1. Přečti vstup.
-   2. Aplikuj Y.
-   3. Vrať Z.
-   ```
-
-3. **Dej to do `~/.claude/skills/muj-skill/`.** Claude to najde příště.
-
-Začni hrubě. Použij dvakrát. Dolaď. To je ta smyčka.
-
-→ [Skills docs](https://docs.claude.com/en/docs/claude-code/skills)
+→ [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Pluginy
 
 **Plugin** balí související skilly, příkazy a hooky do jednoho instalovatelného celku. Nainstaluj jednou, získáš celý workflow.
 
-Šestá kapitola provází instalací a používáním [Compound Engineering pluginu](https://github.com/every-to/compound-engineering) — Averyho smyčky brainstorm → plan → work → review → compound. Ten si zkus jako první. [Super Powers](https://github.com/iannuttall/claude-super-powers) je další, o kterém má smysl vědět — širší pick-and-choose toolkit.
+Šestá kapitola provází instalací a používáním [Compound Engineering pluginu](https://github.com/EveryInc/compound-engineering-plugin) — Averyho smyčky brainstorm → plan → work → review → compound. Ten si zkus jako první. [Super Powers](https://github.com/iannuttall/claude-super-powers) je další, o kterém má smysl vědět — širší pick-and-choose toolkit.
 
 Jako reference: [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) je malá kolekce skillů, které jsem si zabalil pro svoji každodenní práci (`visualize` je jeden z nich). Ne něco, co bys teď potřeboval instalovat — příklad toho, co vznikne, jakmile napíšeš tři čtyři skilly, o které nechceš přijít. Jeden takový si postavíš sám.
 
-→ [Plugins docs](https://docs.claude.com/en/docs/claude-code/plugins)
+→ [Plugins docs](https://code.claude.com/docs/en/plugins)
 
-## MCPs
+## MCPs — Claudeovy ruce na externích službách
 
-**Model Context Protocol** umožňuje Claudovi mluvit s externími službami — filesystem, databáze, prohlížeče, API — jako s prvotřídními tooly.
+**Model Context Protocol** je otevřený standard pro propojení Clauda s nástroji, které žijí mimo konverzaci — filesystem, databáze, prohlížeče, API. Pokud skilly rozšiřují to, co Claude **ví**, MCPs rozšiřují to, co Claude **umí**.
 
-Jeden, který vyčnívá pro webové vývojáře:
+### Zkus jeden: Chrome DevTools MCP
 
-- **Chrome DevTools MCP** — Claude dostává živý přístup ke Chrome console, network, performance profileru. "Otevři stránku, řekni mi, proč je LCP 3,2 s, oprav to." Claude se teď může opravdu podívat.
+Mačka pro webovou práci. Claude dostává živý přístup ke Chromu — console, network, Lighthouse, performance trace, screenshoty.
 
-Další MCPs existují pro Gmail, Google Drive, Linear, Notion, Postgres a další. Instaluj to, co se hodí tvé práci.
+```bash
+claude mcp add --transport stdio chrome-devtools -- npx -y chrome-devtools-mcp@latest
+```
 
-→ [MCP docs](https://docs.claude.com/en/docs/agents-and-tools/mcp)
+A pak v session:
 
-## Subagenti
+> Otevři `https://example.com` a řekni mi, proč má pomalý LCP. Pusť Lighthouse, pokud potřebuješ.
 
-Když Claude spustí úkol, který by spálil moc kontextu — hluboký průzkum codebase, velký review — použije **subagenta**. Subagent pracuje ve vlastním kontextovém okně a vrátí ti shrnutí.
+Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs přestanou být abstraktní.
 
-Subagenty obvykle nevoláš přímo. Jen si všimneš, že hlavní konverzace zůstává čistá, i když na pozadí běží těžký úkol.
+### Další, o kterých má smysl vědět
 
-Proč to má význam: tvůj kontextový prostor je konečný. Subagenti ho drží zaměřený na to, na čem ti záleží.
+- **Gmail, Google Drive, Calendar, Notion** — zabalené v `claude.ai` pro plánové uživatele
+- **Postgres, Linear, Sentry, GitHub, Playwright** — komunitní MCPs, jeden `claude mcp add` daleko
+- **Postav si vlastní** — skill `mcp-builder` v `anthropics/skills` ti postaví základ
 
-## Remote a mobil
+**Bezpečnostní poznámka.** MCPs, které načítají nedůvěryhodný obsah (webové stránky, issues, maily), do tvé session můžou injektovat instrukce. Anthropicové varování platí: třetí strany na vlastní riziko. Kapitola 8.5 má víc.
 
-Dvě cesty, jak spustit Claude, když nejsi u svého stolu:
+→ [MCP docs](https://code.claude.com/docs/en/mcp)
 
-- **Remote control** — Claude Code běží na tvé pracovní stanici, ovládáš ho z prohlížeče nebo telefonu. Užitečné pro dlouhotrvající joby, které odstartuješ z meetingu.
-- **Mobilní aplikace** — lehčí, pro rychlé review, čtení historie konverzace, schvalování čekajících úkolů.
+## Subagenti — delegování, které drží kontext čistý
 
-Přihlas se stejným účtem a pokračuj uprostřed práce.
+**Subagent** je specializovaný pracovník, kterého Claude spustí ve vlastním kontextovém okně, s vlastními nástroji a oprávněními. Když Claude potřebuje něco těžkého — prozkoumat velký codebase, pustit review, shrnout dlouhý soubor — může to delegovat na subagenta místo toho, aby spálil tvůj hlavní kontext.
+
+Můžeš je volat přímo, nebo to nech Claude rozhodnout.
+
+### Zkus jednoho: vestavěný Explore agent
+
+Přichází s nástrojem. Read-only, rychlý (Haiku), ideální pro „kde je X?" otázky ve velkém codebase.
+
+V libovolném repu se zeptej:
+
+> Použij Explore agenta a najdi, kde je řešená autentizace. Pak shrň.
+
+Nebo ho pojmenuj explicitně:
+
+> @Explore: najdi všechna místa, kde voláme Stripe API.
+
+Tvoje hlavní konverzace dostane dvou-odstavcové shrnutí. Samotné čtení souborů proběhlo v bočním kontextu, který se teď zahodil. Na výsledek jsi utratil ~100 tokenů, ne ~20k na průzkum.
+
+### Postav si vlastního
+
+Pro opakující se delegování — třeba reviewera, co vždycky aplikuje vaše týmové standardy — spusť:
+
+```
+/agents
+```
+
+Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu rozsah (Personal nebo Project), omez nástroje, ulož. Tvůj agent je teď v `.claude/agents/my-agent.md` a dostupný přes `@my-agent` nebo přirozeným jazykem.
+
+**Poznámka.** V Claude Code v2.1.63+ byl interní nástroj `Task` přejmenovaný na `Agent`. Starší tutoriály, které mu říkají Task, pořád fungují — je to totéž.
+
+**Limit.** Subagenti nemůžou spouštět další subagenty. Pro vnořené delegování použij skilly s `context: fork` nebo řetěz z hlavní konverzace.
+
+→ [Subagents docs](https://code.claude.com/docs/en/sub-agents)
+
+## Remote a mobil — Claude mimo tvůj stůl
+
+Dva různé produkty, které si lidé pletou. Oba vyžadují plán Pro nebo vyšší — pouhé API klíče jsou mimo hru.
+
+### Remote Control — tvoje stanice, tvoje soubory
+
+Claude Code běží **na tvém stroji**, s plným přístupem k lokálnímu filesystemu, k tvým nakonfigurovaným MCPs, k tvým klíčům. Ovládáš ho z prohlížeče nebo mobilní aplikace.
+
+Setup — čtyři kroky:
+
+1. Ověř verzi: `claude --version` (potřebuje 2.1.51+)
+2. `claude` → `/login` — přihlášení přes claude.ai
+3. V projektu: `claude --remote-control "My Project"`
+4. V terminálu zmáčkni `spacebar` → QR kód. Naskenuj Claude mobilní aplikací ([iOS](https://apps.apple.com/app/claude), [Android](https://play.google.com/store/apps/details?id=com.anthropic.claude)) nebo otevři `claude.ai/code` v prohlížeči.
+
+Teď můžeš session ovládat odkudkoliv. Dlouhé buildy, PR review z meetingu, „zkontroluj deploy" z telefonu.
+
+### Claude Code na Webu — cloud, efemérní
+
+Jiný produkt. Session běží na Anthropicem spravovaných VMs, startuje z čerstvého klonu tvého GitHub repa. Žádné lokální soubory, žádné lokální MCPs. Dobré na rychlé GitHub-based úkoly z libovolného zařízení.
+
+Spouštíš z `claude.ai/code` v prohlížeči — vybereš repo, startneš session.
+
+### Mobilní aplikace
+
+Ne samostatný Claude Code — **ovladač** pro Remote Control session a Claude Code na Webu. Push notifikace pro oprávnění. Review diffů, chat, schvalování volání nástrojů z telefonu. Webové session umí spustit sama.
+
+→ [Remote Control docs](https://code.claude.com/docs/en/remote-control) · [Claude Code na Webu](https://code.claude.com/docs/en/claude-code-on-the-web)
+
+---
 
 Ekosystém je nabídka, ne povinnost. Instaluj, co ti skutečně ušetří čas. Zbytek může počkat.

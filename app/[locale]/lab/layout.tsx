@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { ThemeSwitcher } from "@/app/components/theme-switcher";
 import { LanguageSwitcher } from "@/app/components/language-switcher";
+import { GitHubLink } from "@/app/components/github-link";
 import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
 
 export default async function LabLayout({
@@ -36,6 +37,7 @@ export default async function LabLayout({
           </Link>
           <div className="flex items-center gap-4">
             <LanguageSwitcher currentLocale={validLocale} />
+            <GitHubLink />
             <ThemeSwitcher />
           </div>
         </div>

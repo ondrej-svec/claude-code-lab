@@ -4,7 +4,7 @@ The first prompt is never the last prompt. The value in Claude Code isn't the ou
 
 ## Rewind
 
-Double-tap **Esc** in the Claude window. You're back one message. File changes are rolled back. The conversation branches.
+Double-tap **Esc** in the Claude window. You're back one message. File changes are rolled back. The conversation branches. Same effect as the `/rewind` slash command, just faster.
 
 This is the single most useful keyboard shortcut in the whole tool. Use it whenever:
 
@@ -13,7 +13,7 @@ This is the single most useful keyboard shortcut in the whole tool. Use it whene
 - You want to branch an experiment without committing to it
 - The diff surprised you and you'd rather not have it
 
-Rewind is cheap. Re-prompting from scratch is expensive. Use the shortcut.
+Rewind is cheap. Re-prompting from scratch is expensive. Use the shortcut. Chapter 8.2 has the full keybinding reference.
 
 ## Narrow the scope
 
@@ -39,15 +39,14 @@ When Claude does something close but off, resist the urge to rewrite from scratc
 
 Claude will move it. The structure holds. You didn't have to re-explain the whole task.
 
-## When to start a new session
+## When to start fresh — `/clear` vs `/compact`
 
-Context windows are large but not infinite. Start fresh when:
+Context windows are large but not infinite. Two commands, different tools:
 
-- You've pivoted to a different area of the codebase
-- The conversation has 30+ turns and you're noticing repetition
-- You asked Claude to explore, it explored, and now you actually want to build
+- **`/compact`** — same conversation, Claude summarises the history so far and throws the raw turns away. Use when you're mid-task and need breathing room.
+- **`/clear`** — new conversation, old one archived (resumable via `/resume`). Use when you've pivoted to a different area of the codebase, or the conversation has 30+ turns and is drifting.
 
-A clean session with good `CLAUDE.md` is almost always faster than a long one.
+A clean conversation with good `CLAUDE.md` is almost always faster than a long one.
 
 ## Read the diff before accepting
 
@@ -64,10 +63,22 @@ Ten seconds of review saves an hour of debugging later.
 
 ## Plan mode
 
-In the desktop app, you can ask Claude to **plan before touching code**. It writes the plan, you approve it, then it executes. Useful for:
+Press **Shift+Tab** to cycle permission modes:
 
-- Multi-file changes
-- Anything with a destructive step (migrations, deletes)
+1. **default** — Claude asks before editing
+2. **acceptEdits** — Claude edits freely, you review diffs after
+3. **plan** — Claude can read, think, and propose a plan, but **cannot edit or run anything** until you leave plan mode
+4. **auto** (on some plans) — Claude edits and runs without prompting
+
+Plan mode is the one most worth knowing. In it, Claude reads the codebase, thinks through the task, writes a plan to `docs/plans/` (or wherever your convention lives), and stops. You review. If the plan is right, you hit Shift+Tab to leave plan mode and `/work` against it. If it's wrong, you fix it or rewind.
+
+Use plan mode for:
+
+- Multi-file changes where you want to see the shape before commits happen
+- Anything with a destructive step (migrations, deletes, rewrites)
 - Tasks where the "what" matters as much as the "how"
+- Any time the Compound Engineering loop (chapter 6) uses `/plan`
 
-Ask for a plan when you don't trust your ability to catch mistakes in the diff.
+Don't use plan mode for single-line fixes or one-function refactors — the overhead isn't worth it.
+
+→ Full keybinding and slash-command reference in [chapter 8](/en/lab/reference).

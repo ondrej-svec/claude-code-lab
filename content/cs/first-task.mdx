@@ -34,7 +34,7 @@ Teď něco s drobnými stakes. Pořád v malém — jde o to procítit smyčku, 
 
 Koukni, co se stane:
 
-1. Claude napíše **plán** ještě před dotykem kódu — jaký soubor, jaká změna
+1. Claude napíše **plán** ještě před dotykem kódu — jaký soubor, jaká změna. Pokud jsi nejdřív zmáčkl `Shift+Tab` do **plan módu**, Claude jenom naplánuje a před jakoukoliv editací si vyžádá tvoje schválení.
 2. Claude **si vyžádá svolení** před první editací (řekni ano)
 3. Claude provede editaci a ukáže **diff**
 4. Zkontroluješ. Potvrdíš, požádáš o úpravu, nebo zrušíš.
@@ -44,6 +44,8 @@ Tři věci, kterých si všimni:
 - **Plán je napsaný.** Přečti si ho znovu, než potvrdíš. Pokud byl špatný plán, bude špatný i diff — ale opravit plán je levné.
 - **Diff je malý.** Dobrá spolupráce s agentem má malý diff. Pokud Claude přepsal tři soubory, je to signál — příště zúžit scope.
 - **Zatím nic neběželo.** Kód je napsaný, ale nespustil se. Zkontroluj, pak teprve testuj.
+
+Tahle smyčka — popiš, naplánuj, diff, zkontroluj, iteruj — je tvar, který Anthropic doporučuje na všechno. Jejich [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices) stojí za přečtení, až si to procítíš.
 
 ## Zkontroluj, spusť, iteruj
 
@@ -57,6 +59,7 @@ Tohle je smyčka. Popiš → plán → diff → kontrola → spuštění → pop
 
 Než půjdeš dál, zkus na stejném sample něco z tohohle:
 
+- Nech Claude **prozkoumat repo** a shrnout, co najde — objevovací pattern, kterým každý větší úkol začíná.
 - Nech Claude napsat test na endpoint, který jsi právě přidal.
 - Nech Claude refaktorovat jednu rozbitou funkci — vyber si.
 - Nech Claude vysvětlit závislosti projektu a označit, co je zastaralé.

@@ -2,7 +2,7 @@
 
 Claude Code alone is a good agent. With the ecosystem, it becomes a platform you extend instead of wait for.
 
-This chapter is a tour, not a tutorial. Skim it, mark what matters to you, come back later for depth.
+This chapter is a tour with enough steps to try each piece yourself. Skim it, pick one thing, come back later for depth.
 
 ## Skills
 
@@ -10,71 +10,115 @@ A **skill** is a bundle of instructions + optional scripts that Claude loads on 
 
 **An example worth a look:** [`visualize`](https://github.com/ondrej-svec/heart-of-gold-toolkit). Takes any markdown document — a plan, a brainstorm, an architecture doc — and turns it into a polished, shareable HTML artifact. One well-defined job, well-scoped instructions, a few helper scripts. The shape of a good skill.
 
-### Build your own
+**Open standard.** Skills follow the [Agent Skills open format](https://agentskills.io) — spec is public, skills are portable across Claude Code and other tools that adopt the standard. Anthropic maintains a [reference repo](https://github.com/anthropics/skills) with 17 production skills you can read as exemplars.
 
-Three steps:
+Chapter 6 shows how to have Claude build one of these for you.
 
-1. **Pick one specific job** you do repeatedly. Not "help with coding" — something like *"turn this plan into a shareable HTML artifact"* or *"write a release note in our voice."*
-2. **Write a `SKILL.md`** with a small frontmatter block + clear instructions:
-
-   ```md
-   ---
-   name: my-skill
-   description: One sentence — when should Claude activate this?
-   ---
-
-   # My skill
-
-   When asked to do X, do this:
-
-   1. Read the input.
-   2. Apply Y.
-   3. Return Z.
-   ```
-
-3. **Drop it in** `~/.claude/skills/my-skill/`. Claude finds it next time around.
-
-Start rough. Use it twice. Refine. That's the loop.
-
-→ [Skills docs](https://docs.claude.com/en/docs/claude-code/skills)
+→ [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Plugins
 
 A **plugin** bundles related skills, commands, and hooks into one installable unit. Install once, get the whole workflow.
 
-Chapter 6 walks through installing and using the [Compound Engineering plugin](https://github.com/every-to/compound-engineering) — Avery's full brainstorm → plan → work → review → compound loop. That's the one to try first. [Super Powers](https://github.com/iannuttall/claude-super-powers) is another worth knowing about — a broader pick-and-choose toolkit.
+Chapter 6 walks through installing and using the [Compound Engineering plugin](https://github.com/EveryInc/compound-engineering-plugin) — Avery's full brainstorm → plan → work → review → compound loop. That's the one to try first. [Super Powers](https://github.com/iannuttall/claude-super-powers) is another worth knowing about — a broader pick-and-choose toolkit.
 
 As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) is a small collection of skills I bundled for my daily work (visualize is one of them). Not something to install now — an example of what emerges once you've written three or four skills you don't want to lose. You'll build one of your own.
 
-→ [Plugins docs](https://docs.claude.com/en/docs/claude-code/plugins)
+→ [Plugins docs](https://code.claude.com/docs/en/plugins)
 
-## MCPs
+## MCPs — Claude's hands on external services
 
-**Model Context Protocol** lets Claude talk to external services — filesystems, databases, browsers, APIs — as first-class tools.
+**Model Context Protocol** is the open standard for wiring Claude to tools that live outside its conversation — filesystems, databases, browsers, APIs. If skills extend what Claude *knows*, MCPs extend what Claude can *do*.
 
-One standout for web developers:
+### Try one: Chrome DevTools MCP
 
-- **Chrome DevTools MCP** — Claude gets live access to Chrome's console, network, performance profiler. "Open the page, tell me why LCP is 3.2s, fix it." Claude can now actually look.
+The standout for web work. Gives Claude live access to Chrome — console logs, network requests, Lighthouse, performance traces, screenshots.
 
-Other MCPs exist for Gmail, Google Drive, Linear, Notion, Postgres, and more. Install what matches your flow.
+```bash
+claude mcp add --transport stdio chrome-devtools -- npx -y chrome-devtools-mcp@latest
+```
 
-→ [MCP docs](https://docs.claude.com/en/docs/agents-and-tools/mcp)
+Then in your session:
 
-## Subagents
+> Open `https://example.com` and tell me why its LCP is slow. Run Lighthouse if you need to.
 
-When Claude spawns a task that would burn a lot of context — deep codebase exploration, running a big review — it uses a **subagent**. The subagent does its work in its own context window, then hands back a summary.
+Claude opens the page, inspects, reports back. This is the moment MCPs stop being abstract.
 
-You don't usually invoke subagents directly. You just notice that your main conversation stays clean even when a heavy task runs in the background.
+### Others worth knowing about
 
-Why it matters: your context window is finite. Subagents keep it focused on the task you care about.
+- **Gmail, Google Drive, Calendar, Notion** — bundled on `claude.ai` for plan users
+- **Postgres, Linear, Sentry, GitHub, Playwright** — community MCPs, one `claude mcp add` away
+- **Build your own** — `mcp-builder` skill in `anthropics/skills` scaffolds one
 
-## Remote and mobile
+**Security note.** MCPs that fetch untrusted content (web pages, issues, emails) can inject instructions into your session. Anthropic's warning stands: third-party MCPs at your own risk. Chapter 8.5 has more.
 
-Two ways to run Claude when you're not at your desk:
+→ [MCP docs](https://code.claude.com/docs/en/mcp)
 
-- **Remote control** — Claude Code runs on your workstation, you drive it from a browser or phone. Useful for long-running jobs you kick off from a meeting.
-- **Mobile app** — lighter, for quick reviews, reading conversation history, approving waiting tasks.
+## Subagents — delegate to keep your context clean
 
-Sign in with the same account; pick up mid-session.
+A **subagent** is a specialised worker Claude spawns with its own context window, tools, and permissions. When Claude needs to do something heavy — explore a big codebase, run a review, summarise a long file — it can delegate to a subagent instead of burning your main context.
+
+You can invoke them directly, or let Claude choose.
+
+### Try one: the built-in Explore agent
+
+Ship-built. Read-only, fast (Haiku), ideal for "where is X?" questions in a large codebase.
+
+In any repo, ask:
+
+> Use the Explore agent to find where authentication is handled, then summarise.
+
+Or more explicitly, mention it by name:
+
+> @Explore: find every place we call the Stripe API.
+
+Your main conversation gets a two-paragraph summary. The actual file-reading happened in a side context that's now discarded. You spent ~100 tokens on the result, not ~20k on the exploration.
+
+### Create your own
+
+For recurring delegation — say, a reviewer that always applies your team's standards — run:
+
+```
+/agents
+```
+
+Choose Library → Create new agent → let Claude generate the definition. Scope it (Personal or Project), restrict its tools, save. Your agent is now `.claude/agents/my-agent.md` and available via `@my-agent` or natural language.
+
+**Note.** In Claude Code v2.1.63+, the internal `Task` tool was renamed to `Agent`. Older tutorials calling it Task still work — same thing.
+
+**Limit.** Subagents cannot spawn other subagents. For nested delegation, use skills with `context: fork` or chain from the main conversation.
+
+→ [Subagents docs](https://code.claude.com/docs/en/sub-agents)
+
+## Remote and mobile — Claude off your desk
+
+Two different products people confuse. Both need a Pro plan or higher — API-key-only setups are locked out.
+
+### Remote Control — your workstation, your files
+
+Claude Code runs **on your machine**, with full local filesystem access, your configured MCPs, your keys. You drive it from a browser or mobile app.
+
+Setup — four steps:
+
+1. Confirm version: `claude --version` (needs 2.1.51+)
+2. `claude` → `/login` to sign in through claude.ai
+3. In your project: `claude --remote-control "My Project"`
+4. Press `spacebar` at the terminal → QR code. Scan with the Claude mobile app ([iOS](https://apps.apple.com/app/claude), [Android](https://play.google.com/store/apps/details?id=com.anthropic.claude)) or open `claude.ai/code` in a browser.
+
+You can now drive the session from anywhere. Long-running builds, PR reviews from a meeting, "check the deploy" from your phone.
+
+### Claude Code on the Web — cloud-hosted, ephemeral
+
+Different product. Session runs on Anthropic-managed VMs, starting from a fresh clone of your GitHub repo. No local files, no local MCPs. Good for quick GitHub-based tasks from any device.
+
+Start via `claude.ai/code` on the web — pick a repo, start a session.
+
+### Mobile app
+
+Not a standalone Claude Code — a **controller** for Remote Control sessions and Claude Code on the Web. Push notifications for permission prompts. Review diffs, chat, approve tool calls from your phone. Starts web sessions on its own.
+
+→ [Remote Control docs](https://code.claude.com/docs/en/remote-control) · [Claude Code on the Web](https://code.claude.com/docs/en/claude-code-on-the-web)
+
+---
 
 The ecosystem is a menu, not a checklist. Install what actually saves you time. Everything else can wait.

@@ -4,7 +4,7 @@ První prompt nikdy není poslední. Hodnota Claude Code není výstup — je to
 
 ## Rewind
 
-Dvakrát **Esc** v Claude okně. Jsi o zprávu zpět. Změny v souborech jsou rollbacknuté. Konverzace se větví.
+Dvakrát **Esc** v Claude okně. Jsi o zprávu zpět. Změny v souborech jsou rollbacknuté. Konverzace se větví. Stejný efekt jako slash příkaz `/rewind`, jenom rychlejší.
 
 Tohle je nejužitečnější klávesová zkratka v celém nástroji. Používej ji, kdykoliv:
 
@@ -13,7 +13,7 @@ Tohle je nejužitečnější klávesová zkratka v celém nástroji. Používej 
 - Chceš vyzkoušet experiment, aniž by ses k němu zavázal
 - Diff tě překvapil a radši bys ho neměl
 
-Rewind je levný. Nový prompt od začátku je drahý. Používej tu zkratku.
+Rewind je levný. Nový prompt od začátku je drahý. Používej tu zkratku. Kompletní přehled klávesových zkratek je v kapitole 8.2.
 
 ## Zúžit scope
 
@@ -39,15 +39,14 @@ Když Claude udělá něco blízkého, ale vedle, nepodléhej nutkání to přep
 
 Claude ji přesune. Struktura drží. Nemusel jsi vysvětlovat celý úkol znovu.
 
-## Kdy začít znovu
+## Kdy začít znovu — `/clear` vs `/compact`
 
-Kontextová okna jsou velká, ale nejsou nekonečná. Začni načisto, když:
+Kontextová okna jsou velká, ale nejsou nekonečná. Dva příkazy, dva nástroje:
 
-- Přehodil jsi do úplně jiné části codebase
-- Konverzace má 30+ kol a všímáš si opakování
-- Nechal jsi Claude prozkoumat, prozkoumal, a teď už chceš reálně stavět
+- **`/compact`** — stejná konverzace, Claude si shrne dosavadní historii a zahodí surové zprávy. Použij, když jsi uprostřed úkolu a potřebuješ si odlehčit.
+- **`/clear`** — nová konverzace, ta stará se zaarchivuje (dá se obnovit přes `/resume`). Použij, když přehodíš do jiné části codebase nebo konverzace má 30+ kol a drifftuje.
 
-Nová konverzace s dobrým `CLAUDE.md` je skoro vždycky rychlejší než dlouhá.
+Čistá konverzace s dobrým `CLAUDE.md` je skoro vždycky rychlejší než dlouhá.
 
 ## Přečti diff, než potvrdíš
 
@@ -64,10 +63,22 @@ Deset vteřin kontroly ušetří hodinu debugování později.
 
 ## Plan mode
 
-V desktop aplikaci můžeš Claude požádat, ať **naplánuje, než sáhne na kód**. Napíše plán, ty ho potvrdíš, a teprve pak se provede. Užitečné pro:
+Zmáčkni **Shift+Tab** a přepneš režim oprávnění:
 
-- Změny napříč soubory
-- Cokoliv s destruktivním krokem (migrace, delete)
+1. **default** — Claude se ptá před každou editací
+2. **acceptEdits** — Claude edituje volně, ty kontroluješ diffy až po
+3. **plan** — Claude může číst, přemýšlet a navrhnout plán, ale **nemůže nic editovat ani spouštět**, dokud plan mode neopustíš
+4. **auto** (na některých plánech) — Claude edituje a spouští bez ptaní
+
+Plan mode je ten, který má smysl znát nejvíc. V něm Claude přečte codebase, promyslí úkol, zapíše plán do `docs/plans/` (nebo kam má tvoje konvence) a zastaví se. Ty ho zkontroluješ. Pokud plán sedí, opustíš plan mode dalším Shift+Tab a pustíš `/work`. Pokud ne, opravíš ho nebo rewindneš.
+
+Plan mode použij na:
+
+- Změny napříč soubory, kde chceš vidět tvar, než se commitne
+- Cokoliv s destruktivním krokem (migrace, delete, rewrite)
 - Úkoly, kde "co" je stejně důležité jako "jak"
+- Vždy, když Compound Engineering smyčka (kapitola 6) volá `/plan`
 
-Vyžádej si plán, když sis nevěříš, že odchytíš chyby v diffu.
+Nepoužívej plan mode na opravu jednoho řádku nebo refaktor jedné funkce — režie se nevyplatí.
+
+→ Plný přehled klávesových zkratek a slash příkazů v [kapitole 8](/cs/lab/reference).

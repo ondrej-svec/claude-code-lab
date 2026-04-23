@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ThemeSwitcher } from "@/app/components/theme-switcher";
 import { LanguageSwitcher } from "@/app/components/language-switcher";
+import { GitHubLink } from "@/app/components/github-link";
 import { DEFAULT_LOCALE, getMessages, isLocale } from "@/lib/i18n";
 
 export default async function LandingPage({
@@ -29,6 +30,7 @@ export default async function LandingPage({
         </span>
         <div className="flex items-center gap-4">
           <LanguageSwitcher currentLocale={validLocale} />
+          <GitHubLink />
           <ThemeSwitcher />
         </div>
       </header>

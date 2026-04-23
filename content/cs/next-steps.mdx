@@ -1,40 +1,74 @@
 # Kam dál
 
-Základy máš. Zbytek je menu, ne povinnost.
+Základy máš. Zbytek je menu, ne povinnost. Vezmi si jednu věc po druhé, zkus ji, ostatní nech na potom.
 
 ## Automatizace
 
 ### Hooky
 
-Spouštěj skripty automaticky před nebo po událostech Claude. Use case: auto-format při uložení, blokování commitů do mainu, Slack notifikace po doběhnutí dlouhého úkolu.
+Spouštěj skripty automaticky před nebo po událostech Claude. Auto-format při uložení, blokování commitů do mainu, Slack notifikace po doběhnutí dlouhého úkolu. Konfigurace v `settings.json` nebo v `hooks/hooks.json` pluginu.
 
-→ [Hooks docs](https://docs.claude.com/en/docs/claude-code/hooks)
+Zkus tohle první: přidej `PostToolUse` hook, který pustí tvůj linter po každé editaci. Jeden řádek konfigurace, jeden manuální krok méně.
+
+→ [Hooks docs](https://code.claude.com/docs/en/hooks) · katalog událostí v kapitole 8.7
 
 ### Claude v CI
 
-Pusť Claude v GitHub Actions. Automatické review PRs, triage issues, generování changelogů, otevírání follow-up PRs.
+Pusť Claude v GitHub Actions přes `anthropics/claude-code-action@v1`. Spouští ho `@claude` mention v issues nebo PR; fungují i cron a události. Automatické review PR, triage issues, generování changelogů, otevírání follow-up PR.
 
-→ [Claude Code GitHub Actions](https://docs.claude.com/en/docs/claude-code/github-actions)
+Zkus tohle první: v libovolném repu spusť `/install-github-app` v Claude Code — provede tě nastavením. Pak v libovolném otevřeném issue napiš `@claude přidej do README sekci o environment variables`.
 
-### Smyčky a shadow tasky
+→ [Claude Code GitHub Actions](https://code.claude.com/docs/en/github-actions)
 
-Dlouhotrvající úkol se může spouštět každých N minut nebo podle plánu. "Každé ráno zkontroluj failing testy v mainu a otevři PR s fixem." "Každý večer shrň, co se mergovalo, a pošli do Slacku."
+### Smyčky a naplánované běhy
 
-Shadow tasky jsou úkoly, které Claude spouští na pozadí, aniž by narušily tvoji rozdělanou práci — naplánované tebou, neviditelné, dokud nenahlásí výsledek.
+Dlouhotrvající úkol se může spouštět každých N minut nebo podle plánu. „Každé ráno zkontroluj main, jestli nepadá nějaký test, a otevři fix PR." „Každý večer shrň, co se mergovalo, a pošli do Slacku."
 
-→ `/loop` a `/schedule`, pokud máš nainstalovaný toolkit
+`/loop` pustí příkaz v opakujícím se intervalu. `/schedule` (v Heart of Gold toolkitu) vytvoří remote agenta s cronovým plánem. Shadow tasky dělají svoji práci na pozadí, aniž by narušily tvoji aktuální konverzaci.
+
+Zkus tohle první: `/loop 5m zkontroluj, jestli nepadají nějaké testy, a nahlas`. Nech to běžet, zatímco pracuješ na něčem jiném.
 
 ## Testovací postupy
 
-Claude je u testů nemilosrdný — když o to požádáš. Říkej si o:
+Claude je na testy nemilosrdný — když o to požádáš. Tři postupy, které stojí za vyzkoušení:
 
-- **Tracer bullet testy** — jeden end-to-end test ještě před stavbou feature, abys ověřil, že potrubí funguje
-- **TDD smyčka** — test první, implementace druhá, refactor třetí. Claude je v tomhle teď opravdu dobrý
-- **Property-based testy** — pro cokoliv s invariantami, které jdou detekovat vzorem
+### Tracer bullet — jeden test před feature
 
-Začni s: *"napiš failing test na feature, kterou chystám."* Stav, dokud neprojde.
+Než cokoliv postavíš, napiš jeden end-to-end test, který selže, protože feature ještě neexistuje. Ověříš, že propojení funguje — request dorazí do kontroléru, do servicy, do DB — a pak iteruješ k zelenému.
 
-## Tuhle stránku si nech
+> Napiš failing end-to-end test pro `POST /api/items` endpoint, který vytvoří item a vrátí 201. Endpoint ještě neexistuje — jenom to dotáhni tak, ať test selže na správném řádku.
+
+Stav, dokud neprojde. Integraci si tentokrát budeš pamatovat.
+
+### TDD smyčka — red, green, refactor
+
+Test první, implementace druhá, refactor třetí. Tři samostatné prompty, tři samostatné diffy.
+
+> Napiš failing test pro funkci `slugify(input: string)`, která zvládá diakritiku a opakované mezery. Použij naše stávající test setup.
+
+Pak:
+
+> Nech test projít. Minimální implementace.
+
+Pak:
+
+> Zrefaktoruj. Drž testy zelené. Hledej duplikaci a nejasná pojmenování.
+
+Tři diffy, tři kontroly, tři správné věci.
+
+### Property-based testy — na cokoliv s invarianty
+
+Když je těžké vyjmenovat „správný výstup", ale pravidla jsou jasná, přepni na property testy:
+
+> Funkce `parse(input)` by měla být inverzní ke `stringify`. Použij fast-check (nebo Hypothesis) a ověř, že `parse(stringify(x)) === x` pro náhodné vstupy. Najdi případ, kdy to selže.
+
+Claude vygeneruje vstupy, které bys sám nevymyslel. Property testy jsou místo, kde si Claude zaslouží plat.
+
+## Tenhle lab je na GitHubu
+
+Celý tenhle průvodce — web, kapitoly, ukázky, doprovodný skill — je open source na **[github.com/ondrej-svec/claude-code-lab](https://github.com/ondrej-svec/claude-code-lab)**. Pokud něco nesedělo, pokud je čeština vedle, pokud máš pattern, který stojí za přidání: otevři issue nebo PR. Hvězda pomáhá — je to signál, abych to dál zlepšoval.
+
+## Poslední věta
 
 Nic tady není povinné. Ber tuhle kapitolu jako save point. Vrať se, až nahmatáš limity toho, co víš, a vyber jednu věc na vyzkoušení.
 

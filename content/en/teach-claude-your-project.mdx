@@ -1,6 +1,6 @@
 # Teach Claude your project
 
-Claude doesn't remember. Every session starts cold. A good `CLAUDE.md` gives it the shortcuts it would otherwise have to rediscover — which makes every prompt land better.
+Claude doesn't remember. Every conversation starts cold. A good `CLAUDE.md` gives it the shortcuts it would otherwise have to rediscover — which makes every prompt land better.
 
 ## Why context matters more than the model
 
@@ -12,9 +12,9 @@ Three failure modes you'll recognize:
 2. "It suggested a library we don't use" → you didn't list the ones you do
 3. "It kept asking questions I already answered" → you didn't write it down
 
-`CLAUDE.md` is where you write it down once.
+`CLAUDE.md` is where you write it down once. Except — you don't write it. Claude does.
 
-## Generate a starter
+## Let Claude draft it
 
 Inside your project, run:
 
@@ -22,11 +22,21 @@ Inside your project, run:
 /init
 ```
 
-Claude scans the repo and proposes a `CLAUDE.md` with what it learned — stack, structure, common scripts, obvious conventions. Accept it, then **edit ruthlessly.** The auto-generated version is a starting point, not a finished doc.
+Claude scans the repo and proposes a `CLAUDE.md` with what it found — stack, structure, common scripts, obvious conventions. For the newer interactive flow that also proposes skills and hooks, set `CLAUDE_CODE_NEW_INIT=1` before running.
 
-## What to put in CLAUDE.md
+The output is a **starting point, not a finished doc**. Now ask Claude to refine it:
 
-Short sections. Facts and rules, not prose.
+> Re-read `CLAUDE.md` and add the three conventions we've been using this session — strict TypeScript with no `any`, tests next to the file they cover, database migrations as numbered SQL files. Keep each section short.
+
+Then:
+
+> Re-read `CLAUDE.md` and add a **Don't** section with the rules we keep rediscovering — don't touch `app/legacy/`, don't install new packages without asking, don't run migrations automatically.
+
+Claude will edit the file and show you the diff. Review, accept, commit. The document grew by you *asking for* rules you know, not by you *typing* rules into a file.
+
+## What ends up in it
+
+If you're curious, here's the shape Claude usually produces. Don't type this — let Claude write it from your answers.
 
 ```md
 # CLAUDE.md
@@ -50,27 +60,34 @@ Internal tool for customer onboarding. 3k DAU, Postgres + Node, deployed on Verc
 - `pnpm db:seed` — reset local DB to fixture state
 ```
 
-Keep it under 200 lines. If it grows past that, you're duplicating documentation that belongs elsewhere.
+**Target under 200 lines per file.** Longer files consume more context and reduce adherence. Chapter 8.4 has the deeper best-practices reference.
 
-## Update as you learn
+## Update it as you learn
 
-When Claude does something you correct, ask yourself: *is this a one-off, or a convention?* If it's a convention, add it to `CLAUDE.md`. Next session the same mistake won't happen.
+When Claude does something you correct, you don't have to stop and edit `CLAUDE.md`. Just start your next message with `#`:
+
+> #migrations must be reversible — write the down migration alongside the up one
+
+That's the **memory-add prefix**. Claude takes the line after `#`, decides which scope (project / user / local) it fits best, and appends it to the right `CLAUDE.md`. You stayed in flow, the rule got captured.
 
 <Callout variant="tip">
 Think of `CLAUDE.md` like onboarding docs for a new contractor — who needs to be productive fast, doesn't know your history, and works in eight-hour bursts.
 </Callout>
 
-## Global vs project
+## Scope: project, user, local
 
-Two scopes:
+Three files, all concatenated when Claude launches in a project. Order matters — later wins when rules conflict:
 
-- **Project `CLAUDE.md`** — lives in the repo root, committed, shared with the team
-- **Global `~/.claude/CLAUDE.md`** — lives in your home dir, personal, about *you* (editor preferences, shell aliases, global don'ts)
+- **User** — `~/.claude/CLAUDE.md` — about **you**: editor preferences, shell habits, tone. Loads for every project.
+- **Project** — `./CLAUDE.md` or `./.claude/CLAUDE.md` — about **this codebase**: conventions, commands, don'ts. Committed, shared with the team.
+- **Local** — `./CLAUDE.local.md` — about **you in this project**: local paths, secrets, WIP notes. Gitignored.
 
-Project rules always win over global. That's the right default.
+Nested `CLAUDE.md` files in subdirectories load lazily — only when Claude reads a file inside that subdir. Useful for monorepos. Alternative: `.claude/rules/*.md` with `paths:` frontmatter, which only activates when matching files are touched.
+
+→ [Anthropic memory docs](https://code.claude.com/docs/en/memory) — the canonical reference.
 
 ## Try it
 
-Open your sample project. Run `/init`. Read what Claude generated. Add three rules that describe how **you** work. Save.
+Open your sample project. Run `/init`. Read what Claude proposed. Then ask it to add three rules that describe how **you** work. Then add a **Don't** section with one rule you've repeated to a teammate before. Save.
 
 Your next prompt will feel different.

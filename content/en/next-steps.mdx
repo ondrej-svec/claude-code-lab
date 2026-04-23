@@ -1,41 +1,75 @@
 # Where to go next
 
-You have the basics. The rest is menu, not required.
+You have the basics. The rest is menu, not required. Pick one thing at a time, try it, leave the others for later.
 
 ## Automation
 
 ### Hooks
 
-Run scripts automatically before or after Claude events. Use cases: auto-format on save, block commits to main, notify Slack when a long task finishes.
+Run scripts automatically before or after Claude events. Auto-format on save, block commits to main, notify Slack when a long task finishes. Configured in `settings.json` or a plugin's `hooks/hooks.json`.
 
-→ [Hooks docs](https://docs.claude.com/en/docs/claude-code/hooks)
+Try this first: add a `PostToolUse` hook that runs your linter after every edit. One line of config, one less manual step.
+
+→ [Hooks docs](https://code.claude.com/docs/en/hooks) · chapter 8.7 for the event catalog
 
 ### Claude in CI
 
-Run Claude in GitHub Actions. Auto-review PRs, triage issues, generate changelogs, open follow-up PRs.
+Run Claude in GitHub Actions via `anthropics/claude-code-action@v1`. `@claude` mentions in issues or PRs trigger it; cron or events work too. Auto-review PRs, triage issues, generate changelogs, open follow-up PRs.
 
-→ [Claude Code GitHub Actions](https://docs.claude.com/en/docs/claude-code/github-actions)
+Try this first: in any repo, `/install-github-app` in Claude Code walks through setup. Then comment `@claude add a README section about environment variables` on any open issue.
 
-### Loops and shadow tasks
+→ [Claude Code GitHub Actions](https://code.claude.com/docs/en/github-actions)
 
-A long-running task can fire every N minutes or on a schedule. "Every morning, check for failing tests in main and open a PR to fix." "Every evening, summarize what merged and post to Slack."
+### Loops and scheduled runs
 
-Shadow tasks are background tasks Claude runs without disrupting your current session — scheduled by you, invisible until they report.
+A long-running task can fire every N minutes or on a schedule. "Every morning, check main for failing tests and open a fix PR." "Every evening, summarise what merged and post to Slack."
 
-→ `/loop` and `/schedule` if you have the toolkit installed
+`/loop` runs a command on a recurring interval. `/schedule` (in the Heart of Gold toolkit) creates a cron-scheduled remote agent. Shadow tasks do their work in the background without disrupting your current conversation.
+
+Try this first: `/loop 5m check if any tests are failing and report`. Leave it running while you do other work.
 
 ## Testing patterns
 
-Claude is ruthless about tests — if you ask it. Ask for:
+Claude is ruthless about tests — if you ask it. Three patterns worth trying:
 
-- **Tracer bullet tests** — one end-to-end test before you build the feature, to verify the plumbing works
-- **TDD loop** — test first, implementation second, refactor third. Claude is genuinely good at this now
-- **Property-based tests** — for anything with pattern-detectable invariants
+### Tracer bullet — one test before the feature
 
-Start with: *"write a failing test for the feature I'm about to build."* Build until it passes.
+Before you build anything, write one end-to-end test that fails because the feature doesn't exist yet. Prove the wiring works — request reaches controller reaches service reaches DB — then iterate toward green.
 
-## Keep this page
+> Write a failing end-to-end test for a `POST /api/items` endpoint that creates an item and returns 201. I haven't built the endpoint yet — just get the test to fail on the right line.
 
-Nothing here is required. Treat this chapter as a save point. Come back when you've felt the limits of what you know, and pick one thing to try.
+Build until it passes. You'll never forget the integration this time.
+
+### TDD loop — red, green, refactor
+
+Test first, implementation second, refactor third. Three separate prompts, three separate diffs.
+
+> Write a failing test for a `slugify(input: string)` function that handles diacritics and consecutive spaces. Use our existing test setup.
+
+Then:
+
+> Make the test pass. Minimal implementation only.
+
+Then:
+
+> Refactor. Keep the tests green. Look for duplication or unclear naming.
+
+Three diffs, three reviews, three correct things.
+
+### Property-based tests — for anything with invariants
+
+When the "correct output" is hard to enumerate but the rules are clear, switch to property tests:
+
+> The `parse(input)` function should be the inverse of `stringify`. Use fast-check (or Hypothesis) to assert `parse(stringify(x)) === x` for random inputs. Find a case where it breaks.
+
+Claude generates the inputs you wouldn't have thought of. Property tests are where it earns its keep.
+
+## This lab is on GitHub
+
+This whole guide — website, chapters, samples, companion skill — is open source at **[github.com/ondrej-svec/claude-code-lab](https://github.com/ondrej-svec/claude-code-lab)**. If something was wrong, if the Czech is off, if you have a pattern worth adding: open an issue or a PR. Star it if it helped — that's the signal to keep improving it.
+
+## Last thought
+
+Nothing here is required. Treat this chapter as a save point. Come back when you've felt the limits of what you know, pick one thing to try.
 
 Good luck. Have fun. Build something that compounds.

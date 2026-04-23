@@ -2,6 +2,8 @@
 
 This lab is a practice, not a tour. You'll install Claude, point it at a sample project, iterate on real changes, and leave with patterns you can reuse tomorrow. Not a demo of features you'll never touch.
 
+The whole guide — chapters, sample projects, companion skill — lives at **[github.com/ondrej-svec/claude-code-lab](https://github.com/ondrej-svec/claude-code-lab)**. Clone it and you have everything locally. Anthropic's canonical docs for Claude Code are at [code.claude.com/docs/en/overview](https://code.claude.com/docs/en/overview) — that's the source of truth whenever we point somewhere.
+
 ## Install Claude
 
 Two ways to run Claude Code. Start with the desktop app — it's the shortest path to your first working session.
@@ -25,7 +27,7 @@ Both share the same account. Use whichever fits the task.
 
 You need an Anthropic account. [console.anthropic.com](https://console.anthropic.com) — sign in with Google or email.
 
-**Check before signing up:** your organization may already have team access. Team accounts differ on billing and data retention. Personal accounts are fine for this lab.
+**Check your plan before signing up.** Claude Code works on personal plans (Pro, Max) and organizational plans (Team, Enterprise). If your company already has a Team or Enterprise seat for you, use it — billing, data retention, and admin policy differ between personal and organizational tiers. Features like **Remote Control** (driving your workstation from a browser or phone) require Pro or higher; API-key-only setups are locked out.
 
 First run opens a browser window for OAuth. That's normal. Tokens land in `~/.claude/` on macOS/Linux, `%APPDATA%\Claude\` on Windows.
 
@@ -34,11 +36,11 @@ First run opens a browser window for OAuth. That's normal. Tokens land in `~/.cl
 Claude Code asks before acting. Defaults:
 
 - **Read files** — auto-allowed inside your project
-- **Edit files** — prompts on first edit each session
-- **Run commands** — prompts on first run each session
+- **Edit files** — prompts on first edit each conversation
+- **Run commands** — prompts on first run each conversation
 - **Git actions** — prompts every time
 
-You can tune this in settings once you trust the pattern. For the lab, keep defaults.
+You can tune this in `/permissions` once you trust the pattern. For the lab, keep defaults.
 
 <Callout variant="tip">
 If you're on a corporate machine, check with IT before installing. Some orgs allow-list binaries and will block the CLI installer.
@@ -49,16 +51,24 @@ If you're on a corporate machine, check with IT before installing. Some orgs all
 Every prompt sends:
 
 - Your message
-- Files you've explicitly shared (via `@mention` or tool use)
-- Conversation history
+- Files you explicitly share (via `@mention`, tool use, or what Claude reads to answer you)
+- Conversation history in the current context window
 
 It does **not** send:
 
 - Your full filesystem
-- Files outside the project
+- Files outside the project directory
 - Anything in `.gitignore` or `.claudeignore`
 
-If you're worried about sensitive data, create `.claudeignore` next to `.gitignore` and list what you want kept local. Secrets, customer data, internal docs — whatever your compliance posture requires.
+### Retention, briefly
+
+The important part for corporate use: how long does Anthropic keep what you sent?
+
+- **Personal plans (Pro, Max)** — standard retention, used to improve product; you can opt out in console settings.
+- **Team / Enterprise** — admin-configurable. Zero-retention is available on Enterprise. Your admin sets policy; you inherit it.
+- **`.claudeignore`** — the simplest defence. Next to `.gitignore`, lists files or paths never sent to Claude regardless of plan. Use it for secrets, customer data, proprietary code.
+
+Chapter 8.5 has the deeper reference with links to Anthropic's data handling and compliance pages. If you're on a team with specific compliance requirements, talk to your admin *before* starting the lab.
 
 ## Minimum requirements
 
@@ -66,6 +76,7 @@ If you're worried about sensitive data, create `.claudeignore` next to `.gitigno
 - Node 20+ if you use the CLI
 - ~500 MB disk space
 - Internet
+- For Remote Control and mobile app: Pro plan or higher (ch 5)
 
 ## When you're ready
 

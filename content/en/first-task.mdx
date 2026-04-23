@@ -34,7 +34,7 @@ Now something with stakes. Still small — the goal is to feel the loop, not bui
 
 Watch what happens:
 
-1. Claude writes a **plan** before touching code — what file, what change
+1. Claude writes a **plan** before touching code — what file, what change. If you pressed `Shift+Tab` first to enter **plan mode**, Claude only plans and waits for your approval before any edit.
 2. Claude **asks permission** before the first edit (say yes)
 3. Claude makes the edit and shows the **diff**
 4. You review. Accept, ask for a tweak, or cancel.
@@ -44,6 +44,8 @@ Three things to notice:
 - **The plan was written down.** Re-read it before accepting. If the plan was wrong, the diff will be wrong, but plans are cheap to fix.
 - **The diff is small.** Good agentic sessions produce small diffs. If Claude rewrote three files, that's a signal — narrow the scope next time.
 - **Nothing ran yet.** The code is written; you haven't executed it. Review, then test.
+
+This loop — describe, plan, diff, review, iterate — is the shape Anthropic recommends for everything. Their [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices) is worth a read once you've felt it.
 
 ## Review, run, iterate
 
@@ -57,6 +59,7 @@ This is the loop. Describe → plan → diff → review → run → describe nex
 
 Before moving on, try one of these on the same sample:
 
+- Ask Claude to **explore the repo** and summarize what it finds — the discovery pattern that every larger task starts with.
 - Ask Claude to write a test for the endpoint you just added.
 - Ask Claude to refactor one messy function — you pick.
 - Ask Claude to explain the project's dependencies and flag anything outdated.
