@@ -157,6 +157,20 @@ function extractMermaidSource(children: ReactNode): string | null {
 
 function Pre({ children }: { children?: ReactNode }) {
   const mermaidSource = extractMermaidSource(children);
+  // eslint-disable-next-line no-console
+  if (typeof window !== "undefined") {
+    const c = children as { type?: unknown; props?: { className?: string } };
+    console.log(
+      "[Pre] children type:",
+      typeof children,
+      "child.type:",
+      typeof c?.type,
+      "child.props.className:",
+      c?.props?.className,
+      "extracted:",
+      mermaidSource?.slice(0, 40),
+    );
+  }
   if (mermaidSource !== null) {
     return <Diagram chart={mermaidSource} />;
   }
