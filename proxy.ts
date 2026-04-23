@@ -65,6 +65,11 @@ function detectLocale(request: NextRequest): Locale {
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|gif|webp|svg|ico|woff2?|ttf)).*)",
+    // Excluded from the auth + locale proxy:
+    // - /api (login endpoint + future api routes)
+    // - Next.js internals: _next/static, _next/image
+    // - Static asset extensions (images, fonts)
+    // - /opengraph-image at any depth so social previews work unauthenticated
+    "/((?!api|_next/static|_next/image|favicon.ico|.*opengraph-image.*|.*\\.(?:png|jpg|jpeg|gif|webp|svg|ico|woff2?|ttf)).*)",
   ],
 };
