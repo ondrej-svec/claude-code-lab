@@ -1,16 +1,41 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Children, useEffect, useRef, useState, type ReactNode } from "react";
 import { useTheme } from "next-themes";
 
+function flattenChildren(children: ReactNode): string {
+  if (children == null) return "";
+  if (typeof children === "string") return children;
+  if (typeof children === "number") return String(children);
+  if (Array.isArray(children)) {
+    return children.map((c) => flattenChildren(c)).join("");
+  }
+  // React element (e.g. <p>wrapped</p>) — flatten its children.
+  // We use the runtime check rather than imports to stay cheap.
+  if (typeof children === "object" && "props" in children) {
+    return flattenChildren(
+      (children as { props?: { children?: ReactNode } }).props?.children,
+    );
+  }
+  return "";
+}
+
 type Props = {
-  chart: string;
+  chart?: string;
   caption?: string;
+  children?: React.ReactNode;
 };
 
 // Mermaid renders on the client. We import it lazily so it's only loaded
 // when a chapter actually has a diagram.
-export function Diagram({ chart, caption }: Props) {
+//
+// Chart source can arrive either as a `chart` prop or as children.
+// MDX has trouble with multi-line backtick template literals in prop
+// expressions — they often arrive empty. Children (inside a JSX
+// expression) are reliable.
+export function Diagram({ chart, caption, children }: Props) {
+  const source = (chart && chart.trim()) || flattenChildren(children).trim();
+
   const ref = useRef<HTMLDivElement>(null);
   const [svg, setSvg] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -49,10 +74,11 @@ export function Diagram({ chart, caption }: Props) {
               },
         });
 
+        if (!source) {
+          throw new Error("Diagram: no chart content provided");
+        }
         const id = `d-${Math.random().toString(36).slice(2, 9)}`;
-        // eslint-disable-next-line no-console
-        console.log("[Diagram] chart input", JSON.stringify(chart));
-        const { svg: rendered } = await mermaid.render(id, chart);
+        const { svg: rendered } = await mermaid.render(id, source);
         if (!cancelled) {
           setSvg(rendered);
           setError(null);
@@ -70,7 +96,7 @@ export function Diagram({ chart, caption }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [chart, resolvedTheme]);
+  }, [source, resolvedTheme]);
 
   if (error) {
     return (

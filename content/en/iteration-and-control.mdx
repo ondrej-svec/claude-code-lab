@@ -83,11 +83,11 @@ Press **Shift+Tab** to cycle permission modes in the current conversation:
 3. **plan** — Claude can read, think, and propose, but **cannot edit or run** until you leave plan mode
 4. **auto** (on some plans) — Claude edits and runs without prompting
 
-<Diagram chart={`flowchart LR
+<Diagram caption="Shift+Tab cycles modes in the current conversation.">{`flowchart LR
     D[default] -->|Shift+Tab| A[acceptEdits]
     A -->|Shift+Tab| P[plan]
     P -->|Shift+Tab| Auto[auto]
-    Auto -.->|Shift+Tab| D`} caption="Shift+Tab cycles modes in the current conversation." />
+    Auto -.->|Shift+Tab| D`}</Diagram>
 
 Plan mode is the most worth knowing. It lets Claude think as hard as it wants without doing anything destructive. You see the reasoning, accept or redirect, then leave plan mode to let it execute.
 
