@@ -9,10 +9,11 @@ export const contentType = "image/png";
 export default async function ChapterOpengraphImage({
   params,
 }: {
-  params: { locale: string; slug: string };
+  params: Promise<{ locale: string; slug: string }>;
 }) {
-  const locale = isLocale(params.locale) ? params.locale : DEFAULT_LOCALE;
-  const chapter = getChapter(params.slug);
+  const { locale: rawLocale, slug } = await params;
+  const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
+  const chapter = getChapter(slug);
 
   const eyebrow = chapter?.eyebrows[locale] ?? "claude-code-lab";
   const title = chapter?.titles[locale] ?? "claude-code-lab";
@@ -123,7 +124,7 @@ export default async function ChapterOpengraphImage({
             alignItems: "center",
           }}
         >
-          <span>claude-code-lab-nine.vercel.app/{locale}/lab/{params.slug}</span>
+          <span>claude-code-lab-nine.vercel.app/{locale}/lab/{slug}</span>
           <span>{locale.toUpperCase()}</span>
         </div>
       </div>
