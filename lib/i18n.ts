@@ -38,7 +38,7 @@ export const messages: Record<Locale, Messages> = {
       lede: "Install Claude. Give it context. Iterate with discipline. Build the reusable patterns that compound. Start here.",
       cta: "Enter the lab",
       ctaHint: "password required",
-      footer: "Rosé Pine · Harness Lab design system",
+      footer: "Rosé Pine theme · Built with Claude Code",
     },
     login: {
       title: "Enter the lab",
@@ -61,7 +61,7 @@ export const messages: Record<Locale, Messages> = {
       lede: "Nainstaluj Claude. Dej mu kontext projektu. Iteruj s rozmyslem. Postav si skilly a pluginy, ke kterým se budeš vracet. Začni tady.",
       cta: "Vstoupit do labu",
       ctaHint: "vyžaduje heslo",
-      footer: "Rosé Pine · Harness Lab design system",
+      footer: "Rosé Pine theme · Built with Claude Code",
     },
     login: {
       title: "Vstoupit do labu",

@@ -87,7 +87,6 @@ Then: "Ready for the first real task?" Wait for yes.
 
 Tell them:
 - Chapters 5–7 (ecosystem, compound engineering, next steps) are reference material. Browse the web guide at their own pace.
-- Harness Lab (github.com/ondrej-svec/harness-lab) is the full-day practice if they want depth.
 - The compound engineering loop — handle once → skill → plugin — is the real endgame.
 
 Ask: *"What's the first thing you'll try on your real codebase this week?"* Get a specific answer. That's the commitment.
