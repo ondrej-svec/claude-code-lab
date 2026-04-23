@@ -56,7 +56,7 @@ export default async function LandingPage({
 
           <div className="flex items-center gap-4">
             <Link
-              href={`/${validLocale}/login`}
+              href={`/${validLocale}/lab`}
               className="motion-button inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium"
               style={{
                 background: "var(--accent-surface)",
@@ -65,9 +65,6 @@ export default async function LandingPage({
             >
               {m.landing.cta}
             </Link>
-            <span className="text-sm" style={{ color: "var(--text-muted)" }}>
-              {m.landing.ctaHint}
-            </span>
           </div>
         </div>
       </main>

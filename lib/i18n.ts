@@ -42,12 +42,12 @@ export const messages: Record<Locale, Messages> = {
     },
     login: {
       title: "Enter the lab",
-      lede: "The workshop password was shared ahead of the session.",
+      lede: "The workshop password was shared ahead of time — in the invite or the Teams chat.",
       passwordLabel: "Password",
       passwordPlaceholder: "workshop password",
       submit: "Unlock",
       invalid: "Wrong password.",
-      hint: "If you don't have it, check the pre-session email.",
+      hint: "Don't have it? Ask in the Teams chat.",
     },
     nav: {
       language: "Language",
@@ -65,12 +65,12 @@ export const messages: Record<Locale, Messages> = {
     },
     login: {
       title: "Vstoupit do labu",
-      lede: "Heslo jsme poslali mailem před sessionou.",
+      lede: "Heslo jsme poslali předem — v pozvánce nebo v Teams chatu.",
       passwordLabel: "Heslo",
       passwordPlaceholder: "heslo k workshopu",
       submit: "Odemknout",
       invalid: "Špatné heslo.",
-      hint: "Pokud ho nemáš, mrkni do mailu před sessionou.",
+      hint: "Nemáš ho? Zeptej se v Teams chatu.",
     },
     nav: {
       language: "Jazyk",
