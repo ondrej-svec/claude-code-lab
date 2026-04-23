@@ -1,0 +1,76 @@
+# The ecosystem
+
+Claude Code alone is a good agent. With the ecosystem, it becomes a platform you extend instead of wait for.
+
+This chapter is a tour, not a tutorial. Skim it, mark what matters to you, come back later for depth.
+
+## Skills
+
+A **skill** is a bundle of instructions + files + optional scripts that Claude can load on demand. Think of it as a domain-specific playbook.
+
+Some you can install today:
+
+- `write-post` — guided long-form writing
+- `frontend-design` — distinctive, production-grade UI generation
+- `rclone` — cloud storage sync patterns
+- `clean-code-tdd` — refactoring and test-driven patterns
+
+Skills live in `~/.claude/skills/` or come from **plugins** (below). When a skill matches what you're doing, Claude invokes it automatically.
+
+→ [Skills docs](https://docs.claude.com/en/docs/claude-code/skills)
+
+## Plugins
+
+A **plugin** is a bundle of skills, commands, and hooks — distributed as a unit. You install a plugin once and get all its capabilities.
+
+Two worth installing this week:
+
+- **[Compound Engineering](https://github.com/every-to/compound-engineering)** by Avery — the `brainstorm → plan → work → review → compound` loop as a full workflow. Ships with slash commands and reviewer agents.
+- **[Super Powers](https://github.com/iannuttall/claude-super-powers)** — a broader toolkit. Pick-and-choose skills for daily work.
+
+Install a plugin:
+
+```
+/plugin install <source>
+```
+
+→ [Plugins docs](https://docs.claude.com/en/docs/claude-code/plugins)
+
+## MCPs
+
+**Model Context Protocol** lets Claude talk to external services — filesystems, databases, browsers, APIs — as first-class tools.
+
+One standout for web developers:
+
+- **Chrome DevTools MCP** — Claude gets live access to Chrome's console, network, performance profiler. "Open the page, tell me why LCP is 3.2s, fix it." Claude can now actually look.
+
+Other MCPs exist for Gmail, Google Drive, Linear, Notion, Postgres, and more. Install what matches your flow.
+
+→ [MCP docs](https://docs.claude.com/en/docs/agents-and-tools/mcp)
+
+## Subagents
+
+When Claude spawns a task that would burn a lot of context — deep codebase exploration, running a big review — it uses a **subagent**. The subagent does its work in its own context window, then hands back a summary.
+
+You don't usually invoke subagents directly. You just notice that your main conversation stays clean even when a heavy task runs in the background.
+
+Why it matters: your context window is finite. Subagents keep it focused on the task you care about.
+
+## Remote and mobile
+
+Two ways to run Claude when you're not at your desk:
+
+- **Remote control** — Claude Code runs on your workstation, you drive it from a browser or phone. Useful for long-running jobs you kick off from a meeting.
+- **Mobile app** — lighter, for quick reviews, reading conversation history, approving waiting tasks.
+
+Sign in with the same account; pick up mid-session.
+
+## What to install for Monday
+
+For the workshop, minimum kit:
+
+1. Claude desktop app
+2. (Optional) Claude Code CLI
+3. (Recommended) Compound Engineering plugin — we'll demo the workflow
+
+Everything else can wait. The ecosystem is a menu, not a checklist.

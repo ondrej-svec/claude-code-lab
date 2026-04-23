@@ -1,0 +1,64 @@
+# Your first task
+
+Open a sample project, ask Claude to make one real change, watch what happens.
+
+## Pick a sample
+
+Two samples in this repo. Use the one that matches your day-job stack:
+
+- **[samples/python-react](https://github.com/ondrej-svec/claude-code-lab/tree/main/samples/python-react)** — FastAPI + React. For Alveno-flavored days.
+- **[samples/dotnet-core](https://github.com/ondrej-svec/claude-code-lab/tree/main/samples/dotnet-core)** — ASP.NET Core minimal API. Cross-platform, runs on Mac and Linux. For CYGNUS-flavored days.
+
+Clone the whole repo, open the sample folder in Claude desktop, and you're in.
+
+```bash
+git clone https://github.com/ondrej-svec/claude-code-lab.git
+cd claude-code-lab/samples/dotnet-core   # or samples/python-react
+```
+
+## Ask Claude to explain something
+
+Start with reading, not writing. It's faster to learn how Claude sees code than to supervise it editing.
+
+In the Claude window, paste (adapt the filename to your sample):
+
+> Read `Program.cs` and tell me what this service does in four sentences.
+
+Claude will read the file, summarize the structure, and name the moving parts. You'll notice it quotes specific function names and flags anything unusual. This is your baseline — you now know what Claude sees.
+
+## Ask for one small change
+
+Now something with stakes. Still small — the goal is to feel the loop, not build a feature.
+
+> Add a `GET /health` endpoint that returns `{ "ok": true, "uptime_seconds": n }`.
+
+Watch what happens:
+
+1. Claude writes a **plan** before touching code — what file, what change
+2. Claude **asks permission** before the first edit (say yes)
+3. Claude makes the edit and shows the **diff**
+4. You review. Accept, ask for a tweak, or cancel.
+
+Three things to notice:
+
+- **The plan was written down.** Re-read it before accepting. If the plan was wrong, the diff will be wrong, but plans are cheap to fix.
+- **The diff is small.** Good agentic sessions produce small diffs. If Claude rewrote three files, that's a signal — narrow the scope next time.
+- **Nothing ran yet.** The code is written; you haven't executed it. Review, then test.
+
+## Review, run, iterate
+
+Run the project. If the test endpoint works, commit. If it doesn't, say what you see:
+
+> The endpoint returns 500. Here's the log: `[paste]`. Fix it.
+
+This is the loop. Describe → plan → diff → review → run → describe next. Most of your day in Claude Code looks like this.
+
+## What to try next
+
+Before moving on, try one of these on the same sample:
+
+- Ask Claude to write a test for the endpoint you just added.
+- Ask Claude to refactor one messy function — you pick.
+- Ask Claude to explain the project's dependencies and flag anything outdated.
+
+Get a feel for the rhythm. The rest of the lab builds on it.

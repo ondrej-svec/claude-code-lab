@@ -1,0 +1,73 @@
+# Iterace a kontrola
+
+První prompt nikdy není poslední. Hodnota Claude Code není výstup — je to smyčka, která tě dovede ke správnému výstupu za tři čtyři kola místo jednoho frustrovaného přepisu.
+
+## Rewind
+
+Dvakrát **Esc** v Claude okně. Jsi o zprávu zpět. Změny v souborech jsou rollbacknuté. Konverzace se větví.
+
+Tohle je nejužitečnější klávesová zkratka v celém nástroji. Používej ji, kdykoliv:
+
+- Claude šel špatným směrem a chceš prompt zkusit znovu
+- Uprostřed promptu jsi si uvědomil lepší formulaci
+- Chceš vyzkoušet experiment, aniž by ses k němu zavázal
+- Diff tě překvapil a radši bys ho neměl
+
+Rewind je levný. Nový prompt od začátku je drahý. Používej tu zkratku.
+
+## Zúžit scope
+
+Nejrychlejší cesta ke špatnému výstupu je prompt, který chce moc věcí naráz.
+
+**Široký:**
+> Zrefaktoruj tenhle soubor na dependency injection, přidej testy a převeď ho na TypeScript strict mode.
+
+**Úzký, tři prompty:**
+> Zrefaktoruj tenhle soubor na dependency injection. Testy a typy zatím nech.
+
+> Teď přidej testy na zrefaktorované rozhraní.
+
+> Teď zapni strict mode a oprav, co se rozbije.
+
+Tři úzké prompty dopadnou třikrát rychleji než jeden široký. Každý dostane čistou kontrolu.
+
+## "To není úplně ono"
+
+Když Claude udělá něco blízkého, ale vedle, nepodléhej nutkání to přepsat od začátku. Popiš mezeru:
+
+> Helper funkce je v pořádku, ale přesuň ji do `utils/time.ts` — tam držíme time-related helpery.
+
+Claude ji přesune. Struktura drží. Nemusel jsi vysvětlovat celý úkol znovu.
+
+## Kdy začít novou session
+
+Context windows jsou velké, ale nejsou nekonečné. Začni načisto, když:
+
+- Přehodil jsi do úplně jiné části codebase
+- Konverzace má 30+ kol a všímáš si opakování
+- Nechal jsi Claude prozkoumat, prozkoumal, a teď už chceš reálně stavět
+
+Čistá session s dobrým `CLAUDE.md` je skoro vždycky rychlejší než dlouhá.
+
+## Přečti diff, než potvrdíš
+
+Tenhle jeden návyk odděluje lidi, kterým práce s agenty sedí, od lidí, kteří jim nevěří.
+
+Před "accept":
+
+- Projdi diff — celý
+- Zkontroluj nechtěné změny v nesouvisejících souborech
+- Zkontroluj nové závislosti (přidal knihovnu, kterou nepotřebuješ?)
+- Zkontroluj, jestli se testy nemění způsobem, o který jsi nežádal
+
+Deset vteřin kontroly ušetří hodinu debugování později.
+
+## Plan mode
+
+V desktop aplikaci můžeš Claude požádat, ať **naplánuje, než sáhne na kód**. Napíše plán, ty ho potvrdíš, a teprve pak se provede. Užitečné pro:
+
+- Změny napříč soubory
+- Cokoliv s destruktivním krokem (migrace, delete)
+- Úkoly, kde "co" je stejně důležité jako "jak"
+
+Vyžádej si plán, když sis nevěříš, že odchytíš chyby v diffu.

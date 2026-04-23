@@ -1,0 +1,45 @@
+# Kam dál
+
+Základy máš. Zbytek je menu, ne povinnost.
+
+## Automatizace
+
+### Hooky
+
+Spouštěj skripty automaticky před nebo po událostech Claude. Use case: auto-format při uložení, blokování commitů do mainu, Slack notifikace po doběhnutí dlouhého úkolu.
+
+→ [Hooks docs](https://docs.claude.com/en/docs/claude-code/hooks)
+
+### Claude v CI
+
+Pusť Claude v GitHub Actions. Automatické review PRs, triage issues, generování changelogů, otevírání follow-up PRs.
+
+→ [Claude Code GitHub Actions](https://docs.claude.com/en/docs/claude-code/github-actions)
+
+### Smyčky a shadow tasky
+
+Dlouhotrvající úkol se může spouštět každých N minut nebo podle plánu. "Každé ráno zkontroluj failing testy v mainu a otevři PR s fixem." "Každý večer shrň, co se mergovalo, a pošli do Slacku."
+
+Shadow tasky jsou background úkoly, které Claude spouští, aniž by narušily tvoji aktuální session — naplánované tebou, neviditelné, dokud nenahlásí výsledek.
+
+→ `/loop` a `/schedule`, pokud máš nainstalovaný toolkit
+
+## Testovací patterny
+
+Claude je u testů nemilosrdný — když o to požádáš. Říkej si o:
+
+- **Tracer bullet testy** — jeden end-to-end test ještě před stavbou feature, abys ověřil, že potrubí funguje
+- **TDD smyčka** — test první, implementace druhá, refactor třetí. Claude je v tomhle teď opravdu dobrý
+- **Property-based testy** — pro cokoliv s invariantami, které jdou detekovat vzorem
+
+Začni s: *"napiš failing test na feature, kterou chystám."* Stav, dokud neprojde.
+
+## Harness
+
+Tenhle lab tě naučil první hodinu s Claude Code. [Harness Lab](https://github.com/ondrej-svec/harness-lab) je celodenní praxe — týmy, context engineering, rotace, všechno. Pokud ti pondělí přišlo krátké, tam jdeš pro hloubku.
+
+## Tuhle stránku si nech
+
+Nic tady není povinné. Ber tuhle kapitolu jako save point. Vrať se, až nahmatáš limity toho, co víš, a vyber jednu věc na vyzkoušení.
+
+Hodně štěstí. Bav se. Postav něco, co se skládá samo na sebe.

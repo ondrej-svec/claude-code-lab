@@ -35,7 +35,7 @@ export const messages: Record<Locale, Messages> = {
     landing: {
       eyebrow: "Workshop · Iresoft Group · April 2026",
       title: "A practice for developers working with agents.",
-      lede: "Install once. Teach your project. Iterate with discipline. Build the reusable patterns that multiply your output. This lab takes you from first command to compound.",
+      lede: "Install Claude. Give it context. Iterate with discipline. Build the reusable patterns that compound. Start here.",
       cta: "Enter the lab",
       ctaHint: "password required",
       footer: "Rosé Pine · Harness Lab design system",
@@ -57,20 +57,20 @@ export const messages: Record<Locale, Messages> = {
   cs: {
     landing: {
       eyebrow: "Workshop · Iresoft Group · duben 2026",
-      title: "Praktická cesta pro vývojáře, kteří pracují s agenty.",
-      lede: "Nainstaluj. Nauč svůj projekt. Iteruj s disciplínou. Postav si patterny, které tvoji práci násobí. Lab tě vede od prvního příkazu až k fázi, kdy se ti práce začíná skládat sama na sebe.",
+      title: "Praxe pro vývojáře pracující s agenty.",
+      lede: "Nainstaluj Claude. Dej mu kontext projektu. Iteruj s rozmyslem. Postav si skilly a pluginy, ke kterým se budeš vracet. Začni tady.",
       cta: "Vstoupit do labu",
       ctaHint: "vyžaduje heslo",
       footer: "Rosé Pine · Harness Lab design system",
     },
     login: {
       title: "Vstoupit do labu",
-      lede: "Heslo jsme poslali v e‑mailu před sessionou.",
+      lede: "Heslo jsme poslali mailem před sessionou.",
       passwordLabel: "Heslo",
       passwordPlaceholder: "heslo k workshopu",
       submit: "Odemknout",
       invalid: "Špatné heslo.",
-      hint: "Pokud ho nemáš, mrkni do předsession mailu.",
+      hint: "Pokud ho nemáš, mrkni do mailu před sessionou.",
     },
     nav: {
       language: "Jazyk",

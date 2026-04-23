@@ -1,0 +1,64 @@
+# První úkol
+
+Otevři ukázkový projekt, nech Claude udělat jednu reálnou změnu, koukni, co se stane.
+
+## Vyber si sample
+
+V repu jsou dva. Použij ten, který pasuje tvému dennímu stacku:
+
+- **[samples/python-react](https://github.com/ondrej-svec/claude-code-lab/tree/main/samples/python-react)** — FastAPI + React. Pro Alveno světy.
+- **[samples/dotnet-core](https://github.com/ondrej-svec/claude-code-lab/tree/main/samples/dotnet-core)** — ASP.NET Core minimal API. Cross-platform, běží na Macu i Linuxu. Pro CYGNUS světy.
+
+Naklonuj celý repo, otevři složku sample v desktop Claudeovi a jsi uvnitř.
+
+```bash
+git clone https://github.com/ondrej-svec/claude-code-lab.git
+cd claude-code-lab/samples/dotnet-core   # nebo samples/python-react
+```
+
+## Nech Claude něco vysvětlit
+
+Začni čtením, ne psaním. Naučit se, jak Claude vidí kód, je rychlejší než supervizovat jeho editaci.
+
+V Claude okně napiš (přizpůsob si název souboru podle sample):
+
+> Přečti `Program.cs` a řekni mi ve čtyřech větách, co tahle služba dělá.
+
+Claude soubor přečte, popíše strukturu a pojmenuje jednotlivé části. Všimni si, že cituje konkrétní názvy funkcí a označí, co je neobvyklé. To je tvůj baseline — teď víš, co Claude vidí.
+
+## Nech ho udělat jednu malou změnu
+
+Teď něco s drobnými stakes. Pořád v malém — jde o to procítit smyčku, ne postavit feature.
+
+> Přidej `GET /health` endpoint, který vrací `{ "ok": true, "uptime_seconds": n }`.
+
+Koukni, co se stane:
+
+1. Claude napíše **plán** ještě před dotykem kódu — jaký soubor, jaká změna
+2. Claude **si vyžádá svolení** před první editací (řekni ano)
+3. Claude provede editaci a ukáže **diff**
+4. Zkontroluješ. Potvrdíš, požádáš o úpravu, nebo zrušíš.
+
+Tři věci, kterých si všimni:
+
+- **Plán je napsaný.** Přečti si ho znovu, než potvrdíš. Pokud byl špatný plán, bude špatný i diff — ale opravit plán je levné.
+- **Diff je malý.** Dobré agentic session mají malý diff. Pokud Claude přepsal tři soubory, je to signál — příště zúžit scope.
+- **Zatím nic neběželo.** Kód je napsaný, ale nespustil se. Zkontroluj, pak teprve testuj.
+
+## Zkontroluj, spusť, iteruj
+
+Spusť projekt. Pokud endpoint funguje, commitni. Pokud ne, popiš, co vidíš:
+
+> Endpoint vrací 500. Log: `[paste]`. Oprav to.
+
+Tohle je smyčka. Popiš → plán → diff → kontrola → spuštění → popiš další. Většina dne v Claude Code vypadá takhle.
+
+## Co zkusit dál
+
+Než půjdeš dál, zkus na stejném sample něco z tohohle:
+
+- Nech Claude napsat test na endpoint, který jsi právě přidal.
+- Nech Claude refaktorovat jednu rozbitou funkci — vyber si.
+- Nech Claude vysvětlit závislosti projektu a označit, co je zastaralé.
+
+Naciť ten rytmus. Zbytek labu na něm staví.

@@ -1,0 +1,55 @@
+# Compound engineering
+
+Když vyřešíš problém poprvé s Claudem, ušetříš možná hodinu. Když se stejný problém objeví podruhé a mezitím jsi neudělal nic navíc, ušetříš zase hodinu. Lineární.
+
+Compound engineering je to, co lineární mění na exponenciální. Pokaždé, když něco vyřešíš, zanecháš za sebou znovupoužitelný kousek. Příště, když se problém objeví — nebo něco z jeho sousedství — ten kousek už existuje. Tvůj agent je schopnější, než byl včera.
+
+## Tři kroky
+
+**1. Vyřeš to jednou.** Prostě problém vyřeš. Nesnaž se hned generalizovat. Pošli fix.
+
+**2. Udělej z toho skill.** Když se pattern objeví znova, zastav se. Napiš si kroky jako skill — `SKILL.md` s instrukcemi a případnými pomocnými soubory. Dej to do `~/.claude/skills/`.
+
+**3. Ze skillů udělej pluginy.** Když se tři čtyři související skilly slepí k sobě, zabal je jako plugin. Tvůj tým teď může celý pattern nainstalovat jedním příkazem.
+
+Tohle je progrese. Problém → skill → plugin → znovupoužití. A znova.
+
+## Co dělá dobrý skill
+
+Skill je dobře tvarovaný, když:
+
+- Řeší konkrétní, pojmenovaný problém
+- Kroky jsou opakovatelné, ne tacitní
+- Kolega si ho může nainstalovat a použít, aniž by se tě musel ptát
+
+Skill je špatně tvarovaný, když:
+
+- Je moc obecný ("pomáhá se vším")
+- Duplikuje existující skill s drobnými úpravami
+- Závisí na tajemstvích ve tvé hlavě
+
+Skilly piš, až jsi něco udělal dvakrát. Ne po jednom (předčasné), ne po desátém (osm iterací jsi promarnil).
+
+## Úroveň pluginu
+
+Pluginy balí související skilly. Jsou to jednotky sdílení.
+
+Když stavíš workshop content: zabal skilly `brainstorm`, `plan`, `work`, `review` a `compound` do jednoho pluginu. Teď si tvůj tým nainstaluje celý workflow přes `/plugin install`.
+
+Přesně to dělá [Compound Engineering plugin](https://github.com/every-to/compound-engineering) — balí celou smyčku. Přečti si jeho zdroják pro inspiraci tvarem.
+
+## Reálný příklad
+
+Někdo v týmu napíše dobrý postmortem. Jednou. Příští incident si strukturu nikdo nepamatuje.
+
+- **Vyřeš jednou:** napiš postmortem. Pošli.
+- **Skill:** vytáhni strukturu do `~/.claude/skills/postmortem/SKILL.md` se sekcemi, prompty a rejection kritérii. Příští postmortem: Claude autora provede.
+- **Plugin:** zabal `postmortem`, `incident-review`, `on-call-handoff` do pluginu pro incident response. Rolluje se napříč engineeringem.
+
+Tohle je compound. První postmortem zabral čtyři hodiny. Desátý trvá čtyřicet minut a je lepší.
+
+## Kde začít
+
+Po pondělním workshopu si vyber jednu věc, kterou děláš opakovaně. Tenhle týden na ni napiš skill. Nečekej na perfektní abstrakci — napiš tvar, použij dvakrát, dolaď.
+
+[Harness Lab](https://github.com/ondrej-svec/harness-lab) má na tohle kompletní workshop — context engineering, autoring skillů, design pluginů. Pokud ti tahle kapitola sedla, [tam půjdeš dál](https://github.com/ondrej-svec/harness-lab).

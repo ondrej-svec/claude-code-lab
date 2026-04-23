@@ -1,0 +1,76 @@
+# Teach Claude your project
+
+Claude doesn't remember. Every session starts cold. A good `CLAUDE.md` gives it the shortcuts it would otherwise have to rediscover — which makes every prompt land better.
+
+## Why context matters more than the model
+
+Model quality is commoditized. The differentiator is **what you feed it**. A weaker model with great context usually beats a stronger one with none.
+
+Three failure modes you'll recognize:
+
+1. "It gave me code that ignores our conventions" → you didn't tell it the conventions
+2. "It suggested a library we don't use" → you didn't list the ones you do
+3. "It kept asking questions I already answered" → you didn't write it down
+
+`CLAUDE.md` is where you write it down once.
+
+## Generate a starter
+
+Inside your project, run:
+
+```
+/init
+```
+
+Claude scans the repo and proposes a `CLAUDE.md` with what it learned — stack, structure, common scripts, obvious conventions. Accept it, then **edit ruthlessly.** The auto-generated version is a starting point, not a finished doc.
+
+## What to put in CLAUDE.md
+
+Short sections. Facts and rules, not prose.
+
+```md
+# CLAUDE.md
+
+## Project
+Internal tool for customer onboarding. 3k DAU, Postgres + Node, deployed on Vercel.
+
+## Conventions
+- TypeScript strict mode. No `any` unless commented.
+- Tests live next to the file: `foo.ts` + `foo.test.ts`.
+- Database migrations are numbered SQL files in `/db/migrations/`.
+
+## Don't
+- Don't install new npm packages without asking.
+- Don't touch `app/legacy/` — that's frozen pending rewrite.
+- Don't run migrations automatically.
+
+## Useful commands
+- `pnpm dev` — local server on :3000
+- `pnpm test` — vitest, watch mode
+- `pnpm db:seed` — reset local DB to fixture state
+```
+
+Keep it under 200 lines. If it grows past that, you're duplicating documentation that belongs elsewhere.
+
+## Update as you learn
+
+When Claude does something you correct, ask yourself: *is this a one-off, or a convention?* If it's a convention, add it to `CLAUDE.md`. Next session the same mistake won't happen.
+
+<Callout variant="tip">
+Think of `CLAUDE.md` like onboarding docs for a new contractor — who needs to be productive fast, doesn't know your history, and works in eight-hour bursts.
+</Callout>
+
+## Global vs project
+
+Two scopes:
+
+- **Project `CLAUDE.md`** — lives in the repo root, committed, shared with the team
+- **Global `~/.claude/CLAUDE.md`** — lives in your home dir, personal, about *you* (editor preferences, shell aliases, global don'ts)
+
+Project rules always win over global. That's the right default.
+
+## Try it
+
+Open your sample project. Run `/init`. Read what Claude generated. Add three rules that describe how **you** work. Save.
+
+Your next prompt will feel different.

@@ -1,0 +1,72 @@
+# Než začneme
+
+Tohle není tour. Je to praxe. Nainstaluješ Claude, pustíš ho na ukázkový projekt, budeš iterovat na reálných změnách a odejdeš si s pattern, který použiješ i zítra. Žádné demo funkcí, které pak stejně nikdy nepoužiješ.
+
+## Instalace
+
+Dvě cesty. Začni s desktop aplikací — k první funkční session se dostaneš nejrychleji.
+
+### Claude desktop — pro tenhle lab doporučená
+
+Stáhni z [claude.ai/download](https://claude.ai/download). Desktop aplikace má Claude Code jako integrovaný workspace. Žádné nastavování terminálu, nic konfigurovat. Přihlas se a otevři složku projektu.
+
+### Claude Code CLI — až budeš chtít větší kontrolu
+
+Stejný model, stejné schopnosti, víc klávesnice. Jakmile se s desktop flow sžiješ, na CLI přejdeš jedním příkazem:
+
+```bash
+curl -fsSL https://claude.ai/install.sh | sh
+claude --version
+```
+
+Obojí sdílí stejný účet. Používej, co se hodí k úkolu.
+
+## Účet a přihlášení
+
+Potřebuješ Anthropic účet. [console.anthropic.com](https://console.anthropic.com) — přihlášení přes Google nebo mail.
+
+**Než si ho založíš:** možná má tvoje firma týmový přístup. Týmové účty se liší fakturací i tím, jak se nakládá s daty. Na tenhle lab v pohodě stačí osobní.
+
+Při prvním spuštění Claude otevře prohlížeč pro OAuth. To je normální. Tokeny se uloží do `~/.claude/` na macOS/Linux, do `%APPDATA%\Claude\` na Windows.
+
+## Oprávnění
+
+Claude se vždy zeptá, než něco provede. Výchozí chování:
+
+- **Čtení souborů** — uvnitř projektu automaticky povoleno
+- **Úprava souborů** — při první úpravě v session se zeptá
+- **Spouštění příkazů** — při prvním spuštění v session se zeptá
+- **Git akce** — zeptá se pokaždé
+
+Jakmile pattern poznáš, v nastavení si to přizpůsobíš. Na tenhle lab nech výchozí hodnoty.
+
+<Callout variant="tip">
+Pokud jedeš na firemním stroji, ověř si to s IT před instalací. Některé firmy mají allow-list binárek a CLI instalátor ti může spadnout.
+</Callout>
+
+## Co opustí tvůj stroj
+
+Každý prompt posílá:
+
+- Tvoji zprávu
+- Soubory, které jsi explicitně sdílel (přes `@mention` nebo tool use)
+- Historii konverzace
+
+**Neposílá:**
+
+- Celý filesystem
+- Soubory mimo projekt
+- Nic v `.gitignore` ani `.claudeignore`
+
+Pokud ti jde o citlivá data, vytvoř `.claudeignore` vedle `.gitignore` a vypiš, co má zůstat lokálně. Tajné klíče, zákaznická data, interní dokumenty — co ti diktuje compliance.
+
+## Minimální požadavky
+
+- macOS, Windows nebo Linux
+- Node 20+ pro CLI
+- ~500 MB místa
+- Internet
+
+## Až budeš připravený
+
+Claude nainstalovaný, účet přihlášený, desktop otevřený? Fajn. Pokračuj.

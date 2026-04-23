@@ -1,0 +1,76 @@
+# Ekosystém
+
+Claude Code sám o sobě je dobrý agent. S ekosystémem se stává platformou, kterou rozšiřuješ, místo aby ses na něco čekal.
+
+Tahle kapitola je rozhlídnutí, ne tutoriál. Projdi, označ, co tě zajímá, vrať se pro hloubku později.
+
+## Skilly
+
+**Skill** je balík instrukcí + souborů + volitelných skriptů, které si Claude umí načíst podle potřeby. Ber to jako playbook pro konkrétní doménu.
+
+Pár, co si můžeš nainstalovat dnes:
+
+- `write-post` — provedení dlouhým textem
+- `frontend-design` — odlišné, produkčně laděné UI
+- `rclone` — patterny pro cloud storage sync
+- `clean-code-tdd` — refactoring a test-driven patterny
+
+Skilly bydlí v `~/.claude/skills/` nebo přicházejí z **pluginů** (níže). Když skill pasuje na to, co děláš, Claude ho automaticky vyvolá.
+
+→ [Skills docs](https://docs.claude.com/en/docs/claude-code/skills)
+
+## Pluginy
+
+**Plugin** je balík skillů, příkazů a hooků — distribuovaný jako celek. Instaluješ jednou, získáš všechny schopnosti.
+
+Dva, co má smysl tenhle týden instalovat:
+
+- **[Compound Engineering](https://github.com/every-to/compound-engineering)** od Averyho — smyčka `brainstorm → plan → work → review → compound` jako kompletní workflow. Přichází se slash příkazy a review agenty.
+- **[Super Powers](https://github.com/iannuttall/claude-super-powers)** — širší toolkit. Vybereš si skilly pro denní práci.
+
+Instalace pluginu:
+
+```
+/plugin install <source>
+```
+
+→ [Plugins docs](https://docs.claude.com/en/docs/claude-code/plugins)
+
+## MCPs
+
+**Model Context Protocol** umožňuje Claudovi mluvit s externími službami — filesystem, databáze, prohlížeče, API — jako s prvotřídními tooly.
+
+Jeden, který vyčnívá pro webové vývojáře:
+
+- **Chrome DevTools MCP** — Claude dostává živý přístup ke Chrome console, network, performance profileru. "Otevři stránku, řekni mi, proč je LCP 3,2 s, oprav to." Claude se teď může opravdu podívat.
+
+Další MCPs existují pro Gmail, Google Drive, Linear, Notion, Postgres a další. Instaluj, co pasuje tvému flow.
+
+→ [MCP docs](https://docs.claude.com/en/docs/agents-and-tools/mcp)
+
+## Subagenti
+
+Když Claude spustí úkol, který by spálil moc kontextu — hluboký průzkum codebase, velký review — použije **subagenta**. Subagent pracuje ve vlastním kontextovém okně a vrátí ti shrnutí.
+
+Subagenty obvykle nevoláš přímo. Jen si všimneš, že hlavní konverzace zůstává čistá, i když na pozadí běží těžký úkol.
+
+Proč to má význam: tvůj kontextový prostor je konečný. Subagenti ho drží zaměřený na to, na čem ti záleží.
+
+## Remote a mobil
+
+Dvě cesty, jak spustit Claude, když nejsi u svého stolu:
+
+- **Remote control** — Claude Code běží na tvé pracovní stanici, ovládáš ho z prohlížeče nebo telefonu. Užitečné pro dlouhotrvající joby, které odstartuješ z meetingu.
+- **Mobilní aplikace** — lehčí, pro rychlé review, čtení historie konverzace, schvalování čekajících úkolů.
+
+Přihlas se stejným účtem, pokračuješ uprostřed session.
+
+## Co si nainstalovat na pondělí
+
+Pro workshop minimální výbava:
+
+1. Claude desktop aplikace
+2. (Volitelně) Claude Code CLI
+3. (Doporučeno) Compound Engineering plugin — workflow si budeme ukazovat
+
+Zbytek může počkat. Ekosystém je menu, ne checklist.

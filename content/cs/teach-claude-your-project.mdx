@@ -1,0 +1,76 @@
+# Předej Claudovi kontext projektu
+
+Claude si nepamatuje. Každá session začíná z nuly. Dobrý `CLAUDE.md` mu dává zkratky, které by si jinak musel objevit znova — a díky tomu každý prompt dopadá lépe.
+
+## Proč je kontext důležitější než model
+
+Kvalita modelu je komoditizovaná. Rozdíl dělá **to, čím ho krmíš**. Slabší model s dobrým kontextem obvykle porazí silnější bez kontextu.
+
+Tři failure módy, které poznáš:
+
+1. "Dal mi kód, co ignoruje naše konvence" → neřekl jsi mu, jaké konvence máte
+2. "Navrhl knihovnu, kterou nepoužíváme" → nevyjmenoval jsi, které používáte
+3. "Pořád se ptá na věci, na které jsem už odpověděl" → nezapsal sis to
+
+`CLAUDE.md` je místo, kam si to zapíšeš jednou.
+
+## Nech si vygenerovat startér
+
+V projektu spusť:
+
+```
+/init
+```
+
+Claude proskenuje repo a navrhne `CLAUDE.md` s tím, co se dozvěděl — stack, struktura, běžné skripty, zjevné konvence. Vezmi si to, a potom **nemilosrdně přepiš.** Automaticky vygenerovaná verze je startovní bod, ne hotový dokument.
+
+## Co patří do CLAUDE.md
+
+Krátké sekce. Fakta a pravidla, ne próza.
+
+```md
+# CLAUDE.md
+
+## Projekt
+Interní nástroj pro onboarding zákazníků. 3k DAU, Postgres + Node, deploy na Vercelu.
+
+## Konvence
+- TypeScript strict mode. Žádné `any` bez komentáře.
+- Testy bydlí u souboru: `foo.ts` + `foo.test.ts`.
+- Databázové migrace jsou číslované SQL soubory v `/db/migrations/`.
+
+## Ne
+- Neinstaluj nové npm balíčky bez ptaní.
+- Nesahej do `app/legacy/` — to je zamražené, čeká na rewrite.
+- Nespouštěj migrace automaticky.
+
+## Užitečné příkazy
+- `pnpm dev` — lokální server na :3000
+- `pnpm test` — vitest, watch mode
+- `pnpm db:seed` — reset lokální DB na fixture stav
+```
+
+Drž to pod 200 řádků. Když to přeroste, duplikuješ dokumentaci, která patří jinam.
+
+## Aktualizuj podle toho, co se učíš
+
+Když tě Claude opraví, zeptej se sám sebe: *je to jednorázovka, nebo konvence?* Pokud konvence, přidej to do `CLAUDE.md`. Příští session stejná chyba nepřijde.
+
+<Callout variant="tip">
+Ber `CLAUDE.md` jako onboarding doc pro externistu — který musí být rychle produktivní, nezná tvoji historii a pracuje v osmihodinových blocích.
+</Callout>
+
+## Globální vs projektový
+
+Dvě úrovně:
+
+- **Projektový `CLAUDE.md`** — v rootu repa, commitnutý, sdílený s týmem
+- **Globální `~/.claude/CLAUDE.md`** — v home adresáři, osobní, o **tobě** (preference editoru, shell aliasy, globální ne-dělej)
+
+Projektová pravidla vždycky přebijí globální. To je správný default.
+
+## Zkus to
+
+Otevři ukázkový projekt. Spusť `/init`. Přečti si, co Claude vygeneroval. Přidej tři pravidla, která popisují, jak pracuješ **ty**. Ulož.
+
+Tvůj další prompt bude vypadat jinak.

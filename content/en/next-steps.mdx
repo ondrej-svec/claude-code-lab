@@ -1,0 +1,45 @@
+# Where to go next
+
+You have the basics. The rest is menu, not required.
+
+## Automation
+
+### Hooks
+
+Run scripts automatically before or after Claude events. Use cases: auto-format on save, block commits to main, notify Slack when a long task finishes.
+
+→ [Hooks docs](https://docs.claude.com/en/docs/claude-code/hooks)
+
+### Claude in CI
+
+Run Claude in GitHub Actions. Auto-review PRs, triage issues, generate changelogs, open follow-up PRs.
+
+→ [Claude Code GitHub Actions](https://docs.claude.com/en/docs/claude-code/github-actions)
+
+### Loops and shadow tasks
+
+A long-running task can fire every N minutes or on a schedule. "Every morning, check for failing tests in main and open a PR to fix." "Every evening, summarize what merged and post to Slack."
+
+Shadow tasks are background tasks Claude runs without disrupting your current session — scheduled by you, invisible until they report.
+
+→ `/loop` and `/schedule` if you have the toolkit installed
+
+## Testing patterns
+
+Claude is ruthless about tests — if you ask it. Ask for:
+
+- **Tracer bullet tests** — one end-to-end test before you build the feature, to verify the plumbing works
+- **TDD loop** — test first, implementation second, refactor third. Claude is genuinely good at this now
+- **Property-based tests** — for anything with pattern-detectable invariants
+
+Start with: *"write a failing test for the feature I'm about to build."* Build until it passes.
+
+## The harness
+
+This lab taught you the first hour with Claude Code. The [Harness Lab](https://github.com/ondrej-svec/harness-lab) is the full-day practice — teams, context engineering, rotations, the works. If Monday felt short, that's where you go for depth.
+
+## Keep this page
+
+Nothing here is required. Treat this chapter as a save point. Come back when you've felt the limits of what you know, and pick one thing to try.
+
+Good luck. Have fun. Build something that compounds.

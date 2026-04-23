@@ -1,0 +1,73 @@
+# Iteration and control
+
+The first prompt is never the last prompt. The value in Claude Code isn't the output — it's the loop that gets you to the right output in three or four rounds instead of one frustrated rewrite.
+
+## Rewind
+
+Double-tap **Esc** in the Claude window. You're back one message. File changes are rolled back. The conversation branches.
+
+This is the single most useful keyboard shortcut in the whole tool. Use it whenever:
+
+- Claude went down the wrong path and you want to retry the prompt
+- You spotted a better way to phrase the ask mid-thought
+- You want to branch an experiment without committing to it
+- The diff surprised you and you'd rather not have it
+
+Rewind is cheap. Re-prompting from scratch is expensive. Use the shortcut.
+
+## Narrow the scope
+
+The fastest way to bad output is a prompt that asks for too much at once.
+
+**Wide:**
+> Refactor this file to use dependency injection, add tests, and migrate it to TypeScript strict mode.
+
+**Narrow, three prompts:**
+> Refactor this file to use dependency injection. Don't touch tests or types yet.
+
+> Now add tests for the refactored interface.
+
+> Now enable strict mode and fix what breaks.
+
+Three narrow prompts land three times faster than one wide one. Each one gets a clean review.
+
+## "That's not quite right"
+
+When Claude does something close but off, resist the urge to rewrite from scratch. Describe the gap:
+
+> The helper function is fine, but move it into `utils/time.ts` — we keep time-related helpers there.
+
+Claude will move it. The structure holds. You didn't have to re-explain the whole task.
+
+## When to start a new session
+
+Context windows are large but not infinite. Start fresh when:
+
+- You've pivoted to a different area of the codebase
+- The conversation has 30+ turns and you're noticing repetition
+- You asked Claude to explore, it explored, and now you actually want to build
+
+A clean session with good `CLAUDE.md` is almost always faster than a long one.
+
+## Read the diff before accepting
+
+This is the single habit that separates people who like working with agents from people who don't trust them.
+
+Before hitting "accept":
+
+- Scroll through the diff — all of it
+- Check for unintended changes to unrelated files
+- Check for new dependencies (did it add a library you don't need?)
+- Check for tests changing in ways you didn't ask for
+
+Ten seconds of review saves an hour of debugging later.
+
+## Plan mode
+
+In the desktop app, you can ask Claude to **plan before touching code**. It writes the plan, you approve it, then it executes. Useful for:
+
+- Multi-file changes
+- Anything with a destructive step (migrations, deletes)
+- Tasks where the "what" matters as much as the "how"
+
+Ask for a plan when you don't trust your ability to catch mistakes in the diff.

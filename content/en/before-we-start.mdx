@@ -1,0 +1,72 @@
+# Before we start
+
+This lab is a practice, not a tour. You'll install Claude, point it at a sample project, iterate on real changes, and leave with patterns you can reuse tomorrow. Not a demo of features you'll never touch.
+
+## Install Claude
+
+Two ways to run Claude Code. Start with the desktop app — it's the shortest path to your first working session.
+
+### Claude desktop app — recommended for this lab
+
+Download from [claude.ai/download](https://claude.ai/download). The desktop app includes Claude Code as a built-in workspace. No terminal setup, nothing to configure. Sign in and open your project folder.
+
+### Claude Code CLI — for when you want more control
+
+Same model, same capabilities, more keyboard. Once the desktop flow is second nature, the CLI is one command away:
+
+```bash
+curl -fsSL https://claude.ai/install.sh | sh
+claude --version
+```
+
+Both share the same account. Use whichever fits the task.
+
+## Account and auth
+
+You need an Anthropic account. [console.anthropic.com](https://console.anthropic.com) — sign in with Google or email.
+
+**Check before signing up:** your organization may already have team access. Team accounts differ on billing and data retention. Personal accounts are fine for this lab.
+
+First run opens a browser window for OAuth. That's normal. Tokens land in `~/.claude/` on macOS/Linux, `%APPDATA%\Claude\` on Windows.
+
+## Permissions
+
+Claude Code asks before acting. Defaults:
+
+- **Read files** — auto-allowed inside your project
+- **Edit files** — prompts on first edit each session
+- **Run commands** — prompts on first run each session
+- **Git actions** — prompts every time
+
+You can tune this in settings once you trust the pattern. For the lab, keep defaults.
+
+<Callout variant="tip">
+If you're on a corporate machine, check with IT before installing. Some orgs allow-list binaries and will block the CLI installer.
+</Callout>
+
+## What leaves your machine
+
+Every prompt sends:
+
+- Your message
+- Files you've explicitly shared (via `@mention` or tool use)
+- Conversation history
+
+It does **not** send:
+
+- Your full filesystem
+- Files outside the project
+- Anything in `.gitignore` or `.claudeignore`
+
+If you're worried about sensitive data, create `.claudeignore` next to `.gitignore` and list what you want kept local. Secrets, customer data, internal docs — whatever your compliance posture requires.
+
+## Minimum requirements
+
+- macOS, Windows, or Linux
+- Node 20+ if you use the CLI
+- ~500 MB disk space
+- Internet
+
+## When you're ready
+
+Claude installed, account authenticated, desktop app open? Good. Move on.

@@ -1,0 +1,50 @@
+# claude-code-lab copy-editor configuration.
+#
+# Consumed by the marvin:copy-editor skill from the Heart of Gold toolkit.
+# Layer 1: deterministic typography audit (regex-level, auto-closeable).
+# Layer 2: LLM judgment — reject-list hits, nominal-style, clarity, voice.
+#
+# Running (from agent): /marvin:copy-editor
+# Running (from CLI):   bun ../heart-of-gold-toolkit/plugins/marvin/skills/copy-editor/scripts/copy-audit.ts --config .copy-editor.yaml
+#
+# Czech visible-surface signoff always requires a Czech-fluent human
+# reviewer. The skill surfaces suggestions; humans own the final call.
+
+extends:
+  - czech
+
+language: cs
+
+# Repo-local rule sources. Minimal for now — inherit from the baked-in
+# Czech profile until we write a local style-guide.
+rules:
+  style_guide: null
+  reject_list: null
+  examples: null
+
+voice_doctrine: |
+  Piš jako zkušený peer vývojáře vývojáři. Klidně, věcně, akčně.
+  Žádný hype, žádný korporát, žádná škola.
+  Krátké věty. Slovesa před podstatná jména.
+  Na viditelných surfaces žádný anglický shorthand, pokud není
+  skutečně ustálený technický termín ("commit", "prompt", "repo",
+  "branch", "skill", "plugin" jsou OK).
+  Vyhni se literálním překladům anglických idiomů.
+
+paths:
+  include:
+    # UI strings
+    - lib/i18n.ts
+
+    # Czech content
+    - content/cs/**/*.mdx
+    - content/cs/**/*.md
+
+    # Components with inline Czech (if any appear)
+    - app/**/*.tsx
+
+  exclude:
+    - node_modules/**
+    - .next/**
+    - test-results/**
+    - coverage/**
