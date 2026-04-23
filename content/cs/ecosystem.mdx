@@ -1,156 +1,130 @@
 # Ekosystém
 
-Claude Code sám o sobě je dobrý agent. S ekosystémem se stává platformou, kterou rozšiřuješ, místo aby ses na něco čekal.
+Claude Code sám o sobě je dobrý agent. S ekosystémem se stává platformou, kterou rozšiřuješ — místo abys čekal, až ji rozšíří někdo jiný.
 
-Tahle kapitola je rozhlídnutí, ale s dost kroky na to, abys každý díl rovnou zkusil. Projdi, vyber si jednu věc, vrať se pro hloubku později.
+Tahle kapitola je rozhlídnutí, ale s dost kroky na to, abys každý díl rovnou zkusil. Projdi, vyber si jednu věc, vrať se pro hloubku později.
 
 ## Skilly
 
 **Skill** je balík instrukcí + volitelných skriptů, které si Claude načte podle potřeby. Doménový playbook — bydlí v `~/.claude/skills/`, aktivuje se sám, když situace sedí.
 
-**Příklad, který stojí za prozkoumání:** [`visualize`](https://github.com/ondrej-svec/heart-of-gold-toolkit). Vezme libovolný markdown — plán, brainstorm, architekturu — a udělá z něj uhlazený, sdílitelný HTML artefakt. Jedna dobře ohraničená úloha, dobře napsané instrukce, pár pomocných skriptů. Tvar dobrého skillu.
+**Příklad, který stojí za prozkoumání:** [`visualize`](https://github.com/ondrej-svec/heart-of-gold-toolkit). Vezme libovolný markdown — plán, brainstorm, architekturu — a udělá z něj uhlazený, sdílitelný HTML artefakt. Jedna dobře ohraničená úloha, dobře napsané instrukce, pár pomocných skriptů. Tvar dobrého skillu.
 
-**Otevřený standard.** Skilly jedou podle [Agent Skills otevřeného formátu](https://agentskills.io) — specifikace je veřejná, skilly jsou přenositelné mezi Claude Code a dalšími nástroji, které standard přijímají. Anthropic udržuje [referenční repo](https://github.com/anthropics/skills) se 17 produkčními skilly, ze kterých se dá číst jako z exempláře.
+**Otevřený standard.** Skilly jedou podle [Agent Skills otevřeného formátu](https://agentskills.io) — specifikace je veřejná, skilly jsou přenositelné mezi Claude Code a dalšími nástroji, které standard přijímají. Anthropic udržuje [referenční repo](https://github.com/anthropics/skills) se 17 produkčními skilly, ze kterých se dá číst jako z exempláře.
 
-Kapitola 6 ukazuje, jak necháš Claude, aby ti jeden takový napsal.
+Níž v téhle kapitole ukážeme, jak si jeden takový necháš Claudem napsat.
 
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Pluginy
 
-**Plugin** balí související skilly, příkazy a hooky do jednoho instalovatelného celku. Nainstaluj jednou, získáš celý workflow.
+**Plugin** balí související skilly, příkazy a hooky do jednoho instalovatelného celku. Nainstaluj jednou, získáš celý workflow.
 
-Šestá kapitola provází instalací a používáním [Compound Engineering pluginu](https://github.com/EveryInc/compound-engineering-plugin) — Averyho smyčky brainstorm → plan → work → review → compound. Ten si zkus jako první. [Super Powers](https://github.com/iannuttall/claude-super-powers) je další, o kterém má smysl vědět — širší pick-and-choose toolkit.
+Šestá kapitola provází instalací a používáním [Compound Engineering pluginu](https://github.com/EveryInc/compound-engineering-plugin) — Averyho smyčky brainstorm → plan → work → review → compound. Ten si zkus jako první. [Super Powers](https://github.com/iannuttall/claude-super-powers) je další, o kterém má smysl vědět — širší pick-and-choose toolkit.
 
-Jako reference: [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) je malá kolekce skillů, které jsem si zabalil pro svoji každodenní práci (`visualize` je jeden z nich). Ne něco, co bys teď potřeboval instalovat — příklad toho, co vznikne, jakmile napíšeš tři čtyři skilly, o které nechceš přijít. Jeden takový si postavíš sám.
+Jako reference: [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) je malá kolekce skillů, které jsem si zabalil pro svoji každodenní práci (`visualize` je jeden z nich). Ne něco, co bys teď potřeboval instalovat — příklad toho, co vznikne, jakmile napíšeš tři čtyři skilly, o které nechceš přijít. Jeden takový si postavíš sám.
 
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 
-## Postav si svůj první skill
+## Postav si vlastní skill — agentním způsobem
 
-Než si nainstaluješ další od ostatních, napiš jeden. Změní ti to pohled na zbytek ekosystému.
+Než si nainstaluješ další skilly od ostatních, napiš si vlastní. Když se něco opakuje — tvar promptu, formát výstupu, sled kroků — vytáhni z toho skill. **A `SKILL.md` nepiš ručně. Nech to Claude.**
 
-Jako příklad si vezmi **visualize** — je dost malý na přečtení, dost konkrétní na okopírování.
+### Dva meta-skilly, které píšou skilly
 
-### Anatomie
+Oba dělají totéž: provedou tě objevováním, sepíšou dobře tvarovaný `SKILL.md` a uloží ho na disk. Vyber si jeden.
 
-Skill je jeden markdown soubor plus volitelné skripty. A to je celé.
+- **`skill-creator`** — dodává Anthropic v repu [`anthropics/skills`](https://github.com/anthropics/skills). Instalace přes `/plugin` z toho marketplace. Kanonický, minimalistický, učí tvar.
+- **`craft-skill`** — součást [Heart of Gold toolkitu](https://github.com/ondrej-svec/heart-of-gold-toolkit). Vyhraněný. Pětifázový workflow, technický checklist, ve výchozím stavu sepíše skill, který specifikaci sedí líp.
+
+### Průchod
+
+S jedním z nich nainstalovaným spusť v reálném projektu:
 
 ```
-~/.claude/skills/visualize/
-├── SKILL.md
-└── scripts/
-    ├── render-mindmap.sh
-    └── smart-render.js
+/skill-creator
 ```
 
-`SKILL.md` má YAML frontmatter a pod ním prózu. Tři pole ve frontmatteru nesou váhu:
+(nebo `/craft-skill`, podle toho, co máš).
 
-```yaml
----
-name: visualize
-description: >
-  Create shareable HTML visual artifacts from markdown, plans,
-  architecture docs, brainstorms, and other structured content.
-  Triggers: visualize, mindmap, mind map, show me the structure,
-  draw a map, make this clear, make this visual.
-allowed-tools:
-  - Read
-  - Bash
-  - Glob
-  - Grep
----
-```
+Claude se ptá, jednu otázku po druhé:
 
-- **name** — kebab-case, shoduje se s názvem adresáře.
-- **description** — to, co Claude vidí ve svém seznamu skillů. První věta je pitch. Řádek `Triggers:` je zásadní: ty fráze skill automaticky vyvolají, když se objeví v konverzaci. Bez dobrých triggerů se tvůj skill nikdy nenačte.
-- **allowed-tools** — ohraničená plocha schopností. Whitelist jenom toho, co skill reálně používá. Skill, který nepotřebuje `Write`, by ho neměl dostat.
+1. **Co má ten skill dělat?** Jedna věta. *„Převést markdown brainstorm na sdílitelný HTML vizuál."*
+2. **Kdy se má aktivovat?** Spouštěcí fráze. *„visualize, mindmap, ukaž strukturu, udělej z toho vizuál."*
+3. **Kdo je uživatel?** Konkrétně. *„Já, když dopíšu brainstorm a chci někomu ukázat, jak to vypadá."*
+4. **Jak vypadá úspěch?** Tvar výstupu. *„Jeden HTML soubor, layout jako dashboard, ať ho můžu poslat dál."*
 
-### Próza je provozní manuál
+Odpovídej co nejkonkrétněji. Vágní odpovědi dělají vágní skilly.
 
-Pod frontmatterem napiš dokument, který by externista potřeboval první den: Mission, Boundaries, Core Principle, rozhodovací stromy pro časté rozcestí. Ne tutoriál — referenci, kterou si skill může citovat.
+Claude pak sepíše `SKILL.md` — `name`, description s těmi triggery, povolené nástroje, misi, hranice, rozhodovací pravidla, příklady. Ukáže ti diff. Projdeš, upravíš, potvrdíš.
 
-Mise pro visualize, zkráceně:
+Soubor přistane v `~/.claude/skills/můj-skill/SKILL.md`. Další session, když řekneš něco ze spouštěcích frází, skill se aktivuje sám.
 
-> Vytvoř jeden srozumitelný, sdílitelný vizuální artefakt, který odpovídá reálné potřebě uživatele, působí záměrně navržený, nejdřív shrnuje a pak detailuje, primárně cílí na HTML v prohlížeči.
+### Progresivní odkrývání
 
-Jeho Boundaries:
+Skilly drž pod ~500 řádků. Delší obsah patří do přibalených souborů: `references/` pro materiál ke čtení, `scripts/` pro helpery, `assets/` pro šablony. Tomu se říká *progressive disclosure* — metadata jsou vždy načtená, tělo se načte, až když se skill spustí, extra věci až když je skill potřebuje.
 
-- **MAY** — číst soubory, generovat terminálové mind mapy, zapisovat dočasné HTML, spouštět renderer skripty přes bash
-- **MAY NOT** — modifikovat projektové soubory, vytvářet trvalé soubory mimo výstupní artefakt, instalovat nesouvisející balíčky
+Zralý skill jako [`visualize` v Heart of Gold toolkitu](https://github.com/ondrej-svec/heart-of-gold-toolkit/tree/main/plugins/babel-fish/skills/visualize) ukazuje, jak to vypadá ve velkém — jeden `SKILL.md`, kolem něj pár helper skriptů, rozhodovací stromy pro to, kdy který skript použít. Nic z toho nevzniklo na jednom sezení. Každý kus přibyl, když týden používání odhalil mezeru.
 
-Celou prózu drž pod ~300 řádků. Dlouhé skilly se Claudovi hůř načítají a hůř se v nich orientuje. Když ti narůstá, rozděl ho — triggery druhého skillu přechytí přetečení.
+### Otevřený formát Agent Skills
 
-### Helper skripty bydlí vedle SKILL.md
+Formát je [otevřená specifikace](https://agentskills.io) — pole frontmatteru, chování loaderu, pravidla progresivního odkrývání. Kompletní reference od Anthropicu je v [`anthropics/skills/spec/agent-skills-spec.md`](https://github.com/anthropics/skills/blob/main/spec/agent-skills-spec.md). Skilly, které napíšeš, fungují v Claude Code dnes a budou fungovat v každém nástroji, který tu specifikaci převezme zítra.
 
-Cokoliv deterministického — renderer, templater, převodník — žije jako skript v `scripts/`. Odkazuj na ně z `SKILL.md` relativní cestou, ať je Claude spouští přes bash. Tady se leverage skillu skládá: drahé myšlení proběhne jednou, ve skriptu; každé další volání ho dostane zadarmo.
+### Skutečný endgame
 
-`scripts/smart-render.js` u visualize vezme markdown soubor a cílovou rodinu artefaktů („mind map", „architecture brief", „roadmap") a vygeneruje HTML. Próza skillu Claudovi říká, *kdy* po něm sáhnout; skript dělá deterministickou část.
+Udělej tohle třikrát, čtyřikrát — vytáhni skill pokaždé, když se něco opakuje — a najednou máš malou sbírku. Zabal ji s `.claude-plugin/plugin.json`, vydej na GitHubu, a je to **tvůj plugin**. Stejný tvar jako Compound Engineering plugin, který jsi instaloval dřív, jenom tvůj. Tým instaluje jednou a dědí všechno, co ses naučil systematizovat.
 
-### Instalace a iterace
+Compound, až úplně dolů.
 
-Dvě cesty instalace:
-
-- **Lokální cesta** — naklonuj nebo napiš skill lokálně, nasměruj Clauda na adresář. Nejrychlejší iterace — uprav, reloaduj, hotovo.
-- **Plugin marketplace** — publikuj spolu s dalšími souvisejícími skilly. Uživatelé instalují přes `/plugin install`. Tohle je tvar, který má Heart of Gold.
-
-A pak *ho týden používej*. Pokaždé, když zjistíš, že vysvětluješ něco, co skill neodchytl, přidej to do prózy. Pokaždé, když opakuješ manuální krok, přidej helper skript. Skill odráží tvoje tacitní know-how — nenapíšeš ho celý předem, objevuješ ho tím, že vypustíš tenkou verzi a používáš ji.
-
-### Co postavit první
-
-Vyber si něco, co děláš každý týden a dá se to popsat jednou větou. *„Převeď brainstorm na plán." „Shrň PR do Slacku." „Odbav nový issue."* Jedna práce, jeden skill, jeden dodržený slib.
-
-První skill je vždycky horší než třetí. Vypusť ho tak jako tak.
-
-→ [Agent Skills otevřený formát](https://agentskills.io) · [Anthropic skills repo](https://github.com/anthropics/skills) · [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit)
+→ [Skills docs](https://code.claude.com/docs/en/skills) · [Plugins docs](https://code.claude.com/docs/en/plugins)
 
 ## MCPs — Claudeovy ruce na externích službách
 
-**Model Context Protocol** je otevřený standard pro propojení Clauda s nástroji, které žijí mimo konverzaci — filesystem, databáze, prohlížeče, API. Pokud skilly rozšiřují to, co Claude **ví**, MCPs rozšiřují to, co Claude **umí**.
+**Model Context Protocol** je otevřený standard pro propojení Clauda s nástroji, které žijí mimo konverzaci — filesystem, databáze, prohlížeče, API. Pokud skilly rozšiřují to, co Claude **ví**, MCPs rozšiřují to, co Claude **umí**.
 
 ### Zkus jeden: Chrome DevTools MCP
 
-Mačka pro webovou práci. Claude dostává živý přístup ke Chromu — console, network, Lighthouse, performance trace, screenshoty.
+Pecka na webovou práci. Claude dostává živý přístup ke Chromu — console, network, Lighthouse, performance trace, screenshoty.
 
 ```bash
 claude mcp add --transport stdio chrome-devtools -- npx -y chrome-devtools-mcp@latest
 ```
 
-A pak v session:
+A pak v session:
 
-> Otevři `https://example.com` a řekni mi, proč má pomalý LCP. Pusť Lighthouse, pokud potřebuješ.
+> Otevři `https://example.com` a řekni mi, proč má pomalý LCP. Pusť Lighthouse, pokud potřebuješ.
 
 Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs přestanou být abstraktní.
 
-### Další, o kterých má smysl vědět
+### Další, o kterých má smysl vědět
 
 - **Gmail, Google Drive, Calendar, Notion** — zabalené v `claude.ai` pro plánové uživatele
 - **Postgres, Linear, Sentry, GitHub, Playwright** — komunitní MCPs, jeden `claude mcp add` daleko
 - **Postav si vlastní** — skill `mcp-builder` v `anthropics/skills` ti postaví základ
 
-**Bezpečnostní poznámka.** MCPs, které načítají nedůvěryhodný obsah (webové stránky, issues, maily), do tvé session můžou injektovat instrukce. Anthropicové varování platí: třetí strany na vlastní riziko. Kapitola 8.5 má víc.
+**Bezpečnostní poznámka.** MCPs, které načítají nedůvěryhodný obsah (webové stránky, issues, maily), do tvé session můžou injektovat instrukce. Varování od Anthropicu platí: třetí strany na vlastní riziko. Kapitola 8.5 má víc.
 
 → [MCP docs](https://code.claude.com/docs/en/mcp)
 
 ## Subagenti — delegování, které drží kontext čistý
 
-**Subagent** je specializovaný pracovník, kterého Claude spustí ve vlastním kontextovém okně, s vlastními nástroji a oprávněními. Když Claude potřebuje něco těžkého — prozkoumat velký codebase, pustit review, shrnout dlouhý soubor — může to delegovat na subagenta místo toho, aby spálil tvůj hlavní kontext.
+**Subagent** je specializovaný pracovník, kterého Claude spustí ve vlastním kontextovém okně, s vlastními nástroji a oprávněními. Když Claude potřebuje něco těžkého — prozkoumat velký codebase, pustit review, shrnout dlouhý soubor — může to delegovat na subagenta místo toho, aby spálil tvůj hlavní kontext.
 
 Můžeš je volat přímo, nebo to nech Claude rozhodnout.
 
 ### Zkus jednoho: vestavěný Explore agent
 
-Přichází s nástrojem. Read-only, rychlý (Haiku), ideální pro „kde je X?" otázky ve velkém codebase.
+Vestavěný. Read-only, rychlý (Haiku), ideální na otázky „kde je X?" ve velkém codebase.
 
-V libovolném repu se zeptej:
+V libovolném repu se zeptej:
 
-> Použij Explore agenta a najdi, kde je řešená autentizace. Pak shrň.
+> Použij Explore agenta a najdi, kde je řešená autentizace. Pak shrň.
 
 Nebo ho pojmenuj explicitně:
 
 > @Explore: najdi všechna místa, kde voláme Stripe API.
 
-Tvoje hlavní konverzace dostane dvou-odstavcové shrnutí. Samotné čtení souborů proběhlo v bočním kontextu, který se teď zahodil. Na výsledek jsi utratil ~100 tokenů, ne ~20k na průzkum.
+Tvoje hlavní konverzace dostane dvou-odstavcové shrnutí. Samotné čtení souborů proběhlo v bočním kontextu, který se teď zahodil. Na výsledek jsi utratil ~100 tokenů, ne ~20k na průzkum.
 
 ### Postav si vlastního
 
@@ -162,44 +136,44 @@ Pro opakující se delegování — třeba reviewera, co vždycky aplikuje vaše
 
 <Screenshot
   src="/screenshots/ch5-agents-ui.png"
-  alt="UI /agents — projektoví, osobní a library subagenti s popisy"
-  caption="`/agents` ukáže, co je k dispozici. Vyber, nastav scope, ulož — agenti žijí jako `.md` soubory."
+  alt="UI /agents — projektoví, osobní a library subagenti s popisy"
+  caption="`/agents` ukáže, co je k dispozici. Vyber, nastav scope, ulož — agenti žijí jako `.md` soubory."
 />
 
-Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu rozsah (Personal nebo Project), omez nástroje, ulož. Tvůj agent je teď v `.claude/agents/my-agent.md` a dostupný přes `@my-agent` nebo přirozeným jazykem.
+Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu rozsah (Personal nebo Project), omez nástroje, ulož. Tvůj agent je teď v `.claude/agents/my-agent.md` a dostupný přes `@my-agent` nebo přirozeným jazykem.
 
-**Poznámka.** V Claude Code v2.1.63+ byl interní nástroj `Task` přejmenovaný na `Agent`. Starší tutoriály, které mu říkají Task, pořád fungují — je to totéž.
+**Poznámka.** V Claude Code v2.1.63+ byl interní nástroj `Task` přejmenovaný na `Agent`. Starší tutoriály, které mu říkají Task, pořád fungují — je to totéž.
 
-**Limit.** Subagenti nemůžou spouštět další subagenty. Pro vnořené delegování použij skilly s `context: fork` nebo řetěz z hlavní konverzace.
+**Limit.** Subagenti nemůžou spouštět další subagenty. Pro vnořené delegování použij skilly s `context: fork` nebo řetěz z hlavní konverzace.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 
-## Remote a mobil — Claude mimo tvůj stůl
+## Remote a mobil — Claude mimo tvůj stůl
 
 Dva různé produkty, které si lidé pletou. Oba vyžadují plán Pro nebo vyšší — pouhé API klíče jsou mimo hru.
 
 ### Remote Control — tvoje stanice, tvoje soubory
 
-Claude Code běží **na tvém stroji**, s plným přístupem k lokálnímu filesystemu, k tvým nakonfigurovaným MCPs, k tvým klíčům. Ovládáš ho z prohlížeče nebo mobilní aplikace.
+Claude Code běží **na tvém stroji**, s plným přístupem k lokálnímu filesystemu, k tvým nakonfigurovaným MCPs, k tvým klíčům. Ovládáš ho z prohlížeče nebo mobilní aplikace.
 
 Setup — čtyři kroky:
 
 1. Ověř verzi: `claude --version` (potřebuje 2.1.51+)
 2. `claude` → `/login` — přihlášení přes claude.ai
-3. V projektu: `claude --remote-control "My Project"`
-4. V terminálu zmáčkni `spacebar` → QR kód. Naskenuj Claude mobilní aplikací ([iOS](https://apps.apple.com/app/claude), [Android](https://play.google.com/store/apps/details?id=com.anthropic.claude)) nebo otevři `claude.ai/code` v prohlížeči.
+3. V projektu: `claude --remote-control "My Project"`
+4. V terminálu zmáčkni `spacebar` → QR kód. Naskenuj Claude mobilní aplikací ([iOS](https://apps.apple.com/app/claude), [Android](https://play.google.com/store/apps/details?id=com.anthropic.claude)) nebo otevři `claude.ai/code` v prohlížeči.
 
-Teď můžeš session ovládat odkudkoliv. Dlouhé buildy, PR review z meetingu, „zkontroluj deploy" z telefonu.
+Teď můžeš session ovládat odkudkoliv. Dlouhé buildy, PR review z meetingu, „zkontroluj deploy" z telefonu.
 
 ### Claude Code na Webu — cloud, efemérní
 
-Jiný produkt. Session běží na Anthropicem spravovaných VMs, startuje z čerstvého klonu tvého GitHub repa. Žádné lokální soubory, žádné lokální MCPs. Dobré na rychlé GitHub-based úkoly z libovolného zařízení.
+Jiný produkt. Session běží na Anthropicem spravovaných VMs, startuje z čerstvého klonu tvého GitHub repa. Žádné lokální soubory, žádné lokální MCPs. Dobré na rychlé GitHub-based úkoly z libovolného zařízení.
 
-Spouštíš z `claude.ai/code` v prohlížeči — vybereš repo, startneš session.
+Spouštíš z `claude.ai/code` v prohlížeči — vybereš repo, startneš session.
 
 ### Mobilní aplikace
 
-Ne samostatný Claude Code — **ovladač** pro Remote Control session a Claude Code na Webu. Push notifikace pro oprávnění. Review diffů, chat, schvalování volání nástrojů z telefonu. Webové session umí spustit sama.
+Ne samostatný Claude Code — **ovladač** pro Remote Control session a Claude Code na Webu. Push notifikace pro oprávnění. Review diffů, chat, schvalování volání nástrojů z telefonu. Webové session umí spustit sama.
 
 → [Remote Control docs](https://code.claude.com/docs/en/remote-control) · [Claude Code na Webu](https://code.claude.com/docs/en/claude-code-on-the-web)
 

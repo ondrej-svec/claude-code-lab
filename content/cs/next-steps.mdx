@@ -10,21 +10,21 @@ Spouštěj skripty automaticky před nebo po událostech Claude. Auto-format př
 
 Zkus tohle první: přidej `PostToolUse` hook, který pustí tvůj linter po každé editaci. Jeden řádek konfigurace, jeden manuální krok méně.
 
-→ [Hooks docs](https://code.claude.com/docs/en/hooks) · katalog událostí v kapitole 8.7
+→ [Hooks docs](https://code.claude.com/docs/en/hooks) · katalog událostí v kapitole 8.7
 
-### Claude v CI
+### Claude v CI
 
-Pusť Claude v GitHub Actions přes `anthropics/claude-code-action@v1`. Spouští ho `@claude` mention v issues nebo PR; fungují i cron a události. Automatické review PR, triage issues, generování changelogů, otevírání follow-up PR.
+Pusť Claude v GitHub Actions přes `anthropics/claude-code-action@v1`. Spouští ho `@claude` mention v issues nebo PR; fungují i cron a události. Automatické review PR, triage issues, generování changelogů, otevírání follow-up PR.
 
-Zkus tohle první: v libovolném repu spusť `/install-github-app` v Claude Code — provede tě nastavením. Pak v libovolném otevřeném issue napiš `@claude přidej do README sekci o environment variables`.
+Zkus tohle první: v libovolném repu spusť `/install-github-app` v Claude Code — provede tě nastavením. Pak v libovolném otevřeném issue napiš `@claude přidej do README sekci o environment variables`.
 
 → [Claude Code GitHub Actions](https://code.claude.com/docs/en/github-actions)
 
-### Smyčky a naplánované běhy
+### Smyčky a naplánované běhy
 
-Dlouhotrvající úkol se může spouštět každých N minut nebo podle plánu. „Každé ráno zkontroluj main, jestli nepadá nějaký test, a otevři fix PR." „Každý večer shrň, co se mergovalo, a pošli do Slacku."
+Dlouhotrvající úkol se může spouštět každých N minut nebo podle plánu. „Každé ráno zkontroluj main, jestli nepadá nějaký test, a otevři fix PR." „Každý večer shrň, co se mergovalo, a pošli do Slacku."
 
-`/loop` pustí příkaz v opakujícím se intervalu. `/schedule` (v Heart of Gold toolkitu) vytvoří remote agenta s cronovým plánem. Shadow tasky dělají svoji práci na pozadí, aniž by narušily tvoji aktuální konverzaci.
+`/loop` pustí příkaz v opakujícím se intervalu. `/schedule` (v Heart of Gold toolkitu) vytvoří remote agenta s cronovým plánem. Shadow tasky dělají svoji práci na pozadí, aniž by narušily tvoji aktuální konverzaci.
 
 Zkus tohle první: `/loop 5m zkontroluj, jestli nepadají nějaké testy, a nahlas`. Nech to běžet, zatímco pracuješ na něčem jiném.
 
@@ -32,19 +32,19 @@ Zkus tohle první: `/loop 5m zkontroluj, jestli nepadají nějaké testy, a nahl
 
 Claude Code se mezi konverzacemi resetuje. `CLAUDE.md` pomáhá; `/compound` ve smyčce [Compound Engineering](/cs/lab/compound-engineering) pomáhá víc. Obojí ale vyžaduje, abys nezapomněl si to zapsat.
 
-**[altk-evolve](https://github.com/AgentToolkit/altk-evolve)** (IBM Research, Apache 2.0) krok paměti automatizuje. MCP server nabírá trajektorie — co fungovalo, co ne — do vektorového storu a do nových sessionů vpravuje relevantní poučení. Hlášeno +8.9 bodů na AppWorld benchmarku, +74 % na těžkých víc-krokových úkolech. Nasadíš ho do Claude Code, Codexu i Boba.
+**[altk-evolve](https://github.com/AgentToolkit/altk-evolve)** (IBM Research, Apache 2.0) krok paměti automatizuje. MCP server nabírá trajektorie — co fungovalo, co ne — do vektorového storu a do nových sessionů vpravuje relevantní poučení. Hlášeno +8.9 bodů na AppWorld benchmarku, +74 % na těžkých víc-krokových úkolech. Nasadíš ho do Claude Code, Codexu i Boba.
 
-Zkus to, až: budeš dělat Compound Engineering měsíc a pořád budeš cítit, že si napříč projekty opakuješ stejné fixy. Přesně na tenhle problém je altk-evolve navržený.
+Zkus to, až budeš měsíc v Compound Engineering a pořád budeš cítit, že napříč projekty opakuješ stejné fixy. Přesně na tenhle problém je altk-evolve navržený.
 
 ## Testovací postupy
 
-Claude je na testy nemilosrdný — když o to požádáš. Tři postupy, které stojí za vyzkoušení:
+Claude je na testy nemilosrdný — když o to požádáš. Tři postupy, které stojí za vyzkoušení:
 
 ### Tracer bullet — jeden test před feature
 
-Než cokoliv postavíš, napiš jeden end-to-end test, který selže, protože feature ještě neexistuje. Ověříš, že propojení funguje — request dorazí do kontroléru, do servicy, do DB — a pak iteruješ k zelenému.
+Než cokoliv postavíš, napiš jeden end-to-end test, který selže, protože feature ještě neexistuje. Ověříš, že propojení funguje — request dorazí do kontroléru, do servicy, do DB — a pak iteruješ k zelenému.
 
-> Napiš failing end-to-end test pro `POST /api/items` endpoint, který vytvoří item a vrátí 201. Endpoint ještě neexistuje — jenom to dotáhni tak, ať test selže na správném řádku.
+> Napiš failing end-to-end test pro `POST /api/items` endpoint, který vytvoří item a vrátí 201. Endpoint ještě neexistuje — jenom to dotáhni tak, ať test selže na správném řádku.
 
 Stav, dokud neprojde. Integraci si tentokrát budeš pamatovat.
 
@@ -52,7 +52,7 @@ Stav, dokud neprojde. Integraci si tentokrát budeš pamatovat.
 
 Test první, implementace druhá, refactor třetí. Tři samostatné prompty, tři samostatné diffy.
 
-> Napiš failing test pro funkci `slugify(input: string)`, která zvládá diakritiku a opakované mezery. Použij naše stávající test setup.
+> Napiš failing test pro funkci `slugify(input: string)`, která zvládá diakritiku a opakované mezery. Použij naše stávající test setup.
 
 Pak:
 
@@ -60,15 +60,15 @@ Pak:
 
 Pak:
 
-> Zrefaktoruj. Drž testy zelené. Hledej duplikaci a nejasná pojmenování.
+> Zrefaktoruj. Drž testy zelené. Hledej duplikaci a nejasná pojmenování.
 
 Tři diffy, tři kontroly, tři správné věci.
 
-### Property-based testy — na cokoliv s invarianty
+### Property-based testy — na cokoliv s invarianty
 
 Když je těžké vyjmenovat „správný výstup", ale pravidla jsou jasná, přepni na property testy:
 
-> Funkce `parse(input)` by měla být inverzní ke `stringify`. Použij fast-check (nebo Hypothesis) a ověř, že `parse(stringify(x)) === x` pro náhodné vstupy. Najdi případ, kdy to selže.
+> Funkce `parse(input)` by měla být inverzní ke `stringify`. Použij fast-check (nebo Hypothesis) a ověř, že `parse(stringify(x)) === x` pro náhodné vstupy. Najdi případ, kdy to selže.
 
 Claude vygeneruje vstupy, které bys sám nevymyslel. Property testy jsou místo, kde si Claude zaslouží plat.
 
@@ -78,6 +78,6 @@ Celý tenhle průvodce — web, kapitoly, ukázky, doprovodný skill — je open
 
 ## Poslední věta
 
-Nic tady není povinné. Ber tuhle kapitolu jako save point. Vrať se, až nahmatáš limity toho, co víš, a vyber jednu věc na vyzkoušení.
+Nic tady není povinné. Ber tuhle kapitolu jako save point. Vrať se, až nahmatáš limity toho, co víš, a vyber jednu věc na vyzkoušení.
 
 Hodně štěstí. Bav se. Postav něco, co se skládá samo na sebe.
