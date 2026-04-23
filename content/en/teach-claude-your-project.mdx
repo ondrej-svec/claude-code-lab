@@ -86,24 +86,22 @@ That's the **memory-add prefix**. Claude takes the line after `#`, decides which
 Think of `CLAUDE.md` like onboarding docs for a new contractor — who needs to be productive fast, doesn't know your history, and works in eight-hour bursts.
 </Callout>
 
-## Scope: project, user, local
+## Scope: managed, user, project, local
 
-Three files, all concatenated when Claude launches in a project. Order matters — later wins when rules conflict:
+Up to four layers load at session start. Later in the chain wins when rules conflict:
 
+- **Managed policy** — enterprise-deployed via MDM. Can't be overridden locally. Only present on managed fleets.
 - **User** — `~/.claude/CLAUDE.md` — about **you**: editor preferences, shell habits, tone. Loads for every project.
 - **Project** — `./CLAUDE.md` or `./.claude/CLAUDE.md` — about **this codebase**: conventions, commands, don'ts. Committed, shared with the team.
 - **Local** — `./CLAUDE.local.md` — about **you in this project**: local paths, secrets, WIP notes. Gitignored.
 
 Nested `CLAUDE.md` files in subdirectories load lazily — only when Claude reads a file inside that subdir. Useful for monorepos. Alternative: `.claude/rules/*.md` with `paths:` frontmatter, which only activates when matching files are touched.
 
-```mermaid
-flowchart TD
-    M["Managed policy"] --> U["User · ~/.claude/CLAUDE.md"]
-    U --> P["Project · ./CLAUDE.md"]
-    P --> L["Local · CLAUDE.local.md"]
-```
-
-*All files concatenate at session start. Later in the chain wins on conflict.*
+<Screenshot
+  src="/screenshots/ch3-claude-md-precedence.png"
+  alt="Four CLAUDE.md scope cards stacked in precedence order — Managed policy, User, Project, Local"
+  caption="All layers concatenate at session start. Later in the chain wins on conflict."
+/>
 
 → [Anthropic memory docs](https://code.claude.com/docs/en/memory) — the canonical reference.
 

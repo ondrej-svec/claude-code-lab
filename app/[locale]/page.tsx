@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ThemeSwitcher } from "@/app/components/theme-switcher";
 import { LanguageSwitcher } from "@/app/components/language-switcher";
@@ -37,6 +38,22 @@ export default async function LandingPage({
 
       <main className="flex-1 flex items-center justify-center px-8 py-16">
         <div className="max-w-2xl w-full landing-rise">
+          <div
+            className="mb-10 rounded-xl overflow-hidden"
+            style={{
+              border: "1px solid var(--border)",
+              boxShadow: "var(--shadow-soft)",
+            }}
+          >
+            <Image
+              src="/hero.png"
+              alt="Heart of Gold spaceship with a Claude Code terminal as its viewport"
+              width={1920}
+              height={960}
+              priority
+              className="w-full h-auto block"
+            />
+          </div>
           <p
             className="text-xs uppercase tracking-[0.2em] mb-4"
             style={{ color: "var(--text-muted)" }}

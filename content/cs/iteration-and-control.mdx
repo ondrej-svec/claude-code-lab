@@ -72,32 +72,34 @@ S harnessem na místě se otázka mění z *„udělal Claude v tomhle diffu c
 
 Jestli teprve začínáš: čti diffy pečlivě a vybuduj si reflexy. Jak harness kolem tebe roste, čti jich míň. Ta progrese je pointa.
 
-## Plan mode — cyklení oprávnění přes Shift+Tab
+## Režimy oprávnění
 
-Zmáčkni **Shift+Tab** a přepneš režim oprávnění v aktuální konverzaci:
+Claude Code má pět režimů oprávnění. Aktivní řídí, co může Claude dělat bez ptání.
 
-1. **default** — Claude se ptá před každou editací
-2. **acceptEdits** — Claude edituje volně, ty kontroluješ diffy až po
-3. **plan** — Claude může číst, přemýšlet a navrhnout, ale **nemůže nic editovat ani spouštět**, dokud plan mode neopustíš
-4. **auto** (na některých plánech) — Claude edituje a spouští bez ptaní
+1. **Ask permissions** — Claude se ptá před každou editací nebo spuštěním nástroje. (Výchozí.)
+2. **Accept edits** — Claude edituje volně, diff si prohlédneš až po.
+3. **Plan mode** — Claude může číst, přemýšlet a navrhovat, ale **nic nemůže editovat ani spouštět**, dokud plan mode neopustíš.
+4. **Bypass permissions** — Claude edituje a spouští bez ptání. Stejný stav jako při spuštění s `--dangerously-skip-permissions`. V desktopové aplikaci ho nejdřív musíš povolit v nastavení, než se v menu objeví. Používej jen v izolovaném prostředí.
+5. **Auto mode** — rychlý režim poháněný klasifikátorem, který se učí, co je bezpečné, a ptá se jen na hraniční případy. V desktopové aplikaci ho musíš povolit v nastavení. **Když chceš rychlost, dej přednost Auto před Bypass** — Auto drží zábrany, Bypass je odstraňuje.
 
-```mermaid
-flowchart LR
-    D[default] -->|Shift+Tab| A[acceptEdits]
-    A -->|Shift+Tab| P[plan]
-    P -->|Shift+Tab| Auto[auto]
-    Auto -.->|Shift+Tab| D
-```
+**Jak přepínat:**
 
-*Shift+Tab cyklí režimy v aktuální konverzaci.*
+- **Desktopová aplikace**: zmáčkni `M` a pak číslo `1`–`5`. Režimy, které potřebují povolit v nastavení, jsou do té doby zašedlé.
+- **CLI**: `Shift+Tab` cyklí dostupnými režimy. Nebo rovnou startuj v konkrétním režimu přes `--permission-mode <mode>` (například `--permission-mode auto`).
+
+<Screenshot
+  src="/screenshots/ch4-permission-modes.png"
+  alt="Menu výběru režimu v Claude Code — pět režimů, Bypass permissions a Auto mode jsou zašedlé jako volitelné v nastavení"
+  caption="Desktopové menu Mode. Bypass a Auto jsou zašedlé, dokud je nepovolíš v nastavení."
+/>
+
+Plan mode je ten, který má smysl znát nejvíc v každodenní práci. Claude v něm může přemýšlet tak tvrdě, jak chce, aniž by udělal cokoliv destruktivního — ty vidíš jeho úvahy, potvrdíš nebo přesměruješ, a pak plan mode opustíš, ať to provede. Auto mode je ten, kterému má smysl se naučit věřit, až budeš mít v repu testy a harness, které chyby chytí. Bypass je pro izolované prostředí — nedělej z něj návyk.
 
 <Screenshot
   src="/screenshots/ch4-plan-mode.png"
   alt="Claude Code v plan módu s indikátorem ve spodním řádku"
   caption="Plan mode. Indikátor dole říká, že editace a spouštění jsou vypnuté."
 />
-
-Plan mode je ten, který má smysl znát nejvíc. Claude v něm může přemýšlet tak tvrdě, jak chce, aniž by udělal cokoliv destruktivního. Ty vidíš jeho úvahy, potvrdíš nebo přesměruješ, a pak plan mode opustíš, ať to provede.
 
 **Plan mode plán nikam neukládá.** Plán žije v konverzaci a s `/clear` zmizí. Pokud chceš plány zapsané na disk — abys je mohl později zkontrolovat, sdílet s kolegou nebo aby proti nim běžel `/work` — přesně to dělá skill `/plan` z Compound Engineeringu (kapitola 6). Je to doporučený flow, jakmile máš reálnou víc-krokovou práci.
 
