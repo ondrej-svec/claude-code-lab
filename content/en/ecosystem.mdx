@@ -6,40 +6,45 @@ This chapter is a tour, not a tutorial. Skim it, mark what matters to you, come 
 
 ## Skills
 
-A **skill** is a bundle of instructions + files + optional scripts that Claude can load on demand. Think of it as a domain-specific playbook.
+A **skill** is a bundle of instructions + optional scripts that Claude loads on demand. A domain-specific playbook — lives in `~/.claude/skills/`, activates automatically when the situation matches.
 
-**A good example: `visualize`** from the [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit). Takes any markdown document — a plan, a brainstorm, an architecture doc — and turns it into a polished, shareable HTML artifact. One well-defined job, done well. The skill I reach for most.
+**An example worth a look:** [`visualize`](https://github.com/ondrej-svec/heart-of-gold-toolkit). Takes any markdown document — a plan, a brainstorm, an architecture doc — and turns it into a polished, shareable HTML artifact. One well-defined job, well-scoped instructions, a few helper scripts. The shape of a good skill.
 
-Other skills worth installing from the toolkit:
+### Build your own
 
-- `write-post` — guided long-form writing, end-to-end
-- `frontend-design` — production-grade UI generation without the generic AI look
-- `rclone` — cloud storage sync patterns
-- `clean-code-tdd` — refactoring and test-driven patterns
-- `copy-editor` — typography audit and voice review
+Three steps:
 
-Install the whole toolkit or pick individual skills. See the [Heart of Gold toolkit install docs](https://github.com/ondrej-svec/heart-of-gold-toolkit#install).
+1. **Pick one specific job** you do repeatedly. Not "help with coding" — something like *"turn this plan into a shareable HTML artifact"* or *"write a release note in our voice."*
+2. **Write a `SKILL.md`** with a small frontmatter block + clear instructions:
 
-The bigger point: these are exactly the kind of thing **you can build for yourself**. When you catch yourself running the same instructions three times, stop and write a skill. Chapter 6 is the how.
+   ```md
+   ---
+   name: my-skill
+   description: One sentence — when should Claude activate this?
+   ---
 
-Skills live in `~/.claude/skills/` or come bundled in **plugins** (below). When a skill matches what you're doing, Claude invokes it automatically.
+   # My skill
+
+   When asked to do X, do this:
+
+   1. Read the input.
+   2. Apply Y.
+   3. Return Z.
+   ```
+
+3. **Drop it in** `~/.claude/skills/my-skill/`. Claude finds it next time around.
+
+Start rough. Use it twice. Refine. That's the loop.
 
 → [Skills docs](https://docs.claude.com/en/docs/claude-code/skills)
 
 ## Plugins
 
-A **plugin** is a bundle of skills, commands, and hooks — distributed as a unit. You install a plugin once and get all its capabilities.
+A **plugin** bundles related skills, commands, and hooks into one installable unit. Install once, get the whole workflow.
 
-Two worth installing this week:
+Chapter 6 walks through installing and using the [Compound Engineering plugin](https://github.com/every-to/compound-engineering) — Avery's full brainstorm → plan → work → review → compound loop. That's the one to try first. [Super Powers](https://github.com/iannuttall/claude-super-powers) is another worth knowing about — a broader pick-and-choose toolkit.
 
-- **[Compound Engineering](https://github.com/every-to/compound-engineering)** by Avery — the `brainstorm → plan → work → review → compound` loop as a full workflow. Ships with slash commands and reviewer agents.
-- **[Super Powers](https://github.com/iannuttall/claude-super-powers)** — a broader toolkit. Pick-and-choose skills for daily work.
-
-Install a plugin:
-
-```
-/plugin install <source>
-```
+As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) is a small collection of skills I bundled for my daily work (visualize is one of them). Not something to install now — an example of what emerges once you've written three or four skills you don't want to lose. You'll build one of your own.
 
 → [Plugins docs](https://docs.claude.com/en/docs/claude-code/plugins)
 

@@ -6,40 +6,45 @@ Tahle kapitola je rozhlídnutí, ne tutoriál. Projdi, označ, co tě zajímá, 
 
 ## Skilly
 
-**Skill** je balík instrukcí + souborů + volitelných skriptů, které si Claude umí načíst podle potřeby. Ber to jako playbook pro konkrétní doménu.
+**Skill** je balík instrukcí + volitelných skriptů, které si Claude načte podle potřeby. Doménový playbook — bydlí v `~/.claude/skills/`, aktivuje se sám, když situace sedí.
 
-**Dobrý příklad: `visualize`** z [Heart of Gold toolkitu](https://github.com/ondrej-svec/heart-of-gold-toolkit). Vezme libovolný markdown — plán, brainstorm, architekturu — a udělá z něj uhlazený, sdílitelný HTML artefakt. Jedna dobře ohraničená úloha, dobře udělaná. Skill, po kterém sahám nejčastěji.
+**Příklad, který stojí za prozkoumání:** [`visualize`](https://github.com/ondrej-svec/heart-of-gold-toolkit). Vezme libovolný markdown — plán, brainstorm, architekturu — a udělá z něj uhlazený, sdílitelný HTML artefakt. Jedna dobře ohraničená úloha, dobře napsané instrukce, pár pomocných skriptů. Tvar dobrého skillu.
 
-Další skilly, které z toolkitu stojí za instalaci:
+### Postav si vlastní
 
-- `write-post` — provedení dlouhým textem
-- `frontend-design` — odlišné, produkčně laděné UI
-- `rclone` — synchronizace souborů s cloud storage
-- `clean-code-tdd` — refaktoring a test-driven postupy
-- `copy-editor` — typografický audit a kontrola hlasu
+Tři kroky:
 
-Můžeš nainstalovat celý toolkit, nebo si vybrat jednotlivé skilly. Mrkni na [instalační návod Heart of Gold toolkitu](https://github.com/ondrej-svec/heart-of-gold-toolkit#install).
+1. **Vyber si jednu konkrétní úlohu**, kterou děláš opakovaně. Ne „pomoz mi s kódem" — třeba *„převeď tenhle plán na sdílitelný HTML artefakt"* nebo *„napiš release note naším hlasem."*
+2. **Napiš `SKILL.md`** s krátkým frontmatter blokem a jasnými instrukcemi:
 
-Důležitější bod: přesně tohle si **můžeš postavit sám**. Když zjistíš, že třikrát po sobě píšeš stejné instrukce, zastav se a napiš skill. Jak na to, je 6. kapitola.
+   ```md
+   ---
+   name: muj-skill
+   description: Jedna věta — kdy to má Claude aktivovat?
+   ---
 
-Skilly bydlí v `~/.claude/skills/` nebo přicházejí s **pluginy** (níže). Když skill pasuje na to, co děláš, Claude ho automaticky vyvolá.
+   # Můj skill
+
+   Když tě někdo požádá o X, udělej tohle:
+
+   1. Přečti vstup.
+   2. Aplikuj Y.
+   3. Vrať Z.
+   ```
+
+3. **Dej to do `~/.claude/skills/muj-skill/`.** Claude to najde příště.
+
+Začni hrubě. Použij dvakrát. Dolaď. To je ta smyčka.
 
 → [Skills docs](https://docs.claude.com/en/docs/claude-code/skills)
 
 ## Pluginy
 
-**Plugin** je balík skillů, příkazů a hooků — distribuovaný jako celek. Instaluješ jednou, získáš všechny schopnosti.
+**Plugin** balí související skilly, příkazy a hooky do jednoho instalovatelného celku. Nainstaluj jednou, získáš celý workflow.
 
-Dva, co má smysl tenhle týden instalovat:
+Šestá kapitola provází instalací a používáním [Compound Engineering pluginu](https://github.com/every-to/compound-engineering) — Averyho smyčky brainstorm → plan → work → review → compound. Ten si zkus jako první. [Super Powers](https://github.com/iannuttall/claude-super-powers) je další, o kterém má smysl vědět — širší pick-and-choose toolkit.
 
-- **[Compound Engineering](https://github.com/every-to/compound-engineering)** od Averyho — smyčka `brainstorm → plan → work → review → compound` jako kompletní workflow. Přichází se slash příkazy a review agenty.
-- **[Super Powers](https://github.com/iannuttall/claude-super-powers)** — širší toolkit. Vybereš si skilly pro denní práci.
-
-Instalace pluginu:
-
-```
-/plugin install <source>
-```
+Jako reference: [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) je malá kolekce skillů, které jsem si zabalil pro svoji každodenní práci (`visualize` je jeden z nich). Ne něco, co bys teď potřeboval instalovat — příklad toho, co vznikne, jakmile napíšeš tři čtyři skilly, o které nechceš přijít. Jeden takový si postavíš sám.
 
 → [Plugins docs](https://docs.claude.com/en/docs/claude-code/plugins)
 
