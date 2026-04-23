@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ThemeSwitcher } from "@/app/components/theme-switcher";
 import { LanguageSwitcher } from "@/app/components/language-switcher";
@@ -38,23 +37,6 @@ export default async function LandingPage({
 
       <main className="flex-1 flex items-center justify-center px-8 py-16">
         <div className="max-w-2xl w-full landing-rise">
-          <div
-            className="hero-image-wrap mb-10 rounded-xl overflow-hidden"
-            style={{
-              border: "1px solid var(--hero-border)",
-              boxShadow: "var(--hero-shadow)",
-            }}
-          >
-            <Image
-              src="/hero-landing.png"
-              alt=""
-              width={1792}
-              height={1024}
-              priority
-              className="w-full h-auto block"
-              style={{ opacity: 0.9 }}
-            />
-          </div>
           <p
             className="text-xs uppercase tracking-[0.2em] mb-4"
             style={{ color: "var(--text-muted)" }}

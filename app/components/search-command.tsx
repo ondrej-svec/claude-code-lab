@@ -226,7 +226,7 @@ export function SearchCommand({ entries, locale }: Props) {
                       type="button"
                       onMouseEnter={() => setActiveIndex(i)}
                       onClick={() => go(entry)}
-                      className="w-full text-left px-4 py-2 flex items-baseline gap-3 transition"
+                      className="w-full text-left px-4 py-2.5 flex items-baseline gap-3 transition"
                       style={{
                         background: active
                           ? "var(--surface-elevated)"
@@ -235,7 +235,7 @@ export function SearchCommand({ entries, locale }: Props) {
                       }}
                     >
                       <span
-                        className="font-mono text-xs w-8"
+                        className="font-mono text-xs w-8 flex-none pt-0.5"
                         style={{ color: "var(--text-muted)" }}
                       >
                         {String(entry.chapterOrder).padStart(2, "0")}
@@ -264,9 +264,17 @@ export function SearchCommand({ entries, locale }: Props) {
                             {entry.chapterTitle}
                           </span>
                         )}
+                        {entry.snippet && query.trim().length > 1 && (
+                          <span
+                            className="block text-xs mt-1 line-clamp-2"
+                            style={{ color: "var(--text-muted)" }}
+                          >
+                            {entry.snippet}
+                          </span>
+                        )}
                       </span>
                       <span
-                        className="font-mono text-[10px] uppercase tracking-[0.18em]"
+                        className="font-mono text-[10px] uppercase tracking-[0.18em] flex-none pt-0.5"
                         style={{ color: "var(--text-muted)" }}
                       >
                         {entry.level === 1
@@ -297,38 +305,43 @@ export function SearchCommand({ entries, locale }: Props) {
   );
 }
 
-// Fuzzy scorer — higher score = better match.
+// Fuzzy scorer — higher score = better match. Title/heading carry the
+// most weight; snippet adds a weaker signal so "rate limiting" hits
+// chapter 6 even though the word doesn't appear in any heading.
 function scoreEntry(entry: SearchEntry, q: string): number {
-  const haystackParts = [
+  const titles = [
     entry.chapterTitle.toLowerCase(),
     entry.heading?.toLowerCase() ?? "",
   ];
 
   let score = 0;
-  for (const hay of haystackParts) {
+  for (const hay of titles) {
     if (!hay) continue;
     if (hay === q) score += 100;
     else if (hay.startsWith(q)) score += 60;
     else if (hay.includes(q)) score += 40;
-    else {
-      // Sub-sequence match (loose fuzzy).
-      let hi = 0;
-      let qi = 0;
-      let matched = 0;
-      while (hi < hay.length && qi < q.length) {
-        if (hay[hi] === q[qi]) {
-          matched++;
-          qi++;
-        }
-        hi++;
-      }
-      if (qi === q.length) score += matched * 2;
-    }
+    else if (subsequenceMatch(hay, q)) score += q.length * 2;
   }
 
-  // Boost chapter-level (level 1) slightly so top-level matches surface first
-  // when the query matches both the chapter and a section.
+  const snippet = entry.snippet?.toLowerCase();
+  if (snippet) {
+    if (snippet.includes(q)) score += 15;
+    else if (subsequenceMatch(snippet, q)) score += q.length * 0.5;
+  }
+
+  // Boost chapter-level entries so top-level matches surface first when
+  // the query matches both a chapter and one of its sections.
   if (entry.level === 1) score += 5;
 
   return score;
+}
+
+function subsequenceMatch(hay: string, q: string): boolean {
+  let hi = 0;
+  let qi = 0;
+  while (hi < hay.length && qi < q.length) {
+    if (hay[hi] === q[qi]) qi++;
+    hi++;
+  }
+  return qi === q.length;
 }
