@@ -107,6 +107,25 @@ flowchart TD
 
 → [Anthropic memory docs](https://code.claude.com/docs/en/memory) — the canonical reference.
 
+## Keep it a map, not a manual
+
+Context is scarce. A `CLAUDE.md` that tries to say everything crowds out the thing it was supposed to help with — the task, the code, the relevant docs.
+
+OpenAI's [Ryan Lopopolo](https://openai.com/index/harness-engineering/), writing about shipping a production system mostly from Codex, calls this out directly: keep your `AGENTS.md` / `CLAUDE.md` around 100 lines, and treat it as the **table of contents**. His framing: Claude should be *"a map, not a 1,000-page instruction manual."* The real knowledge lives elsewhere — structured docs the agent opens only when it needs them.
+
+What that looks like as a section in your `CLAUDE.md`:
+
+```md
+## Where to look
+- Architecture decisions — `docs/adr/`
+- On-call runbooks — `docs/runbooks/`
+- Payment refund flow — `docs/runbooks/refunds.md`
+- Style guide — `docs/style-guide.md`
+- Deeper API reference — `docs/api.md`
+```
+
+Now Claude scans the map in every session without reading the encyclopedia. When the task mentions refunds, it opens the runbook. When the task is a new endpoint, it reads the style guide. You write each doc once, in its own file, at its own size — and the map stays short.
+
 ## Practice: continue your sample
 
 Working through the lab in order? Take what this chapter taught to the sample you started in chapter 2 — or to a codebase of your own, where it'll land harder.
@@ -114,5 +133,6 @@ Working through the lab in order? Take what this chapter taught to the sample yo
 1. Open your project folder in Claude — `samples/dotnet-core` (Varianta A), `samples/python-react` (Varianta B), or a repo of your own. Sample folders ship with a starter `CLAUDE.md`; your own repo may or may not. Either way, read what's there before touching anything.
 2. Run `/init`. Claude proposes an updated `CLAUDE.md` based on what it sees. Compare the proposal with what you've got — what does it miss, what does it add that doesn't fit, what's genuinely better. Accept the parts that are, edit the rest.
 3. Use the `#` prefix to add one or two rules that came up in chapter 2, or that you've been repeating to teammates — "always return JSON errors with an `error` field", "before adding an endpoint, add a matching test." Watch which scope each lands in; project scope is what you want for codebase-wide rules.
+4. Add a **Where to look** section — one or two pointers to real destinations. If your repo has runbooks, an ADR folder, or a style guide, point at them. If not, point at where they'll live (`docs/runbooks/`, `docs/adr/`). The pointer is the commitment.
 
-When it works: your `CLAUDE.md` is *yours* — not the starter, not the one `/init` proposed, the one shaped by how you actually work. The next chapter's practice uses plan mode to add a second feature.
+When it works: your `CLAUDE.md` is *yours* — short, opinionated, and linking out to the docs you'll actually reach for. The next chapter's practice uses plan mode to add a second feature.
