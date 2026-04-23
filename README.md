@@ -1,5 +1,7 @@
 # claude-code-lab
 
+![claude-code-lab — eight chapters, one practice](public/screenshots/web-lab-index-dark.png)
+
 A hands-on guide to agentic coding with Claude Code — from install to compound.
 
 A practice-oriented walkthrough for developers adopting Claude Code — install, context, iteration, ecosystem, compound engineering, reference. Both English and Czech.
@@ -30,6 +32,17 @@ pnpm start        # run built app
 pnpm lint         # eslint
 pnpm test         # vitest unit
 pnpm test:e2e     # playwright e2e
+```
+
+## Screenshots
+
+See `scripts/capture/README.md` for the three capture families (CLI via
+`freeze`, WEB via Playwright, DESK manual). Regenerate with:
+
+```bash
+./scripts/capture/generate-fixtures.py    # rebuild CLI ANSI fixtures
+./scripts/capture/capture-cli.sh          # render CLI PNGs
+./scripts/capture/capture-web.sh          # render WEB PNGs (needs pnpm dev)
 ```
 
 ## Design

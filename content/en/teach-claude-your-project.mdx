@@ -24,6 +24,12 @@ Inside your project, run:
 
 Claude scans the repo and proposes a `CLAUDE.md` with what it found — stack, structure, common scripts, obvious conventions. For the newer interactive flow that also proposes skills and hooks, set `CLAUDE_CODE_NEW_INIT=1` before running.
 
+<Screenshot
+  src="/screenshots/ch3-init-output.png"
+  alt="/init output showing Claude scanning a sample project and proposing a CLAUDE.md with build, test, and conventions sections"
+  caption="`/init` drafts a starting `CLAUDE.md`. You refine it over the next few prompts."
+/>
+
 The output is a **starting point, not a finished doc**. Now ask Claude to refine it:
 
 > Re-read `CLAUDE.md` and add the three conventions we've been using this session — strict TypeScript with no `any`, tests next to the file they cover, database migrations as numbered SQL files. Keep each section short.

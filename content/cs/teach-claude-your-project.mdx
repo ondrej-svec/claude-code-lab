@@ -24,6 +24,12 @@ V projektu spusť:
 
 Claude proskenuje repo a navrhne `CLAUDE.md` s tím, co našel — stack, struktura, běžné skripty, zjevné konvence. Pro novější interaktivní flow, co navíc navrhne skilly a hooky, nastav před spuštěním `CLAUDE_CODE_NEW_INIT=1`.
 
+<Screenshot
+  src="/screenshots/ch3-init-output.png"
+  alt="Výstup /init — Claude skenuje ukázkový projekt a navrhuje CLAUDE.md se sekcemi Build, Test a Conventions"
+  caption="`/init` sepíše startovní `CLAUDE.md`. Doladíš ho dalšími prompty."
+/>
+
 Výstup je **startovní bod, ne hotový dokument**. Teď požádej Claude, ať ho dolaďuje:
 
 > Znovu si přečti `CLAUDE.md` a přidej tři konvence, které používáme — strict TypeScript bez `any`, testy vedle souboru, který pokrývají, databázové migrace jako číslované SQL soubory. Sekce nech krátké.

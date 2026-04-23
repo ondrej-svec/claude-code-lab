@@ -1,0 +1,24 @@
+{
+  "theme": "rose-pine-moon",
+  "window": true,
+  "border": {
+    "radius": 8,
+    "width": 0,
+    "color": "#44415a"
+  },
+  "shadow": {
+    "blur": 30,
+    "x": 0,
+    "y": 10
+  },
+  "font": {
+    "family": "JetBrains Mono",
+    "size": 14,
+    "ligatures": false
+  },
+  "line_height": 1.4,
+  "padding": [40, 40, 40, 40],
+  "margin": [0, 0, 0, 0],
+  "width": 1200,
+  "show_line_numbers": false
+}

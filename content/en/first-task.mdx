@@ -32,6 +32,12 @@ Now something with stakes. Still small — the goal is to feel the loop, not bui
 
 > Add a `GET /health` endpoint that returns `{ "ok": true, "uptime_seconds": n }`.
 
+<Screenshot
+  src="/screenshots/ch2-plan-output.png"
+  alt="Claude Code plan output listing the files to edit and verification checks before applying changes"
+  caption="Claude's plan, written before any edit. Read it before you press y."
+/>
+
 Watch what happens:
 
 1. Claude writes a **plan** before touching code — what file, what change. If you pressed `Shift+Tab` first to enter **plan mode**, Claude only plans and waits for your approval before any edit.

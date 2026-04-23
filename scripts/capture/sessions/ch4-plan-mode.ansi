@@ -1,0 +1,18 @@
+[38;5;75m>[0m Refactor the auth middleware to use dependency injection.
+
+[1;36m●[0m I can see [1mProgram.cs[0m wires [1mAuthMiddleware[0m directly. Thinking it
+  through without editing...
+
+  Currently [1mAuthMiddleware[0m reads config from [1mIConfiguration[0m. A cleaner
+  shape is to register it as a scoped service and inject [1mIAuthProvider[0m.
+  Three files would change:
+
+   [38;5;245m→[0m Program.cs
+   [38;5;245m→[0m Middleware/AuthMiddleware.cs
+   [38;5;245m→[0m Extensions/ServiceCollectionExtensions.cs
+
+  Want me to leave plan mode and apply? [2m(Shift+Tab)[0m
+
+[38;5;245m──────────────────────────────────────────────────────────────[0m
+[1;33m◆ plan mode[0m  [2m· Shift+Tab cycles · read-only, no edits or runs[0m
+[38;5;75m>[0m [2m_[0m

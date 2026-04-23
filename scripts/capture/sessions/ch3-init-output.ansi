@@ -1,0 +1,26 @@
+[38;5;75m>[0m /init
+
+[1;36m●[0m Scanning [1msamples/dotnet-core/[0m ...
+
+  [38;5;245m→[0m Program.cs              [38;5;245mASP.NET Core minimal API[0m
+  [38;5;245m→[0m samples.Tests/          [38;5;245mxunit project, 2 tests[0m
+  [38;5;245m→[0m README.md               [38;5;245msetup instructions[0m
+  [38;5;245m→[0m .editorconfig           [38;5;245mspaces, 4 wide[0m
+
+[1;36m●[0m Proposed [1mCLAUDE.md[0m
+
+  [2m# samples/dotnet-core — ASP.NET Core sample[0m
+
+  [2m## Build[0m
+  [2mdotnet build[0m
+
+  [2m## Test[0m
+  [2mdotnet test[0m
+
+  [2m## Conventions[0m
+  [2m- Minimal APIs in Program.cs[0m
+  [2m- Controllers only when routes exceed ~6 endpoints[0m
+  [2m- Spaces, 4 wide[0m
+
+[1;33m◆[0m Write to [1mCLAUDE.md[0m? [2m[y / n][0m
+[38;5;75m>[0m [2m_[0m

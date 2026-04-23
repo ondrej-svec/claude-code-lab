@@ -1,0 +1,19 @@
+[38;5;75m>[0m Add a GET /health endpoint that returns { "ok": true, "uptime_seconds": n }.
+
+[1;36m●[0m I'll add a [1m/health[0m endpoint to [1mProgram.cs[0m.
+
+  [1mPlan[0m
+
+   1. Read [1mProgram.cs[0m to see the current minimal-API setup
+   2. Capture a process-start timestamp at startup
+   3. Register [1mMapGet("/health")[0m returning { ok, uptime_seconds }
+   4. Run the sample and hit the endpoint to verify
+
+  [1mFiles to edit[0m
+   [38;5;245m→[0m Program.cs          [38;5;245m(add route + uptime field)[0m
+
+  [1mChecks[0m
+   [38;5;245m→[0m dotnet test samples/dotnet-core/
+
+[1;33m◆[0m Ready to proceed? [2m[y / n / edit plan][0m
+[38;5;75m>[0m [2m_[0m
