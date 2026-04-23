@@ -236,4 +236,135 @@ ch5 = f"""\
 write("ch5-agents-ui", ch5)
 
 
+# --- ch2 stream A / stream B: diff + run fixtures -------------------------
+# Ch 2 gets two parallel walkthroughs. Stream A uses samples/dotnet-core,
+# Stream B uses samples/python-react. Each stream shows plan → diff → run.
+# The existing ch2-plan-output.ansi serves as Stream A's plan shot.
+
+ADD = "\x1b[38;5;150m"    # soft green for diff additions
+DEL = "\x1b[38;5;210m"    # soft red for diff deletions
+HUNK = "\x1b[38;5;110m"   # blue-grey for @@ hunk headers
+
+
+# --- ch2a-diff — Stream A (.NET) diff before apply ------------------------
+ch2a_diff = f"""\
+{CYAN}●{R} Editing {B}Program.cs{R}
+
+  {HUNK}@@ -1,4 +1,6 @@{R}
+  {ADD}+using System.Diagnostics;{R}
+  {ADD}+{R}
+   using Microsoft.AspNetCore.Builder;
+   using Microsoft.AspNetCore.Http;
+   using Microsoft.Extensions.DependencyInjection;
+
+  {HUNK}@@ -6,6 +8,10 @@{R}
+   builder.Services.AddSingleton<ItemStore>();
+
+   var app = builder.Build();
+  {ADD}+var startedAt = Stopwatch.StartNew();{R}
+  {ADD}+{R}
+  {ADD}+app.MapGet("/health", () => new {{ ok = true, uptime_seconds = startedAt.Elapsed.TotalSeconds }});{R}
+  {ADD}+{R}
+   app.MapGet("/api/items", (ItemStore store) => store.All());
+
+{YELLOW}◆{R} Apply? {D}[y / n / show more]{R}
+{USER}>{R} {D}_{R}
+"""
+write("ch2a-diff", ch2a_diff)
+
+
+# --- ch2a-run — Stream A (.NET) run output with curl ---------------------
+ch2a_run = f"""\
+{USER}>{R} dotnet run --project samples/dotnet-core
+
+{CYAN}●{R} {MUTED}info: Microsoft.Hosting.Lifetime[14]{R}
+  {MUTED}      Now listening on:{R} {B}http://localhost:5055{R}
+  {MUTED}info: Microsoft.Hosting.Lifetime[0]{R}
+  {MUTED}      Application started. Press Ctrl+C to shut down.{R}
+
+{USER}>{R} curl -s localhost:5055/health | jq
+
+  {{
+    {ACCENT}"ok"{R}: {GREEN}true{R},
+    {ACCENT}"uptime_seconds"{R}: {GREEN}3.214{R}
+  }}
+
+{GREEN}✓{R} 200 OK  {MUTED}·{R}  41 B  {MUTED}·{R}  4 ms
+"""
+write("ch2a-run", ch2a_run)
+
+
+# --- ch2b-plan-output — Stream B (Python+React) plan ---------------------
+ch2b_plan = f"""\
+{USER}>{R} Add a GET /health endpoint that returns {{ "ok": true, "uptime_seconds": n }}.
+
+{CYAN}●{R} I'll add a {B}/health{R} endpoint to {B}backend/main.py{R}.
+
+  {B}Plan{R}
+
+   1. Read {B}backend/main.py{R} to see the FastAPI wiring
+   2. Capture a process-start timestamp at module load
+   3. Register {B}@app.get("/health"){R} returning {{ ok, uptime_seconds }}
+   4. Run uvicorn and hit the endpoint to verify
+
+  {B}Files to edit{R}
+   {MUTED}→{R} backend/main.py     {MUTED}(add route + monotonic timer){R}
+
+  {B}Checks{R}
+   {MUTED}→{R} curl localhost:8000/health
+
+{YELLOW}◆{R} Ready to proceed? {D}[y / n / edit plan]{R}
+{USER}>{R} {D}_{R}
+"""
+write("ch2b-plan-output", ch2b_plan)
+
+
+# --- ch2b-diff — Stream B (Python+React) diff before apply ---------------
+ch2b_diff = f"""\
+{CYAN}●{R} Editing {B}backend/main.py{R}
+
+  {HUNK}@@ -1,3 +1,4 @@{R}
+  {ADD}+import time{R}
+   from dataclasses import dataclass, asdict
+   from fastapi import FastAPI, HTTPException
+   from fastapi.middleware.cors import CORSMiddleware
+
+  {HUNK}@@ -5,6 +6,12 @@{R}
+
+   app = FastAPI(title="cc-lab sample api")
+
+  {ADD}+_started_at = time.monotonic(){R}
+  {ADD}+{R}
+  {ADD}+@app.get("/health"){R}
+  {ADD}+def health() -> dict:{R}
+  {ADD}+    return {{"ok": True, "uptime_seconds": time.monotonic() - _started_at}}{R}
+  {ADD}+{R}
+   app.add_middleware(
+       CORSMiddleware,
+
+{YELLOW}◆{R} Apply? {D}[y / n / show more]{R}
+{USER}>{R} {D}_{R}
+"""
+write("ch2b-diff", ch2b_diff)
+
+
+# --- ch2b-run — Stream B (Python+React) run output with curl -------------
+ch2b_run = f"""\
+{USER}>{R} uvicorn backend.main:app --reload
+
+{CYAN}●{R} {MUTED}INFO:     Uvicorn running on{R} {B}http://127.0.0.1:8000{R}
+  {MUTED}INFO:     Application startup complete.{R}
+
+{USER}>{R} curl -s localhost:8000/health | jq
+
+  {{
+    {ACCENT}"ok"{R}: {GREEN}true{R},
+    {ACCENT}"uptime_seconds"{R}: {GREEN}2.871{R}
+  }}
+
+{GREEN}✓{R} 200 OK  {MUTED}·{R}  39 B  {MUTED}·{R}  2 ms
+"""
+write("ch2b-run", ch2b_run)
+
+
 print(f"\nGenerated {len(list(OUT.glob('*.ansi')))} fixture(s) in {OUT.relative_to(HERE.parent.parent)}/")

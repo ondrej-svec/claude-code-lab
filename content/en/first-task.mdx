@@ -1,73 +1,130 @@
 # Your first task
 
-Open a sample project, ask Claude to make one real change, watch what happens.
+Open a sample project, ask Claude to make one real change, watch what happens — on your stack.
 
-## Pick a sample
+Two parallel streams below — pick the one that matches your day-job, skip the other. You don't need both.
 
-Two samples in this repo. Use the one that matches your day-job stack:
+- **Stream A — .NET Core** · ASP.NET Core minimal API. For C# / .NET devs.
+- **Stream B — Python + React** · FastAPI backend, React frontend. For Python / JS devs.
 
-- **[samples/python-react](https://github.com/ondrej-svec/claude-code-lab/tree/main/samples/python-react)** — FastAPI + React. For Python / JS stacks.
-- **[samples/dotnet-core](https://github.com/ondrej-svec/claude-code-lab/tree/main/samples/dotnet-core)** — ASP.NET Core minimal API. Cross-platform, runs on Mac and Linux. For C# / .NET stacks.
-
-Clone the whole repo, open the sample folder in Claude desktop, and you're in.
+Clone the repo once, then jump to your stream:
 
 ```bash
 git clone https://github.com/ondrej-svec/claude-code-lab.git
-cd claude-code-lab/samples/dotnet-core   # or samples/python-react
+cd claude-code-lab
 ```
 
-## Ask Claude to explain something
+## Stream A — .NET Core
 
-Start with reading, not writing. It's faster to learn how Claude sees code than to supervise it editing.
+Open `samples/dotnet-core/` in Claude. Goal: add a `GET /health` endpoint to the minimal API. One concrete change, end-to-end through the loop.
 
-In the Claude window, paste (adapt the filename to your sample):
+### 1. Ask for the change
 
-> Read `Program.cs` and tell me what this service does in four sentences.
+In the Claude window:
 
-Claude will read the file, summarize the structure, and name the moving parts. You'll notice it quotes specific function names and flags anything unusual. This is your baseline — you now know what Claude sees.
-
-## Ask for one small change
-
-Now something with stakes. Still small — the goal is to feel the loop, not build a feature.
-
-> Add a `GET /health` endpoint that returns `{ "ok": true, "uptime_seconds": n }`.
+> Read `Program.cs` so you know the shape, then add a `GET /health` endpoint that returns `{ "ok": true, "uptime_seconds": n }`.
 
 <Screenshot
   src="/screenshots/ch2-plan-output.png"
-  alt="Claude Code plan output listing the files to edit and verification checks before applying changes"
-  caption="Claude's plan, written before any edit. Read it before you press y."
+  alt="Claude Code plan for the .NET /health endpoint, naming Program.cs as the file to edit and a dotnet test check to run"
+  caption="Claude plans first. Read it before pressing y."
 />
 
-Watch what happens:
+**What just happened.** Claude didn't edit yet. It read `Program.cs`, drafted a plan, and named the exact file plus the verification step. No code moved. You get to approve the shape before a single character lands.
 
-1. Claude writes a **plan** before touching code — what file, what change. If you pressed `Shift+Tab` first to enter **plan mode**, Claude only plans and waits for your approval before any edit.
-2. Claude **asks permission** before the first edit (say yes)
-3. Claude makes the edit and shows the **diff**
-4. You review. Accept, ask for a tweak, or cancel.
+### 2. Approve and watch the diff
 
-Three things to notice:
+Say yes. Claude writes the change and shows it as a diff before applying.
 
-- **The plan was written down.** Re-read it before accepting. If the plan was wrong, the diff will be wrong, but plans are cheap to fix.
-- **The diff is small.** Good agentic sessions produce small diffs. If Claude rewrote three files, that's a signal — narrow the scope next time.
-- **Nothing ran yet.** The code is written; you haven't executed it. Review, then test.
+<Screenshot
+  src="/screenshots/ch2a-diff.png"
+  alt="Diff of Program.cs showing a using System.Diagnostics, a Stopwatch startedAt, and a MapGet /health route added"
+  caption="Small, focused diff. Two additions, no deletes."
+/>
+
+Three lines of real code (using, startedAt, MapGet) plus two blanks. Nothing else touched. This is what "small diff" means in practice — if your first attempt sprawls, narrow the prompt and try again.
+
+### 3. Run it
+
+Accept. Then run the sample:
+
+> Start the app and hit `/health` to confirm it's wired up.
+
+<Screenshot
+  src="/screenshots/ch2a-run.png"
+  alt="Terminal showing dotnet run followed by curl localhost:5055/health returning a 200 OK with ok true and uptime_seconds"
+  caption="200 OK. Endpoint live. Loop closed."
+/>
+
+You now have a running feature you can commit.
+
+**If something goes wrong**
+
+- Build fails? Paste the error back: "build failed: `[paste]` — fix it." Claude sees its own change in context and usually fixes in one step.
+- Curl returns 500? Paste the server log. Don't guess; show Claude what it broke.
+
+## Stream B — Python + React
+
+Open `samples/python-react/` in Claude. Goal: same — add a `GET /health` endpoint to the FastAPI backend. One concrete change, end-to-end through the loop.
+
+### 1. Ask for the change
+
+In the Claude window:
+
+> Read `backend/main.py` so you know the shape, then add a `GET /health` endpoint that returns `{ "ok": true, "uptime_seconds": n }`.
+
+<Screenshot
+  src="/screenshots/ch2b-plan-output.png"
+  alt="Claude Code plan for the FastAPI /health endpoint, naming backend/main.py as the file to edit and a curl check to run"
+  caption="Claude plans first. Read it before pressing y."
+/>
+
+**What just happened.** Claude didn't touch a file yet. It opened `backend/main.py`, sketched the plan, and named the verification step it wants to run after. The plan is free — you can reject it, reword it, or approve it. The edit only starts after `y`.
+
+### 2. Approve and watch the diff
+
+Say yes. Claude writes the change and shows it as a diff.
+
+<Screenshot
+  src="/screenshots/ch2b-diff.png"
+  alt="Diff of backend/main.py showing an added time import, a _started_at monotonic timer, and a /health route"
+  caption="Small, focused diff. No side edits."
+/>
+
+One import, one module-level timer, one route. That's it. Existing middleware and routes are untouched — good agent work doesn't spread.
+
+### 3. Run it
+
+Accept. Then run the backend:
+
+> Start uvicorn and hit `/health` to confirm it's wired up.
+
+<Screenshot
+  src="/screenshots/ch2b-run.png"
+  alt="Terminal showing uvicorn running on port 8000 and curl returning a 200 OK with ok true and uptime_seconds"
+  caption="200 OK. Endpoint live. Loop closed."
+/>
+
+You now have a running feature you can commit.
+
+**Bonus (if you want a frontend beat):** ask Claude to wire a small "Backend: OK" indicator in the React app that fetches `/health` on mount. One component, one fetch. Same loop, one layer up.
+
+**If something goes wrong**
+
+- Uvicorn crashes? Paste the traceback: "uvicorn crashed: `[paste]` — fix it."
+- Curl returns 500? Show the server log. Don't guess; show Claude what it broke.
+
+## What you just felt
+
+Both streams walked the same shape: **describe → plan → diff → run**. That shape is the spine of every agentic session. The rest of this lab earns its keep by getting progressively better at each of those four steps.
+
+A few signals worth naming now, so you spot them later:
+
+- **The plan saved you a retry.** Reading the plan before pressing `y` is cheaper than reviewing a bad diff. Later chapters make plans much more powerful — written to disk, acted on by other commands, reviewed before any code moves. The Compound Engineering loop in [chapter 6](/en/lab/compound-engineering) is where that fully lands.
+- **The diff was reviewable.** Three to five lines, not thirty. [Chapter 4](/en/lab/iteration-and-control) covers how to keep diffs small on purpose — plan mode, rewind, narrowed scope.
+- **You didn't trust the agent — you verified.** Running the endpoint was the real approval, not pressing `y` on the diff. [Chapter 7](/en/lab/next-steps) is the depth source on making that verification more automatic (tests, scans, CI review).
+- **The agent worked on your stack, not a toy.** Your own projects have context the agent will need. [Chapter 3](/en/lab/teach-claude-your-project) is about giving it that context cleanly.
+
+Four beats. One small feature. Do the same thing on a real repo of yours tomorrow — same shape, same rhythm.
 
 This loop — describe, plan, diff, review, iterate — is the shape Anthropic recommends for everything. Their [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices) is worth a read once you've felt it.
-
-## Review, run, iterate
-
-Run the project. If the test endpoint works, commit. If it doesn't, say what you see:
-
-> The endpoint returns 500. Here's the log: `[paste]`. Fix it.
-
-This is the loop. Describe → plan → diff → review → run → describe next. Most of your day in Claude Code looks like this.
-
-## What to try next
-
-Before moving on, try one of these on the same sample:
-
-- Ask Claude to **explore the repo** and summarize what it finds — the discovery pattern that every larger task starts with.
-- Ask Claude to write a test for the endpoint you just added.
-- Ask Claude to refactor one messy function — you pick.
-- Ask Claude to explain the project's dependencies and flag anything outdated.
-
-Get a feel for the rhythm. The rest of the lab builds on it.
