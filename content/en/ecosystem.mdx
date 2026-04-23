@@ -8,14 +8,21 @@ This chapter is a tour, not a tutorial. Skim it, mark what matters to you, come 
 
 A **skill** is a bundle of instructions + files + optional scripts that Claude can load on demand. Think of it as a domain-specific playbook.
 
-Some you can install today:
+**A good example: `visualize`** from the [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit). Takes any markdown document — a plan, a brainstorm, an architecture doc — and turns it into a polished, shareable HTML artifact. One well-defined job, done well. The skill I reach for most.
 
-- `write-post` — guided long-form writing
-- `frontend-design` — distinctive, production-grade UI generation
+Other skills worth installing from the toolkit:
+
+- `write-post` — guided long-form writing, end-to-end
+- `frontend-design` — production-grade UI generation without the generic AI look
 - `rclone` — cloud storage sync patterns
 - `clean-code-tdd` — refactoring and test-driven patterns
+- `copy-editor` — typography audit and voice review
 
-Skills live in `~/.claude/skills/` or come from **plugins** (below). When a skill matches what you're doing, Claude invokes it automatically.
+Install the whole toolkit or pick individual skills. See the [Heart of Gold toolkit install docs](https://github.com/ondrej-svec/heart-of-gold-toolkit#install).
+
+The bigger point: these are exactly the kind of thing **you can build for yourself**. When you catch yourself running the same instructions three times, stop and write a skill. Chapter 6 is the how.
+
+Skills live in `~/.claude/skills/` or come bundled in **plugins** (below). When a skill matches what you're doing, Claude invokes it automatically.
 
 → [Skills docs](https://docs.claude.com/en/docs/claude-code/skills)
 
@@ -65,12 +72,12 @@ Two ways to run Claude when you're not at your desk:
 
 Sign in with the same account; pick up mid-session.
 
-## What to install for Monday
+## Where to start
 
-For the workshop, minimum kit:
+Minimum kit that covers the rest of the lab:
 
 1. Claude desktop app
-2. (Optional) Claude Code CLI
-3. (Recommended) Compound Engineering plugin — we'll demo the workflow
+2. Claude Code CLI (optional)
+3. Compound Engineering plugin if you want to see the full loop
 
 Everything else can wait. The ecosystem is a menu, not a checklist.

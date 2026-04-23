@@ -15,12 +15,12 @@ export default async function LabIndex({
     en: {
       eyebrow: "The lab",
       title: "Seven chapters. One practice.",
-      lede: "Work top to bottom on a Monday session. Skip and self-pace the rest of the week. Every chapter ends with something you can try immediately.",
+      lede: "Go top to bottom, or pick what you need. Every chapter ends with something you can try immediately.",
     },
     cs: {
       eyebrow: "Lab",
       title: "Sedm kapitol. Jedna praxe.",
-      lede: "V pondělí projdeme společně odshora dolů. Zbytek týdne si prochází vlastním tempem. Každá kapitola končí něčím, co můžeš hned zkusit.",
+      lede: "Projdi odshora dolů, nebo si vyber, co ti zrovna sedí. Každá kapitola končí něčím, co můžeš hned zkusit.",
     },
   };
 

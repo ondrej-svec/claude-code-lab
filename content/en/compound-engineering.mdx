@@ -1,55 +1,99 @@
 # Compound engineering
 
-The first time you solve a problem with Claude, you save maybe an hour. The second time the same problem shows up, if you did nothing in between, you save another hour. Linear.
+The single most useful thing you can install after the first four chapters is the **Compound Engineering plugin** by Avery from Every. It packages the full `brainstorm → plan → work → review → compound` loop as slash commands you can run against any codebase.
 
-Compound engineering is what turns linear into exponential. Each time you solve something, you leave behind a reusable piece. Next time the problem shows up — or something in its neighborhood — that piece already exists. Your agent is more capable than it was yesterday.
+This chapter is how you install it, use it, and why the loop compounds.
 
-## The three steps
+## The loop in five commands
 
-**1. Handle it once.** Just solve the problem. Don't try to generalize yet. Ship the fix.
+- `/brainstorm` — widen the problem before you narrow it
+- `/plan` — decide what to build and in what order, written down
+- `/work` — execute the plan, one atomic change at a time
+- `/review` — second pass on the output, against the plan
+- `/compound` — write down what you learned so next time is cheaper
 
-**2. Turn it into a skill.** When the pattern shows up again, stop. Write the steps down as a skill — a `SKILL.md` with instructions, plus any helper files. Put it in `~/.claude/skills/`.
+Most dev work fits this shape. The plugin makes the shape visible — and reusable.
 
-**3. Turn skills into plugins.** When three or four related skills cluster together, bundle them as a plugin. Now your team can install the whole pattern in one command.
+## Install
 
-This is the progression. Problem → skill → plugin → reuse. Repeat.
+From inside Claude Code:
 
-## What makes a good skill
+```
+/plugin install compound-engineering
+```
 
-A skill is well-shaped when:
+Or if your environment prefers a direct source, clone and point Claude at the [Compound Engineering repo](https://github.com/every-to/compound-engineering).
 
-- It solves a specific, named problem
-- The steps are repeatable, not tacit
-- A teammate could install it and use it without asking you how
+Verify with:
 
-A skill is badly shaped when:
+```
+/plan --help
+```
 
-- It's too generic ("helps with anything")
-- It duplicates an existing skill with small tweaks
-- It depends on secrets in your head
+If you see the command, you're in.
 
-Write skills after you've done something twice. Not after once (premature), not after ten times (you've wasted eight iterations).
+## Use it on something real
 
-## The plugin level
+Pick a task you'd work on this week. Not a toy — something with enough shape to plan. A small feature, a migration, a performance issue. This is what the loop is for.
 
-Plugins bundle related skills. They're the unit of sharing.
+**1. Brainstorm.** Start with:
 
-If you build workshop content: bundle a `brainstorm`, `plan`, `work`, `review`, and `compound` skill into one plugin. Now your team can install the whole workflow with `/plugin install`.
+```
+/brainstorm: I want to add rate limiting to our public API
+```
 
-This is what the [Compound Engineering plugin](https://github.com/every-to/compound-engineering) does — bundles the full loop. Read its source for shape inspiration.
+Don't skip to the solution. Let Claude widen the problem — what traffic patterns, what attacker model, what cost. Most of the value is in the questions it asks you back.
 
-## Real example
+**2. Plan.** When the problem is clear:
 
-Someone on your team writes a good postmortem. Once. Next incident, nobody remembers the structure.
+```
+/plan
+```
 
-- **Handle once:** write the postmortem. Ship.
-- **Skill:** extract the structure into `~/.claude/skills/postmortem/SKILL.md` with sections, prompts, and rejection criteria. Next postmortem: Claude guides the author.
-- **Plugin:** bundle `postmortem`, `incident-review`, `on-call-handoff` into an incident-response plugin. Rolls out across engineering.
+Claude writes a task list with dependencies, saves it to a markdown file under `docs/plans/`, and stops. Read it. Edit it. Accept only when you'd hand it to a teammate without blushing.
 
-That's compound. The first postmortem took four hours. The tenth takes forty minutes and is better.
+**3. Work.** Against the approved plan:
 
-## Where to start
+```
+/work
+```
 
-After Monday's workshop, pick one thing you do repeatedly. Write a skill for it this week. Don't wait for the perfect abstraction — write the shape, use it twice, refine.
+Claude ticks tasks off one at a time, commits small, doesn't batch. If something surprises you in the diff, stop and update the plan — don't power through.
 
-The Harness Lab has a full workshop on this — context engineering, skill authoring, plugin design. If this chapter landed, [that's where you go next](https://github.com/ondrej-svec/harness-lab).
+**4. Review.** When work is done:
+
+```
+/review
+```
+
+Claude reads its own output against the plan and surfaces what's missing, what drifted, what needs a second look. This catches ~70% of the "it compiles but…" class of problems.
+
+**5. Compound.** Finally:
+
+```
+/compound
+```
+
+Claude writes a short doc to `docs/solutions/` with the problem, the fix, and what was non-obvious. These docs become the memory your next `/brainstorm` and `/plan` will draw on.
+
+## Why the loop compounds
+
+The first time through, you save an hour. Linear.
+
+The second time, `/compound` has left docs in your repo. Your next `/brainstorm` is faster because the unknowns shrunk. Your next `/plan` references the prior one.
+
+The tenth time, half of your planning is already written. The skills you've extracted handle routine work. You're spending time on new problems instead of rediscovering old ones. That's the compound.
+
+## What to try this week
+
+1. Install the plugin
+2. Pick one real task
+3. Run the full loop — all five commands — even if it feels slow
+4. Do it again on a second task
+5. Notice what's already written after `/compound`
+
+Two full loops is enough to feel the shape. After that, the loop runs you.
+
+## Where to go next
+
+[Harness Lab](https://github.com/ondrej-svec/harness-lab) is the full-day practice of this — context engineering, skill authoring, plugin design, team rotations. If this chapter landed, that's where you go next.

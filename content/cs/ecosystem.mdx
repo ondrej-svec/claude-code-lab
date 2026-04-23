@@ -8,14 +8,21 @@ Tahle kapitola je rozhlídnutí, ne tutoriál. Projdi, označ, co tě zajímá, 
 
 **Skill** je balík instrukcí + souborů + volitelných skriptů, které si Claude umí načíst podle potřeby. Ber to jako playbook pro konkrétní doménu.
 
-Pár, co si můžeš nainstalovat dnes:
+**Dobrý příklad: `visualize`** z [Heart of Gold toolkitu](https://github.com/ondrej-svec/heart-of-gold-toolkit). Vezme libovolný markdown — plán, brainstorm, architekturu — a udělá z něj uhlazený, sdílitelný HTML artefakt. Jedna dobře ohraničená úloha, dobře udělaná. Skill, po kterém sahám nejčastěji.
+
+Další skilly, které z toolkitu stojí za instalaci:
 
 - `write-post` — provedení dlouhým textem
 - `frontend-design` — odlišné, produkčně laděné UI
 - `rclone` — synchronizace souborů s cloud storage
 - `clean-code-tdd` — refaktoring a test-driven postupy
+- `copy-editor` — typografický audit a kontrola hlasu
 
-Skilly bydlí v `~/.claude/skills/` nebo přicházejí z **pluginů** (níže). Když skill pasuje na to, co děláš, Claude ho automaticky vyvolá.
+Můžeš nainstalovat celý toolkit, nebo si vybrat jednotlivé skilly. Mrkni na [instalační návod Heart of Gold toolkitu](https://github.com/ondrej-svec/heart-of-gold-toolkit#install).
+
+Důležitější bod: přesně tohle si **můžeš postavit sám**. Když zjistíš, že třikrát po sobě píšeš stejné instrukce, zastav se a napiš skill. Jak na to, je 6. kapitola.
+
+Skilly bydlí v `~/.claude/skills/` nebo přicházejí s **pluginy** (níže). Když skill pasuje na to, co děláš, Claude ho automaticky vyvolá.
 
 → [Skills docs](https://docs.claude.com/en/docs/claude-code/skills)
 
@@ -65,12 +72,12 @@ Dvě cesty, jak spustit Claude, když nejsi u svého stolu:
 
 Přihlas se stejným účtem a pokračuj uprostřed práce.
 
-## Co si nainstalovat na pondělí
+## Kde začít
 
-Pro workshop minimální výbava:
+Minimální výbava, která ti pokryje zbytek labu:
 
 1. Claude desktop aplikace
-2. (Volitelně) Claude Code CLI
-3. (Doporučeno) Compound Engineering plugin — workflow si budeme ukazovat
+2. Volitelně Claude Code CLI
+3. Compound Engineering plugin, pokud chceš rovnou vidět celou smyčku
 
-Zbytek může počkat. Ekosystém je menu, ne checklist.
+Zbytek může počkat. Ekosystém je nabídka, ne povinnost.

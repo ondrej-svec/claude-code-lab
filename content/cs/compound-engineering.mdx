@@ -1,55 +1,99 @@
 # Compound engineering
 
-Když vyřešíš problém poprvé s Claudem, ušetříš možná hodinu. Když se stejný problém objeví podruhé a mezitím jsi neudělal nic navíc, ušetříš zase hodinu. Lineární.
+Nejužitečnější věc, kterou si po prvních čtyřech kapitolách můžeš nainstalovat, je **Compound Engineering plugin** od Averyho z Every. Zabaluje celou smyčku `brainstorm → plan → work → review → compound` jako slash příkazy, které pustíš na libovolný codebase.
 
-Compound engineering je to, co lineární mění na exponenciální. Pokaždé, když něco vyřešíš, zanecháš za sebou znovupoužitelný kousek. Příště, když se problém objeví — nebo něco z jeho sousedství — ten kousek už existuje. Tvůj agent je schopnější, než byl včera.
+Tahle kapitola je o tom, jak si ho nainstaluješ, jak ho použiješ, a proč se ta smyčka skládá sama na sebe.
 
-## Tři kroky
+## Smyčka v pěti příkazech
 
-**1. Vyřeš to jednou.** Prostě problém vyřeš. Nesnaž se hned generalizovat. Pošli fix.
+- `/brainstorm` — rozšiř problém, než ho začneš zužovat
+- `/plan` — rozhodni, co stavět a v jakém pořadí, a napiš si to
+- `/work` — vykonej plán, jednu atomickou změnu za druhou
+- `/review` — druhé oči na výstup, proti plánu
+- `/compound` — zapiš, co ses naučil, ať je příště levnější
 
-**2. Udělej z toho skill.** Když se ten vzorec objeví znova, zastav se. Napiš si kroky jako skill — `SKILL.md` s instrukcemi a případnými pomocnými soubory. Dej to do `~/.claude/skills/`.
+Většina dev práce má takový tvar. Plugin ten tvar zviditelňuje — a dělá ho znovupoužitelným.
 
-**3. Ze skillů udělej pluginy.** Když se tři čtyři související skilly slepí k sobě, zabal je jako plugin. Tvůj tým teď může celý postup nainstalovat jedním příkazem.
+## Instalace
 
-Tohle je progrese. Problém → skill → plugin → znovupoužití. A znova.
+Přímo v Claude Code:
 
-## Co dělá dobrý skill
+```
+/plugin install compound-engineering
+```
 
-Skill je dobře tvarovaný, když:
+Nebo pokud ti víc sedí přímý zdroj, naklonuj a nasměruj Claude na [Compound Engineering repo](https://github.com/every-to/compound-engineering).
 
-- Řeší konkrétní, pojmenovaný problém
-- Kroky jsou opakovatelné, ne tacitní
-- Kolega si ho může nainstalovat a použít, aniž by se tě musel ptát
+Ověř si to:
 
-Skill je špatně tvarovaný, když:
+```
+/plan --help
+```
 
-- Je moc obecný ("pomáhá se vším")
-- Duplikuje existující skill s drobnými úpravami
-- Závisí na tajemstvích ve tvé hlavě
+Pokud příkaz vidíš, jsi uvnitř.
 
-Skilly piš, až jsi něco udělal dvakrát. Ne po jednom (předčasné), ne po desátém (osm iterací jsi promarnil).
+## Použij to na něčem reálném
 
-## Úroveň pluginu
+Vyber si úkol, na kterém bys tenhle týden pracoval. Ne hračku — něco, co má dost tvaru, aby se to dalo naplánovat. Menší feature, migraci, performance issue. Na to ta smyčka je.
 
-Pluginy balí související skilly. Jsou to jednotky sdílení.
+**1. Brainstorm.** Začni s:
 
-Když stavíš workshop content: zabal skilly `brainstorm`, `plan`, `work`, `review` a `compound` do jednoho pluginu. Teď si tvůj tým nainstaluje celý workflow přes `/plugin install`.
+```
+/brainstorm: chci přidat rate limiting na naše veřejné API
+```
 
-Přesně to dělá [Compound Engineering plugin](https://github.com/every-to/compound-engineering) — balí celou smyčku. Přečti si jeho zdroják pro inspiraci tvarem.
+Neskákej rovnou k řešení. Nech Claude problém rozšířit — jaké provozní vzorce, jaký útočník, jaká cena. Většina hodnoty je v otázkách, které se ti Claude vrátí.
 
-## Reálný příklad
+**2. Plán.** Když je problém jasný:
 
-Někdo v týmu napíše dobrý postmortem. Jednou. Příští incident si strukturu nikdo nepamatuje.
+```
+/plan
+```
 
-- **Vyřeš jednou:** napiš postmortem. Pošli.
-- **Skill:** vytáhni strukturu do `~/.claude/skills/postmortem/SKILL.md` se sekcemi, prompty a rejection kritérii. Příští postmortem: Claude autora provede.
-- **Plugin:** zabal `postmortem`, `incident-review`, `on-call-handoff` do pluginu pro incident response. Rolluje se napříč engineeringem.
+Claude napíše seznam úkolů s návaznostmi, uloží ho jako markdown soubor do `docs/plans/` a zastaví se. Přečti si ho. Uprav ho. Odsouhlas, až bys ho bez rozpaků předal kolegovi.
 
-Tohle je compound. První postmortem zabral čtyři hodiny. Desátý trvá čtyřicet minut a je lepší.
+**3. Práce.** Proti schválenému plánu:
 
-## Kde začít
+```
+/work
+```
 
-Po pondělním workshopu si vyber jednu věc, kterou děláš opakovaně. Tenhle týden na ni napiš skill. Nečekej na perfektní abstrakci — napiš tvar, použij dvakrát, dolaď.
+Claude odškrtává úkoly po jednom, commituje v malém, nebatchuje. Pokud tě něco v diffu překvapí, zastav se a uprav plán — neprotlačuj to.
 
-[Harness Lab](https://github.com/ondrej-svec/harness-lab) má na tohle kompletní workshop — context engineering, autoring skillů, design pluginů. Pokud ti tahle kapitola sedla, [tam půjdeš dál](https://github.com/ondrej-svec/harness-lab).
+**4. Review.** Když je hotovo:
+
+```
+/review
+```
+
+Claude si sám přečte svůj výstup proti plánu a označí, co chybí, co sklouzlo jinam, co potřebuje druhý pohled. Tohle zachytí zhruba 70 % těch „zkompilovalo se to, ale…" problémů.
+
+**5. Compound.** Nakonec:
+
+```
+/compound
+```
+
+Claude napíše krátký dokument do `docs/solutions/` s problémem, fixem a tím, co nebylo zjevné. Tyhle dokumenty se stávají pamětí, ze které čerpá tvůj příští `/brainstorm` a `/plan`.
+
+## Proč se ta smyčka skládá
+
+Napoprvé ušetříš hodinu. Lineární.
+
+Napodruhé už má `/compound` zanechané dokumenty v repu. Další `/brainstorm` je rychlejší, protože neznámých ubylo. Další `/plan` čerpá z toho předchozího.
+
+Podesáté máš polovinu plánování napsanou předem. Skilly, které jsi vytáhl, odbavují rutinu. Řešíš nové problémy, místo aby ses probíral starými. To je ten compound.
+
+## Co zkusit tenhle týden
+
+1. Nainstaluj plugin
+2. Vyber si jeden reálný úkol
+3. Projdi celou smyčku — všech pět příkazů — i když se ti to zdá pomalé
+4. Udělej to podruhé na jiném úkolu
+5. Všimni si, co už je napsané po `/compound`
+
+Dvě smyčky stačí, abys ten tvar ucítil. Pak už tě smyčka vede sama.
+
+## Kam dál
+
+[Harness Lab](https://github.com/ondrej-svec/harness-lab) je celodenní praxe tohohle — context engineering, autoring skillů, design pluginů, rotace v týmech. Pokud ti tahle kapitola sedla, tam jdeš dál.
