@@ -2,7 +2,7 @@
 
 A hands-on guide to agentic coding with Claude Code — from install to compound.
 
-Built for the Iresoft Group workshop (April 2026), but useful for anyone learning Claude Code for the first time.
+A practice-oriented walkthrough for developers adopting Claude Code — install, context, iteration, ecosystem, compound engineering, reference. Both English and Czech.
 
 ## What's inside
 

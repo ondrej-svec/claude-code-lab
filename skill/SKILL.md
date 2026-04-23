@@ -12,7 +12,7 @@ Interactive walkthrough of the first hour of claude-code-lab. You guide the user
 Activate when the user:
 - says "cc-lab", "claude code lab", "walk me through the lab"
 - asks to practice with Claude Code from scratch
-- mentions the Iresoft workshop and wants to prepare
+- wants a guided walkthrough of a Claude Code workshop / lab
 - asks for a guided session on install / CLAUDE.md / iteration
 
 If none of these match, do not activate.

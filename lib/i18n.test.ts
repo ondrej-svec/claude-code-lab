@@ -27,15 +27,6 @@ describe("i18n", () => {
       }
     });
 
-    it("returns non-empty login copy for every locale", () => {
-      for (const locale of LOCALES) {
-        const m = getMessages(locale);
-        expect(m.login.title.length).toBeGreaterThan(0);
-        expect(m.login.submit.length).toBeGreaterThan(0);
-        expect(m.login.invalid.length).toBeGreaterThan(0);
-      }
-    });
-
     it("keeps the rejection rule: no tool-war framing in landing", () => {
       for (const locale of LOCALES) {
         const m = getMessages(locale);

@@ -23,9 +23,5 @@ export default defineConfig({
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
-    env: {
-      WORKSHOP_PASSWORD: "test-password",
-      COOKIE_SECRET: "test-secret-1234567890abcdef",
-    },
   },
 });

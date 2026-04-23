@@ -1,6 +1,6 @@
 # dotnet-core sample
 
-Minimal ASP.NET Core Web API. Used as the hands-on sample for CYGNUS-stack chapters of the claude-code-lab workshop.
+Minimal ASP.NET Core Web API. Hands-on sample for the C# / .NET track of the claude-code-lab guide.
 
 ## Requirements
 
@@ -35,7 +35,7 @@ curl http://localhost:5100/api/items
 
 ## Why this stack?
 
-CYGNUS team codebases are .NET 4.8 WinForms — Windows-only, hard to demo from a Mac. This cross-platform sample keeps the language (C#) and runtime shape (ASP.NET Core, DI, record types, endpoints) but runs on every OS. The workflow you practice here transfers directly.
+Teams running .NET 4.8 WinForms are Windows-only and hard to practice on from a Mac. This cross-platform sample keeps the language (C#) and runtime shape (ASP.NET Core, DI, record types, endpoints) but runs on every OS. The workflow you practice here transfers directly.
 
 ## Guide chapters that use this sample
 

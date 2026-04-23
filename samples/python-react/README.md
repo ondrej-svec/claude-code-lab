@@ -1,6 +1,6 @@
 # python-react sample
 
-Minimal FastAPI + React (Vite) sample used for Alveno-stack chapters of the claude-code-lab workshop.
+Minimal FastAPI + React (Vite) sample for the Python / JS track of the claude-code-lab guide.
 
 ## Requirements
 
