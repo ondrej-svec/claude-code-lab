@@ -8,10 +8,10 @@ import {
 import { LOCALES } from "./i18n";
 
 describe("chapters", () => {
-  it("has exactly 7 chapters ordered 1-7", () => {
-    expect(CHAPTERS).toHaveLength(7);
+  it("has exactly 8 chapters ordered 1-8", () => {
+    expect(CHAPTERS).toHaveLength(8);
     const orders = CHAPTERS.map((c) => c.order);
-    expect(orders).toEqual([1, 2, 3, 4, 5, 6, 7]);
+    expect(orders).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
   });
 
   it("has unique slugs", () => {
@@ -46,7 +46,7 @@ describe("chapters", () => {
     });
 
     it("returns undefined after the last chapter", () => {
-      expect(getNextChapter("next-steps")).toBeUndefined();
+      expect(getNextChapter("reference")).toBeUndefined();
     });
   });
 

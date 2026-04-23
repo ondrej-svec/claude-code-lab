@@ -67,6 +67,13 @@ export const CHAPTERS: readonly Chapter[] = [
     eyebrows: { en: "Chapter 7 · Beyond the lab", cs: "Kapitola 7 · Za hranicí labu" },
     readTime: { en: "6 min read", cs: "6 min čtení" },
   },
+  {
+    slug: "reference",
+    order: 8,
+    titles: { en: "Reference", cs: "Reference" },
+    eyebrows: { en: "Chapter 8 · Bookmark this", cs: "Kapitola 8 · Ulož si to" },
+    readTime: { en: "Lookup page", cs: "Pro rychlý přehled" },
+  },
 ] as const;
 
 export function getChapter(slug: string): Chapter | undefined {

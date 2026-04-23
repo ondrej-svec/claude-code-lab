@@ -1,0 +1,326 @@
+# Reference
+
+Bookmark this chapter. It's the lookup page — not a tutorial. When you've forgotten a shortcut mid-flow, scroll here, grab it, move on.
+
+## 8.1 Slash commands
+
+Type `/` in any Claude Code conversation to see the full list filtered to your plan, platform, and installed plugins. These are the built-ins worth knowing.
+
+### Session
+
+| Command | What it does |
+|---|---|
+| `/clear` | Start a new conversation. Previous one still archived — resume with `/resume`. |
+| `/compact [focus]` | Keep the conversation, summarise history, free context. Optional focus narrows what to keep. |
+| `/resume` | Pick up a previous conversation. |
+| `/rewind` | Checkpoint menu — restore code, conversation, or both to an earlier state. Same as double-Esc. |
+| `/branch` | Fork the conversation from a given point. |
+| `/exit` | Quit Claude Code (or `Ctrl+D`). |
+
+### Configuration
+
+| Command | What it does |
+|---|---|
+| `/init` | Scan the repo and propose a starting `CLAUDE.md`. Set `CLAUDE_CODE_NEW_INIT=1` for the new multi-phase interactive flow. |
+| `/memory` | View or edit CLAUDE.md files and loaded memory. |
+| `/permissions` | Manage tool allow/deny rules. |
+| `/model` | Switch model mid-conversation (e.g., Opus → Sonnet). |
+| `/effort` | Per-session effort override. |
+| `/keybindings` | Open `~/.claude/keybindings.json`. |
+| `/hooks` | Configure lifecycle hooks. |
+| `/config` | Open the settings UI. |
+| `/theme` | Switch terminal theme. |
+
+### Info
+
+| Command | What it does |
+|---|---|
+| `/help` | List commands. |
+| `/context` | Visualise current context-window usage with optimisation hints. |
+| `/cost` | Session cost so far. |
+| `/usage`, `/stats` | Broader usage metrics. |
+| `/doctor` | Diagnostics — surfaces config conflicts, missing setup. |
+
+### Workflow
+
+| Command | What it does |
+|---|---|
+| `/agents` | Manage subagents (create, edit, delete). |
+| `/plugin` | Install or manage plugins. |
+| `/mcp` | Install or manage MCP servers. |
+| `/skills` | List installed skills. |
+| `/review` | Bundled PR-style review skill. |
+| `/security-review` | Bundled security review skill. |
+| `/diff` | Show diff since last checkpoint. |
+
+### Remote
+
+| Command | What it does |
+|---|---|
+| `/remote-control` (alias `/rc`) | Make the current session drivable from phone or browser. |
+| `/mobile` | QR code to open the session in Claude mobile app. |
+| `/teleport` (alias `/tp`) | Pull a Claude-Code-on-Web session into your terminal. |
+| `/web-setup` | Set up Claude Code on the Web for the current repo. |
+
+### Heart of Gold toolkit (if installed)
+
+| Command | What it does |
+|---|---|
+| `/loop <interval> <task>` | Run `<task>` every interval. |
+| `/schedule` | Create or manage cron-scheduled remote agents. |
+| `/learn` | Capture session insights to memory. |
+| `/handoff` | Prepare a handoff doc for the next session or teammate. |
+| `/compound` | Document a solved problem for future reference. |
+
+→ [Commands docs](https://code.claude.com/docs/en/commands)
+
+## 8.2 Keyboard shortcuts
+
+CLI shortcuts are context-specific. Full list at [code.claude.com/docs/en/keybindings](https://code.claude.com/docs/en/keybindings). Edit your own at `~/.claude/keybindings.json` via `/keybindings`.
+
+### Must-know
+
+| Shortcut | Action |
+|---|---|
+| `Esc Esc` | **Rewind** — restore to a previous message (same as `/rewind`). |
+| `Ctrl+C` | Interrupt current input or response. **Does not exit.** Reserved. |
+| `Ctrl+D` | Exit Claude Code. Reserved. |
+| `Shift+Tab` | Cycle permission mode: default → acceptEdits → plan → auto. |
+| `Ctrl+R` | Reverse-search conversation history. |
+| `Ctrl+O` | Toggle verbose transcript (expands collapsed tool calls). |
+| `Ctrl+T` | Toggle task list. |
+| `Ctrl+B` | Background the current task. (Conflicts with tmux prefix — press twice.) |
+| `Ctrl+J` | Newline without submitting. |
+| `Ctrl+G` or `Ctrl+X Ctrl+E` | Open current prompt in `$EDITOR`. |
+| `Ctrl+V` (`Cmd+V` on iTerm2) | Paste image from clipboard as `[Image #N]`. |
+| `Cmd+P` / `Meta+P` | Model picker. |
+| `Cmd+T` / `Meta+T` | Toggle extended thinking. |
+| `Shift+Enter` or `\+Enter` | Multi-line entry. Native in iTerm2, WezTerm, Ghostty, Kitty, Warp, Apple Terminal. Elsewhere: `/terminal-setup`. |
+
+### Gotcha
+
+Option-key shortcuts on macOS silently fail until you set **Left/Right Option = Esc+** in your terminal profile (iTerm2, etc.). If `Alt+M` does nothing for mode cycling, that's why — use `Shift+Tab` instead.
+
+The desktop app's shortcuts are not officially documented by Anthropic — what you see here is the CLI.
+
+## 8.3 Input prefixes
+
+Claude Code's input line reads the first character as a mode signal:
+
+| First char | Mode |
+|---|---|
+| `/` | Slash command — runs a command, not a prompt. |
+| `!` | Bash passthrough — runs shell, result enters your context. |
+| `@` | File mention — `@path/to/file` attaches a file; `@Explore` mentions a subagent. |
+| `#` | Memory add — the text after `#` gets appended to the right `CLAUDE.md`. Claude picks the scope (project / user / local). |
+| Anything else | Normal prompt. |
+
+Use `#` when you catch yourself re-explaining the same rule. Use `!` when you want Claude to see the output of a real command. Use `@` when you want Claude to read a specific file without guessing.
+
+## 8.4 CLAUDE.md best practices
+
+The canonical memory docs live at [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory). The practical shape:
+
+### Target length
+
+**Under 200 lines per file.** Official guidance. Beyond that, context usage grows and Claude follows the rules less reliably. Community consensus runs shorter — good CLAUDE.md files are often under 80 lines.
+
+### What belongs
+
+- **What** the project is (one paragraph: domain, scale, stack)
+- **Why** it's built this way (one paragraph: architecture or constraints)
+- **How** to work on it (commands, conventions, don'ts)
+
+Put multi-step procedures in skills, not CLAUDE.md. Put path-specific rules in `.claude/rules/*.md` with a `paths:` frontmatter so they activate only when relevant.
+
+### Scope hierarchy
+
+All `CLAUDE.md` files from the current directory up to the filesystem root get concatenated at session start. Priority (later wins on conflict):
+
+1. **Managed** — enterprise-admin-pushed policy (if any)
+2. **User** — `~/.claude/CLAUDE.md` (about you, loads everywhere)
+3. **Project** — `./CLAUDE.md` or `./.claude/CLAUDE.md` (about the codebase, committed)
+4. **Local** — `./CLAUDE.local.md` (about you in this project, gitignored)
+
+Subdirectory `CLAUDE.md` files load lazily when Claude reads a file inside. Useful for monorepos.
+
+### Three shape templates
+
+**Project (`./CLAUDE.md`):**
+
+```md
+# Project
+
+Internal onboarding tool. Postgres + Node, Vercel deploy.
+
+## Conventions
+- TypeScript strict. No `any` unless commented.
+- Tests next to source: `foo.ts` + `foo.test.ts`.
+- Migrations: numbered SQL files in `db/migrations/`.
+
+## Don't
+- Don't install npm packages without asking.
+- Don't touch `app/legacy/`.
+
+## Commands
+- `pnpm dev`, `pnpm test`, `pnpm db:seed`
+```
+
+**User (`~/.claude/CLAUDE.md`):**
+
+```md
+# Personal
+
+Prefer direct answers. No throat-clearing.
+I use vim keybindings in my editor.
+When I say "ship it", run tests first, then commit.
+```
+
+**Local (`./CLAUDE.local.md`, gitignored):**
+
+```md
+# Local notes
+
+Staging DB: `postgresql://localhost:5433/app_staging`
+WIP branch: `wip/2026-04-refactor-auth`
+```
+
+### Imports
+
+`@path/to/file.md` expands inline — useful but **the imported file still counts against context**, it loads at session start. Max depth 5 hops. Don't use imports to "save context" — they don't.
+
+### What goes wrong
+
+- **Over-instruction** — rules get uniformly ignored
+- **Personality prose** — wastes tokens without improving output
+- **Conflicting rules across nested files** — Claude picks one arbitrarily
+- **Used as a linter** — let linters lint; let CLAUDE.md set intent
+
+## 8.5 Privacy, security & plan tiers
+
+This is a lightweight overview. Anthropic's current privacy and trust pages are the source of truth; links are below.
+
+### What leaves your machine
+
+Every prompt sends: your message, files you explicitly share (via `@`, tool use, or what Claude reads to answer), and conversation history in the current context window.
+
+It does **not** send: your full filesystem, files outside the project, anything matched by `.gitignore` or `.claudeignore`.
+
+### Plan tiers and retention
+
+| Plan | Audience | Retention posture |
+|---|---|---|
+| **Pro** | Individual | Standard retention; used to improve service; opt out in console settings. |
+| **Max** | Heavy individual | Same as Pro. |
+| **Team** | Small orgs (5-200 seats) | Admin-configurable. Stricter defaults than Pro. |
+| **Enterprise** | Large orgs | Zero-retention available. Admin pushes policy. SSO, SOC 2, DPA. |
+| **API direct** | Developers, some features blocked | Retention policy set by you in API console; Remote Control, mobile app, and team features typically locked out. |
+
+If your company has a Team or Enterprise seat, **use it**. The retention and admin-policy differences matter for corporate use.
+
+### `.claudeignore`
+
+The simplest defence regardless of plan. Next to `.gitignore`, lists files or paths Claude never sees:
+
+```
+.env
+.env.*
+**/secrets.*
+customer-data/
+proprietary-algorithms/
+```
+
+Use it for secrets, customer data, internal docs — whatever your compliance posture requires.
+
+### MCP security
+
+MCPs that fetch untrusted content (web pages, issues, emails) can inject instructions into your session. Anthropic's stance: **third-party MCPs at your own risk**. Review what an MCP does before installing. Prefer first-party MCPs from `anthropics/` organisations when available.
+
+### Canonical references
+
+- [Anthropic Privacy Policy](https://www.anthropic.com/legal/privacy)
+- [Anthropic Trust Center](https://trust.anthropic.com) — compliance certifications, data processing addendum, security posture
+- [Claude Code data handling](https://code.claude.com/docs/en/data-handling)
+- [Enterprise plan features](https://www.anthropic.com/enterprise)
+- [Permissions docs](https://code.claude.com/docs/en/settings#permissions)
+
+If you're unsure what your organisation's policy allows, talk to your admin before touching production code with Claude.
+
+## 8.6 Extending Claude
+
+### Skills
+
+The Agent Skills open format — spec and reference implementations:
+
+- [agentskills.io](https://agentskills.io) — the open standard
+- [github.com/anthropics/skills](https://github.com/anthropics/skills) — 17 official skills + the `skill-creator` and `mcp-builder` meta-skills
+- [Skills docs](https://code.claude.com/docs/en/skills)
+
+Chapter 6 shows the agentic skill-authoring workflow (invoke `skill-creator` or `craft-skill`, answer discovery questions, review the draft).
+
+### Plugins
+
+Plugin manifest format, marketplace submission, plugin-vs-skill distinction:
+
+- [Plugins docs](https://code.claude.com/docs/en/plugins)
+- [Plugins reference](https://code.claude.com/docs/en/plugins-reference)
+- Submit a plugin: [claude.ai/settings/plugins/submit](https://claude.ai/settings/plugins/submit)
+
+### Hooks
+
+Shell commands, HTTP endpoints, or LLM prompts fired at specific lifecycle events. Events include `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, and many more.
+
+- [Hooks docs](https://code.claude.com/docs/en/hooks)
+- Configure in `.claude/settings.json` under `"hooks"`, or in a plugin's `hooks/hooks.json`
+
+### MCPs
+
+Build custom MCP servers with the MCP SDK (Python or TypeScript):
+
+- [Model Context Protocol](https://modelcontextprotocol.io) — the open standard
+- `mcp-builder` skill in `anthropics/skills` scaffolds one
+- [Claude Code MCP docs](https://code.claude.com/docs/en/mcp)
+
+## 8.7 Canonical sources
+
+Every official link referenced across this guide, in one place.
+
+### Anthropic — Claude Code
+
+- [Overview](https://code.claude.com/docs/en/overview)
+- [Memory / CLAUDE.md](https://code.claude.com/docs/en/memory)
+- [Skills](https://code.claude.com/docs/en/skills)
+- [Plugins](https://code.claude.com/docs/en/plugins)
+- [Sub-agents](https://code.claude.com/docs/en/sub-agents)
+- [MCP](https://code.claude.com/docs/en/mcp)
+- [Hooks](https://code.claude.com/docs/en/hooks)
+- [Commands](https://code.claude.com/docs/en/commands)
+- [Keybindings](https://code.claude.com/docs/en/keybindings)
+- [Interactive mode](https://code.claude.com/docs/en/interactive-mode)
+- [Remote Control](https://code.claude.com/docs/en/remote-control)
+- [Claude Code on the Web](https://code.claude.com/docs/en/claude-code-on-the-web)
+- [GitHub Actions](https://code.claude.com/docs/en/github-actions)
+- [Settings (permissions)](https://code.claude.com/docs/en/settings)
+- [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices)
+
+### Standards + reference repos
+
+- [Agent Skills spec](https://agentskills.io)
+- [anthropics/skills](https://github.com/anthropics/skills)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+
+### Ecosystem
+
+- [Compound Engineering plugin](https://github.com/EveryInc/compound-engineering-plugin)
+- [Super Powers plugin](https://github.com/iannuttall/claude-super-powers)
+- [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit)
+
+### Privacy + compliance
+
+- [Anthropic Privacy Policy](https://www.anthropic.com/legal/privacy)
+- [Anthropic Trust Center](https://trust.anthropic.com)
+- [Enterprise plan](https://www.anthropic.com/enterprise)
+
+### This lab
+
+- [github.com/ondrej-svec/claude-code-lab](https://github.com/ondrej-svec/claude-code-lab) — source, issues, stars welcome.

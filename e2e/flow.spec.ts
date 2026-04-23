@@ -51,10 +51,10 @@ test.describe("chapter navigation", () => {
     await page.click('button[type="submit"]');
   });
 
-  test("lab index lists all seven chapters", async ({ page }) => {
+  test("lab index lists all eight chapters", async ({ page }) => {
     await page.goto("/en/lab");
     const chapterLinks = page.locator("a[href*='/en/lab/']");
-    await expect(chapterLinks).toHaveCount(7 * 2);
+    await expect(chapterLinks).toHaveCount(8 * 2);
   });
 
   test("chapter 1 renders and links to chapter 2", async ({ page }) => {

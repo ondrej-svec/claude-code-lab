@@ -166,6 +166,66 @@ function HR() {
   );
 }
 
+function Table({ children }: { children?: ReactNode }) {
+  return (
+    <div className="my-5 overflow-x-auto">
+      <table
+        className="w-full text-sm border-collapse"
+        style={{
+          background: "var(--surface-elevated)",
+          border: "1px solid var(--border)",
+          borderRadius: "8px",
+        }}
+      >
+        {children}
+      </table>
+    </div>
+  );
+}
+
+function THead({ children }: { children?: ReactNode }) {
+  return (
+    <thead
+      style={{ background: "var(--surface-panel)" }}
+      className="text-left"
+    >
+      {children}
+    </thead>
+  );
+}
+
+function TH({ children }: { children?: ReactNode }) {
+  return (
+    <th
+      className="px-3 py-2 font-semibold text-xs uppercase tracking-wide"
+      style={{
+        color: "var(--text-secondary)",
+        borderBottom: "1px solid var(--border)",
+      }}
+    >
+      {children}
+    </th>
+  );
+}
+
+function TD({ children }: { children?: ReactNode }) {
+  return (
+    <td
+      className="px-3 py-2 align-top"
+      style={{
+        color: "var(--text-primary)",
+        borderBottom: "1px solid var(--border)",
+      }}
+    >
+      {children}
+    </td>
+  );
+}
+
+function TR({ children }: { children?: ReactNode }) {
+  return <tr>{children}</tr>;
+}
+
 function Strong({ children }: { children?: ReactNode }) {
   return (
     <strong className="font-semibold" style={{ color: "var(--text-primary)" }}>
@@ -215,5 +275,11 @@ export const mdxComponents: MDXComponents = {
   blockquote: Blockquote,
   hr: HR,
   strong: Strong,
+  table: Table,
+  thead: THead,
+  tbody: ({ children }: { children?: ReactNode }) => <tbody>{children}</tbody>,
+  tr: TR,
+  th: TH,
+  td: TD,
   Callout,
 };
