@@ -1,7 +1,17 @@
 import Link from "next/link";
-import { ThemeSwitcher } from "./components/theme-switcher";
+import { ThemeSwitcher } from "@/app/components/theme-switcher";
+import { LanguageSwitcher } from "@/app/components/language-switcher";
+import { DEFAULT_LOCALE, getMessages, isLocale } from "@/lib/i18n";
 
-export default function Home() {
+export default async function LandingPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const validLocale = isLocale(locale) ? locale : DEFAULT_LOCALE;
+  const m = getMessages(validLocale);
+
   return (
     <div
       className="min-h-screen flex flex-col"
@@ -17,7 +27,10 @@ export default function Home() {
         >
           claude-code-lab
         </span>
-        <ThemeSwitcher />
+        <div className="flex items-center gap-4">
+          <LanguageSwitcher currentLocale={validLocale} />
+          <ThemeSwitcher />
+        </div>
       </header>
 
       <main className="flex-1 flex items-center justify-center px-8 py-16">
@@ -26,39 +39,34 @@ export default function Home() {
             className="text-xs uppercase tracking-[0.2em] mb-4"
             style={{ color: "var(--text-muted)" }}
           >
-            Workshop · Iresoft Group · April 2026
+            {m.landing.eyebrow}
           </p>
           <h1
             className="text-5xl md:text-6xl font-semibold leading-[1.05] mb-6"
             style={{ color: "var(--text-primary)" }}
           >
-            From ChatGPT in the browser to Claude Code in your terminal.
+            {m.landing.title}
           </h1>
           <p
             className="text-lg leading-relaxed mb-10"
             style={{ color: "var(--text-secondary)" }}
           >
-            A hands-on lab that takes you from install to{" "}
-            <em>compound</em> — the state where your agent writes the skill,
-            which writes the plugin, which writes the next plugin.
+            {m.landing.lede}
           </p>
 
           <div className="flex items-center gap-4">
             <Link
-              href="/login"
+              href={`/${validLocale}/login`}
               className="motion-button inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium"
               style={{
                 background: "var(--accent-surface)",
                 color: "var(--accent-text)",
               }}
             >
-              Enter the lab
+              {m.landing.cta}
             </Link>
-            <span
-              className="text-sm"
-              style={{ color: "var(--text-muted)" }}
-            >
-              password required
+            <span className="text-sm" style={{ color: "var(--text-muted)" }}>
+              {m.landing.ctaHint}
             </span>
           </div>
         </div>
@@ -68,7 +76,7 @@ export default function Home() {
         className="px-8 py-6 max-w-5xl mx-auto w-full text-xs"
         style={{ color: "var(--text-muted)" }}
       >
-        Built with Claude Code · Rosé Pine · Harness Lab design system
+        {m.landing.footer}
       </footer>
     </div>
   );

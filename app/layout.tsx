@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Manrope, Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "./components/theme-provider";
+import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
 import "./globals.css";
 
 const bodyFont = Manrope({
@@ -18,14 +20,18 @@ const displayFont = Space_Grotesk({
 export const metadata: Metadata = {
   title: "Claude Code Lab",
   description:
-    "A hands-on guide to agentic coding with Claude Code — from install to compound.",
+    "A practice for developers working with agents — from first command to compound.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const headerStore = await headers();
+  const headerLocale = headerStore.get("x-locale");
+  const lang = isLocale(headerLocale) ? headerLocale : DEFAULT_LOCALE;
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <body className={`${bodyFont.variable} ${displayFont.variable}`}>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
