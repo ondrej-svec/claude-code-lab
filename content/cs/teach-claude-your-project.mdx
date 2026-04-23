@@ -107,8 +107,12 @@ flowchart TD
 
 → [Anthropic memory docs](https://code.claude.com/docs/en/memory) — kanonická reference.
 
-## Zkus to
+## Praxe: pokračuj se svou ukázkou
 
-Otevři ukázkový projekt. Spusť `/init`. Přečti si, co Claude navrhnul. Pak ho požádej, ať přidá tři pravidla, která popisují, jak pracuješ **ty**. Pak přidej sekci **Ne** s jedním pravidlem, které jsi kolegovi zopakoval už víckrát. Ulož.
+Procházíš lab popořadě? Vezmi, co tě tahle kapitola naučila, k ukázce, se kterou jsi začal v kapitole 2 — nebo rovnou ke svému vlastnímu codebase, kde to sedne hlouběji.
 
-Tvůj další prompt bude vypadat jinak.
+1. Otevři v Claudu složku projektu — `samples/dotnet-core` (Varianta A), `samples/python-react` (Varianta B), nebo svoje vlastní repo. Ukázkové složky mají starter `CLAUDE.md`; tvoje repo ho mít nemusí. Každopádně se podívej, co tam je, než do toho šáhneš.
+2. Pusť `/init`. Claude navrhne aktualizovaný `CLAUDE.md` podle toho, co vidí. Srovnej návrh s tím, co máš — co mu uniklo, co přidal nad rámec, co je fakt lepší. Přijmi, co sedí, zbytek oprav.
+3. Použij prefix `#` a přidej jedno dvě pravidla, která vylezla v kapitole 2, nebo která pořád opakuješ týmu — „chybové odpovědi vracej s polem `error`“, „než přidáš endpoint, přidej k němu test.“ Sleduj, v jakém scope každé z nich přistane; project scope chceš pro pravidla platná pro celý codebase.
+
+Když to funguje: tvůj `CLAUDE.md` je *tvůj* — ne starter, ne ten, co navrhl `/init`, ale ten tvarovaný podle toho, jak s kódem fakt pracuješ. Praxe v další kapitole používá plan mode na přidání další funkce.
