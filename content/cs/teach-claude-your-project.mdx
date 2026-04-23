@@ -85,10 +85,9 @@ Tři soubory, všechny se při startu Clauda v projektu zřetězí dohromady. Po
 Vnořené `CLAUDE.md` soubory v podadresářích se načítají líně — jenom když Claude sahá do souboru uvnitř toho podadresáře. Užitečné pro monorepa. Alternativa: `.claude/rules/*.md` s `paths:` frontmatter, které se aktivují, jenom když se dotýkáš odpovídajících souborů.
 
 <Diagram chart={`flowchart TD
-    M[Managed politika<br/>enterprise admin] --> U
-    U["Uživatel<br/>~/.claude/CLAUDE.md"] --> P
-    P["Projekt<br/>./CLAUDE.md"] --> L
-    L["Lokální<br/>CLAUDE.local.md · gitignorované"]`} caption="Všechny soubory se při startu session zřetězí. Při konfliktu vyhrává ten pozdější v řetězu." />
+    M["Managed politika"] --> U["Uživatel · ~/.claude/CLAUDE.md"]
+    U --> P["Projekt · ./CLAUDE.md"]
+    P --> L["Lokální · CLAUDE.local.md"]`} caption="Všechny soubory se při startu session zřetězí. Při konfliktu vyhrává ten pozdější v řetězu." />
 
 → [Anthropic memory docs](https://code.claude.com/docs/en/memory) — kanonická reference.
 

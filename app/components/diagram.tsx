@@ -20,46 +20,45 @@ export function Diagram({ chart, caption }: Props) {
     let cancelled = false;
 
     (async () => {
-      const mermaid = (await import("mermaid")).default;
+      try {
+        const mermaid = (await import("mermaid")).default;
 
-      mermaid.initialize({
-        startOnLoad: false,
-        theme: "base",
-        fontFamily: "var(--font-body), Inter, system-ui, sans-serif",
-        themeVariables:
-          resolvedTheme === "dark"
+        const isDark = resolvedTheme === "dark";
+
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: "base",
+          securityLevel: "loose",
+          fontFamily: "Inter, system-ui, sans-serif",
+          themeVariables: isDark
             ? {
                 background: "transparent",
-                primaryColor: "#393552",
+                primaryColor: "#2a273f",
                 primaryTextColor: "#e0def4",
                 primaryBorderColor: "#6e6a86",
                 lineColor: "#908caa",
-                secondaryColor: "#2a273f",
-                tertiaryColor: "#232136",
-                noteBkgColor: "#2a273f",
-                noteTextColor: "#e0def4",
                 textColor: "#e0def4",
               }
             : {
                 background: "transparent",
-                primaryColor: "#faf4ed",
+                primaryColor: "#fffaf3",
                 primaryTextColor: "#575279",
                 primaryBorderColor: "#9893a5",
                 lineColor: "#797593",
-                secondaryColor: "#f2e9e1",
-                tertiaryColor: "#f4ede8",
-                noteBkgColor: "#f4ede8",
-                noteTextColor: "#575279",
                 textColor: "#575279",
               },
-      });
+        });
 
-      try {
         const id = `d-${Math.random().toString(36).slice(2, 9)}`;
         const { svg: rendered } = await mermaid.render(id, chart);
-        if (!cancelled) setSvg(rendered);
+        if (!cancelled) {
+          setSvg(rendered);
+          setError(null);
+        }
       } catch (err) {
-        if (!cancelled) setError(String(err));
+        const message =
+          err instanceof Error ? err.message : String(err);
+        if (!cancelled) setError(message);
       }
     })();
 
