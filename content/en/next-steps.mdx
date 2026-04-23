@@ -2,6 +2,123 @@
 
 You have the basics. The rest is menu, not required. Pick one thing at a time, try it, leave the others for later.
 
+## Testing, properly
+
+Three practices worth using, from people who've argued about them in public.
+
+### Tracer bullets — one test before the feature
+
+Before you build anything, write one end-to-end test that fails because the feature doesn't exist. Prove the wiring works — request reaches controller reaches service reaches database — then iterate toward green.
+
+The name comes from Andy Hunt and Dave Thomas in *The Pragmatic Programmer*. You fire a few rounds, see where they land, adjust. Their [Artima interview on tracer bullets](https://www.artima.com/articles/tracer-bullets-and-prototypes) explains the metaphor and the discipline it imposes.
+
+> Write a failing end-to-end test for a `POST /api/items` endpoint that creates an item and returns 201. I haven't built the endpoint yet — just get the test to fail on the right line.
+
+Build until it passes. You never forget the integration this time.
+
+### TDD — red, green, refactor
+
+Test first, implementation second, refactor third. Three separate prompts, three separate diffs.
+
+Kent Beck named the practice in *Test-Driven Development: By Example*. TDD has had its doubters. The 2014 [Is TDD Dead?](https://martinfowler.com/articles/is-tdd-dead/) series between Beck, Martin Fowler, and DHH is still the best map of where it helps, where it hurts, and what "TDD" even means. Read it once, then decide your own posture.
+
+> Write a failing test for `slugify(input: string)` handling diacritics and consecutive spaces. Use our existing test setup.
+
+Then:
+
+> Make the test pass. Minimal implementation only.
+
+Then:
+
+> Refactor. Keep the tests green. Look for duplication or unclear naming.
+
+Three diffs, three reviews, three correct things.
+
+### TDD is where agents earn their keep
+
+Beck's recent take: TDD is a "superpower" for AI agents. The [Pragmatic Engineer interview with Beck](https://newsletter.pragmaticengineer.com/p/tdd-ai-agents-and-coding-with-kent) is worth the hour — Builder.io summarises the mechanism well: "[everything that makes TDD a slog for humans makes it the perfect workflow for an AI agent](https://www.builder.io/blog/test-driven-development-ai)." Write tests, give them to the agent, let it iterate to green without the ego cost humans feel when their code keeps bouncing off a red bar.
+
+The counterpoint, same interview: agents sometimes delete the tests to make them pass. Watch the diff. Pin the test files in your review.
+
+### Mutation testing — check the tests themselves
+
+Every project eventually asks: *is my test suite actually protecting me?* Mutation testing answers it. The tool makes small changes to your code — flips a comparison, drops a return — and runs your tests. If the tests still pass, they weren't testing what you thought.
+
+- JavaScript / TypeScript: [Stryker](https://stryker-mutator.io/)
+- Java / JVM: [PITest](https://pitest.org/)
+
+Worth knowing about. Not worth insisting on until you have a real suite to mutate.
+
+## Agent-driven review
+
+Agents don't mind reading your code. They can run it on every PR, on every commit, before every merge. Five worth knowing about:
+
+### Claude Code `/security-review`
+
+Ships with Claude Code. Scans the pending diff for SQL injection, XSS, auth flaws, insecure data handling, dependency issues — with severity ratings and false-positive filtering. Customise by copying `security-review.md` into `.claude/commands/`. Source: [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review).
+
+In CI the same engine runs as a GitHub Action via [`anthropics/claude-code-action`](https://github.com/anthropics/claude-code-action) — catches issues before a human reviewer even clicks the PR.
+
+### GitHub Copilot Autofix
+
+Built into GitHub's code scanning. When CodeQL flags an alert, an LLM proposes a fix inline on the PR — you accept, edit, or reject. Free on public repos, included with Code Security on private ones. Supports C#, C/C++, Go, Java/Kotlin, Swift, JS/TS, Python, Ruby, Rust. [Copilot Autofix docs](https://docs.github.com/en/code-security/concepts/code-scanning/copilot-autofix-for-code-scanning).
+
+### Semgrep Assistant + MCP
+
+[Semgrep](https://semgrep.dev/) is a fast static analyser. Its [MCP server](https://github.com/semgrep/mcp) wires the scanner into Claude Code and other agents: the agent runs a scan, reads the finding, proposes a fix, re-runs — a closed loop. Good fit if your CI already uses Semgrep rulesets.
+
+### Snyk DeepCode AI
+
+[Snyk DeepCode AI](https://snyk.io/platform/deepcode-ai/) combines a symbolic taint-analysis engine with a neural model trained on millions of lines. The symbolic side constrains what the LLM can suggest — small targeted fixes, not rewrites. Worth evaluating on a codebase that already lives in Snyk.
+
+### Amazon Q Developer code reviews
+
+[Q Developer](https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/code-reviews.html) reviews codebases for security and quality — SAST, SCA, AWS best practices — and auto-fixes what it can. Best fit if you're already on AWS and want findings surfaced next to your other Q workflows.
+
+Pick one that matches where your code lives. Running two is fine; running five is noise.
+
+## LLMs for security — current tooling
+
+Two tools worth naming, both landscape-shaping, both with access hedges.
+
+### AWS Security Agent
+
+[AWS Security Agent](https://aws.amazon.com/about-aws/whats-new/2026/03/aws-security-agent-ondemand-penetration/) went GA at the end of March 2026. Autonomous penetration testing, 24/7, $50 per task-hour — roughly $1,200 per full app test. Different class of tool from Q Developer's code reviews: Q flags issues in your source; Security Agent tries to break your running app the way a human pentester would.
+
+The clean pitch: you can run a pentest per release instead of per year.
+
+### GPT-5.4-Cyber
+
+OpenAI's [cybersecurity-tuned GPT-5.4 variant](https://openai.com/index/scaling-trusted-access-for-cyber-defense/) has fewer refusal restrictions on legitimate security work — vulnerability research, binary reverse engineering, malware analysis. **Access is gated.** You apply through OpenAI's Trusted Access for Cyber program and get verified before the model is enabled for you. Enterprises apply via their account rep; individuals at `chatgpt.com/cyber`.
+
+Worth naming because you'll hear about it. Not worth waiting for — for day-to-day defensive work on application code, the tools above cover most of what a working team needs.
+
+### Where to start, if you're starting now
+
+`/security-review` on every commit. `claude-code-action` on every PR. One dedicated tool (Semgrep, Snyk, or Q Developer) in CI for the SAST layer. Add AWS Security Agent when you have something shipped worth attacking. Skip GPT-5.4-Cyber until you have a concrete defensive use case that justifies the gates.
+
+## Security concerns that don't go away
+
+Tools help. They don't erase the shape of the problem.
+
+Simon Willison named the [**lethal trifecta**](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/) — three conditions that, combined, let an attacker exfiltrate your data through an agent:
+
+1. **Access to private data** — your repo, your tokens, your customer records.
+2. **Exposure to untrusted content** — a GitHub issue, a scraped page, an email, an MCP tool output.
+3. **External communication** — any channel the agent can reach out on.
+
+If all three are live, an attacker who can inject instructions into the untrusted content can usually get it to send the private data out.
+
+Korny Sietsma's [*Agentic AI and Security*](https://martinfowler.com/articles/agentic-ai-security.html) on martinfowler.com extends the framing into practical mitigations: break tasks so each sub-task removes at least one leg of the trifecta; run LLMs in sandboxed containers; take small, human-reviewable steps.
+
+Practical posture:
+
+- Audit every MCP you add for the trifecta. Most third-party MCPs fetch untrusted content.
+- Keep test files out of "agent edits freely" scope — the agents-delete-tests counterpoint from Beck is real.
+- Review diffs on anything touching auth, secrets, or migrations.
+
+The agent is fast. Humans stay on the boundary.
+
 ## Automation
 
 ### Hooks
@@ -36,47 +153,23 @@ Claude Code resets between conversations. `CLAUDE.md` helps; `/compound` in the 
 
 Try this when: you've done Compound Engineering for a month and still feel like you're repeating the same fixes across projects. That's the problem altk-evolve is designed for.
 
-## Testing patterns
+## People to follow
 
-Claude is ruthless about tests — if you ask it. Three patterns worth trying:
+The field moves fast. Five voices worth keeping an eye on for the long game.
 
-### Tracer bullet — one test before the feature
+- **[Simon Willison](https://simonwillison.net/)** — the most reliable signal on LLM capabilities, agent security, and where the hype breaks. Named "prompt injection" and the "lethal trifecta." Honest hedges, small working examples. Read the blog.
+- **[Korny Sietsma](https://blog.korny.info/)** — agentic-AI security from an agile-engineering lens. His [*Agentic AI and Security*](https://martinfowler.com/articles/agentic-ai-security.html) on martinfowler.com is the clearest current primer on the attack surface.
+- **[Tanya Janca](https://shehackspurple.ca/)** (SheHacksPurple) — author of *Alice and Bob Learn Application Security* and *Alice and Bob Learn Secure Coding*. Trains developers, not security teams. If your reflex is "security is someone else's job," this is the reset.
+- **[Daniel Miessler](https://danielmiessler.com/)** — weekly [Unsupervised Learning](https://newsletter.danielmiessler.com/) newsletter covers AI, security, and their intersection. Good for spotting trends before they land in your inbox as a mandate.
+- **[Laurie Williams](https://collaboration.csc.ncsu.edu/laurie/)** — NC State, research on secure software supply chains and DevSecOps practices backed by the NSF. Academic rigour, practitioner audience. Follow her publications when a topic (SBOMs, dependency attacks, pair programming) moves you to dig deeper.
 
-Before you build anything, write one end-to-end test that fails because the feature doesn't exist yet. Prove the wiring works — request reaches controller reaches service reaches DB — then iterate toward green.
-
-> Write a failing end-to-end test for a `POST /api/items` endpoint that creates an item and returns 201. I haven't built the endpoint yet — just get the test to fail on the right line.
-
-Build until it passes. You'll never forget the integration this time.
-
-### TDD loop — red, green, refactor
-
-Test first, implementation second, refactor third. Three separate prompts, three separate diffs.
-
-> Write a failing test for a `slugify(input: string)` function that handles diacritics and consecutive spaces. Use our existing test setup.
-
-Then:
-
-> Make the test pass. Minimal implementation only.
-
-Then:
-
-> Refactor. Keep the tests green. Look for duplication or unclear naming.
-
-Three diffs, three reviews, three correct things.
-
-### Property-based tests — for anything with invariants
-
-When the "correct output" is hard to enumerate but the rules are clear, switch to property tests:
-
-> The `parse(input)` function should be the inverse of `stringify`. Use fast-check (or Hypothesis) to assert `parse(stringify(x)) === x` for random inputs. Find a case where it breaks.
-
-Claude generates the inputs you wouldn't have thought of. Property tests are where it earns its keep.
+Five names, five URLs. An hour a week across them is enough to stay oriented.
 
 ## This lab is on GitHub
 
 This whole guide — website, chapters, samples, companion skill — is open source at **[github.com/ondrej-svec/claude-code-lab](https://github.com/ondrej-svec/claude-code-lab)**. If something was wrong, if the Czech is off, if you have a pattern worth adding: open an issue or a PR. Star it if it helped — that's the signal to keep improving it.
 
-## Last thought
+## Last word
 
 Nothing here is required. Treat this chapter as a save point. Come back when you've felt the limits of what you know, pick one thing to try.
 

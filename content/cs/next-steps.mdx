@@ -2,6 +2,123 @@
 
 Základy máš. Zbytek je menu, ne povinnost. Vezmi si jednu věc po druhé, zkus ji, ostatní nech na potom.
 
+## Testování, pořádně
+
+Tři postupy, které stojí za vyzkoušení — od lidí, co se o nich veřejně hádali.
+
+### Tracer bullet — jeden test před feature
+
+Než cokoliv postavíš, napiš jeden end-to-end test, který selže, protože feature ještě neexistuje. Ověříš, že propojení funguje — request dorazí do kontroléru, do servicy, do DB — a pak iteruješ k zelenému.
+
+Metaforu razí Andy Hunt a Dave Thomas v *The Pragmatic Programmer*. Vystřelíš pár raket, díváš se, kam dopadly, upravíš mířidla. Jejich [rozhovor na Artimě o tracer bullets](https://www.artima.com/articles/tracer-bullets-and-prototypes) vysvětluje, odkud metafora pochází a k jaké disciplíně vede.
+
+> Napiš failing end-to-end test pro `POST /api/items` endpoint, který vytvoří item a vrátí 201. Endpoint ještě neexistuje — jenom to dotáhni tak, ať test selže na správném řádku.
+
+Stav, dokud neprojde. Integraci si tentokrát budeš pamatovat.
+
+### TDD — red, green, refactor
+
+Test první, implementace druhá, refactor třetí. Tři samostatné prompty, tři samostatné diffy.
+
+Kent Beck tu praktiku pojmenoval v knize *Test-Driven Development: By Example*. Kolem TDD se ale roky vedou spory. Série [Is TDD Dead?](https://martinfowler.com/articles/is-tdd-dead/) z roku 2014 mezi Beckem, Martinem Fowlerem a DHH je pořád nejlepší mapa toho, kde TDD pomáhá, kde škodí a co vlastně „TDD" znamená. Přečti si to jednou a vyber si vlastní postoj.
+
+> Napiš failing test pro funkci `slugify(input: string)`, která zvládá diakritiku a opakované mezery. Použij naše stávající test setup.
+
+Pak:
+
+> Nech test projít. Minimální implementace.
+
+Pak:
+
+> Zrefaktoruj. Drž testy zelené. Hledej duplikaci a nejasná pojmenování.
+
+Tři diffy, tři kontroly, tři správné věci.
+
+### TDD je místo, kde si agenti zaslouží plat
+
+Beck sám nedávno: TDD je pro AI agenty „superpower“. [Rozhovor s Beckem v Pragmatic Engineer](https://newsletter.pragmaticengineer.com/p/tdd-ai-agents-and-coding-with-kent) stojí za tu hodinu — Builder.io mechaniku shrnul dobře: „[všechno, co z TDD dělá pro lidi otravnou dřinu, z něj pro AI agenta dělá perfektní workflow](https://www.builder.io/blog/test-driven-development-ai)“. Napiš testy, dej je agentovi, ať iteruje k zelenému — bez zranění ega, které si lidi odnášejí, když se jejich kód pořád odráží od červeného.
+
+Protipól, stejný rozhovor: agenti občas testy smažou, aby „prošly“. Kontroluj diff. V review přišpendli soubory s testy.
+
+### Mutační testování — zkontroluj samotné testy
+
+Každý projekt se jednou zeptá: *chrání mě test suite doopravdy?* Na to odpovídá mutační testování. Nástroj udělá malé změny v kódu — přehodí porovnání, vyhodí `return` — a pustí tvoje testy. Jestli projdou, netestovaly to, co sis myslel.
+
+- JavaScript / TypeScript: [Stryker](https://stryker-mutator.io/)
+- Java / JVM: [PITest](https://pitest.org/)
+
+Stojí to za pozornost. Ne za to, abys na tom trval, dokud nemáš reálnou suite, kterou by šlo mutovat.
+
+## Review od agenta
+
+Agentům nevadí číst tvůj kód. Můžou ho procházet na každém PR, na každém commitu, před každým mergem. Pět, které stojí za to znát:
+
+### Claude Code `/security-review`
+
+Součást Claude Code. Skenuje aktuální diff na SQL injection, XSS, auth díry, nebezpečnou práci s daty, problémy v závislostech — s hodnocením závažnosti a odfiltrováním falešných poplachů. Přizpůsobíš zkopírováním `security-review.md` do `.claude/commands/`. Zdroj: [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review).
+
+V CI stejný engine běží jako GitHub Action přes [`anthropics/claude-code-action`](https://github.com/anthropics/claude-code-action) — chytí problémy ještě předtím, než se na PR podívá člověk.
+
+### GitHub Copilot Autofix
+
+Součást GitHubového code scanningu. Když CodeQL ohlásí alert, LLM navrhne fix přímo v PR — přijmeš, upravíš, nebo zamítneš. Na veřejných repech zdarma, na privátních v rámci licence Code Security. Podporuje C#, C/C++, Go, Java/Kotlin, Swift, JS/TS, Python, Ruby, Rust. [Dokumentace Copilot Autofix](https://docs.github.com/en/code-security/concepts/code-scanning/copilot-autofix-for-code-scanning).
+
+### Semgrep Assistant + MCP
+
+[Semgrep](https://semgrep.dev/) je rychlý statický analyzátor. Jeho [MCP server](https://github.com/semgrep/mcp) napojí scanner do Claude Code a dalších agentů: agent spustí sken, přečte nález, navrhne fix, sken znova — uzavřená smyčka. Dobré, pokud tvoje CI Semgrep pravidla už používá.
+
+### Snyk DeepCode AI
+
+[Snyk DeepCode AI](https://snyk.io/platform/deepcode-ai/) kombinuje symbolický engine taint analýzy s neural modelem trénovaným na milionech řádků. Symbolická část omezuje, co LLM smí navrhnout — malé cílené fixy, ne přepisování. Stojí za zvážení, pokud už codebase v Snyk žije.
+
+### Amazon Q Developer code reviews
+
+[Q Developer](https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/code-reviews.html) kontroluje kódy na bezpečnost a kvalitu — SAST, SCA, AWS best practices — a co umí, opraví sám. Nejlepší fit, když už na AWS jedeš a chceš mít nálezy vedle ostatních Q workflowů.
+
+Vyber si jeden, který sedí k místu, kde tvůj kód žije. Dva najednou je v pohodě; pět je šum.
+
+## LLMs pro security — aktuální nástroje
+
+Dva nástroje, co stojí za zmínku. Oba mění krajinu, oba mají háček v přístupu.
+
+### AWS Security Agent
+
+[AWS Security Agent](https://aws.amazon.com/about-aws/whats-new/2026/03/aws-security-agent-ondemand-penetration/) šel do GA na konci března 2026. Autonomní penetration testing, 24/7, $50 za task-hour — zhruba $1 200 za plný test aplikace. Jiná třída nástroje než code review v Q Developeru: Q hlásí chyby ve zdrojáku; Security Agent se snaží rozbít běžící aplikaci způsobem, jakým by to dělal lidský pentester.
+
+Čistý pitch: pentest na každý release místo jednoho za rok.
+
+### GPT-5.4-Cyber
+
+[Cybersecurity verze GPT-5.4 od OpenAI](https://openai.com/index/scaling-trusted-access-for-cyber-defense/) má volnější pravidla odmítání pro legitimní security práci — vulnerability research, reverse engineering binárek, analýza malwaru. **Přístup je omezený.** Musíš se přihlásit do programu Trusted Access for Cyber, projít verifikací, a teprve pak ti model zapnou. Firmy přes svého account repa; jednotlivci na `chatgpt.com/cyber`.
+
+Zmiňuju ho, protože o něm uslyšíš. Čekat na něj ne — na denní defenzivní práci s aplikačním kódem pokrývají nástroje výš skoro všechno, co skutečný tým potřebuje.
+
+### Kde začít, když začínáš teď
+
+`/security-review` na každý commit. `claude-code-action` na každý PR. Jeden dedikovaný nástroj (Semgrep, Snyk, nebo Q Developer) v CI jako SAST vrstva. AWS Security Agent přidej, až budeš mít něco nasazeného, co stojí za to napadnout. GPT-5.4-Cyber přeskoč, dokud nebudeš mít konkrétní defenzivní use-case, kvůli kterému stojí za to procházet verifikací.
+
+## Bezpečnost, která nezmizí
+
+Nástroje pomáhají. Tvar problému ale nesmažou.
+
+Simon Willison pojmenoval [**lethal trifecta**](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/) — tři podmínky, které společně umožní útočníkovi vytáhnout tvoje data přes agenta:
+
+1. **Přístup k privátním datům** — tvoje repo, tvoje tokeny, tvoje zákaznická data.
+2. **Vystavení nedůvěryhodnému obsahu** — GitHub issue, scrapovaná stránka, mail, výstup z MCP toolu.
+3. **Externí komunikace** — jakýkoliv kanál, přes který může agent ven.
+
+Když jsou všechny tři aktivní, útočník, který umí vpravit instrukce do nedůvěryhodného obsahu, obvykle donutí agenta privátní data poslat ven.
+
+Korny Sietsmův [*Agentic AI and Security*](https://martinfowler.com/articles/agentic-ai-security.html) na martinfowler.com framework rozšiřuje do praktických mitigací: rozděl úkoly tak, aby každý podúkol odstranil aspoň jednu nohu trifecty; pouštěj LLM v sandboxovaných kontejnerech; drž malé kroky, které si člověk může zkontrolovat.
+
+Praktický postoj:
+
+- Každé MCP, které přidáš, projdi na trifectu. Většina MCP třetích stran stahuje nedůvěryhodný obsah.
+- Nepouštěj agenta s volnou rukou na soubory s testy — Beckův protipól („agenti testy mažou") je reálný.
+- Na cokoliv kolem auth, secrets, nebo migrací kontroluj diff.
+
+Agent je rychlý. Lidi drží hranici.
+
 ## Automatizace
 
 ### Hooky
@@ -22,7 +139,7 @@ Zkus tohle první: v libovolném repu spusť `/install-github-app` v Claude Co
 
 ### Smyčky a naplánované běhy
 
-Dlouhotrvající úkol se může spouštět každých N minut nebo podle plánu. „Každé ráno zkontroluj main, jestli nepadá nějaký test, a otevři fix PR." „Každý večer shrň, co se mergovalo, a pošli do Slacku."
+Dlouhotrvající úkol se může spouštět každých N minut nebo podle plánu. „Každé ráno zkontroluj main, jestli nepadá nějaký test, a otevři fix PR.“ „Každý večer shrň, co se mergovalo, a pošli do Slacku“.
 
 `/loop` pustí příkaz v opakujícím se intervalu. `/schedule` (v Heart of Gold toolkitu) vytvoří remote agenta s cronovým plánem. Shadow tasky dělají svoji práci na pozadí, aniž by narušily tvoji aktuální konverzaci.
 
@@ -36,48 +153,24 @@ Claude Code se mezi konverzacemi resetuje. `CLAUDE.md` pomáhá; `/compound` ve 
 
 Zkus to, až budeš měsíc v Compound Engineering a pořád budeš cítit, že napříč projekty opakuješ stejné fixy. Přesně na tenhle problém je altk-evolve navržený.
 
-## Testovací postupy
+## Lidi, které stojí za to sledovat
 
-Claude je na testy nemilosrdný — když o to požádáš. Tři postupy, které stojí za vyzkoušení:
+Pole se hýbe rychle. Pět hlasů, které stojí za to dlouhodobě sledovat.
 
-### Tracer bullet — jeden test před feature
+- **[Simon Willison](https://simonwillison.net/)** — nejspolehlivější signál o tom, co LLM skutečně umí, o bezpečnosti agentů, a o tom, kde hype praská. Pojmenoval „prompt injection" i „lethal trifecta". Poctivé výhrady, malé funkční ukázky. Čti blog.
+- **[Korny Sietsma](https://blog.korny.info/)** — bezpečnost agentních systémů z pohledu agilního inženýra. Jeho [*Agentic AI and Security*](https://martinfowler.com/articles/agentic-ai-security.html) na martinfowler.com je aktuálně nejpřehlednější vstup do té útočné plochy.
+- **[Tanya Janca](https://shehackspurple.ca/)** (SheHacksPurple) — autorka knih *Alice and Bob Learn Application Security* a *Alice and Bob Learn Secure Coding*. Učí vývojáře, ne security týmy. Pokud je tvůj reflex „security je věc někoho jiného", tohle je reset.
+- **[Daniel Miessler](https://danielmiessler.com/)** — týdenní newsletter [Unsupervised Learning](https://newsletter.danielmiessler.com/) pokrývá AI, security, a jejich průsečík. Dobré na to, aby ses k trendům dostal dřív, než ti přistanou v inboxu jako direktiva.
+- **[Laurie Williams](https://collaboration.csc.ncsu.edu/laurie/)** — NC State, výzkum zabezpečení dodavatelských řetězců softwaru a DevSecOps praktik podpořený NSF. Akademická důslednost, praktikující publikum. Její publikace sleduj, když tě téma (SBOM, útoky přes závislosti, pair programming) zajme natolik, abys chtěl jít hlouběji.
 
-Než cokoliv postavíš, napiš jeden end-to-end test, který selže, protože feature ještě neexistuje. Ověříš, že propojení funguje — request dorazí do kontroléru, do servicy, do DB — a pak iteruješ k zelenému.
-
-> Napiš failing end-to-end test pro `POST /api/items` endpoint, který vytvoří item a vrátí 201. Endpoint ještě neexistuje — jenom to dotáhni tak, ať test selže na správném řádku.
-
-Stav, dokud neprojde. Integraci si tentokrát budeš pamatovat.
-
-### TDD smyčka — red, green, refactor
-
-Test první, implementace druhá, refactor třetí. Tři samostatné prompty, tři samostatné diffy.
-
-> Napiš failing test pro funkci `slugify(input: string)`, která zvládá diakritiku a opakované mezery. Použij naše stávající test setup.
-
-Pak:
-
-> Nech test projít. Minimální implementace.
-
-Pak:
-
-> Zrefaktoruj. Drž testy zelené. Hledej duplikaci a nejasná pojmenování.
-
-Tři diffy, tři kontroly, tři správné věci.
-
-### Property-based testy — na cokoliv s invarianty
-
-Když je těžké vyjmenovat „správný výstup", ale pravidla jsou jasná, přepni na property testy:
-
-> Funkce `parse(input)` by měla být inverzní ke `stringify`. Použij fast-check (nebo Hypothesis) a ověř, že `parse(stringify(x)) === x` pro náhodné vstupy. Najdi případ, kdy to selže.
-
-Claude vygeneruje vstupy, které bys sám nevymyslel. Property testy jsou místo, kde si Claude zaslouží plat.
+Pět jmen, pět URL. Hodina týdně napříč nimi stačí, aby ses neztratil.
 
 ## Tenhle lab je na GitHubu
 
 Celý tenhle průvodce — web, kapitoly, ukázky, doprovodný skill — je open source na **[github.com/ondrej-svec/claude-code-lab](https://github.com/ondrej-svec/claude-code-lab)**. Pokud něco nesedělo, pokud je čeština vedle, pokud máš pattern, který stojí za přidání: otevři issue nebo PR. Hvězda pomáhá — je to signál, abych to dál zlepšoval.
 
-## Poslední věta
+## Poslední slovo
 
-Nic tady není povinné. Ber tuhle kapitolu jako save point. Vrať se, až nahmatáš limity toho, co víš, a vyber jednu věc na vyzkoušení.
+Nic tady není povinné. Ber tuhle kapitolu jako save point. Vrať se, až nahmatáš limity toho, co víš, a vyber si jednu věc na vyzkoušení.
 
 Hodně štěstí. Bav se. Postav něco, co se skládá samo na sebe.
