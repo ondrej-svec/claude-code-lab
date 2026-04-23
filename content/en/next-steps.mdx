@@ -28,6 +28,14 @@ A long-running task can fire every N minutes or on a schedule. "Every morning, c
 
 Try this first: `/loop 5m check if any tests are failing and report`. Leave it running while you do other work.
 
+### Agents that learn across sessions
+
+Claude Code resets between conversations. `CLAUDE.md` helps; `/compound` in the [Compound Engineering](/en/lab/compound-engineering) loop helps more. But both require you to remember to write things down.
+
+**[altk-evolve](https://github.com/AgentToolkit/altk-evolve)** (IBM Research, Apache 2.0) automates the memory step. An MCP server captures trajectories — what worked, what didn't — into a vector store, then injects the relevant lessons into new sessions. Reported +8.9 points on the AppWorld benchmark, +74% on hard multi-step tasks. Drops into Claude Code, Codex, or Bob.
+
+Try this when: you've done Compound Engineering for a month and still feel like you're repeating the same fixes across projects. That's the problem altk-evolve is designed for.
+
 ## Testing patterns
 
 Claude is ruthless about tests — if you ask it. Three patterns worth trying:

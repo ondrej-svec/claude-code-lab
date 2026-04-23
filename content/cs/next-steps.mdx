@@ -28,6 +28,14 @@ Dlouhotrvající úkol se může spouštět každých N minut nebo podle plánu.
 
 Zkus tohle první: `/loop 5m zkontroluj, jestli nepadají nějaké testy, a nahlas`. Nech to běžet, zatímco pracuješ na něčem jiném.
 
+### Agenti, kteří se učí napříč sessionami
+
+Claude Code se mezi konverzacemi resetuje. `CLAUDE.md` pomáhá; `/compound` ve smyčce [Compound Engineering](/cs/lab/compound-engineering) pomáhá víc. Obojí ale vyžaduje, abys nezapomněl si to zapsat.
+
+**[altk-evolve](https://github.com/AgentToolkit/altk-evolve)** (IBM Research, Apache 2.0) krok paměti automatizuje. MCP server nabírá trajektorie — co fungovalo, co ne — do vektorového storu a do nových sessionů vpravuje relevantní poučení. Hlášeno +8.9 bodů na AppWorld benchmarku, +74 % na těžkých víc-krokových úkolech. Nasadíš ho do Claude Code, Codexu i Boba.
+
+Zkus to, až: budeš dělat Compound Engineering měsíc a pořád budeš cítit, že si napříč projekty opakuješ stejné fixy. Přesně na tenhle problém je altk-evolve navržený.
+
 ## Testovací postupy
 
 Claude je na testy nemilosrdný — když o to požádáš. Tři postupy, které stojí za vyzkoušení:
