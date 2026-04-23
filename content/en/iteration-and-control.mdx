@@ -83,6 +83,12 @@ Press **Shift+Tab** to cycle permission modes in the current conversation:
 3. **plan** — Claude can read, think, and propose, but **cannot edit or run** until you leave plan mode
 4. **auto** (on some plans) — Claude edits and runs without prompting
 
+<Diagram chart={`flowchart LR
+    D[default] -->|Shift+Tab| A[acceptEdits]
+    A -->|Shift+Tab| P[plan]
+    P -->|Shift+Tab| Auto[auto]
+    Auto -. Shift+Tab .-> D`} caption="Shift+Tab cycles modes in the current conversation." />
+
 Plan mode is the most worth knowing. It lets Claude think as hard as it wants without doing anything destructive. You see the reasoning, accept or redirect, then leave plan mode to let it execute.
 
 **Plan mode doesn't persist the plan.** The plan lives in the conversation and disappears with `/clear`. If you want plans written to disk — so you can review them later, share them with a teammate, or have `/work` act on them — that's what Compound Engineering's `/plan` skill does (chapter 6). That's the recommended flow once you have real multi-step work.

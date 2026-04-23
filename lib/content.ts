@@ -64,3 +64,12 @@ function cleanHeading(text: string): string {
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
     .trim();
 }
+
+export type SearchEntry = {
+  chapterSlug: string;
+  chapterTitle: string;
+  chapterOrder: number;
+  heading: string | null;
+  headingId: string | null;
+  level: 1 | 2 | 3;
+};

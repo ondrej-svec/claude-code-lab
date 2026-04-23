@@ -83,6 +83,12 @@ Zmáčkni **Shift+Tab** a přepneš režim oprávnění v aktuální konverzaci:
 3. **plan** — Claude může číst, přemýšlet a navrhnout, ale **nemůže nic editovat ani spouštět**, dokud plan mode neopustíš
 4. **auto** (na některých plánech) — Claude edituje a spouští bez ptaní
 
+<Diagram chart={`flowchart LR
+    D[default] -->|Shift+Tab| A[acceptEdits]
+    A -->|Shift+Tab| P[plan]
+    P -->|Shift+Tab| Auto[auto]
+    Auto -. Shift+Tab .-> D`} caption="Shift+Tab cyklí režimy v aktuální konverzaci." />
+
 Plan mode je ten, který má smysl znát nejvíc. Claude v něm může přemýšlet tak tvrdě, jak chce, aniž by udělal cokoliv destruktivního. Ty vidíš jeho úvahy, potvrdíš nebo přesměruješ, a pak plan mode opustíš, ať to provede.
 
 **Plan mode plán nikam neukládá.** Plán žije v konverzaci a s `/clear` zmizí. Pokud chceš plány zapsané na disk — abys je mohl později zkontrolovat, sdílet s kolegou nebo aby proti nim běžel `/work` — přesně to dělá skill `/plan` z Compound Engineeringu (kapitola 6). Je to doporučený flow, jakmile máš reálnou víc-krokovou práci.

@@ -84,6 +84,12 @@ Three files, all concatenated when Claude launches in a project. Order matters �
 
 Nested `CLAUDE.md` files in subdirectories load lazily — only when Claude reads a file inside that subdir. Useful for monorepos. Alternative: `.claude/rules/*.md` with `paths:` frontmatter, which only activates when matching files are touched.
 
+<Diagram chart={`flowchart TD
+    M[Managed policy<br/>enterprise admin] --> U
+    U["User<br/>~/.claude/CLAUDE.md"] --> P
+    P["Project<br/>./CLAUDE.md"] --> L
+    L["Local<br/>CLAUDE.local.md · gitignored"]`} caption="All files concatenate at session start. Later in the chain wins on conflict." />
+
 → [Anthropic memory docs](https://code.claude.com/docs/en/memory) — the canonical reference.
 
 ## Try it

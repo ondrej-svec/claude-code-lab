@@ -1,6 +1,7 @@
 import type { MDXComponents } from "mdx/types";
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { Diagram } from "./diagram";
 
 function H1({ children }: { children?: ReactNode }) {
   return (
@@ -282,4 +283,5 @@ export const mdxComponents: MDXComponents = {
   th: TH,
   td: TD,
   Callout,
+  Diagram,
 };

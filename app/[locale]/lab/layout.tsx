@@ -3,6 +3,8 @@ import type { ReactNode } from "react";
 import { ThemeSwitcher } from "@/app/components/theme-switcher";
 import { LanguageSwitcher } from "@/app/components/language-switcher";
 import { GitHubLink } from "@/app/components/github-link";
+import { SearchCommand } from "@/app/components/search-command";
+import { buildSearchIndex } from "@/lib/search-index";
 import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
 
 export default async function LabLayout({
@@ -14,6 +16,7 @@ export default async function LabLayout({
 }) {
   const { locale } = await params;
   const validLocale = isLocale(locale) ? locale : DEFAULT_LOCALE;
+  const searchIndex = await buildSearchIndex(validLocale);
 
   return (
     <div
@@ -35,7 +38,8 @@ export default async function LabLayout({
           >
             claude-code-lab
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <SearchCommand entries={searchIndex} locale={validLocale} />
             <LanguageSwitcher currentLocale={validLocale} />
             <GitHubLink />
             <ThemeSwitcher />

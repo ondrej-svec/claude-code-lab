@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import { ChapterSidebar } from "@/app/components/chapter-sidebar";
 import { PageToc } from "@/app/components/page-toc";
+import { PageTocMobile } from "@/app/components/page-toc-mobile";
 import { mdxComponents } from "@/app/components/mdx-components";
 import { extractToc, getChapterSource } from "@/lib/content";
 import {
@@ -58,6 +59,7 @@ export default async function ChapterPage({
           >
             {chapter.eyebrows[validLocale]} · {chapter.readTime[validLocale]}
           </p>
+          <PageTocMobile headings={toc} locale={validLocale} />
           <MDXRemote
             source={source}
             components={mdxComponents}
