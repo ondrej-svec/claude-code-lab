@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
+import { remarkMermaid } from "@/lib/remark-mermaid";
 import { ChapterSidebar } from "@/app/components/chapter-sidebar";
 import { PageToc } from "@/app/components/page-toc";
 import { PageTocMobile } from "@/app/components/page-toc-mobile";
@@ -66,7 +67,7 @@ export default async function ChapterPage({
             options={{
               parseFrontmatter: true,
               mdxOptions: {
-                remarkPlugins: [remarkGfm],
+                remarkPlugins: [remarkGfm, remarkMermaid],
                 rehypePlugins: [rehypeSlug],
               },
             }}

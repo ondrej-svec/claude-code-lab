@@ -22,6 +22,7 @@ function flattenChildren(children: ReactNode): string {
 
 type Props = {
   chart?: string;
+  b64?: string;
   caption?: string;
   children?: React.ReactNode;
 };
@@ -29,12 +30,21 @@ type Props = {
 // Mermaid renders on the client. We import it lazily so it's only loaded
 // when a chapter actually has a diagram.
 //
-// Chart source can arrive either as a `chart` prop or as children.
-// MDX has trouble with multi-line backtick template literals in prop
-// expressions — they often arrive empty. Children (inside a JSX
-// expression) are reliable.
-export function Diagram({ chart, caption, children }: Props) {
-  const source = (chart && chart.trim()) || flattenChildren(children).trim();
+// The chart source arrives via the `b64` prop — remark-mermaid transforms
+// fenced ```mermaid blocks into <Diagram b64="…" /> JSX. We use base64
+// because next-mdx-remote 6.x drops multi-line JSX expression attributes
+// and expression children, but single-word plain-string attributes survive.
+// `chart` (plain string) and children stay as fallbacks for direct JSX use.
+export function Diagram({ chart, b64, caption, children }: Props) {
+  const decoded = b64
+    ? typeof Buffer !== "undefined"
+      ? Buffer.from(b64, "base64").toString("utf8")
+      : decodeURIComponent(escape(atob(b64)))
+    : "";
+  const source =
+    (decoded && decoded.trim()) ||
+    (chart && chart.trim()) ||
+    flattenChildren(children).trim();
 
   const ref = useRef<HTMLDivElement>(null);
   const [svg, setSvg] = useState<string | null>(null);
