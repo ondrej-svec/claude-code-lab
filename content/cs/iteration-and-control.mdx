@@ -116,3 +116,13 @@ Kdy se nevyplatí:
 ## Doporučený flow, až budeš připravený
 
 Tahle kapitola je o denních návycích. [Kapitola 6](/cs/lab/compound-engineering) je **praxe**, která je balí do opakovatelné smyčky: brainstorm → plan → work → review → compound. Compound Engineering plugin si nainstaluj, až budeš připravený — je to nejkratší cesta z *„iteruju po jednom promptu“* k *„mám praxi, která vyrábí spolehlivě dobrou práci.“*
+
+## Praxe: pokračuj se svou ukázkou
+
+Procházíš lab popořadě? Vezmi, co tě tahle kapitola naučila, k ukázce, se kterou jsi začal v kapitole 2 — nebo rovnou ke svému vlastnímu codebase, kde to sedne hlouběji.
+
+1. Ve složce projektu požádej Claude, ať přidá druhý, read-only endpoint — na ukázkách třeba `GET /version` vracející `{ "version": "1.0.0" }`. Na vlastním repu malý route s reálnými daty z tvojí domény. Než prompt pustíš, zmáčkni `Shift+Tab`, dokud nejsi v **plan módu** — Claude bude plánovat, ale needituje.
+2. Přečti si plán. Pokud je tvar špatně — moc souborů, špatné místo, minutá konvence — neopravuj to uprostřed plánu. Dvakrát `Esc` a udělej **rewind**, pak znovu promptni s užším popisem. Lepší plán porazí opravený diff.
+3. Vyskoč z plan módu (Shift+Tab znovu) a potvrď. Claude zapíše kód, ukáže diff, ty spustíš a commitneš, když to funguje.
+
+Když to funguje: tvoje ukázka má dva endpointy a ty sis sáhl na plan mode i rewind na reálném úkolu — dva pohyby, které budeš ve zbytku labu používat nejčastěji. Praxe v další kapitole tě nechá postavit malý skill, který takové route generuje sám.

@@ -116,3 +116,13 @@ When it's not:
 ## The recommended flow, when you're ready
 
 This chapter is the daily habits. [Chapter 6](/en/lab/compound-engineering) is the **practice** that bundles them into a repeatable loop: brainstorm → plan → work → review → compound. Install the Compound Engineering plugin when you're ready — it's the shortest path from *"I iterate one prompt at a time"* to *"I have a practice that produces reliably good work."*
+
+## Practice: continue your sample
+
+Working through the lab in order? Take what this chapter taught to the sample you started in chapter 2 — or to a codebase of your own, where it'll land harder.
+
+1. In your project folder, ask Claude to add a second read-only endpoint — on the samples, something like `GET /version` returning `{ "version": "1.0.0" }`. On your own repo, a small route with real data from your domain. Before running the prompt, hit `Shift+Tab` until you're in **plan mode** — Claude will plan but not edit.
+2. Read the plan. If the shape is wrong — too many files, wrong location, missed a convention — don't bother correcting mid-plan. Double-tap `Esc` to **rewind**, then re-prompt with a narrower description. Better plan beats corrected diff.
+3. Leave plan mode (Shift+Tab again) and approve. Claude writes the code, shows the diff, you run and commit when it works.
+
+When it works: your sample has two endpoints, and you've felt plan mode + rewind on a real task — the two moves you'll use most often in the rest of the lab. The next chapter's practice has you build a small skill that scaffolds routes like this.
