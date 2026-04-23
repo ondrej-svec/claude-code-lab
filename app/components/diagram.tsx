@@ -35,6 +35,10 @@ type Props = {
 // expression) are reliable.
 export function Diagram({ chart, caption, children }: Props) {
   const source = (chart && chart.trim()) || flattenChildren(children).trim();
+  // eslint-disable-next-line no-console
+  if (typeof window !== "undefined") {
+    console.log("[Diagram] chart=", JSON.stringify(chart), "children type=", typeof children, "children=", children, "source=", JSON.stringify(source));
+  }
 
   const ref = useRef<HTMLDivElement>(null);
   const [svg, setSvg] = useState<string | null>(null);
