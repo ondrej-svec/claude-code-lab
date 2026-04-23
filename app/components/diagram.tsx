@@ -50,6 +50,8 @@ export function Diagram({ chart, caption }: Props) {
         });
 
         const id = `d-${Math.random().toString(36).slice(2, 9)}`;
+        // eslint-disable-next-line no-console
+        console.log("[Diagram] chart input", JSON.stringify(chart));
         const { svg: rendered } = await mermaid.render(id, chart);
         if (!cancelled) {
           setSvg(rendered);
