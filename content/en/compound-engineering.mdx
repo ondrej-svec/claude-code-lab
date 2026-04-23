@@ -12,16 +12,7 @@ This chapter is how you install it, use it, and why the loop compounds.
 - `/review` — second pass on the output, against the plan
 - `/compound` — write down what you learned so next time is cheaper
 
-```mermaid
-flowchart LR
-    B[brainstorm] --> P[plan]
-    P --> W[work]
-    W --> R[review]
-    R --> C[compound]
-    C -.->|next problem| B
-```
-
-*Each pass leaves documents the next brainstorm and plan will draw on.*
+<Diagram chart={"flowchart LR\n    B[brainstorm] --> P[plan]\n    P --> W[work]\n    W --> R[review]\n    R --> C[compound]\n    C -.->|next problem| B"} caption="Each pass leaves documents the next brainstorm and plan will draw on." />
 
 Most dev work fits this shape. The plugin makes the shape visible — and reusable.
 
