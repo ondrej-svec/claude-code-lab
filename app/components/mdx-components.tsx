@@ -130,7 +130,36 @@ function InlineCode({ children }: { children?: ReactNode }) {
   );
 }
 
+// Detect mermaid fenced code blocks: ```mermaid ... ``` in MDX arrives
+// as <pre><code class="language-mermaid">...</code></pre>. We intercept
+// and hand the raw source to the Diagram renderer.
+function extractMermaidSource(children: ReactNode): string | null {
+  if (!children || typeof children !== "object") return null;
+  if (Array.isArray(children)) {
+    for (const c of children) {
+      const s = extractMermaidSource(c);
+      if (s !== null) return s;
+    }
+    return null;
+  }
+  const el = children as {
+    props?: { className?: string; children?: ReactNode };
+  };
+  const className = el.props?.className ?? "";
+  if (!className.includes("language-mermaid")) return null;
+  const inner = el.props?.children;
+  if (typeof inner === "string") return inner;
+  if (Array.isArray(inner)) {
+    return inner.map((v) => (typeof v === "string" ? v : "")).join("");
+  }
+  return null;
+}
+
 function Pre({ children }: { children?: ReactNode }) {
+  const mermaidSource = extractMermaidSource(children);
+  if (mermaidSource !== null) {
+    return <Diagram chart={mermaidSource} />;
+  }
   return (
     <pre
       className="my-5 p-4 rounded-lg overflow-x-auto text-sm leading-relaxed"

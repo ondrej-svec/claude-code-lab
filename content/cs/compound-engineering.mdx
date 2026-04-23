@@ -12,12 +12,16 @@ Tahle kapitola je o tom, jak si ho nainstaluješ, jak ho použiješ, a proč se 
 - `/review` — druhé oči na výstup, proti plánu
 - `/compound` — zapiš, co ses naučil, ať je příště levnější
 
-<Diagram caption="Každý průchod zanechá dokumenty, ze kterých čerpá další brainstorm a plán.">{`flowchart LR
+```mermaid
+flowchart LR
     B[brainstorm] --> P[plan]
     P --> W[work]
     W --> R[review]
     R --> C[compound]
-    C -.->|další problém| B`}</Diagram>
+    C -.->|další problém| B
+```
+
+*Každý průchod zanechá dokumenty, ze kterých čerpá další brainstorm a plán.*
 
 Většina dev práce má takový tvar. Plugin ten tvar zviditelňuje — a dělá ho znovupoužitelným.
 

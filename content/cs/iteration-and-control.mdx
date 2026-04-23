@@ -83,11 +83,15 @@ Zmáčkni **Shift+Tab** a přepneš režim oprávnění v aktuální konverzaci:
 3. **plan** — Claude může číst, přemýšlet a navrhnout, ale **nemůže nic editovat ani spouštět**, dokud plan mode neopustíš
 4. **auto** (na některých plánech) — Claude edituje a spouští bez ptaní
 
-<Diagram caption="Shift+Tab cyklí režimy v aktuální konverzaci.">{`flowchart LR
+```mermaid
+flowchart LR
     D[default] -->|Shift+Tab| A[acceptEdits]
     A -->|Shift+Tab| P[plan]
     P -->|Shift+Tab| Auto[auto]
-    Auto -.->|Shift+Tab| D`}</Diagram>
+    Auto -.->|Shift+Tab| D
+```
+
+*Shift+Tab cyklí režimy v aktuální konverzaci.*
 
 Plan mode je ten, který má smysl znát nejvíc. Claude v něm může přemýšlet tak tvrdě, jak chce, aniž by udělal cokoliv destruktivního. Ty vidíš jeho úvahy, potvrdíš nebo přesměruješ, a pak plan mode opustíš, ať to provede.
 
