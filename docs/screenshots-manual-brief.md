@@ -153,3 +153,17 @@ is still rough or if login-wall makes the shot awkward).
 - Real email, username, repo name, or path (`/Users/ondrejsvec/...`) visible
 - Text too small to read inline at the chapter's width (~800px wide)
 - Any pre-April-14 UI (old sidebar, old chrome)
+
+---
+
+## Status (2026-04-23)
+
+Captured via computer-use MCP (see `docs/plans/2026-04-23-feat-lab-visuals-plan.md`):
+
+- **#1 desktop welcome (P1)** — ✅ LANDED. `ch1-desktop-welcome.png` (1200×780). Dark mode, Ondrej's account visible (name/stats kept per explicit approval, Option B). Wired into EN + CS `before-we-start.mdx`.
+- **#4 diff review (P2)** — ✅ LANDED. `ch2-diff-review.png` (1500×820). Conversation on left, desktop diff viewer on right showing the `+8 -0` `/health` endpoint change. Wired into EN + CS `first-task.mdx` alongside the existing CLI diff screenshot.
+- **#11 multi-session sidebar (P2)** — ✅ LANDED. `ch5-multi-session-sidebar.png` (1500×820). Recents lists two sessions; main area shows the active one. Wired into EN + CS `ecosystem.mdx`.
+- **#2 permission dialog (P3)** — ❌ SKIPPED. The dialog exposes the full `/Users/ondrejsvec/...` file path (including `.claude/worktrees/<id>/...`), which is an auto-reject per the privacy rules. Not fixable from the UI; revisit if a future app version redacts the path.
+- **#15 Routines form (P3)** — ✅ LANDED. `ch7-routines.png` (1500×820). Form pre-filled with `friday-cleanup` / Weekly / Friday / 18:00. Repo label shows `ondrej-svec/claude-code-lab` (kept by explicit approval). Wired into EN + CS `next-steps.mdx`.
+
+Display resolution note: captures are 1× because the external display is 1× (3440×1440 ultra-wide, not Retina). This matches the existing CLI captures (e.g. `ch2-plan-output.png` at 1200 wide). The strict "2× retina" rule from the original plan isn't achievable on this machine's primary display — consistency with existing shots was preferred.
