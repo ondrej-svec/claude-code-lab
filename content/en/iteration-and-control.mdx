@@ -2,9 +2,11 @@
 
 The first prompt is never the last prompt. The value in Claude Code isn't the output — it's the loop that gets you to the right output in three or four rounds instead of one frustrated rewrite.
 
+Over time the goal shifts. Early on you read every diff, watch every change, stay in control. Later you build a **harness** around the agent so the work becomes verifiable without your eyes on every line. This chapter is both halves — the daily iteration habits, and the posture that makes them scale.
+
 ## Rewind
 
-Double-tap **Esc** in the Claude window. You're back one message. File changes are rolled back. The conversation branches. Same effect as the `/rewind` slash command, just faster.
+Double-tap **Esc** in the Claude window. You're back one message. File changes are rolled back. The conversation branches. Same effect as `/rewind`, just faster.
 
 This is the single most useful keyboard shortcut in the whole tool. Use it whenever:
 
@@ -13,7 +15,7 @@ This is the single most useful keyboard shortcut in the whole tool. Use it whene
 - You want to branch an experiment without committing to it
 - The diff surprised you and you'd rather not have it
 
-Rewind is cheap. Re-prompting from scratch is expensive. Use the shortcut. Chapter 8.2 has the full keybinding reference.
+Rewind is cheap. Re-prompting from scratch is expensive.
 
 ## Narrow the scope
 
@@ -39,46 +41,64 @@ When Claude does something close but off, resist the urge to rewrite from scratc
 
 Claude will move it. The structure holds. You didn't have to re-explain the whole task.
 
-## When to start fresh — `/clear` vs `/compact`
+## Managing context — `/clear` vs `/compact`
 
 Context windows are large but not infinite. Two commands, different tools:
 
-- **`/compact`** — same conversation, Claude summarises the history so far and throws the raw turns away. Use when you're mid-task and need breathing room.
+- **`/compact [focus]`** — same conversation, Claude summarises the history so far and throws the raw turns away. Use when you're mid-task and need breathing room.
 - **`/clear`** — new conversation, old one archived (resumable via `/resume`). Use when you've pivoted to a different area of the codebase, or the conversation has 30+ turns and is drifting.
 
 A clean conversation with good `CLAUDE.md` is almost always faster than a long one.
 
-## Read the diff before accepting
+**Pro move for the Compound Engineering loop** (chapter 6): clear between phases. `/clear` before `/plan` means the brainstorming turns don't muddy the plan. `/clear` before `/work` means the plan debate doesn't colour the implementation. Each phase gets sharp context; `/compound` at the end has clean material to summarise.
 
-This is the single habit that separates people who like working with agents from people who don't trust them.
+## The shift: from control to a harness you trust
 
-Before hitting "accept":
+Early in agentic work, the advice is simple: read every diff, review every change, don't trust the agent. That's the control reflex. It builds the skill.
 
-- Scroll through the diff — all of it
-- Check for unintended changes to unrelated files
-- Check for new dependencies (did it add a library you don't need?)
-- Check for tests changing in ways you didn't ask for
+As you work with Claude Code daily, that posture becomes the bottleneck. You can't read fifty diffs an hour. You can't simultaneously hold the plan + the diff + the codebase in your head. The longer you sit in control mode, the less the agent can actually accelerate you.
 
-Ten seconds of review saves an hour of debugging later.
+The better path: **build a harness around Claude Code that makes its work verifiable without your eyes on every line.** Your role shifts from reviewer to harness architect.
 
-## Plan mode
+What the harness looks like in practice:
 
-Press **Shift+Tab** to cycle permission modes:
+- **Tracer-bullet tests** — one failing end-to-end test before the feature exists. When it passes, the plumbing works. (Chapter 7 has the pattern.)
+- **TDD loops** — red, green, refactor as three separate prompts. Tests prove the code.
+- **Chrome DevTools MCP** — Claude opens the page, runs Lighthouse, confirms LCP improved. (Chapter 5 shows the install.)
+- **Playwright E2E** — full-stack happy-path before merge. Claude writes them for you.
+- **Security scans** — `/security-review` before commit; dedicated pentest skills on high-risk paths.
+- **Performance assertions** — load tests, benchmark snapshots wired into CI.
+- **Claude in CI** — `anthropics/claude-code-action` auto-reviews PRs, catches drift you'd miss live. (Chapter 7.)
+
+With the harness in place, the question changes from *"did Claude make a mistake in this diff?"* to *"did the harness catch it if it did?"* Diff review becomes a spot-check, not a mandate. You get faster. The agent gets trusted. Both grow together.
+
+If you're just starting: read diffs carefully and build the reflexes. As the harness grows around you, read fewer of them. That progression is the point.
+
+## Plan mode — cycle permissions with Shift+Tab
+
+Press **Shift+Tab** to cycle permission modes in the current conversation:
 
 1. **default** — Claude asks before editing
 2. **acceptEdits** — Claude edits freely, you review diffs after
-3. **plan** — Claude can read, think, and propose a plan, but **cannot edit or run anything** until you leave plan mode
+3. **plan** — Claude can read, think, and propose, but **cannot edit or run** until you leave plan mode
 4. **auto** (on some plans) — Claude edits and runs without prompting
 
-Plan mode is the one most worth knowing. In it, Claude reads the codebase, thinks through the task, writes a plan to `docs/plans/` (or wherever your convention lives), and stops. You review. If the plan is right, you hit Shift+Tab to leave plan mode and `/work` against it. If it's wrong, you fix it or rewind.
+Plan mode is the most worth knowing. It lets Claude think as hard as it wants without doing anything destructive. You see the reasoning, accept or redirect, then leave plan mode to let it execute.
 
-Use plan mode for:
+**Plan mode doesn't persist the plan.** The plan lives in the conversation and disappears with `/clear`. If you want plans written to disk — so you can review them later, share them with a teammate, or have `/work` act on them — that's what Compound Engineering's `/plan` skill does (chapter 6). That's the recommended flow once you have real multi-step work.
+
+When plan mode is worth it:
 
 - Multi-file changes where you want to see the shape before commits happen
 - Anything with a destructive step (migrations, deletes, rewrites)
 - Tasks where the "what" matters as much as the "how"
-- Any time the Compound Engineering loop (chapter 6) uses `/plan`
 
-Don't use plan mode for single-line fixes or one-function refactors — the overhead isn't worth it.
+When it's not:
 
-→ Full keybinding and slash-command reference in [chapter 8](/en/lab/reference).
+- Single-line fixes
+- One-function refactors
+- Quick questions
+
+## The recommended flow, when you're ready
+
+This chapter is the daily habits. [Chapter 6](/en/lab/compound-engineering) is the **practice** that bundles them into a repeatable loop: brainstorm → plan → work → review → compound. Install the Compound Engineering plugin when you're ready — it's the shortest path from *"I iterate one prompt at a time"* to *"I have a practice that produces reliably good work."*

@@ -2,9 +2,11 @@
 
 První prompt nikdy není poslední. Hodnota Claude Code není výstup — je to smyčka, která tě dovede ke správnému výstupu za tři čtyři kola místo jednoho frustrovaného přepisu.
 
+V čase se cíl posouvá. Na začátku čteš každý diff, kontroluješ každou změnu, držíš všechno v ruce. Později si kolem agenta postavíš **harness**, který dělá jeho práci ověřitelnou bez toho, aby tvoje oči byly na každém řádku. Tahle kapitola je obě poloviny — denní návyky iterace a postoj, díky kterému fungují ve velkém.
+
 ## Rewind
 
-Dvakrát **Esc** v Claude okně. Jsi o zprávu zpět. Změny v souborech jsou rollbacknuté. Konverzace se větví. Stejný efekt jako slash příkaz `/rewind`, jenom rychlejší.
+Dvakrát **Esc** v Claude okně. Jsi o zprávu zpět. Změny v souborech jsou rollbacknuté. Konverzace se větví. Stejný efekt jako `/rewind`, jenom rychlejší.
 
 Tohle je nejužitečnější klávesová zkratka v celém nástroji. Používej ji, kdykoliv:
 
@@ -13,7 +15,7 @@ Tohle je nejužitečnější klávesová zkratka v celém nástroji. Používej 
 - Chceš vyzkoušet experiment, aniž by ses k němu zavázal
 - Diff tě překvapil a radši bys ho neměl
 
-Rewind je levný. Nový prompt od začátku je drahý. Používej tu zkratku. Kompletní přehled klávesových zkratek je v kapitole 8.2.
+Rewind je levný. Nový prompt od začátku je drahý.
 
 ## Zúžit scope
 
@@ -39,46 +41,64 @@ Když Claude udělá něco blízkého, ale vedle, nepodléhej nutkání to přep
 
 Claude ji přesune. Struktura drží. Nemusel jsi vysvětlovat celý úkol znovu.
 
-## Kdy začít znovu — `/clear` vs `/compact`
+## Správa kontextu — `/clear` vs `/compact`
 
 Kontextová okna jsou velká, ale nejsou nekonečná. Dva příkazy, dva nástroje:
 
-- **`/compact`** — stejná konverzace, Claude si shrne dosavadní historii a zahodí surové zprávy. Použij, když jsi uprostřed úkolu a potřebuješ si odlehčit.
+- **`/compact [focus]`** — stejná konverzace, Claude si shrne dosavadní historii a zahodí surové zprávy. Použij, když jsi uprostřed úkolu a potřebuješ si odlehčit.
 - **`/clear`** — nová konverzace, ta stará se zaarchivuje (dá se obnovit přes `/resume`). Použij, když přehodíš do jiné části codebase nebo konverzace má 30+ kol a drifftuje.
 
 Čistá konverzace s dobrým `CLAUDE.md` je skoro vždycky rychlejší než dlouhá.
 
-## Přečti diff, než potvrdíš
+**Pro tip pro Compound Engineering smyčku** (kapitola 6): dělej `/clear` mezi fázemi. `/clear` před `/plan` znamená, že brainstormingové kolo nezaneřádí plánování. `/clear` před `/work` znamená, že debatování nad plánem neobarví implementaci. Každá fáze dostane ostrý kontext; `/compound` na konci má čistý materiál k shrnutí.
 
-Tenhle jeden návyk odděluje lidi, kterým práce s agenty sedí, od lidí, kteří jim nevěří.
+## Posun: od kontroly k harnessu, kterému věříš
 
-Před "accept":
+Na začátku agentní práce je rada jednoduchá: čti každý diff, kontroluj každou změnu, nevěř agentovi. To je kontrolní reflex. Vybuduje dovednost.
 
-- Projdi diff — celý
-- Zkontroluj nechtěné změny v nesouvisejících souborech
-- Zkontroluj nové závislosti (přidal knihovnu, kterou nepotřebuješ?)
-- Zkontroluj, jestli se testy nemění způsobem, o který jsi nežádal
+Jakmile s Claude Code pracuješ denně, tenhle postoj se stává úzkým hrdlem. Nemůžeš číst padesát diffů za hodinu. Nemůžeš zároveň držet plán + diff + codebase v hlavě. Čím déle vysedáváš v režimu kontroly, tím méně tě agent ve skutečnosti dokáže zrychlit.
 
-Deset vteřin kontroly ušetří hodinu debugování později.
+Lepší cesta: **postav si kolem Claude Code harness, který dělá jeho práci ověřitelnou bez toho, aby tvé oči byly na každém řádku.** Tvoje role se posune z reviewera na architekta harnessu.
 
-## Plan mode
+Jak ten harness v praxi vypadá:
 
-Zmáčkni **Shift+Tab** a přepneš režim oprávnění:
+- **Tracer-bullet testy** — jeden failing end-to-end test dřív, než feature existuje. Když projde, potrubí funguje. (Pattern je v kapitole 7.)
+- **TDD smyčky** — red, green, refactor jako tři samostatné prompty. Testy dokazují kód.
+- **Chrome DevTools MCP** — Claude otevře stránku, pustí Lighthouse, potvrdí, že LCP se zlepšilo. (Instalace je v kapitole 5.)
+- **Playwright E2E** — full-stack happy path před mergem. Claude ti je napíše.
+- **Security scany** — `/security-review` před commitem; specializované pentest skilly na rizikových cestách.
+- **Performance asserce** — load testy, benchmark snapshoty napojené na CI.
+- **Claude v CI** — `anthropics/claude-code-action` automaticky review PR, chytí drift, který bys živě přehlédl. (Kapitola 7.)
+
+S harnessem na místě se otázka mění z *„udělal Claude v tomhle diffu chybu?"* na *„chytil by to harness, kdyby ano?"* Čtení diffu se stává spot-checkem, ne povinností. Ty jsi rychlejší. Agent získává důvěru. Oboje roste společně.
+
+Jestli teprve začínáš: čti diffy pečlivě a vybuduj si reflexy. Jak harness kolem tebe roste, čti jich míň. Ta progrese je pointa.
+
+## Plan mode — cyklení oprávnění přes Shift+Tab
+
+Zmáčkni **Shift+Tab** a přepneš režim oprávnění v aktuální konverzaci:
 
 1. **default** — Claude se ptá před každou editací
 2. **acceptEdits** — Claude edituje volně, ty kontroluješ diffy až po
-3. **plan** — Claude může číst, přemýšlet a navrhnout plán, ale **nemůže nic editovat ani spouštět**, dokud plan mode neopustíš
+3. **plan** — Claude může číst, přemýšlet a navrhnout, ale **nemůže nic editovat ani spouštět**, dokud plan mode neopustíš
 4. **auto** (na některých plánech) — Claude edituje a spouští bez ptaní
 
-Plan mode je ten, který má smysl znát nejvíc. V něm Claude přečte codebase, promyslí úkol, zapíše plán do `docs/plans/` (nebo kam má tvoje konvence) a zastaví se. Ty ho zkontroluješ. Pokud plán sedí, opustíš plan mode dalším Shift+Tab a pustíš `/work`. Pokud ne, opravíš ho nebo rewindneš.
+Plan mode je ten, který má smysl znát nejvíc. Claude v něm může přemýšlet tak tvrdě, jak chce, aniž by udělal cokoliv destruktivního. Ty vidíš jeho úvahy, potvrdíš nebo přesměruješ, a pak plan mode opustíš, ať to provede.
 
-Plan mode použij na:
+**Plan mode plán nikam neukládá.** Plán žije v konverzaci a s `/clear` zmizí. Pokud chceš plány zapsané na disk — abys je mohl později zkontrolovat, sdílet s kolegou nebo aby proti nim běžel `/work` — přesně to dělá skill `/plan` z Compound Engineeringu (kapitola 6). Je to doporučený flow, jakmile máš reálnou víc-krokovou práci.
+
+Kdy se plan mode vyplatí:
 
 - Změny napříč soubory, kde chceš vidět tvar, než se commitne
 - Cokoliv s destruktivním krokem (migrace, delete, rewrite)
-- Úkoly, kde "co" je stejně důležité jako "jak"
-- Vždy, když Compound Engineering smyčka (kapitola 6) volá `/plan`
+- Úkoly, kde „co" je stejně důležité jako „jak"
 
-Nepoužívej plan mode na opravu jednoho řádku nebo refaktor jedné funkce — režie se nevyplatí.
+Kdy se nevyplatí:
 
-→ Plný přehled klávesových zkratek a slash příkazů v [kapitole 8](/cs/lab/reference).
+- Opravy jednoho řádku
+- Refactor jedné funkce
+- Rychlé dotazy
+
+## Doporučený flow, až budeš připravený
+
+Tahle kapitola je o denních návycích. [Kapitola 6](/cs/lab/compound-engineering) je **praxe**, která je balí do opakovatelné smyčky: brainstorm → plan → work → review → compound. Compound Engineering plugin si nainstaluj, až budeš připravený — je to nejkratší cesta z *„iteruju po jednom promptu"* k *„mám praxi, která vyrábí spolehlivě dobrou práci."*
