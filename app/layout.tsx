@@ -21,6 +21,13 @@ export const metadata: Metadata = {
   title: "Claude Code Lab",
   description:
     "A practice for developers working with agents — from first command to compound.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "32x32" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default async function RootLayout({
