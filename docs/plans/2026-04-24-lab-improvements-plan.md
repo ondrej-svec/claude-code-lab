@@ -1,217 +1,73 @@
-# Claude Code Lab improvements plan
+# Claude Code Lab — lean improvement plan
 
 Date: 2026-04-24  
 Repo: `claude-code-lab`  
-Status: in progress — Phase 1 complete  
-Scope: content, design/UX, architecture, repo health
+Status: lean review complete — ready for proof-slice image work  
+Principle: **YAGNI — keep the lab minimal, polished, and close to what already works.**
+
+## TL;DR
+
+We already did the important trust reset:
+
+- repo is clean enough to build on;
+- lint/test/build/e2e pass;
+- stale “eight chapters” copy is fixed;
+- password-gate docs mismatch is removed;
+- accidental Claude worktrees are gone;
+- improvement branch is reset to that clean baseline.
+
+The original plan was too ambitious. We are **not** going to turn the site into a course platform.
+
+Drop:
+
+- progress tracking / “chapter completed” state;
+- big checkpoint system;
+- many new MDX primitives;
+- lab-report templates;
+- team adoption kit;
+- danger lab;
+- major architecture refactors;
+- CI/sample hardening unless needed later;
+- broad content rewrites.
+
+Keep:
+
+- small design/content polish where it clearly improves understanding;
+- a few supportive images/diagrams where concepts are hard to grasp from text alone;
+- maybe one lightweight copyable prompt component **only if** it feels obviously useful after reviewing the chapters;
+- no backend, no tracking, no big UX system.
 
 ## Goal
 
-Turn `claude-code-lab` from a strong readable guide into a tighter, trustworthy, artifact-producing workshop lab.
+Make an already good lab a little clearer, calmer, and more memorable — without changing its character.
 
-The lab should feel like this:
+The target is not:
 
-> I arrived, I followed a path, I produced concrete artifacts, I learned what to do when Claude goes wrong, and I left with a repeatable practice.
+> “A full interactive learning platform.”
+
+The target is:
+
+> “A polished guide with a few visual anchors that help the concepts land.”
 
 ## Non-goals
 
-- Do not rewrite all chapter content in one pass.
-- Do not introduce a backend or user accounts.
-- Do not replace the current visual identity.
-- Do not add heavy analytics or tracking.
-- Do not change the core teaching arc: install → first task → context → iteration → ecosystem → compound → hardening → reference → behind the scenes.
-
-## Guiding principles
-
-1. **Trust before polish.** Fix broken tests, stale copy, and doc/code contradictions before adding features.
-2. **Artifacts over reading.** Every chapter should make clear what the participant leaves with.
-3. **Recovery is the lesson.** Teach rewind, narrowing, plan mode, and harnesses through failure drills, not only explanation.
-4. **Static until proven otherwise.** This is mostly content. Prefer static rendering, simple generated data, and no runtime complexity unless needed.
-5. **Workshop-native UX.** Copyable prompts, checkpoints, progress, and path selection matter more than decorative motion.
-6. **Security posture should match the teaching.** Avoid casual loose permissions, stale password-gate claims, or unclear trust boundaries.
+- No progression tracking.
+- No account/backend/localStorage completion model.
+- No big component system for exercises/checkpoints/outputs.
+- No full content rewrite.
+- No major routing/static rendering refactor.
+- No workshop management tooling.
+- No team-adoption package in this pass.
+- No danger lab in this pass.
+- No CI expansion unless we separately decide it is worth it.
 
 ---
 
-# Phase 0 — Baseline and branch hygiene
+# Phase 1 — Done: trust baseline
 
-## Tasks
+Completed on branch `improve/lab-workshop-readiness` in commit `0b5d331`.
 
-- Create a working branch, e.g. `improve/lab-workshop-readiness`.
-- Record current state:
-  - `git status --short`
-  - `pnpm lint`
-  - `pnpm test`
-  - `pnpm build`
-  - `pnpm test:e2e`
-- Decide whether to remove untracked local Claude worktrees immediately or keep them until inspected.
-
-## Known baseline issues
-
-- `pnpm test` passes.
-- `pnpm lint` fails:
-  - unescaped apostrophe in `app/components/build-stats.tsx`
-  - unused import in `app/components/diagram.tsx`
-  - React hook lint errors in `app/components/search-command.tsx`
-  - duplicated lint failures from untracked `samples/**/.claude/worktrees`
-- `pnpm test:e2e` fails because the app now has 9 chapters but test expects 8.
-- `pnpm build` succeeds but warns about missing `metadataBase`.
-- `git status` shows untracked sample `.claude/` directories.
-
-## Acceptance
-
-- Baseline is captured in the work log or commit message.
-- No functional changes yet.
-
----
-
-# Phase 1 — Trust and repo health fixes
-
-This is the first implementation slice. Do not start UX/content improvements until this phase is green.
-
-## 1.1 Remove accidental Claude worktrees from samples
-
-### Tasks
-
-- Delete generated local worktrees:
-  - `samples/dotnet-core/.claude/`
-  - `samples/python-react/.claude/`
-- Add ignore rules to prevent recurrence:
-
-```gitignore
-# Claude Code local worktrees / session artifacts
-.claude/worktrees/
-**/.claude/worktrees/
-```
-
-If the sample projects should never track `.claude` content, consider:
-
-```gitignore
-samples/**/.claude/
-```
-
-Prefer the narrower `worktrees` ignore unless we intentionally decide sample-local `.claude` files are out of scope forever.
-
-### Acceptance
-
-- `git status --short` no longer shows sample `.claude` worktrees.
-- `pnpm lint` no longer scans generated worktree copies.
-
-## 1.2 Fix lint errors in app code
-
-### Tasks
-
-- `app/components/build-stats.tsx`
-  - Escape the unescaped apostrophe or rewrite the string.
-- `app/components/diagram.tsx`
-  - Remove unused `Children` import.
-- `app/components/search-command.tsx`
-  - Remove synchronous state updates inside effects.
-  - Preferred approach:
-    - reset `query` and `activeIndex` in the button/open handlers instead of an effect;
-    - clamp active index during keyboard navigation or derive a safe active index for render;
-    - keep the focus effect because it synchronizes with the DOM.
-
-### Acceptance
-
-- `pnpm lint` passes.
-
-## 1.3 Fix chapter count drift
-
-### Tasks
-
-- Update e2e test name and assertion:
-  - `all eight chapters` → `all chapters`
-  - expected count should be `9` or derived from app-visible chapter metadata.
-- Update stale copy:
-  - `README.md`: eight → nine
-  - `app/[locale]/lab/page.tsx`: `Eight chapters` / `Osm kapitol` → `Nine chapters` / `Devět kapitol`
-  - `content/en/behind-the-scenes.mdx`: eight → nine where describing shipped content
-  - `content/cs/behind-the-scenes.mdx`: osm → devět where describing shipped content
-  - `skill/SKILL.md` and `skill/README.md`: references to chapters 5–7 should become 5–9 if they mean self-serve material.
-
-### Acceptance
-
-- `pnpm test:e2e` no longer fails on chapter count.
-- No visible “eight chapters” copy remains unless intentionally historical.
-
-## 1.4 Resolve password-gate contradiction
-
-### Current contradiction
-
-- README says the site is password-gated via `WORKSHOP_PASSWORD`.
-- Skill says the web guide requires a password.
-- Code currently does not implement an active password gate.
-
-### Decision needed
-
-Choose one:
-
-#### Option A — Public lab, recommended
-
-Remove password-gate claims from:
-
-- `README.md`
-- `skill/SKILL.md`
-- `skill/README.md`
-- screenshot docs if they imply unlock behavior
-
-Keep `.env.example` only if some other env is needed; otherwise simplify it.
-
-#### Option B — Private workshop lab
-
-Implement a real gate in `proxy.ts` or app boundary and add tests.
-
-### Recommendation
-
-Use **Option A**. This lab is a public artifact and stronger when shared openly.
-
-### Acceptance
-
-- README accurately describes how to run the app.
-- Skill does not promise a password if none exists.
-- No code/docs mismatch remains.
-
-## 1.5 Fix Open Graph metadata base
-
-### Tasks
-
-- Add `metadataBase` in `app/layout.tsx`.
-- Prefer env-driven site URL:
-
-```ts
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-```
-
-- Use production Vercel URL as default only if we are comfortable hardcoding it.
-
-### Acceptance
-
-- `pnpm build` no longer warns about missing `metadataBase`.
-
-## Phase 1 validation
-
-Run:
-
-```bash
-pnpm lint
-pnpm test
-pnpm build
-pnpm test:e2e
-```
-
-Expected: all pass.
-
-Commit suggestion:
-
-```text
-chore: restore lab repo health
-```
-
----
-
-## Phase 1 completion log
-
-Completed on branch `improve/lab-workshop-readiness`:
+## What changed
 
 - Removed accidental sample `.claude` worktrees.
 - Added `.gitignore` rules for Claude Code worktrees.
@@ -221,7 +77,7 @@ Completed on branch `improve/lab-workshop-readiness`:
 - Removed password-gate claims from README, skill docs, and capture docs/code.
 - Added `metadataBase` via `NEXT_PUBLIC_SITE_URL` fallback.
 
-Validation:
+## Validation
 
 ```bash
 pnpm lint
@@ -234,704 +90,383 @@ All passed locally.
 
 ---
 
-# Phase 2 — Workshop-native UX primitives
+# Phase 2 — Lean review pass
 
-Add small reusable components before changing lots of content.
+Before making more changes, do one careful review of the current lab and mark only the places where a small intervention would help.
 
-## 2.1 Add prompt copy component
+## Review questions
 
-### Why
+For each chapter, ask:
 
-Many chapter prompts are actions. Participants should be able to copy them directly.
+1. Is there a concept that is still too abstract?
+2. Is there a section where the eye gets tired?
+3. Is there an existing screenshot/diagram that feels basic or unnecessary?
+4. Would one supportive image make the idea clearer?
+5. Is any copy stale, too wordy, or not quite Ondrej/peer voice?
 
-### Component
+## Output
 
-Create an MDX component, e.g. `Prompt`:
-
-```mdx
-<Prompt>
-Use the Explore agent to find where authentication is handled, then summarise.
-</Prompt>
-```
-
-Render with:
-
-- visually distinct prompt box;
-- copy button;
-- accessible label;
-- optional caption or title later.
-
-### Files likely touched
-
-- `app/components/mdx-components.tsx`
-- new `app/components/prompt.tsx` if client-side copy is needed
-
-### Acceptance
-
-- `Prompt` works in MDX.
-- Copy button works in browser.
-- Keyboard accessible.
-- No hydration warnings.
-
-## 2.2 Add semantic lab callouts
-
-### Why
-
-Current callouts are generic (`note`, `warn`, `tip`). A lab needs learning-state blocks.
-
-### Add components
-
-Either extend `Callout` variants or create wrappers:
-
-- `TryThis`
-- `Checkpoint`
-- `FailureMode`
-- `SafetyBoundary`
-- `Output`
-
-Example:
-
-```mdx
-<Checkpoint>
-You are done when `curl localhost:8000/health` returns `{ "ok": true }`.
-</Checkpoint>
-```
-
-### Acceptance
-
-- Components are available in MDX.
-- Visual distinction is clear but still Rosé Pine-native.
-- Existing `Callout` uses remain compatible.
-
-## 2.3 Add chapter artifact metadata
-
-### Minimal approach
-
-Extend `CHAPTERS` in `lib/chapters.ts`:
-
-```ts
-artifact: Record<Locale, string>;
-track: Record<Locale, string>;
-```
-
-Example:
-
-```ts
-artifact: {
-  en: "Installed Claude + privacy boundary",
-  cs: "Nainstalovaný Claude + hranice pro data",
-}
-```
-
-### Alternative
-
-Move metadata into MDX frontmatter. Better long-term, but bigger. For this phase, prefer minimal extension unless doing the architecture phase now.
-
-### Acceptance
-
-- Lab index cards show artifact/output.
-- Chapter header or intro shows what the participant leaves with.
-
-## 2.4 Add progress/completion state
-
-### Simple local-only implementation
-
-- Add a “Mark chapter done” button on chapter pages.
-- Store completed slugs in `localStorage`, per locale.
-- Show progress in sidebar/index: `3 / 9 complete`.
-- Add “Continue where you left off” on `/lab` if any progress exists.
-
-### Files likely touched
-
-- `app/components/chapter-sidebar.tsx`
-- new client component for progress state
-- `app/[locale]/lab/page.tsx`
-- `app/[locale]/lab/[slug]/page.tsx`
-
-### Acceptance
-
-- No account/backend required.
-- Works after reload.
-- Does not break SSR.
-- Accessible button labels.
-
-## Phase 2 validation
-
-Run:
-
-```bash
-pnpm lint
-pnpm test
-pnpm build
-pnpm test:e2e
-```
-
-Add/update e2e smoke for:
-
-- copy prompt button if stable enough;
-- marking chapter complete if implemented.
-
-Commit suggestion:
-
-```text
-feat(ux): add workshop progress and prompt primitives
-```
-
----
-
-# Phase 3 — Content upgrades
-
-Use the new primitives to improve teaching without rewriting everything.
-
-## 3.1 Add “what you leave with” to every chapter
-
-Add near the top of each chapter:
-
-```mdx
-<Output>
-By the end of this chapter you will have ...
-</Output>
-```
-
-Suggested artifacts:
-
-| Chapter | Artifact |
-|---|---|
-| 1 Before we start | Installed Claude, signed in, `.claudeignore` decision made |
-| 2 Your first task | One working `/health` endpoint and one reviewed diff |
-| 3 Teach Claude your project | A useful `CLAUDE.md` with project/conventions/don’t/commands |
-| 4 Iteration and control | One rewind branch and one plan-mode run |
-| 5 Ecosystem | One installed extension or one tiny generated skill |
-| 6 Compound engineering | One plan file and one compound note |
-| 7 Next steps | One selected harness upgrade for real work |
-| 8 Reference | A bookmarked command/reference surface |
-| 9 Behind the scenes | A prompt to render your own usage dashboard |
-
-### Acceptance
-
-- Each EN chapter has a clear output.
-- Each CS chapter has equivalent, natural Czech copy.
-
-## 3.2 Add failure drills
-
-### Chapter 4 — Rewind drill
-
-Add an exercise where the participant intentionally prompts badly, observes overreach, rewinds, and narrows.
-
-Key lesson:
-
-> Rewind is cheaper than explaining around a bad branch.
-
-### Chapter 6 — Scope creep drill
-
-Add a plan-review exercise:
-
-- ask Claude for a plan;
-- identify if it is too broad;
-- constrain to a 30-minute slice;
-- only then execute.
-
-Key lesson:
-
-> A plan is not good because it is detailed. It is good because it is bounded.
-
-### Acceptance
-
-- Failure drills are concrete and runnable.
-- They do not require special tools beyond Claude Code and sample projects.
-
-## 3.3 Add minimum harness checklist earlier
-
-In Chapter 4, add a compact checklist:
-
-```mdx
-<SafetyBoundary title="Minimum harness before longer agent runs">
-- test command
-- lint/typecheck command
-- clean git status
-- no secrets in scope
-- small commits
-- plan before destructive changes
-</SafetyBoundary>
-```
-
-### Acceptance
-
-- Chapter 4 makes “harness” concrete before Chapter 7 deepens it.
-
-## 3.4 Add “what not to automate yet”
-
-In Chapter 7, add a section warning against autonomous runs for:
-
-- production migrations;
-- auth rewrites;
-- payment logic;
-- secret handling;
-- legal/compliance text;
-- customer data transformations;
-- anything untestable.
-
-### Acceptance
-
-- The lab balances speed with judgment.
-- Tone stays calm, not fear-based.
-
-## 3.5 Add Czech glossary
-
-Add to Czech reference chapter or as a callout:
-
-- prompt — zadání pro Claude
-- skill — znovupoužitelný pracovní postup
-- plugin — balíček skillů/příkazů/hooků
-- subagent — delegovaný agent s vlastním kontextem
-- harness — sada kontrol, testů a pravidel kolem agenta
-- MCP — propojení na externí nástroj/službu
-
-### Acceptance
-
-- Czech readers get term consistency without over-translating established tool names.
-
-## 3.6 Add “current as of” notes
-
-For chapters that mention volatile Claude Code UI/features, add:
+Create a short punch list, not a new giant plan:
 
 ```md
-Current as of April 2026. Claude Code moves fast; if UI labels differ, trust the official docs linked here.
+## Keep as-is
+- ...
+
+## Small copy polish
+- Chapter X: ...
+
+## Candidate supportive imagery
+- Chapter X: concept, why it helps, image idea
+
+## Do not touch
+- ...
 ```
 
-Likely chapters:
+## Lean review result
 
-- Chapter 1
-- Chapter 5
-- Chapter 7
-- Chapter 8
+### Existing visual DNA
 
-### Acceptance
+The current visual system is already coherent:
 
-- Time-sensitive claims are framed clearly.
+- dark Rosé Pine Moon base, muted lavender outlines, peach/rose/teal accents;
+- mostly flat technical line-art with soft glow, not glossy 3D;
+- terminal/window cards, file cards, arrows, circles, and simple diagrams;
+- lots of negative space;
+- monospaced labels only where they clarify;
+- landing hero is the outlier in format, but still shares the same palette, line weight, and calm space-tech feel.
 
-## Phase 3 validation
+The generated concept images that currently fit best:
 
-Run:
+- `public/hero.png` — spacious Heart-of-Gold/terminal spaceship;
+- `public/screenshots/ch6-compound-loop.png` — strongest current conceptual diagram;
+- `public/screenshots/ch7-lethal-trifecta.png` — simple, clear, memorable;
+- `public/screenshots/ch3-claude-md-precedence.png` and `ch4-permission-modes.png` — useful diagrammatic UI abstractions.
 
-```bash
-pnpm lint
-pnpm test
-pnpm build
-pnpm test:e2e
-```
+### Keep as-is
 
-Also run the copy editor if available:
+- Chapter 1 install/auth screenshots.
+- Chapter 2 sample-task screenshots.
+- Chapter 3 `CLAUDE.md` precedence diagram.
+- Chapter 6 compound loop diagram.
+- Chapter 7 lethal-trifecta diagram and routines screenshot.
+- Chapter 9 dashboard.
 
-```bash
-bun ../heart-of-gold-toolkit/plugins/marvin/skills/copy-editor/scripts/copy-audit.ts --config .copy-editor.yaml
-```
+### Small copy/design polish candidates
 
-Commit suggestion:
+Keep these surgical:
 
-```text
-feat(content): make chapters artifact-driven
-```
+- Review captions around concept images. A few can work harder by saying *why the image matters*, not only what it shows.
+- Check Chapter 4’s “control → harness” section. It is strong but abstract; one image or one short bridge sentence may help.
+- Check Chapter 5’s ecosystem chapter. It has many concepts; one map may reduce cognitive load more than more prose.
+
+### Candidate supportive imagery
+
+Only two candidates survive the YAGNI filter:
+
+1. **Chapter 4 — Control → harness**
+   - Reason: this is one of the lab’s most important mental-model shifts.
+   - Current state: text is good, but abstract.
+   - Proposed image: a calm developer cockpit / engineering harness around an agentic work loop — tests, diffs, permissions, review, and alarms as abstract cards.
+   - Decision: **best first proof slice.**
+
+2. **Chapter 5 — Ecosystem map**
+   - Reason: chapter introduces many extension concepts at once.
+   - Current state: screenshots are useful but do not show the whole ecosystem shape.
+   - Proposed image: Claude Code as the center with skills, plugins, MCPs, subagents, remote/web/mobile as surrounding modules.
+   - Decision: **only do after Chapter 4 image works.**
+
+### Do not touch for now
+
+- No progression tracking.
+- No checkpoint/output/failure component system.
+- No new lab-report/team-kit/danger-lab work.
+- No architecture refactor.
+- No broad chapter rewrites.
+- No more than 1–2 new images unless the first proof slice clearly improves the lab.
 
 ---
 
-# Phase 4 — Architectural cleanup
+# Phase 3 — Supportive imagery, only where it earns its place
 
-This phase can happen after UX/content, unless static rendering becomes urgent.
+This is the main useful remaining improvement.
 
-## 4.1 Decide static vs dynamic route strategy
+Use GPT Image 2 for a few visual anchors that clarify the mental models. Do not add decorative art just because we can.
 
-### Current issue
+## Cohesion rule
 
-`app/layout.tsx` reads request headers to set `<html lang>`:
+Before generating any new image, inspect the existing visual family and keep new work inside that design language.
 
-```ts
-const headerStore = await headers();
-const headerLocale = headerStore.get("x-locale");
-```
+Reference visuals:
 
-This likely makes otherwise static content dynamic.
+- landing hero: `public/hero.png`
+- existing generated diagrams/screenshots in `public/screenshots/`
+- especially the current compound engineering visual and any Chapter 4/6/7 concept images
 
-### Options
+The goal is not “make a cool image.” The goal is:
 
-#### Option A — Accept dynamic rendering
+> This looks like it was always part of Claude Code Lab.
 
-Pros:
-- correct `html lang` from middleware header;
-- minimal change.
+If a generated image does not match the existing visual DNA, do not use it.
 
-Cons:
-- content routes remain dynamic;
-- less cacheable;
-- surprising for a static MDX guide.
+## Candidate image slots
 
-#### Option B — Static-first layout
+These are candidates, not commitments.
 
-Remove `headers()` from root layout. Use a simpler default `lang` or restructure layouts so locale-specific pages set language without dynamic headers.
+### 1. Chapter 3 — Context as onboarding
 
-Pros:
-- static routes possible;
-- better CDN behavior;
-- simpler mental model.
+Concept: `CLAUDE.md` is not config trivia. It is onboarding for a new collaborator.
 
-Cons:
-- may require Next 16-specific research;
-- `html lang` correctness may need a different approach.
+Possible image:
 
-### Required research
+- a developer desk / project map / onboarding dossier;
+- Claude as a new teammate receiving project context;
+- visual metaphor of “project memory” flowing into useful work.
 
-Because project `AGENTS.md` warns this Next version has breaking changes, read relevant local Next docs before changing routing/layout APIs:
+Why it may help:
 
-```text
-node_modules/next/dist/docs/
-```
+- Chapter 3 is conceptual;
+- readers often underestimate context;
+- an image could make “teach Claude your project” feel concrete.
 
-### Acceptance
+### 2. Chapter 4 — Control → harness
 
-- Explicit decision recorded in an ADR or plan note.
-- If changed, `pnpm build` route output improves or the tradeoff is documented.
+Concept: the human shifts from watching every diff to designing a verification harness.
 
-## 4.2 Memoize or prebuild search index
+Possible image:
 
-### Current behavior
+- a developer cockpit with tests, diffs, permissions, and alarms around an agent;
+- not “robot coding,” more “instrumented engineering loop.”
 
-`LabLayout` calls:
+Why it may help:
 
-```ts
-const searchIndex = await buildSearchIndex(validLocale);
-```
+- This is one of the strongest ideas in the lab;
+- it deserves a memorable visual anchor;
+- current text is good, but the posture shift is abstract.
 
-This reads MDX files and extracts sections.
+### 3. Chapter 5 — Ecosystem map
 
-### Minimal fix
+Concept: Claude Code extends through skills, plugins, MCPs, subagents, remote/web/mobile.
 
-Wrap in React cache:
+Possible image:
 
-```ts
-import { cache } from "react";
+- clean constellation / toolbox map;
+- Claude Code in the center with extension layers around it;
+- restrained technical illustration, not hype.
 
-export const buildSearchIndex = cache(async (locale: Locale) => { ... });
-```
+Why it may help:
 
-### Better fix
+- Chapter 5 has many concepts;
+- a single map could reduce cognitive load.
 
-Generate static JSON search indexes at build time.
+### 4. Chapter 6 — Compound loop
 
-### Acceptance
+There is already a diagram/image. Review whether it is good enough.
 
-- Search still works.
-- No unnecessary repeated filesystem parsing per request if dynamic rendering remains.
+Only regenerate if the current one does not clearly communicate:
 
-## 4.3 Replace regex heading extraction with AST extraction
+- brainstorm → plan → work → review → compound;
+- knowledge accumulating over time;
+- reusable practice, not one-off prompting.
 
-### Current behavior
+### 5. Chapter 7 — Harness / security posture
 
-`extractToc` and `extractSections` parse MDX by line regex.
+There is already a lethal-trifecta image. Review whether an additional image is needed. Probably not.
 
-### Improvement
+If anything, prefer small copy polish over more art.
 
-Use unified/remark AST extraction for headings and section snippets.
+## Image style constraints
 
-### Acceptance
+New images must match the existing lab image DNA:
 
-- Existing TOC/search tests still pass.
-- Add tests for:
-  - inline code in headings;
-  - links in headings;
-  - fenced code blocks;
-  - duplicate headings.
+- calm Rosé Pine-inspired palette;
+- muted lavender, peach, rose, teal, and warm dark surfaces;
+- soft technical illustration style;
+- slightly cinematic but restrained lighting;
+- rounded panels, terminal surfaces, diagrams, cards, project artifacts;
+- practical software-engineering feeling, not generic AI futurism;
+- cohesive with the Heart-of-Gold landing hero and current compound-engineering image;
+- low visual noise and generous negative space;
+- no glossy SaaS stock illustration style;
+- no generic robot/humanoid AI cliché;
+- no “robot hands typing code” cliché;
+- no fake product UI likely to become inaccurate;
+- no text-heavy image unless text is intentionally minimal and legible.
 
-## 4.4 Split `BuildStats`
+Preferred visual ingredients:
 
-### Current issue
+- terminal windows;
+- plan documents;
+- diffs and tests as abstract cards;
+- small project maps;
+- soft glowing connection lines;
+- developer workbench / cockpit metaphors;
+- reusable artifacts accumulating over time.
 
-`app/components/build-stats.tsx` mixes:
+## Process
 
-- localized copy;
-- data;
-- chart components;
-- styles;
-- methodology.
+### 0. Extract a mini style guide first
 
-### Target structure
+Before the first generation, review the existing images and write a short reusable prompt prefix.
 
-```text
-app/components/build-stats/
-  index.tsx
-  data.ts
-  copy.tsx
-  palette.ts
-  parts.tsx
-```
-
-or keep component path stable by re-exporting from `app/components/build-stats.tsx`.
-
-### Acceptance
-
-- No visual regression intended.
-- Easier to update stats/copy separately.
-
-## 4.5 Revisit Mermaid rendering/security
-
-### Current behavior
-
-`Diagram` uses:
-
-```ts
-securityLevel: "loose"
-```
-
-### Tasks
-
-- Test whether stricter Mermaid security works for current diagrams.
-- If loose is required, add a comment explaining that diagrams are trusted local MDX.
-- Consider pre-rendered SVGs later to reduce client JS.
-
-### Acceptance
-
-- Diagram rendering still works.
-- Security posture is intentional and documented.
-
-## Phase 4 validation
-
-Run full suite:
-
-```bash
-pnpm lint
-pnpm test
-pnpm build
-pnpm test:e2e
-```
-
-Commit suggestion:
+Reusable prompt prefix:
 
 ```text
-refactor: simplify lab content architecture
+Match the existing Claude Code Lab visual family: dark Rosé Pine Moon background, muted lavender line art, peach/rose/teal accents, warm dark terminal surfaces, rounded window cards, thin technical outlines, soft subtle glow, generous negative space, calm software-engineering diagram aesthetic, cohesive with the Heart-of-Gold spaceship hero and compound engineering loop illustration. Flat/semi-flat technical illustration, not glossy 3D. Use practical developer artifacts: terminal windows, diffs, test cards, plan documents, file cards, soft connection lines. No generic AI robots, no humanoid robot, no glossy SaaS stock illustration, no busy fake product UI, no robot hands typing code, no dense text.
 ```
+
+Use this exact family unless a proof slice shows it needs small tuning.
+
+### Per image
+
+1. Start with the shared style prefix.
+2. Add one concept-specific prompt.
+3. Generate one proof slice.
+4. Review in the chapter context, not in isolation.
+5. Keep it only if it clearly improves understanding **and** matches the existing visual family.
+6. If style drifts, tune the prompt once or drop the image.
+7. Do not batch-generate many variants unless the proof slice works.
+
+## First proof-slice prompt — Chapter 4
+
+Use GPT Image 2 with the reusable prefix plus:
+
+```text
+Concept: the shift from direct control to a trusted engineering harness. Show a developer workbench/cockpit made of abstract terminal cards around a central agentic coding loop. Cards represent: plan mode, diff review, tests passing, permissions, security review, and automation hooks. The human is not micromanaging every line; they are designing the verification harness. Keep it calm, minimal, and readable as a concept image. No literal robot. No real product UI. Minimal or no text; if text appears, keep it abstract and legible.
+```
+
+Target file if accepted:
+
+- `public/screenshots/ch4-control-to-harness.png`
+
+Placement if accepted:
+
+- Chapter 4, near “The shift: from control to a harness you trust”.
+
+Caption direction:
+
+> The shift is not blind trust. It is replacing constant diff-watching with tests, permissions, reviews, and automation that catch mistakes for you.
+
+## Optional second proof-slice prompt — Chapter 5
+
+Only do this if Chapter 4 image lands well.
+
+```text
+Concept: Claude Code as an extensible platform. Show a central terminal/workbench labeled only abstractly, surrounded by six connected modules: skills, plugins, MCPs, subagents, remote control, and web/mobile sessions. Make it feel like a calm ecosystem map, not a network diagram. Same visual family as the compound loop: rounded terminal cards, file cards, soft connection lines, muted Rosé Pine colors, lots of negative space. No robots, no glossy SaaS icons, no dense text.
+```
+
+Target file if accepted:
+
+- `public/screenshots/ch5-ecosystem-map.png`
+
+Placement if accepted:
+
+- Chapter 5, near the opening after the multi-session screenshot or as a replacement if it makes the screenshot redundant.
+
+## Acceptance
+
+- Prefer one accepted image, two maximum.
+- Every added image has a clear teaching purpose.
+- No chapter feels visually bloated.
+- If generated style drifts from the existing family, drop the image instead of forcing it in.
 
 ---
 
-# Phase 5 — CI and sample hardening
+# Phase 4 — Small content polish
 
-## 5.1 Add GitHub Actions CI
+Make surgical edits only.
 
-### Workflow
+## Good candidates
 
-Add `.github/workflows/ci.yml`:
+- Remove stale wording.
+- Tighten overlong paragraphs.
+- Make Czech visible copy more natural where it currently feels translated.
+- Add a one-sentence bridge before a hard concept.
+- Add a short “why this matters” line where a section jumps too fast.
 
-- install pnpm;
-- install dependencies with lockfile;
-- run:
-  - `pnpm lint`
-  - `pnpm test`
-  - `pnpm build`
-  - `pnpm test:e2e`
+## Avoid
 
-### Acceptance
+- Rewriting whole chapters.
+- Adding many new callouts.
+- Adding new formal exercise structure.
+- Turning the voice into courseware.
+- Adding generic motivational copy.
 
-- CI runs on PR and push to main.
-- CI documents the same harness the lab teaches.
+## Acceptance
 
-## 5.2 Add sample smoke checks
-
-### Python/React sample
-
-Add either:
-
-- a simple backend smoke test; or
-- documented command that CI can run if dependencies are installed.
-
-Possible:
-
-```bash
-cd samples/python-react/backend
-python -m pip install -r requirements.txt
-python -m compileall .
-```
-
-If adding actual tests, keep them tiny.
-
-### .NET sample
-
-Possible:
-
-```bash
-cd samples/dotnet-core
-dotnet build
-```
-
-If CI environment has dotnet available, include it; otherwise document local check only.
-
-### Acceptance
-
-- Sample projects do not silently rot.
-- README sample instructions match tested commands.
-
-## 5.3 Optional link check
-
-Later, add a link checker for external docs. Because Claude Code docs move quickly, link rot is likely.
-
-### Acceptance
-
-- Link check is non-blocking at first, or scoped to internal links only.
-
-## Phase 5 validation
-
-- CI passes on pushed branch.
-
-Commit suggestion:
-
-```text
-ci: add lab quality gates
-```
+- Content still feels like the current lab.
+- Changes are small enough to review comfortably.
+- Czech remains peer-like and not over-polished.
 
 ---
 
-# Phase 6 — Bigger product moves
+# Phase 5 — Small design polish
 
-Do these after the lab is healthy and workshop-native.
+Only adjust the existing design system where there is obvious friction.
 
-## 6.1 Participant lab report
+## Possible small wins
 
-Add a final artifact template:
+- Improve lab index card hierarchy if it feels too flat.
+- Slightly improve spacing around screenshots/diagrams.
+- Add subtle “concept image” treatment if new images need consistent framing.
+- Improve captions where images need more context.
+- Check mobile rendering after image additions.
+
+## Avoid
+
+- New navigation model.
+- Completion/progress UI.
+- Big landing page redesign.
+- Motion-heavy interactions.
+- Dashboard-like complexity.
+
+## Acceptance
+
+- Design remains minimal and calm.
+- New images feel native to the page.
+- No component sprawl.
+
+---
+
+# Optional later — only if pain appears
+
+These are intentionally deferred.
+
+## Copyable prompt component
+
+Maybe useful, but only add if chapter review shows prompt copying is a real friction point.
+
+If added, keep it as one simple component. No broader exercise system.
+
+## CI
+
+Useful eventually, but not necessary for the current polish pass.
+
+## Architecture cleanup
+
+Only revisit if there is an actual performance/build problem. Do not refactor for theoretical neatness.
+
+---
+
+# Recommended next step
+
+Do the lean review pass.
+
+Produce a short list like:
 
 ```md
-# Claude Code Lab Report
+## Proposed minimal changes
 
-## My repo
-
-## What Claude got right
-
-## Where it failed
-
-## My CLAUDE.md changes
-
-## One workflow I will turn into a skill
-
-## My safety boundary
+1. Add/replace image in Chapter 4 — control → harness.
+2. Add ecosystem map in Chapter 5.
+3. Tighten two paragraphs in Chapter 6.
+4. Update captions for existing diagrams.
+5. Stop there.
 ```
 
-Could live in:
+Then implement only that list.
 
-- `docs/lab-report-template.md`
-- `public/templates/lab-report.md`
-- Chapter 9 exercise
+## Current bias
 
-## 6.2 Team adoption kit
+If unsure, **do nothing**.
 
-Create:
-
-```text
-docs/team-adoption/
-  30-minute-intro.md
-  90-minute-workshop.md
-  manager-brief.md
-  security-faq.md
-  rollout-checklist.md
-```
-
-Purpose: make the lab useful beyond individual self-study.
-
-## 6.3 Danger lab sandbox
-
-A deliberately safe failure playground:
-
-- prompt injection in issue text;
-- command that tries to read `.env`;
-- over-broad refactor;
-- missing test catches;
-- MCP trust boundary example.
-
-This would make Chapter 7 visceral.
-
-## 6.4 Companion skill modes
-
-Update the skill from “first four chapters only” to explicit modes:
-
-- `starter` — chapters 1–4, 40 min
-- `extension` — chapters 5–6, 45 min
-- `hardening` — chapter 7, 30 min
-- `reference` — chapter 8 lookup
-- `retro` — chapter 9 usage dashboard
-
-The skill should ask at activation:
-
-> Do you want the 40-minute starter, the 90-minute workshop, or a specific chapter coach?
-
-## 6.5 Public case study page
-
-Promote Chapter 9 into a public-facing case study:
-
-> We built this Claude Code lab with Claude Code. Here is the receipt.
-
-Could be a separate route or a more prominent landing-page section.
-
----
-
-# Suggested first work batch
-
-If implementing now, do only this first:
-
-1. Remove accidental `.claude/worktrees` from samples.
-2. Add ignore rule.
-3. Fix lint errors.
-4. Fix e2e chapter count.
-5. Update eight → nine copy.
-6. Resolve password-gate claims as public lab.
-7. Add `metadataBase`.
-8. Run full validation.
-9. Commit.
-
-This creates a clean base for every later improvement.
-
-## First batch commands
-
-```bash
-cd ../claude-code-lab
-rm -rf samples/dotnet-core/.claude samples/python-react/.claude
-pnpm lint
-pnpm test
-pnpm build
-pnpm test:e2e
-```
-
-Remember: use non-interactive flags where relevant; `rm -rf` is intentional here.
-
----
-
-# Risks
-
-## Risk: turning the guide into a heavy app
-
-Mitigation: keep progress localStorage-only, no backend.
-
-## Risk: content churn in two languages
-
-Mitigation: edit EN first, then CS in small batches. Run copy editor after each batch.
-
-## Risk: Next 16 API assumptions
-
-Mitigation: read local Next docs before routing/layout changes.
-
-## Risk: over-polishing away Ondrej voice
-
-Mitigation: keep copy direct, human, practical. Avoid corporate courseware language.
-
-## Risk: feature drift from Claude Code docs
-
-Mitigation: add “current as of” notes and link official docs.
-
----
-
-# Definition of done for full improvement program
-
-- Full quality suite passes locally and in CI.
-- README matches actual app behavior.
-- No stale “eight chapters” copy remains.
-- Lab index communicates chapter outputs/artifacts.
-- Participants can copy prompts directly.
-- Chapters include checkpoints and failure drills.
-- Progress is visible without requiring an account.
-- Architecture decisions are documented where tradeoffs exist.
-- Sample projects have at least smoke-level validation.
-- Companion skill accurately reflects the current 9-chapter lab.
+This lab is already good. The remaining work should make it clearer, not bigger.
