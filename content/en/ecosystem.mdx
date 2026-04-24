@@ -100,7 +100,7 @@ claude mcp add --transport stdio chrome-devtools -- npx -y chrome-devtools-mcp@l
 
 Then in your session:
 
-> Open `https://example.com` and tell me why its LCP is slow. Run Lighthouse if you need to.
+<Prompt>Open https://example.com and tell me why its LCP is slow. Run Lighthouse if you need to.</Prompt>
 
 Claude opens the page, inspects, reports back. This is the moment MCPs stop being abstract.
 
@@ -126,11 +126,11 @@ Ship-built. Read-only, fast (Haiku), ideal for "where is X?" questions in a larg
 
 In any repo, ask:
 
-> Use the Explore agent to find where authentication is handled, then summarise.
+<Prompt>Use the Explore agent to find where authentication is handled, then summarise.</Prompt>
 
 Or more explicitly, mention it by name:
 
-> @Explore: find every place we call the Stripe API.
+<Prompt>@Explore: find every place we call the Stripe API.</Prompt>
 
 Your main conversation gets a two-paragraph summary. The actual file-reading happened in a side context that's now discarded. You spent ~100 tokens on the result, not ~20k on the exploration.
 

@@ -22,7 +22,7 @@ Open `samples/dotnet-core/` in Claude. Goal: add a `GET /health` endpoint to the
 
 In the Claude window:
 
-> Read `Program.cs` so you know the shape, then add a `GET /health` endpoint that returns `{ "ok": true, "uptime_seconds": n }`.
+<Prompt>Read Program.cs so you know the shape, then add a GET /health endpoint that returns \{ "ok": true, "uptime_seconds": n \}.</Prompt>
 
 <Screenshot
   src="/screenshots/ch2-plan-output.png"
@@ -56,7 +56,7 @@ Three lines of real code (using, startedAt, MapGet) plus two blanks. Nothing els
 
 Accept. Then run the sample:
 
-> Start the app and hit `/health` to confirm it's wired up.
+<Prompt>Start the app and hit /health to confirm it's wired up.</Prompt>
 
 <Screenshot
   src="/screenshots/ch2a-run.png"
@@ -79,7 +79,7 @@ Open `samples/python-react/` in Claude. Goal: same — add a `GET /health` endpo
 
 In the Claude window:
 
-> Read `backend/main.py` so you know the shape, then add a `GET /health` endpoint that returns `{ "ok": true, "uptime_seconds": n }`.
+<Prompt>Read backend/main.py so you know the shape, then add a GET /health endpoint that returns \{ "ok": true, "uptime_seconds": n \}.</Prompt>
 
 <Screenshot
   src="/screenshots/ch2b-plan-output.png"
@@ -105,7 +105,7 @@ One import, one module-level timer, one route. That's it. Existing middleware an
 
 Accept. Then run the backend:
 
-> Start uvicorn and hit `/health` to confirm it's wired up.
+<Prompt>Start uvicorn and hit /health to confirm it's wired up.</Prompt>
 
 <Screenshot
   src="/screenshots/ch2b-run.png"

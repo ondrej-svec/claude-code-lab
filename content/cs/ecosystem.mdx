@@ -100,7 +100,7 @@ claude mcp add --transport stdio chrome-devtools -- npx -y chrome-devtools-mcp@l
 
 A pak v session:
 
-> Otevři `https://example.com` a řekni mi, proč má pomalý LCP. Pusť Lighthouse, pokud potřebuješ.
+<Prompt>Otevři https://example.com a řekni mi, proč má pomalý LCP. Pusť Lighthouse, pokud potřebuješ.</Prompt>
 
 Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs přestanou být abstraktní.
 
@@ -126,11 +126,11 @@ Vestavěný. Read-only, rychlý (Haiku), ideální na otázky „kde je X?" ve v
 
 V libovolném repu se zeptej:
 
-> Použij Explore agenta a najdi, kde je řešená autentizace. Pak shrň.
+<Prompt>Použij Explore agenta a najdi, kde je řešená autentizace. Pak shrň.</Prompt>
 
 Nebo ho pojmenuj explicitně:
 
-> @Explore: najdi všechna místa, kde voláme Stripe API.
+<Prompt>@Explore: najdi všechna místa, kde voláme Stripe API.</Prompt>
 
 Tvoje hlavní konverzace dostane dvou-odstavcové shrnutí. Samotné čtení souborů proběhlo v bočním kontextu, který se teď zahodil. Na výsledek jsi utratil ~100 tokenů, ne ~20k na průzkum.
 
