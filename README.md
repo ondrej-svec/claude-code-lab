@@ -2,9 +2,11 @@
 
 ![claude-code-lab — nine chapters, one practice](public/screenshots/web-lab-index-dark.png)
 
-A hands-on guide to agentic coding with Claude Code — from install to compound.
+**→ Live at [cc-lab.ondrejsvec.com](https://cc-lab.ondrejsvec.com)**
 
-A practice-oriented walkthrough for developers adopting Claude Code — install, context, iteration, ecosystem, compound engineering, reference. Both English and Czech.
+A hands-on guide to agentic coding with Claude Code — from install to compound. Bilingual (EN / CS), practice-oriented, with copyable prompts and sample projects you can run through the full loop.
+
+Covers: install & auth, your first task, teaching Claude your project, iteration & control, the ecosystem, compound engineering, where to go next, a reference, and behind-the-scenes stats from building the lab itself.
 
 ## What's inside
 

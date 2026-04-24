@@ -1,6 +1,6 @@
 # cc-lab companion skill
 
-A Claude Code skill that walks you through the first four chapters of [claude-code-lab](https://github.com/ondrej-svec/claude-code-lab) interactively. Paired with the web guide at https://claude-code-lab.vercel.app, this skill turns Claude into your facilitator.
+A Claude Code skill that walks you through the first four chapters of [claude-code-lab](https://github.com/ondrej-svec/claude-code-lab) interactively. Paired with the web guide at https://cc-lab.ondrejsvec.com, this skill turns Claude into your facilitator.
 
 ## Install
 

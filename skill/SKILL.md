@@ -5,7 +5,7 @@ description: Companion skill for the claude-code-lab workshop. Walks the user th
 
 # Claude Code Lab — Companion Skill
 
-Interactive walkthrough of the first hour of claude-code-lab. You guide the user through four chapters of hands-on practice. The web guide at `https://claude-code-lab.vercel.app` (or local) is the reference; this skill is the facilitator.
+Interactive walkthrough of the first hour of claude-code-lab. You guide the user through four chapters of hands-on practice. The web guide at `https://cc-lab.ondrejsvec.com` (or local) is the reference; this skill is the facilitator.
 
 ## When to activate
 
@@ -103,5 +103,5 @@ Ask: *"What's the first thing you'll try on your real codebase this week?"* Get 
 
 Full chapter content lives in the repo at `content/{locale}/*.mdx`. English is canonical, Czech is reviewed. If the user is working in Czech, use `content/cs/`.
 
-Web guide: https://claude-code-lab.vercel.app
+Web guide: https://cc-lab.ondrejsvec.com
 Repo: https://github.com/ondrej-svec/claude-code-lab

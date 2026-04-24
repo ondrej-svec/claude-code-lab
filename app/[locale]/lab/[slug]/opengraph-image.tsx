@@ -124,7 +124,7 @@ export default async function ChapterOpengraphImage({
             alignItems: "center",
           }}
         >
-          <span>claude-code-lab-nine.vercel.app/{locale}/lab/{slug}</span>
+          <span>cc-lab.ondrejsvec.com/{locale}/lab/{slug}</span>
           <span>{locale.toUpperCase()}</span>
         </div>
       </div>

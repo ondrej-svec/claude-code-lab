@@ -111,7 +111,7 @@ export default async function OpengraphImage() {
             alignItems: "center",
           }}
         >
-          <span>claude-code-lab-nine.vercel.app</span>
+          <span>cc-lab.ondrejsvec.com</span>
           <span>Rosé Pine · EN / CS</span>
         </div>
       </div>

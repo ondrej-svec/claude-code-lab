@@ -22,7 +22,7 @@ Ahoj,
 
 Průvodce pro workshop žije na webu. Použij ho během session i potom. Funguje i na mobilu.
 
-URL: https://claude-code-lab-nine.vercel.app
+URL: https://cc-lab.ondrejsvec.com
 
 Je tam devět kapitol s runnable ukázkami. První čtyři projdeme společně, zbytek je reference pro samostatné tempo během týdne.
 
@@ -70,7 +70,7 @@ Hi,
 
 Built as a web app. Use it during the session and after. Works on mobile.
 
-URL: https://claude-code-lab-nine.vercel.app
+URL: https://cc-lab.ondrejsvec.com
 
 Nine chapters with runnable code samples. We'll walk through the first four together; the rest is reference for your own pace through the week.
 
@@ -102,6 +102,6 @@ Ondra
 
 ## Notes for the sender
 
-- **URL** is currently `claude-code-lab-nine.vercel.app` (auto-assigned; `claude-code-lab.vercel.app` was taken). Update the email if you add a custom domain like `cc-lab.ondrejsvec.com`.
+- **URL** is `cc-lab.ondrejsvec.com` (custom domain, served from Vercel).
 - **Reply-to:** set to whoever handles pre-session questions.
 - **Placeholders to fill:** date, time, day, duration. Optionally add workshop-specific context (company name, team split, etc.) in an intro paragraph.
