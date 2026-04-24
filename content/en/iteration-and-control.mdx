@@ -66,6 +66,12 @@ As you work with Claude Code daily, that posture becomes the bottleneck. You can
 
 The better path: **build a harness around Claude Code that makes its work verifiable without your eyes on every line.** Your role shifts from reviewer to harness architect.
 
+<Screenshot
+  src="/screenshots/ch4-control-to-harness.png"
+  alt="A dark Rosé Pine diagram: terminal cards for planning, diffs, permissions, security, and automation connected around a central verified coding loop."
+  caption="The shift is not blind trust. It is replacing constant diff-watching with tests, permissions, reviews, and automation that catch mistakes for you."
+/>
+
 What the harness looks like in practice: testing discipline (tracer bullets, TDD, mutation checks), agent-driven review (`/security-review`, `claude-code-action`, Semgrep or Snyk in CI), security posture against the lethal trifecta, and automation (hooks, Playwright, benchmark assertions). [Chapter 7](/en/lab/next-steps) is the depth source — pick one, read the references, try it on a real task.
 
 With the harness in place, the question changes from *"did Claude make a mistake in this diff?"* to *"did the harness catch it if it did?"* Diff review becomes a spot-check, not a mandate. You get faster. The agent gets trusted. Both grow together.

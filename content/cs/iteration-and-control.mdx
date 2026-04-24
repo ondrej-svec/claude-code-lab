@@ -66,6 +66,12 @@ Jakmile s Claude Code pracuješ denně, tenhle postoj se stává úzkým hrdlem
 
 Lepší cesta: **postav si kolem Claude Code harness, který dělá jeho práci ověřitelnou bez toho, aby tvé oči byly na každém řádku.** Tvoje role se posune z reviewera na architekta harnessu.
 
+<Screenshot
+  src="/screenshots/ch4-control-to-harness.png"
+  alt="Tmavý Rosé Pine diagram: terminálové karty pro plánování, diffy, oprávnění, bezpečnost a automatizaci napojené na ověřenou vývojovou smyčku."
+  caption="Ten posun není slepá důvěra. Je to nahrazení neustálého hlídání diffu testy, oprávněními, review a automatizací, které chyby chytají za tebe."
+/>
+
 Jak ten harness v praxi vypadá: testovací disciplína (tracer bullets, TDD, mutační kontroly), review vedené agentem (`/security-review`, `claude-code-action`, Semgrep nebo Snyk v CI), bezpečnostní postoj proti lethal trifectě a automatizace (hooky, Playwright, benchmark asserce). [Kapitola 7](/cs/lab/next-steps) je místo, kde je tohle rozvedené — vyber jednu věc, přečti si odkazy, zkus ji na skutečném úkolu.
 
 S harnessem na místě se otázka mění z *„udělal Claude v tomhle diffu chybu?“* na *„chytil by to harness, kdyby ano?“* Čtení diffu se stává spot-checkem, ne povinností. Ty jsi rychlejší. Agent získává důvěru. Oboje roste společně.

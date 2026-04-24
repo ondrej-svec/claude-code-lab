@@ -2,7 +2,7 @@
 
 Date: 2026-04-24  
 Repo: `claude-code-lab`  
-Status: lean review complete — ready for proof-slice image work  
+Status: lean image proof slice implemented  
 Principle: **YAGNI — keep the lab minimal, polished, and close to what already works.**
 
 ## TL;DR
@@ -328,23 +328,32 @@ Use this exact family unless a proof slice shows it needs small tuning.
 
 ## First proof-slice prompt — Chapter 4
 
-Use GPT Image 2 with the reusable prefix plus:
+Implemented as `public/screenshots/ch4-control-to-harness.png` and placed in Chapter 4 near “The shift: from control to a harness you trust”.
+
+Generation note: GPT Image 2 was the preferred direction, but the local harness had OpenRouter image generation available rather than a GPT Image 2 key. The accepted proof slice used FLUX.2 Pro through OpenRouter after rejecting an initial text-heavy/style-drifting version.
+
+Final prompt shape used the reusable prefix, tightened to require dark terminal cards and no text:
 
 ```text
 Concept: the shift from direct control to a trusted engineering harness. Show a developer workbench/cockpit made of abstract terminal cards around a central agentic coding loop. Cards represent: plan mode, diff review, tests passing, permissions, security review, and automation hooks. The human is not micromanaging every line; they are designing the verification harness. Keep it calm, minimal, and readable as a concept image. No literal robot. No real product UI. Minimal or no text; if text appears, keep it abstract and legible.
 ```
 
-Target file if accepted:
+Target file:
 
 - `public/screenshots/ch4-control-to-harness.png`
 
-Placement if accepted:
+Placement:
 
-- Chapter 4, near “The shift: from control to a harness you trust”.
+- `content/en/iteration-and-control.mdx`
+- `content/cs/iteration-and-control.mdx`
 
-Caption direction:
+Caption:
 
 > The shift is not blind trust. It is replacing constant diff-watching with tests, permissions, reviews, and automation that catch mistakes for you.
+
+Czech caption:
+
+> Ten posun není slepá důvěra. Je to nahrazení neustálého hlídání diffu testy, oprávněními, review a automatizací, které chyby chytají za tebe.
 
 ## Optional second proof-slice prompt — Chapter 5
 
@@ -368,6 +377,11 @@ Placement if accepted:
 - Every added image has a clear teaching purpose.
 - No chapter feels visually bloated.
 - If generated style drifts from the existing family, drop the image instead of forcing it in.
+
+Current status:
+
+- Chapter 4 proof slice accepted into the branch.
+- Do **not** generate Chapter 5 automatically. Review Chapter 4 in-browser first. Only continue if it genuinely improves the reading experience.
 
 ---
 
