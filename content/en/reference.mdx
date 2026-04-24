@@ -214,6 +214,12 @@ Every prompt sends: your message, files you explicitly share (via `@`, tool use,
 
 It does **not** send: your full filesystem, files outside the project, anything matched by `.gitignore` or `.claudeignore`.
 
+<Screenshot
+  src="/screenshots/ch8-data-flow.png"
+  alt="Two-zone diagram. Left panel labeled your machine: file cards for auth.ts, main.py, .env, secrets.json, plus a small terminal. Right panel labeled anthropic: a model card. Peach arrows cross labeled prompt, @-mentioned files, what claude reads. Dashed rose arrows for .env and secrets stop at filter cards labeled .claudeignore and .gitignore. A teal arrow labeled response goes back."
+  caption="The boundary isn't a floodgate — it's a filter. Prompts and the files you reference cross; .env and anything on .claudeignore or .gitignore do not."
+/>
+
 ### Plan tiers and retention
 
 | Plan | Audience | Retention posture |

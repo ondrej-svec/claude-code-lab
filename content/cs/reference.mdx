@@ -214,6 +214,12 @@ Každý prompt posílá: tvoji zprávu, soubory, které jsi explicitně sdílel 
 
 **Neposílá:** celý filesystem, soubory mimo projekt, nic, co sedí na `.gitignore` nebo `.claudeignore`.
 
+<Screenshot
+  src="/screenshots/ch8-data-flow.png"
+  alt="Diagram dvou zón. Levý panel s popiskem your machine: karty souborů auth.ts, main.py, .env, secrets.json a malý terminál. Pravý panel s popiskem anthropic: karta model. Broskvové šipky přes hranici s popisky prompt, @-mentioned files, what claude reads. Čárkované růžové šipky pro .env a secrets končí u filtrů s popisky .claudeignore a .gitignore. Tyrkysová šipka response vede zpět."
+  caption="Hranice není uzavřená brána — je to filtr. Prompt a soubory, které zmíníš, projdou; .env a cokoliv na .claudeignore nebo .gitignore ne."
+/>
+
 ### Plány a retence
 
 | Plán | Pro koho | Jak je na tom s retencí |
