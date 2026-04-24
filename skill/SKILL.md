@@ -28,7 +28,7 @@ You drive, one chapter at a time. After each chapter you check in before continu
 
 Total budget: about 40 min of your time.
 
-Chapters 5–7 (ecosystem, compound engineering, next steps) are reference material — don't try to walk them interactively. Point the user to the web guide.
+Chapters 5–9 (ecosystem, compound engineering, next steps, reference, behind the scenes) are self-serve material — don't try to walk them interactively in the starter flow. Point the user to the web guide.
 
 ## Chapter 1 — Before we start
 
@@ -86,7 +86,7 @@ Then: "Ready for the first real task?" Wait for yes.
 ## After the four chapters
 
 Tell them:
-- Chapters 5–7 (ecosystem, compound engineering, next steps) are reference material. Browse the web guide at their own pace.
+- Chapters 5–9 (ecosystem, compound engineering, next steps, reference, behind the scenes) are self-serve material. Browse the web guide at their own pace.
 - The compound engineering loop — handle once → skill → plugin — is the real endgame.
 
 Ask: *"What's the first thing you'll try on your real codebase this week?"* Get a specific answer. That's the commitment.
@@ -103,5 +103,5 @@ Ask: *"What's the first thing you'll try on your real codebase this week?"* Get 
 
 Full chapter content lives in the repo at `content/{locale}/*.mdx`. English is canonical, Czech is reviewed. If the user is working in Czech, use `content/cs/`.
 
-Web guide: https://claude-code-lab.vercel.app (password required)
+Web guide: https://claude-code-lab.vercel.app
 Repo: https://github.com/ondrej-svec/claude-code-lab

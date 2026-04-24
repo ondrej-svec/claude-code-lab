@@ -20,12 +20,19 @@ export function SearchCommand({ entries, locale }: Props) {
   const listRef = useRef<HTMLUListElement>(null);
   const router = useRouter();
 
+  const openSearch = useCallback(() => {
+    setQuery("");
+    setActiveIndex(0);
+    setOpen(true);
+  }, []);
+
   // Keyboard: Cmd/Ctrl+K opens; Esc closes.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        setOpen((prev) => !prev);
+        if (open) setOpen(false);
+        else openSearch();
       }
       if (e.key === "Escape" && open) {
         e.preventDefault();
@@ -34,15 +41,12 @@ export function SearchCommand({ entries, locale }: Props) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  }, [open, openSearch]);
 
-  // When opened, focus the input and reset state.
+  // When opened, focus the input. Query/index resets happen in openSearch().
   useEffect(() => {
-    if (open) {
-      setQuery("");
-      setActiveIndex(0);
-      requestAnimationFrame(() => inputRef.current?.focus());
-    }
+    if (!open) return;
+    requestAnimationFrame(() => inputRef.current?.focus());
   }, [open]);
 
   const results = useMemo(() => {
@@ -65,6 +69,9 @@ export function SearchCommand({ entries, locale }: Props) {
     return scored;
   }, [entries, query]);
 
+  const activeResultIndex =
+    results.length === 0 ? 0 : Math.min(activeIndex, results.length - 1);
+
   const go = useCallback(
     (entry: SearchEntry) => {
       const base = `/${locale}/lab/${entry.chapterSlug}`;
@@ -78,13 +85,13 @@ export function SearchCommand({ entries, locale }: Props) {
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setActiveIndex((i) => Math.min(results.length - 1, i + 1));
+      setActiveIndex((i) => Math.max(0, Math.min(results.length - 1, i + 1)));
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       setActiveIndex((i) => Math.max(0, i - 1));
     } else if (e.key === "Enter") {
       e.preventDefault();
-      const target = results[activeIndex];
+      const target = results[activeResultIndex];
       if (target) go(target);
     }
   };
@@ -93,14 +100,9 @@ export function SearchCommand({ entries, locale }: Props) {
   useEffect(() => {
     const list = listRef.current;
     if (!list) return;
-    const item = list.children[activeIndex] as HTMLElement | undefined;
+    const item = list.children[activeResultIndex] as HTMLElement | undefined;
     item?.scrollIntoView({ block: "nearest" });
-  }, [activeIndex]);
-
-  // Clamp active when results shrink.
-  useEffect(() => {
-    if (activeIndex >= results.length) setActiveIndex(0);
-  }, [results.length, activeIndex]);
+  }, [activeResultIndex]);
 
   const labels =
     locale === "cs"
@@ -121,7 +123,7 @@ export function SearchCommand({ entries, locale }: Props) {
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={openSearch}
         aria-label={labels.button}
         className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md border text-xs transition"
         style={{
@@ -215,7 +217,7 @@ export function SearchCommand({ entries, locale }: Props) {
                 </li>
               )}
               {results.map((entry, i) => {
-                const active = i === activeIndex;
+                const active = i === activeResultIndex;
                 return (
                   <li
                     key={`${entry.chapterSlug}-${entry.headingId ?? "root"}`}

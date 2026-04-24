@@ -17,7 +17,10 @@ const displayFont = Space_Grotesk({
   display: "swap",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Claude Code Lab",
   description:
     "A practice for developers working with agents — from first command to compound.",

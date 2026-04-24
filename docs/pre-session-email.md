@@ -24,7 +24,7 @@ Průvodce pro workshop žije na webu. Použij ho během session i potom. Funguje
 
 URL: https://claude-code-lab-nine.vercel.app
 
-Je tam osm kapitol s runnable ukázkami. První čtyři projdeme společně, zbytek je reference pro samostatné tempo během týdne.
+Je tam devět kapitol s runnable ukázkami. První čtyři projdeme společně, zbytek je reference pro samostatné tempo během týdne.
 
 **Ukázkové projekty:**
 
@@ -72,7 +72,7 @@ Built as a web app. Use it during the session and after. Works on mobile.
 
 URL: https://claude-code-lab-nine.vercel.app
 
-Eight chapters with runnable code samples. We'll walk through the first four together; the rest is reference for your own pace through the week.
+Nine chapters with runnable code samples. We'll walk through the first four together; the rest is reference for your own pace through the week.
 
 **Sample projects:**
 

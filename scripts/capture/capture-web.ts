@@ -28,7 +28,6 @@ type Shot = {
 const REPO_ROOT = join(__dirname, "..", "..");
 const OUT_DIR = join(REPO_ROOT, "public", "screenshots");
 const BASE_URL = process.env.CAPTURE_BASE_URL ?? "http://localhost:3000";
-const PASSWORD = process.env.WORKSHOP_PASSWORD ?? process.env.CAPTURE_PASSWORD;
 
 const shots: Shot[] = [
   {
@@ -46,22 +45,6 @@ const shots: Shot[] = [
     waitForSelector: "h1",
   },
 ];
-
-async function unlock(page: Page) {
-  if (!PASSWORD) return;
-  // If the password gate is present, unlock it.
-  const passwordInput = await page.$('input[type="password"]');
-  if (passwordInput) {
-    await passwordInput.fill(PASSWORD);
-    const submit =
-      (await page.$('button[type="submit"]')) ??
-      (await page.$("form button"));
-    if (submit) {
-      await submit.click();
-      await page.waitForLoadState("networkidle");
-    }
-  }
-}
 
 async function setTheme(page: Page, theme: Theme) {
   await page.addInitScript((t) => {
@@ -88,7 +71,6 @@ async function captureShot(browser: Browser, shot: Shot) {
   try {
     await setTheme(page, shot.theme);
     await page.goto(`${BASE_URL}${shot.url}`, { waitUntil: "load" });
-    await unlock(page);
     if (shot.waitForSelector) {
       await page.waitForSelector(shot.waitForSelector, { timeout: 15_000 });
     }

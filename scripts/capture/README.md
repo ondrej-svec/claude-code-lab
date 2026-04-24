@@ -47,9 +47,7 @@ pnpm dev                              # terminal 1
 ./scripts/capture/capture-web.sh web-lab-index-light   # single shot
 ```
 
-Password gate auto-unlocks via `WORKSHOP_PASSWORD` from `.env.local` (or
-`CAPTURE_PASSWORD` env). Light/dark variants are captured separately via
-`colorScheme` emulation.
+The guide is public, so web capture needs no unlock step. Light/dark variants are captured separately via `colorScheme` emulation.
 
 Add new shots to the `shots[]` array in `capture-web.ts`.
 

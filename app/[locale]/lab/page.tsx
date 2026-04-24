@@ -14,12 +14,12 @@ export default async function LabIndex({
   const headings = {
     en: {
       eyebrow: "The lab",
-      title: "Eight chapters. One practice.",
+      title: "Nine chapters. One practice.",
       lede: "Go top to bottom, or pick what you need. Every chapter ends with something you can try immediately.",
     },
     cs: {
       eyebrow: "Lab",
-      title: "Osm kapitol. Jedna praxe.",
+      title: "Devět kapitol. Jedna praxe.",
       lede: "Projdi odshora dolů, nebo si vyber, co ti zrovna sedí. Každá kapitola končí něčím, co můžeš hned zkusit.",
     },
   };
