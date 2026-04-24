@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { BuildStats } from "./build-stats";
 import { Diagram } from "./diagram";
+import { Prompt } from "./prompt";
 import { Screenshot } from "./screenshot";
 
 function H1({ children }: { children?: ReactNode }) {
@@ -319,5 +320,6 @@ export const mdxComponents: MDXComponents = {
   BuildStats,
   Callout,
   Diagram,
+  Prompt,
   Screenshot,
 };

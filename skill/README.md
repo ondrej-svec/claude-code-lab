@@ -43,4 +43,4 @@ Walks you through four chapters, one at a time, waiting between each:
 3. **Teach Claude your project** — `/init` + `CLAUDE.md`
 4. **Iteration and control** — rewind, scope narrowing, plan mode
 
-Chapters 5–7 (ecosystem, compound engineering, next steps) are reference material — browse the web guide at your own pace.
+Chapters 5–9 (ecosystem, compound engineering, next steps, reference, behind the scenes) are self-serve material — browse the web guide at your own pace.

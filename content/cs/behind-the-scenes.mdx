@@ -2,7 +2,7 @@
 
 Krátká kapitola na konci průvodce, který tě učil Claude Code — o tom, co stálo postavit *tento průvodce* právě v Claude Code.
 
-Ve dnech 23.–24. dubna 2026, během šesti sezení a zhruba čtrnácti hodin doby, po kterou byla sezení otevřená, vývojář s agentem doručili všechno, co jsi právě četl: scaffold, auth gate, osm kapitol ve dvou jazycích, ukázkové projekty, doprovodný skill, hero ilustraci, čtyři diagramy, testy, deploy. Dost z těch čtrnácti hodin byl agent pracující bez dozoru na schválených plánech — hodin, kdy byl člověk u toho aktivně, bylo spíš běžné odpoledne. Tohle jsou čísla pod tím, taháno přímo z lokálních transkriptů sezení Claude Code, oceněno v aktuálních API sazbách Anthropicu se správnými cache multiplikátory.
+Ve dnech 23.–24. dubna 2026, během šesti sezení a zhruba čtrnácti hodin doby, po kterou byla sezení otevřená, vývojář s agentem doručili všechno, co jsi právě četl: scaffold, devět kapitol ve dvou jazycích, ukázkové projekty, doprovodný skill, hero ilustraci, čtyři diagramy, testy, deploy. Dost z těch čtrnácti hodin byl agent pracující bez dozoru na schválených plánech — hodin, kdy byl člověk u toho aktivně, bylo spíš běžné odpoledne. Tohle jsou čísla pod tím, taháno přímo z lokálních transkriptů sezení Claude Code, oceněno v aktuálních API sazbách Anthropicu se správnými cache multiplikátory.
 
 <BuildStats locale="cs" />
 
@@ -20,6 +20,6 @@ Dobré závěrečné cvičení: udělej z toho, co jsi právě četl, dashboard 
 
 **Zkus tenhle plan prompt** — jeden úzký úkol, jeden konkrétní výstup:
 
-> `/plan`: Napiš mi Python skript, který přečte moje jsonl soubory sezení Claude Code z posledních 30 dní v `~/.claude/projects/` a vyrenderuje jednostránkový HTML dashboard. Pro každé sezení: délka, počet tahů, počet subagentů, součty tokenů, cena v API sazbě. Použij aktuální sazby z platform.claude.com. Jeden HTML soubor. Bez závislostí mimo Python stdlib.
+<Prompt>/plan: Napiš mi Python skript, který přečte moje jsonl soubory sezení Claude Code z posledních 30 dní v ~/.claude/projects/ a vyrenderuje jednostránkový HTML dashboard. Pro každé sezení: délka, počet tahů, počet subagentů, součty tokenů, cena podle API sazeb. Použij aktuální sazby z platform.claude.com. Jeden HTML soubor. Bez závislostí mimo Python stdlib.</Prompt>
 
 Nech Claude napsat plán, přečti si ho, přitáhni rozsah, pokud se rozjel jinam, a pak `/work` proti schválenému plánu. Týden vlastních sezení vyrenderovaný jako dashboard ti řekne o tom, jak *ty* pracuješ s Claude Code, víc než jakákoli případová studie, kterou publikoval někdo jiný.

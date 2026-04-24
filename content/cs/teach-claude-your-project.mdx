@@ -32,11 +32,11 @@ Claude proskenuje repo a navrhne `CLAUDE.md` s tím, co našel — stack, stru
 
 Výstup je **startovní bod, ne hotový dokument**. Teď požádej Claude, ať ho dolaďuje:
 
-> Znovu si přečti `CLAUDE.md` a přidej tři konvence, které používáme — strict TypeScript bez `any`, testy vedle souboru, který pokrývají, databázové migrace jako číslované SQL soubory. Sekce nech krátké.
+<Prompt>Znovu si přečti CLAUDE.md a přidej tři konvence, které v téhle session používáme — strict TypeScript bez any, testy vedle souboru, který pokrývají, databázové migrace jako číslované SQL soubory. Sekce nech krátké.</Prompt>
 
 A pak:
 
-> Znovu si přečti `CLAUDE.md` a přidej sekci **Ne** s pravidly, která pořád objevujeme znova — nesahej do `app/legacy/`, neinstaluj nové balíčky bez ptaní, nespouštěj migrace automaticky.
+<Prompt>Znovu si přečti CLAUDE.md a přidej sekci **Ne** s pravidly, která pořád objevujeme znova — nesahej do app/legacy/, neinstaluj nové balíčky bez ptaní, nespouštěj migrace automaticky.</Prompt>
 
 Claude soubor upraví a ukáže ti diff. Zkontroluj, potvrď, commitni. Dokument vyrostl tak, že jsi o pravidla **požádal**, ne tak, že jsi je do souboru **natypoval**.
 
@@ -72,7 +72,7 @@ Interní nástroj pro onboarding zákazníků. 3k DAU, Postgres + Node, deploy n
 
 Když tě Claude opraví, nemusíš zastavovat a ručně editovat `CLAUDE.md`. Stačí začít další zprávu znakem `#`:
 
-> #migrace musí být reverzibilní — ke každému up napiš i down
+<Prompt>#migrace musí být reverzibilní — ke každému up napiš i down</Prompt>
 
 <Screenshot
   src="/screenshots/ch3-memory-prefix.png"

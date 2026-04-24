@@ -31,11 +31,12 @@ The fastest way to bad output is a prompt that asks for too much at once.
 > Refactor this file to use dependency injection, add tests, and migrate it to TypeScript strict mode.
 
 **Narrow, three prompts:**
-> Refactor this file to use dependency injection. Don't touch tests or types yet.
 
-> Now add tests for the refactored interface.
+<Prompt>Refactor this file to use dependency injection. Don't touch tests or types yet.</Prompt>
 
-> Now enable strict mode and fix what breaks.
+<Prompt>Now add tests for the refactored interface.</Prompt>
+
+<Prompt>Now enable strict mode and fix what breaks.</Prompt>
 
 Three narrow prompts land three times faster than one wide one. Each one gets a clean review.
 
@@ -67,6 +68,12 @@ As you work with Claude Code daily, that posture becomes the bottleneck. You can
 The better path: **build a harness around Claude Code that makes its work verifiable without your eyes on every line.** Your role shifts from reviewer to harness architect.
 
 What the harness looks like in practice: testing discipline (tracer bullets, TDD, mutation checks), agent-driven review (`/security-review`, `claude-code-action`, Semgrep or Snyk in CI), security posture against the lethal trifecta, and automation (hooks, Playwright, benchmark assertions). [Chapter 7](/en/lab/next-steps) is the depth source — pick one, read the references, try it on a real task.
+
+<Screenshot
+  src="/screenshots/ch4-control-to-harness.png"
+  alt="Two-panel diagram. Left, labeled 'control': a terminal window crowded with raw diff lines and a cursor hovering on one. Right, labeled 'harness': a compact summary window surrounded by cards for tests, security, diff-summary, and workflow. An arrow between them reads 'as the harness grows'."
+  caption="Left: every diff, every line. Right: summaries — the harness caught what mattered. Same work, different posture."
+/>
 
 With the harness in place, the question changes from *"did Claude make a mistake in this diff?"* to *"did the harness catch it if it did?"* Diff review becomes a spot-check, not a mandate. You get faster. The agent gets trusted. Both grow together.
 
@@ -114,6 +121,8 @@ When it's not:
 - Single-line fixes
 - One-function refactors
 - Quick questions
+
+One more dimension worth knowing: **`/sandbox`**. It's a separate toggle from these five modes — it wraps every bash command Claude runs in an OS-level filesystem and network sandbox, so even "accept edits" or "auto" can't reach outside the project or hit unapproved domains. [Chapter 7](/en/lab/next-steps#sandboxing) covers the details and the corporate-deployment flags.
 
 ## The recommended flow, when you're ready
 

@@ -32,11 +32,11 @@ Claude scans the repo and proposes a `CLAUDE.md` with what it found — stack, s
 
 The output is a **starting point, not a finished doc**. Now ask Claude to refine it:
 
-> Re-read `CLAUDE.md` and add the three conventions we've been using this session — strict TypeScript with no `any`, tests next to the file they cover, database migrations as numbered SQL files. Keep each section short.
+<Prompt>Re-read CLAUDE.md and add the three conventions we've been using this session — strict TypeScript with no any, tests next to the file they cover, database migrations as numbered SQL files. Keep each section short.</Prompt>
 
 Then:
 
-> Re-read `CLAUDE.md` and add a **Don't** section with the rules we keep rediscovering — don't touch `app/legacy/`, don't install new packages without asking, don't run migrations automatically.
+<Prompt>Re-read CLAUDE.md and add a **Don't** section with the rules we keep rediscovering — don't touch app/legacy/, don't install new packages without asking, don't run migrations automatically.</Prompt>
 
 Claude will edit the file and show you the diff. Review, accept, commit. The document grew by you *asking for* rules you know, not by you *typing* rules into a file.
 
@@ -72,7 +72,7 @@ Internal tool for customer onboarding. 3k DAU, Postgres + Node, deployed on Verc
 
 When Claude does something you correct, you don't have to stop and edit `CLAUDE.md`. Just start your next message with `#`:
 
-> #migrations must be reversible — write the down migration alongside the up one
+<Prompt>#migrations must be reversible — write the down migration alongside the up one</Prompt>
 
 <Screenshot
   src="/screenshots/ch3-memory-prefix.png"

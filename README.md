@@ -1,6 +1,6 @@
 # claude-code-lab
 
-![claude-code-lab — eight chapters, one practice](public/screenshots/web-lab-index-dark.png)
+![claude-code-lab — nine chapters, one practice](public/screenshots/web-lab-index-dark.png)
 
 A hands-on guide to agentic coding with Claude Code — from install to compound.
 
@@ -8,20 +8,19 @@ A practice-oriented walkthrough for developers adopting Claude Code — install,
 
 ## What's inside
 
-- **`app/`** — password-gated guide site (Next.js 16, Tailwind 4, Rosé Pine theme, dark/light)
-- **`samples/python-react/`** — minimal Python + React sample project (coming)
-- **`samples/dotnet-core/`** — minimal cross-platform .NET Core sample project (coming)
-- **`skill/`** — companion Claude Code skill that walks through the lab from your terminal (coming)
+- **`app/`** — public guide site (Next.js 16, Tailwind 4, Rosé Pine theme, dark/light)
+- **`samples/python-react/`** — minimal Python + React sample project
+- **`samples/dotnet-core/`** — minimal cross-platform .NET Core sample project
+- **`skill/`** — companion Claude Code skill that walks through the lab from your terminal
 
 ## Running locally
 
 ```bash
 pnpm install
-cp .env.example .env.local  # edit WORKSHOP_PASSWORD
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The guide is password-gated — set `WORKSHOP_PASSWORD` in `.env.local` to unlock.
+Open [http://localhost:3000](http://localhost:3000). The guide is public and needs no runtime environment variables.
 
 ## Scripts
 

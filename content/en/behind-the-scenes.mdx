@@ -2,7 +2,7 @@
 
 A short chapter at the end of a guide that taught you Claude Code — about what it took to build *this very guide* with Claude Code.
 
-Over April 23–24, 2026, across six sessions spanning roughly fourteen hours of session time, one developer and one agent shipped everything you just read: the scaffold, the auth gate, eight chapters in two languages, the sample projects, the companion skill, the hero illustration, the four diagrams, the tests, the deploy. A lot of that fourteen hours was the agent working unattended on approved plans — hands-on human attention was closer to a normal afternoon's worth. These are the numbers underneath, pulled straight from Claude Code's local session transcripts, priced at current Anthropic API rates with the proper cache multipliers.
+Over April 23–24, 2026, across six sessions spanning roughly fourteen hours of session time, one developer and one agent shipped everything you just read: the scaffold, nine chapters in two languages, the sample projects, the companion skill, the hero illustration, the four diagrams, the tests, the deploy. A lot of that fourteen hours was the agent working unattended on approved plans — hands-on human attention was closer to a normal afternoon's worth. These are the numbers underneath, pulled straight from Claude Code's local session transcripts, priced at current Anthropic API rates with the proper cache multipliers.
 
 <BuildStats locale="en" />
 
@@ -20,6 +20,6 @@ A good final exercise: turn what you just read into a dashboard of your own usag
 
 **Try this plan prompt** — one scoped task, one concrete output:
 
-> `/plan`: Write me a Python script that reads the last 30 days of my Claude Code session jsonl files from `~/.claude/projects/` and renders a single-page HTML dashboard. Per session: duration, turn count, subagent count, token totals, API-rate cost. Use the published pricing at platform.claude.com for current rates. One HTML file. No dependencies beyond the Python stdlib.
+<Prompt>/plan: Write me a Python script that reads the last 30 days of my Claude Code session jsonl files from ~/.claude/projects/ and renders a single-page HTML dashboard. Per session: duration, turn count, subagent count, token totals, API-rate cost. Use the published pricing at platform.claude.com for current rates. One HTML file. No dependencies beyond the Python stdlib.</Prompt>
 
 Let Claude write the plan, read it, tighten the scope if it drifted, then `/work` against the approved plan. A week of your own sessions rendered as a dashboard will tell you more about how *you* work with Claude Code than any case study someone else published.

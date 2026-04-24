@@ -109,6 +109,12 @@ The desktop app's shortcuts are not officially documented by Anthropic — what 
 
 Claude Code's input line reads the first character as a mode signal:
 
+<Screenshot
+  src="/screenshots/ch8-input-prefixes.png"
+  alt="Four terminal windows in a 2x2 grid showing the input prefixes in peach: slash runs a plan command, bang runs ls and shows output, at attaches auth.ts as a file card, hash adds a rule to CLAUDE.md."
+  caption="One character, four different behaviours. Slash runs a command, bang runs the shell, at attaches a file, hash adds to memory."
+/>
+
 | First char | Mode |
 |---|---|
 | `/` | Slash command — runs a command, not a prompt. |
@@ -208,6 +214,12 @@ Every prompt sends: your message, files you explicitly share (via `@`, tool use,
 
 It does **not** send: your full filesystem, files outside the project, anything matched by `.gitignore` or `.claudeignore`.
 
+<Screenshot
+  src="/screenshots/ch8-data-flow.png"
+  alt="Two-zone diagram. Left panel labeled your machine: file cards for auth.ts, main.py, .env, secrets.json, plus a small terminal. Right panel labeled anthropic: a model card. Peach arrows cross labeled prompt, @-mentioned files, what claude reads. Dashed rose arrows for .env and secrets stop at filter cards labeled .claudeignore and .gitignore. A teal arrow labeled response goes back."
+  caption="The boundary isn't a floodgate — it's a filter. Prompts and the files you reference cross; .env and anything on .claudeignore or .gitignore do not."
+/>
+
 ### Plan tiers and retention
 
 | Plan | Audience | Retention posture |
@@ -233,6 +245,20 @@ proprietary-algorithms/
 ```
 
 Use it for secrets, customer data, internal docs — whatever your compliance posture requires.
+
+### Sandboxing
+
+`/sandbox` wraps bash commands in a filesystem + network sandbox enforced at the OS level (Seatbelt on macOS, bubblewrap on Linux/WSL2). [Chapter 7](/en/lab/next-steps#sandboxing) has the teaching. The flags that matter for managed deployments:
+
+| Flag | Effect |
+|---|---|
+| `sandbox.failIfUnavailable: true` | Hard-fail if sandbox can't start. No silent fallback. |
+| `allowUnsandboxedCommands: false` | Disables the escape hatch that re-runs commands outside the sandbox. |
+| `sandbox.network.allowManagedDomainsOnly: true` | Only admin-approved domains reach the network. |
+| `sandbox.filesystem.allowWrite` | Paths outside CWD where subprocesses may write. Merges across settings scopes. |
+
+→ [Sandboxing docs](https://code.claude.com/docs/en/sandboxing)
+
 
 ### MCP security
 

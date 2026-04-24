@@ -271,14 +271,14 @@ const COPY = {
       "$19 of $845. Subagents stay cheap by running Haiku / Sonnet for scoped tasks.",
     arcHeading: "Correction rate fell as the working pattern settled",
     arcSub:
-      "The fraction of user messages containing pushback language (no, wait, actually, that's not) dropped from 45 % in the heaviest build session to 26 % in the most recent — a quantified learning curve across the arc.",
+      "The fraction of user messages containing pushback language (no, wait, actually, that is not) dropped from 45 % in the heaviest build session to 26 % in the most recent — a quantified learning curve across the arc.",
     arcTitle: "Correction rate by session — 45 % → 26 %",
     arcHead: "19-point drop",
     shippedHeading: "Concrete output of the 14 hours",
     methodology: "Methodology",
     methodologyBody: (
       <>
-        Numbers extracted from Claude Code's local session jsonl transcripts.
+        Numbers extracted from Claude Code&apos;s local session jsonl transcripts.
         Cost is calculated at{" "}
         <a
           href="https://platform.claude.com/docs/en/about-claude/pricing"

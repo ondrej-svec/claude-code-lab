@@ -12,7 +12,7 @@ Before you build anything, write one end-to-end test that fails because the feat
 
 The name comes from Andy Hunt and Dave Thomas in *The Pragmatic Programmer*. You fire a few rounds, see where they land, adjust. Their [Artima interview on tracer bullets](https://www.artima.com/articles/tracer-bullets-and-prototypes) explains the metaphor and the discipline it imposes.
 
-> Write a failing end-to-end test for a `POST /api/items` endpoint that creates an item and returns 201. I haven't built the endpoint yet — just get the test to fail on the right line.
+<Prompt>Write a failing end-to-end test for a POST /api/items endpoint that creates an item and returns 201. I haven't built the endpoint yet — just get the test to fail on the right line.</Prompt>
 
 Build until it passes. You never forget the integration this time.
 
@@ -22,15 +22,15 @@ Test first, implementation second, refactor third. Three separate prompts, three
 
 Kent Beck named the practice in *Test-Driven Development: By Example*. TDD has had its doubters. The 2014 [Is TDD Dead?](https://martinfowler.com/articles/is-tdd-dead/) series between Beck, Martin Fowler, and DHH is still the best map of where it helps, where it hurts, and what "TDD" even means. Read it once, then decide your own posture.
 
-> Write a failing test for `slugify(input: string)` handling diacritics and consecutive spaces. Use our existing test setup.
+<Prompt>Write a failing test for slugify(input: string) handling diacritics and consecutive spaces. Use our existing test setup.</Prompt>
 
 Then:
 
-> Make the test pass. Minimal implementation only.
+<Prompt>Make the test pass. Minimal implementation only.</Prompt>
 
 Then:
 
-> Refactor. Keep the tests green. Look for duplication or unclear naming.
+<Prompt>Refactor. Keep the tests green. Look for duplication or unclear naming.</Prompt>
 
 Three diffs, three reviews, three correct things.
 
@@ -124,6 +124,34 @@ Practical posture:
 - Review diffs on anything touching auth, secrets, or migrations.
 
 The agent is fast. Humans stay on the boundary.
+
+### Sandboxing
+
+`/sandbox` is how you make that boundary concrete. It wraps every bash command Claude runs — and every subprocess those commands spawn (`npm install`, `kubectl`, `terraform`, whatever) — in an OS-level isolation layer. Filesystem access is locked to the working directory by default. Network traffic goes through a proxy that only reaches approved domains.
+
+**Direct mitigation for the trifecta.** Sandbox removes the *external communication* leg by default. If an attacker injects instructions via an MCP or a scraped page, the outbound request to `evil.com` dies at the proxy. You shrink the blast radius without relying on Claude to catch the injection itself.
+
+Type `/sandbox` in a session and pick a mode:
+
+- **Auto-allow** — sandboxed commands skip permission prompts. Anthropic's internal data shows 84% fewer prompts.
+- **Regular permissions** — same isolation, standard prompt flow.
+
+Sandboxing is **orthogonal to Ch 4's permission modes**. Auto-allow sandbox can run while you're still in "Ask permissions" — bash commands inside the bounds execute without asking, while file edits still prompt.
+
+**Platform support.** macOS works out of the box via Seatbelt. Linux and WSL2 need `sudo apt install bubblewrap socat` first. WSL1 and native Windows aren't supported yet.
+
+**For corporate deployments, the flags that matter belong in managed settings:**
+
+- `sandbox.failIfUnavailable: true` — Claude Code refuses to run if the sandbox can't start. No silent fallback.
+- `allowUnsandboxedCommands: false` — disables the escape hatch that lets Claude re-run a failing command unsandboxed.
+- `sandbox.network.allowManagedDomainsOnly: true` — only admin-approved domains reach the network; users can extend the path allowlist but can't remove admin restrictions.
+
+Together these turn sandboxing from a nice default into a security gate.
+
+**What it doesn't cover.** Only bash subprocesses. `Read`, `Edit`, `Write`, `WebFetch` go through the permission system, not the sandbox. Computer use runs on your real desktop. Domain-level filtering isn't packet inspection — allowing `github.com` broadly still permits exfiltration through gists and issues. Defense in depth, not a total solution.
+
+→ [Sandboxing docs](https://code.claude.com/docs/en/sandboxing)
+
 
 ## Automation
 

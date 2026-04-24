@@ -1,6 +1,6 @@
 "use client";
 
-import { Children, useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useTheme } from "next-themes";
 
 function flattenChildren(children: ReactNode): string {

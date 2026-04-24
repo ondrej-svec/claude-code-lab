@@ -4,6 +4,12 @@ Claude Code alone is a good agent. With the ecosystem, it becomes a platform you
 
 This chapter is a tour with enough steps to try each piece yourself. Skim it, pick one thing, come back later for depth.
 
+<Screenshot
+  src="/screenshots/ch5-ecosystem.png"
+  alt="Radial diagram. At the centre, a terminal window labeled 'claude code'. Six surfaces radiate out: skills (a skill.md card), plugins (a plugin.json card), mcps (a running mcp server), subagents (an @Explore invocation), web (a claude.ai/code browser tab), and remote (a phone-shaped card with a nested terminal)."
+  caption="The six surfaces Claude Code extends through. Install what saves you time; skip the rest."
+/>
+
 Everything we're about to cover — skills, plugins, MCPs, subagents — runs inside sessions. The app keeps several open at once, so one conversation can be mid-refactor while another is still planning.
 
 <Screenshot
@@ -100,7 +106,7 @@ claude mcp add --transport stdio chrome-devtools -- npx -y chrome-devtools-mcp@l
 
 Then in your session:
 
-> Open `https://example.com` and tell me why its LCP is slow. Run Lighthouse if you need to.
+<Prompt>Open https://example.com and tell me why its LCP is slow. Run Lighthouse if you need to.</Prompt>
 
 Claude opens the page, inspects, reports back. This is the moment MCPs stop being abstract.
 
@@ -126,11 +132,11 @@ Ship-built. Read-only, fast (Haiku), ideal for "where is X?" questions in a larg
 
 In any repo, ask:
 
-> Use the Explore agent to find where authentication is handled, then summarise.
+<Prompt>Use the Explore agent to find where authentication is handled, then summarise.</Prompt>
 
 Or more explicitly, mention it by name:
 
-> @Explore: find every place we call the Stripe API.
+<Prompt>@Explore: find every place we call the Stripe API.</Prompt>
 
 Your main conversation gets a two-paragraph summary. The actual file-reading happened in a side context that's now discarded. You spent ~100 tokens on the result, not ~20k on the exploration.
 
