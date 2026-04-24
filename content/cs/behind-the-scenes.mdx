@@ -1,0 +1,27 @@
+# Za oponou
+
+Krátká kapitola na konci průvodce, který tě učil Claude Code — o tom, co stálo postavit *tento průvodce* právě v Claude Code.
+
+Ve dnech 23.–24. dubna 2026, během šesti sezení a zhruba čtrnácti aktivních hodin, vývojář s agentem doručili všechno, co jsi právě četl: scaffold, auth gate, osm kapitol ve dvou jazycích, ukázkové projekty, doprovodný skill, hero ilustraci, čtyři diagramy, testy, deploy. Tohle jsou čísla pod tím — taháno přímo z lokálních transkriptů sezení Claude Code, oceněno v aktuálních API sazbách Anthropicu se správnými cache multiplikátory, a upřímné k tomu, kde se skrývala složitost.
+
+<BuildStats locale="cs" />
+
+## Proč je tohle tady
+
+Dva důvody.
+
+**Transparentnost.** Když někdo čte návod k workshopu a ptá se *„jak dlouho to vlastně trvalo a co to stálo,"* upřímná odpověď patří přímo do návodu, ne do následného e-mailu. 14 hodin. $845 v API sazbě. Nulový dodatečný výdaj na Max předplatném, na kterém ta práce skutečně běžela.
+
+**Demonstrace.** Nejsilnější důkaz, že vzory z kapitol 4 a 6 — plan mode, proof slices, compound engineering, posture založená na harnessu — skutečně škálují, je lab postavený přesně v těch vzorech. Tahle kapitola je stvrzenka.
+
+Pokud chceš delší formu — kde spolupráce šla dobře, kde zadrhla, co bychom udělali příště jinak — to je [retrospektiva](#) v doprovodném repu. Pokud jsi chtěl jen čísla, právě se na ně díváš.
+
+## Praxe: pusť miner na svoje vlastní sezení
+
+Chceš si postavit vlastní verzi? Python skript, který tahle čísla vyrobil, je malý a dělá tři věci: prochází `~/.claude/projects/`, parsuje jsonl a násobí tokeny aktuálními sazbami. Požádej Claude Code, ať ti jeden napíše, namířený na nedávný vlastní projekt. Týden vlastní práce vyrenderovaný jako dashboard je upřímnější než jakákoli případová studie, kterou publikoval někdo jiný.
+
+Šablona promptu:
+
+> Přečti moje transkripty sezení Claude Code pod `~/.claude/projects/<project-dir>/`. Pro každé sezení vytáhni: délku, počet tahů, počet volání nástrojů, počet subagentů (vnořených pod `subagents/`) a součty tokenů (input / output / cache-write / cache-read) z pole `usage` zpráv asistenta. Spočítej součty v [aktuálních API sazbách Anthropicu](https://platform.claude.com/docs/en/about-claude/pricing). Napiš malý HTML dashboard shrnující podíl na nákladech podle sezení, model mix a efektivitu.
+
+Pokud jsi četl kapitoly 4 a 6, poznáš tvar toho promptu: jeden úkol, ohraničený rozsah, konkrétní výstup. Plan mode a pak `/work`. Mělo by to přistát pod hodinu.

@@ -1,6 +1,7 @@
 import type { MDXComponents } from "mdx/types";
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { BuildStats } from "./build-stats";
 import { Diagram } from "./diagram";
 import { Screenshot } from "./screenshot";
 
@@ -315,6 +316,7 @@ export const mdxComponents: MDXComponents = {
   tr: TR,
   th: TH,
   td: TD,
+  BuildStats,
   Callout,
   Diagram,
   Screenshot,
