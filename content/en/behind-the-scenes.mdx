@@ -2,7 +2,7 @@
 
 A short chapter at the end of a guide that taught you Claude Code — about what it took to build *this very guide* with Claude Code.
 
-Over April 23–24, 2026, across six sessions and roughly fourteen active hours, one developer and one agent shipped everything you just read: the scaffold, the auth gate, eight chapters in two languages, the sample projects, the companion skill, the hero illustration, the four diagrams, the tests, the deploy. These are the numbers underneath — pulled straight from Claude Code's local session transcripts, priced at current Anthropic API rates with the proper cache multipliers, and honest about where the complexity hid.
+Over April 23–24, 2026, across six sessions spanning roughly fourteen hours of session time, one developer and one agent shipped everything you just read: the scaffold, the auth gate, eight chapters in two languages, the sample projects, the companion skill, the hero illustration, the four diagrams, the tests, the deploy. A lot of that fourteen hours was the agent working unattended on approved plans — hands-on human attention was closer to a normal afternoon's worth. These are the numbers underneath, pulled straight from Claude Code's local session transcripts, priced at current Anthropic API rates with the proper cache multipliers.
 
 <BuildStats locale="en" />
 
@@ -10,18 +10,16 @@ Over April 23–24, 2026, across six sessions and roughly fourteen active hours,
 
 Two reasons.
 
-**Transparency.** When someone reads a workshop guide and wonders *"how long did this actually take and what did it cost,"* the honest answer deserves to live in the guide itself, not a follow-up email. 14 hours. $845 at API rates. Zero incremental spend on the Max subscription the work actually ran on.
+**Transparency.** When someone reads a workshop guide and wonders *"how long did this actually take and what did it cost,"* the honest answer deserves to live in the guide itself, not a follow-up email. Fourteen hours of session time, much of it unattended. $845 at API rates. Zero incremental spend on the Max subscription the work actually ran on.
 
-**Demonstration.** The strongest evidence that the patterns in Chapters 4 and 6 — plan mode, proof slices, compound engineering, the harness-first posture — actually scale is a lab built using exactly those patterns. This chapter is the receipt.
+**Demonstration.** The strongest evidence that the patterns in [Chapter 4](/en/lab/iteration-and-control) and [Chapter 6](/en/lab/compound-engineering) — plan mode, proof slices, the compound loop, the harness-first posture — actually scale is a lab built using exactly those patterns. This chapter is the receipt.
 
-If you want the longer form — where the collaboration went well, where it stumbled, what we'd do differently next time — that's the [retrospective](#) in the companion repo. If you just wanted the numbers, you're looking at them.
+## Practice: render your own dashboard
 
-## Practice: run the miner on your own sessions
+A good final exercise: turn what you just read into a dashboard of your own usage. The patterns from Chapters 4 and 6 carry: narrow scope, plan before work, proof slice before batch.
 
-Want to build your own version? The Python script that produced these numbers is small and does three things: walks `~/.claude/projects/`, parses the jsonl, and multiplies tokens by current rates. Ask Claude Code to write you one, pointed at a recent project of yours. A week of your own work rendered as a dashboard is more honest than any case study someone else published.
+**Try this plan prompt** — one scoped task, one concrete output:
 
-The template prompt:
+> `/plan`: Write me a Python script that reads the last 30 days of my Claude Code session jsonl files from `~/.claude/projects/` and renders a single-page HTML dashboard. Per session: duration, turn count, subagent count, token totals, API-rate cost. Use the published pricing at platform.claude.com for current rates. One HTML file. No dependencies beyond the Python stdlib.
 
-> Read my Claude Code session transcripts under `~/.claude/projects/<project-dir>/`. Extract per-session: duration, turns, tool-call count, subagent count (nested under `subagents/`), and token totals (input / output / cache-write / cache-read) from the `usage` field of assistant messages. Price the totals at [current Anthropic API rates](https://platform.claude.com/docs/en/about-claude/pricing). Write a small HTML dashboard summarizing cost share by session, model mix, and efficiency ratios.
-
-If you've read Chapters 4 and 6, you'll recognize that prompt's shape: one task, bounded scope, concrete output. Plan mode, then `/work`. Should land in under an hour.
+Let Claude write the plan, read it, tighten the scope if it drifted, then `/work` against the approved plan. A week of your own sessions rendered as a dashboard will tell you more about how *you* work with Claude Code than any case study someone else published.

@@ -259,10 +259,10 @@ const COPY = {
       "API-rate value per human instruction. On a Max subscription the incremental cost is $0.",
     outputPerHour: "Output tok / hour",
     outputHint:
-      "Averaged across 14 active hours. Roughly 150 pages of text per hour at peak.",
+      "Averaged across 14 hours of session time. Roughly 150 pages of text per hour at peak — much of it generated during unattended /work runs.",
     subsPerHour: "Subagents / hour",
     subsHint:
-      "107 spawned over 14 h. Heavy parallelization on research and audit tasks.",
+      "107 spawned across 14 h of session time. Heavy parallelization on research and audit tasks.",
     cacheHit: "Cache hit rate",
     cacheHint:
       "973 M cache-read vs. 26 M cache-write. Long sessions amortize context heavily.",
@@ -335,10 +335,10 @@ const COPY = {
       "Hodnota v API sazbě na jeden lidský pokyn. Na Max předplatném je dodatečný náklad $0.",
     outputPerHour: "Výstupní tok / hod",
     outputHint:
-      "Průměr přes 14 aktivních hodin. Při špičce zhruba 150 stran textu za hodinu.",
+      "Průměr přes 14 hodin doby otevřených sezení. Při špičce zhruba 150 stran textu za hodinu — velká část vznikla během běhů /work bez dozoru.",
     subsPerHour: "Subagenti / hod",
     subsHint:
-      "107 za 14 h. Silná paralelizace na průzkumných a auditních úkolech.",
+      "107 během 14 h doby otevřených sezení. Silná paralelizace na průzkumných a auditních úkolech.",
     cacheHit: "Cache hit rate",
     cacheHint:
       "973 M cache read vs. 26 M cache write. Dlouhá sezení kontext dobře amortizují.",
@@ -434,7 +434,7 @@ export function BuildStats({ locale = "en" }: { locale?: Locale }) {
           gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
         }}
       >
-        <HeroStat label={locale === "en" ? "Sessions" : "Sezení"} value="6" sub={locale === "en" ? "~14 h active" : "~14 h aktivně"} color={PALETTE.purple} />
+        <HeroStat label={locale === "en" ? "Sessions" : "Sezení"} value="6" sub={locale === "en" ? "~14 h session time" : "~14 h otevřená"} color={PALETTE.purple} />
         <HeroStat label={locale === "en" ? "Subagents" : "Subagenti"} value="107" sub={locale === "en" ? "parallel research" : "paralelní průzkum"} color={PALETTE.teal} />
         <HeroStat label={locale === "en" ? "API-rate value" : "Hodnota v API sazbě"} value="$845" sub={locale === "en" ? "covered by Max plan" : "kryto Max plánem"} color={PALETTE.peach} />
         <HeroStat label={locale === "en" ? "Tool calls" : "Volání nástrojů"} value="2,090" sub="1,853 + 237" color={PALETTE.rose} />
