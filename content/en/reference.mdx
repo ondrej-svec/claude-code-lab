@@ -246,6 +246,20 @@ proprietary-algorithms/
 
 Use it for secrets, customer data, internal docs — whatever your compliance posture requires.
 
+### Sandboxing
+
+`/sandbox` wraps bash commands in a filesystem + network sandbox enforced at the OS level (Seatbelt on macOS, bubblewrap on Linux/WSL2). [Chapter 7](/en/lab/next-steps#sandboxing) has the teaching. The flags that matter for managed deployments:
+
+| Flag | Effect |
+|---|---|
+| `sandbox.failIfUnavailable: true` | Hard-fail if sandbox can't start. No silent fallback. |
+| `allowUnsandboxedCommands: false` | Disables the escape hatch that re-runs commands outside the sandbox. |
+| `sandbox.network.allowManagedDomainsOnly: true` | Only admin-approved domains reach the network. |
+| `sandbox.filesystem.allowWrite` | Paths outside CWD where subprocesses may write. Merges across settings scopes. |
+
+→ [Sandboxing docs](https://code.claude.com/docs/en/sandboxing)
+
+
 ### MCP security
 
 MCPs that fetch untrusted content (web pages, issues, emails) can inject instructions into your session. Anthropic's stance: **third-party MCPs at your own risk**. Review what an MCP does before installing. Prefer first-party MCPs from `anthropics/` organisations when available.

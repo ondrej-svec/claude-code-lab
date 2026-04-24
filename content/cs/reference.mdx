@@ -246,6 +246,20 @@ proprietary-algorithms/
 
 Používej pro tajné klíče, zákaznická data, interní dokumenty — co ti diktuje compliance.
 
+### Sandboxing
+
+`/sandbox` obalí bash příkazy sandboxem na úrovni OS — filesystem + síť (Seatbelt na macOS, bubblewrap na Linuxu/WSL2). [Kapitola 7](/cs/lab/next-steps#sandboxing) to vysvětluje. Flagy, které jsou důležité pro spravovaná nasazení:
+
+| Flag | Efekt |
+|---|---|
+| `sandbox.failIfUnavailable: true` | Tvrdý fail, když sandbox nestartuje. Žádný tichý fallback. |
+| `allowUnsandboxedCommands: false` | Vypne escape hatch, přes který by jinak příkazy běžely mimo sandbox. |
+| `sandbox.network.allowManagedDomainsOnly: true` | Na síť jen admin-schválené domény. |
+| `sandbox.filesystem.allowWrite` | Cesty mimo CWD, kam můžou subprocesy zapisovat. Slučují se napříč scopy nastavení. |
+
+→ [Sandboxing docs](https://code.claude.com/docs/en/sandboxing)
+
+
 ### MCP bezpečnost
 
 MCPs, které načítají nedůvěryhodný obsah (webové stránky, issues, maily), do tvé session můžou injektovat instrukce. Postoj Anthropicu: **třetí strany na vlastní riziko**. Před instalací MCP si zkontroluj, co dělá. Upřednostňuj first-party MCPs od organizací `anthropics/`, když jsou k dispozici.

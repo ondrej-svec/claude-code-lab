@@ -125,6 +125,34 @@ Praktický postoj:
 
 Agent je rychlý. Lidi drží hranici.
 
+### Sandboxing
+
+`/sandbox` je způsob, jak tu hranici postavit pořádně. Obalí každý bash příkaz, který Claude pouští — a všechny subprocesy, které tyhle příkazy spustí (`npm install`, `kubectl`, `terraform`, cokoliv) — vrstvou izolace na úrovni OS. Zápis do filesystemu je defaultně omezen na pracovní adresář. Síťový provoz jde přes proxy, která pustí jen schválené domény.
+
+**Přímá mitigace trifecty.** Sandbox defaultně odstraní nohu *externí komunikace*. I když útočník vpraví instrukce přes MCP nebo scrapovanou stránku, odchozí požadavek na `evil.com` umře na proxy. Zmenšíš dopad, aniž bys spoléhal, že Claude injekci odhalí sám.
+
+Napiš `/sandbox` v session a vyber režim:
+
+- **Auto-allow** — sandboxované příkazy se neptají na povolení. Anthropicova interní data ukazují o 84 % méně promptů.
+- **Regular permissions** — stejná izolace, standardní permission flow.
+
+Sandboxing je **nezávislý na režimech oprávnění z kapitoly 4**. Auto-allow sandbox může běžet, i když jsi v „Ask permissions" — bash příkazy uvnitř hranice běží bez dotazu, zatímco editace souborů se pořád ptá.
+
+**Podpora platforem.** macOS funguje out-of-the-box přes Seatbelt. Linux a WSL2 potřebují nejdřív `sudo apt install bubblewrap socat`. WSL1 a nativní Windows zatím nefungují.
+
+**Pro firemní nasazení jsou důležité tyhle flagy v managed settings:**
+
+- `sandbox.failIfUnavailable: true` — Claude Code odmítne běžet, když sandbox nestartuje. Žádný tichý fallback.
+- `allowUnsandboxedCommands: false` — vypne escape hatch, přes který by jinak Claude znovu spustil padající příkaz mimo sandbox.
+- `sandbox.network.allowManagedDomainsOnly: true` — na síť se dostanou jen admin-schválené domény; uživatelé můžou allowlist rozšiřovat, ale admin restrikce neodstraní.
+
+Dohromady to ze sandboxu udělá bezpečnostní gate, ne jen rozumný default.
+
+**Co nepokrývá.** Jen bash subprocesy. `Read`, `Edit`, `Write`, `WebFetch` jdou přes permission systém, ne sandbox. Computer use běží na tvém reálném desktopu. A filtrování na úrovni domén není inspekce paketů — široký allowlist jako `github.com` pořád umožní exfiltraci přes gisty a issues. Obrana do hloubky, ne totální řešení.
+
+→ [Sandboxing docs](https://code.claude.com/docs/en/sandboxing)
+
+
 ## Automatizace
 
 ### Hooky

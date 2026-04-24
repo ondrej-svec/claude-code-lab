@@ -125,6 +125,34 @@ Practical posture:
 
 The agent is fast. Humans stay on the boundary.
 
+### Sandboxing
+
+`/sandbox` is how you make that boundary concrete. It wraps every bash command Claude runs — and every subprocess those commands spawn (`npm install`, `kubectl`, `terraform`, whatever) — in an OS-level isolation layer. Filesystem access is locked to the working directory by default. Network traffic goes through a proxy that only reaches approved domains.
+
+**Direct mitigation for the trifecta.** Sandbox removes the *external communication* leg by default. If an attacker injects instructions via an MCP or a scraped page, the outbound request to `evil.com` dies at the proxy. You shrink the blast radius without relying on Claude to catch the injection itself.
+
+Type `/sandbox` in a session and pick a mode:
+
+- **Auto-allow** — sandboxed commands skip permission prompts. Anthropic's internal data shows 84% fewer prompts.
+- **Regular permissions** — same isolation, standard prompt flow.
+
+Sandboxing is **orthogonal to Ch 4's permission modes**. Auto-allow sandbox can run while you're still in "Ask permissions" — bash commands inside the bounds execute without asking, while file edits still prompt.
+
+**Platform support.** macOS works out of the box via Seatbelt. Linux and WSL2 need `sudo apt install bubblewrap socat` first. WSL1 and native Windows aren't supported yet.
+
+**For corporate deployments, the flags that matter belong in managed settings:**
+
+- `sandbox.failIfUnavailable: true` — Claude Code refuses to run if the sandbox can't start. No silent fallback.
+- `allowUnsandboxedCommands: false` — disables the escape hatch that lets Claude re-run a failing command unsandboxed.
+- `sandbox.network.allowManagedDomainsOnly: true` — only admin-approved domains reach the network; users can extend the path allowlist but can't remove admin restrictions.
+
+Together these turn sandboxing from a nice default into a security gate.
+
+**What it doesn't cover.** Only bash subprocesses. `Read`, `Edit`, `Write`, `WebFetch` go through the permission system, not the sandbox. Computer use runs on your real desktop. Domain-level filtering isn't packet inspection — allowing `github.com` broadly still permits exfiltration through gists and issues. Defense in depth, not a total solution.
+
+→ [Sandboxing docs](https://code.claude.com/docs/en/sandboxing)
+
+
 ## Automation
 
 ### Hooks
