@@ -1,5 +1,7 @@
 # claude-code-lab
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 ![claude-code-lab — nine chapters, one practice](public/screenshots/web-lab-index-dark.png)
 
 **→ Live at [cc-lab.ondrejsvec.com](https://cc-lab.ondrejsvec.com)**
@@ -50,6 +52,14 @@ See `scripts/capture/README.md` for the three capture families (CLI via
 
 Rosé Pine Dawn (light) / Moon (dark). Manrope body, Space Grotesk display. Lifted from the [Harness Lab](https://github.com/ondrej-svec) design system.
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Czech corrections especially welcome.
+
+## Security
+
+See [SECURITY.md](SECURITY.md) — use GitHub private vulnerability reporting, don't file public issues for security bugs.
+
 ## License
 
-MIT
+[MIT](LICENSE) — © 2026 Ondrej Svec.
