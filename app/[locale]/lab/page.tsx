@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ChapterSidebar } from "@/app/components/chapter-sidebar";
+import { Screenshot } from "@/app/components/screenshot";
 import { CHAPTERS } from "@/lib/chapters";
 import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
 
@@ -16,11 +17,19 @@ export default async function LabIndex({
       eyebrow: "The lab",
       title: "Nine chapters. One practice.",
       lede: "Go top to bottom, or pick what you need. Every chapter ends with something you can try immediately.",
+      journey: {
+        alt: "Six-panel comic of a Heart-of-Gold-style spaceship traveling through the lab's learning arc: docking at first contact, a small first task, learning context (CLAUDE.md), the shift from control to a verification harness, gaining ecosystem extensions, and a final compounding journey trail with a tiny towel draped on the antenna.",
+        caption: "Six beats. Nine chapters. One practice.",
+      },
     },
     cs: {
       eyebrow: "Lab",
       title: "Devět kapitol. Jedna praxe.",
       lede: "Projdi odshora dolů, nebo si vyber, co ti zrovna sedí. Každá kapitola končí něčím, co můžeš hned zkusit.",
+      journey: {
+        alt: "Šestipanelový komiks vesmírné lodi ve stylu Heart of Gold, která prochází obloukem labu: zakotvení při prvním kontaktu, malý první úkol, učení kontextu (CLAUDE.md), posun od kontroly k ověřovacímu harnessu, získání ekosystémových rozšíření a závěrečná cesta se smyčkou compoundingu — s malým ručníkem přehozeným přes anténu.",
+        caption: "Šest zastavení. Devět kapitol. Jedna praxe.",
+      },
     },
   };
 
@@ -53,7 +62,13 @@ export default async function LabIndex({
             {m.lede}
           </p>
 
-          <ol className="space-y-4">
+          <Screenshot
+            src="/journey-comic.png"
+            alt={m.journey.alt}
+            caption={m.journey.caption}
+          />
+
+          <ol className="space-y-4 mt-10">
             {CHAPTERS.map((chapter) => (
               <li key={chapter.slug}>
                 <Link
