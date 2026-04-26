@@ -173,97 +173,266 @@ buckets.
 Always emit a self-contained HTML file alongside the markdown. The
 template lives at
 `${CLAUDE_PLUGIN_ROOT}/skills/cc-lab-diagnose/template.html` with
-8 placeholders.
+**10 placeholders**: `{{LANG}}`, `{{REPO}}`, `{{HEADLINE}}`,
+`{{MODE_LABEL}}`, `{{DATE}}`, `{{VERSION}}`, `{{SPINE}}`,
+`{{CONTENT}}`, `{{TIMELINE}}`, `{{CLOSING}}`.
 
-**Procedure:**
+The HTML is the **working surface** — it has visual elements the
+markdown can't carry (chapter spine, action timeline). Don't treat
+the HTML as a copy of the markdown. The structure differs.
 
-1. `Read` the template file in full.
-2. Convert each markdown section into the HTML structure the
-   template implies. Use these element shapes:
+#### 6a. Compute the chapter spine
 
-   **Strengths** — ordered the same as in markdown, max 3 per pass:
-   ```html
-   <section class="section">
-     <div class="label">What's working</div>
-     <h2>Strengths grounded in your files</h2>
-     <div class="strengths">
-       <div class="strength">
-         <strong>Comprehensive deny list</strong>
-         <p>Your <code>.claude/settings.json:4-36</code> blocks the
-         right destructive patterns…</p>
-       </div>
-       <!-- 1-3 total -->
-     </div>
-   </section>
-   ```
+For each of the 10 chapters in the cc-lab manifest (see `rubric.md`
+Appendix A), count how many of your final observations link to it:
 
-   **Both-mode pass header** (skip in single-mode):
-   ```html
-   <hr class="pass-divider" />
-   <h2 class="pass-header">Project pass — <repo-name>
-     <span class="subtitle">Would a teammate cloning this succeed today?</span>
-   </h2>
-   ```
+| Findings linking to chapter | Status class |
+|---|---|
+| 0 | `status-quiet` (chapter wasn't relevant this run) |
+| 1 | `status-finding` |
+| 2+ | `status-finding` (concentrated — surface as a cluster) |
 
-   **Observations** — one card per observation:
-   ```html
-   <article class="observation">
-     <div class="obs-head">
-       <span class="obs-num">#1</span>
-       <h3>Wrong project contract cascades into every session</h3>
-       <span class="conf high">High confidence</span>
-     </div>
-     <p class="what-i-see">Your <code>./CLAUDE.md</code> doesn't exist…</p>
-     <pre><code># CLAUDE.md — quellis
-     ...artifact body...
-     </code></pre>
-     <div class="read-more">
-       Read more: <a href="https://cc-lab.ondrejsvec.com/en/teach-claude-your-project">Chapter 3 — Teach Claude your project</a>
-     </div>
-   </article>
-   ```
-   Confidence class is `high` / `medium` / `cant-tell`.
+In `both` mode, count across both project + user observations.
 
-   **Action plan** — three buckets with severity classes
-   (`urgent` / `important` / `compound`):
-   ```html
-   <section class="section">
-     <div class="label">What to do next</div>
-     <h2>Pick from the top, don't pick all</h2>
-     <div class="actions">
-       <div class="action-bucket urgent">
-         <div class="bucket-head">
-           <h3 class="bucket-title">This session</h3>
-           <span class="bucket-time">15-30 min</span>
-         </div>
-         <ul class="action-list">
-           <li><strong>Rotate the credentials</strong>
-             <span class="ref">#user-1, security</span> — every value
-             that lived in the allow list…</li>
-         </ul>
-       </div>
-       <!-- Important + Compound similarly -->
-     </div>
-   </section>
-   ```
+If you also want to surface a chapter as a **strength** (the
+strengths section already mentioned a pattern that chapter teaches),
+use `status-strong` for that chapter — even if it has no findings.
+If it has both findings AND grounded strengths, use `status-mixed`.
 
-3. Fill the 8 template placeholders (`Bash` `sed -i` is fine, but the
-   safest path is to read the template, do string substitution with
-   `Bash` `python3 -c` and write the result):
-   - `{{LANG}}` — `en` or `cs` based on output language
-   - `{{REPO}}` — cwd basename
-   - `{{HEADLINE}}` — the headline text (HTML-escape, single line)
-   - `{{MODE_LABEL}}` — `Project mode` / `User mode` / `Project + user`
-   - `{{DATE}}` — `YYYY-MM-DD`
-   - `{{VERSION}}` — read from `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`
-   - `{{CONTENT}}` — concatenation of: strengths section + (in
-     both-mode: pass header → observations → pass header → observations,
-     in single-mode: observations) + action plan section
-   - `{{CLOSING}}` — closing prose (the final paragraph, no horizontal
-     rule)
+Skip the strength-mapping if it's not obvious — `status-quiet` is
+fine. Don't fabricate to fill cells.
 
-4. Write to `./cc-lab-diagnosis-<repo>-<YYYY-MM-DD>.html` in the
-   user's cwd.
+Emit `{{SPINE}}` as:
+
+```html
+<section class="section">
+  <div class="label">Where you are on the lab</div>
+  <h2>Chapter spine</h2>
+  <p class="lede">Each chapter the lab teaches, with this run's findings highlighted. <em>Quiet</em> chapters didn't surface this run — fine, not every diagnosis touches every category.</p>
+  <ol class="spine">
+    <div class="spine-stop status-quiet">
+      <span class="ch-num">1</span>
+      <span class="ch-name">Before we start</span>
+      <span class="ch-stat">quiet</span>
+    </div>
+    <div class="spine-stop status-finding">
+      <span class="ch-num">3</span>
+      <span class="ch-name"><a href="https://cc-lab.ondrejsvec.com/en/teach-claude-your-project">Teach Claude your project</a></span>
+      <span class="ch-stat">1 finding</span>
+    </div>
+    <!-- ...all 10 chapters in order... -->
+  </ol>
+  <div class="spine-legend">
+    <span><span class="dot strong"></span>strong</span>
+    <span><span class="dot mixed"></span>mixed</span>
+    <span><span class="dot finding"></span>finding</span>
+    <span><span class="dot quiet"></span>quiet</span>
+  </div>
+</section>
+```
+
+The `<a>` on `.ch-name` is optional but useful — make it present
+when there's a finding so the reader can jump to the chapter.
+
+#### 6b. Emit observations into `{{CONTENT}}`
+
+Same as before, but with two changes:
+
+1. **Severity class on the card.** Add `severity-high` to
+   `<article class="observation severity-high">` when the finding is
+   security-impacting (committed secrets, plaintext credentials,
+   wildcard permissions on dangerous tools). Add `severity-medium`
+   for hygiene gaps + medium-confidence observations. Default
+   (no severity class) for everything else.
+
+2. **Both-mode pass headers** use the new shape:
+```html
+<header class="pass-header">
+  <h2>Project pass — quellis</h2>
+  <span class="subtitle">Would a teammate cloning this succeed today?</span>
+</header>
+<!-- then strengths section then observations -->
+
+<header class="pass-header">
+  <h2>User pass — ~/.claude</h2>
+  <span class="subtitle">Is your personal harness pulling its weight?</span>
+</header>
+<!-- then strengths section then observations -->
+```
+
+**Strengths** — same shape as before, but emit the section *under*
+the relevant pass header (so each pass owns its strengths in
+`both` mode):
+
+```html
+<section class="section">
+  <div class="label">What's working</div>
+  <h2>Strengths grounded in your files</h2>
+  <div class="strengths">
+    <div class="strength">
+      <strong>Comprehensive deny list</strong>
+      <p>Your <code>.claude/settings.json:4-36</code> blocks…</p>
+    </div>
+  </div>
+</section>
+```
+
+**Observations** — one card each:
+```html
+<article class="observation severity-high">
+  <div class="obs-head">
+    <span class="obs-num">#user-1</span>
+    <h3>Plaintext live credentials in user allow list</h3>
+    <span class="conf high">High confidence</span>
+  </div>
+  <p class="what-i-see">Your <code>~/.claude/settings.json</code>…</p>
+  <pre><code>...artifact body...</code></pre>
+  <div class="read-more">
+    Read more: <a href="https://cc-lab.ondrejsvec.com/en/ecosystem">Chapter 6 — The ecosystem</a>
+  </div>
+</article>
+```
+
+#### 6c. Emit the action plan into `{{TIMELINE}}` (NEW — replaces bulleted action plan)
+
+In HTML, the action plan becomes a **three-lane timeline**, not
+bulleted lists. Lanes are columns on desktop, stacked on mobile.
+
+```html
+<section class="section">
+  <div class="label">What to do next</div>
+  <h2>Pick from the top, don't pick all</h2>
+  <p class="visual-cta"><strong>This is the working surface.</strong> Every artifact in the observations above has a Copy button. Open this view, copy the patches, run them in your terminal.</p>
+  <div class="timeline">
+    <div class="lane urgent">
+      <div class="lane-head">
+        <h3>This session</h3>
+        <span class="lane-time">15-30 min</span>
+      </div>
+      <div class="lane-cards">
+        <div class="action-card">
+          <div class="num">1</div>
+          <div class="body">
+            <strong>Rotate the credentials</strong>
+            <span class="ref">#user-1 · security</span>
+            <p>Every value that lived in your allow list is on disk in plaintext. Strip first, rotate second.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="lane important">
+      <div class="lane-head">
+        <h3>This week</h3>
+        <span class="lane-time">~1 hour</span>
+      </div>
+      <div class="lane-cards">
+        <!-- 1-3 cards -->
+      </div>
+    </div>
+    <div class="lane compound">
+      <div class="lane-head">
+        <h3>Compound</h3>
+        <span class="lane-time">when you have time</span>
+      </div>
+      <div class="lane-cards">
+        <!-- 1-2 cards -->
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+Each `.action-card` has:
+- `.num` — global action number (1, 2, 3... across all lanes)
+- `.ref` — observation id + short severity tag (`security` /
+  `blocking` / `hygiene` / `compounding`)
+- `<p>` — one short sentence, the *why this matters*, not the how
+- `.outcome` — **the journey arrow.** One short concrete sentence
+  naming what completing this action gets the user. Always present
+  state, no future tense ("secrets off disk" not "secrets will be
+  off disk"). The arrow is rendered automatically by CSS.
+
+Outcome examples:
+
+| Action | Good outcome | Bad outcome |
+|---|---|---|
+| Rotate credentials | "Secrets off disk, out of the auto-approve list" | "You'll be more secure" |
+| Drop project CLAUDE.md | "Every session starts with the right contract" | "Better contract" |
+| Pair brake/accelerator | "Safe commands stop prompting; the deny list keeps mattering" | "Permission fatigue gone" |
+| Patch agent model fields | "Retrieval agents stop inheriting Opus; ~10× cost cut on greps" | "Costs lower" |
+| Prime auto-memory | "Each next session starts from a primed index, not a blank slate" | "Memory works" |
+
+The outcome is what makes the diagnosis a journey. Without it, the
+timeline reads as a chore list. With it, every card answers the
+"why am I doing this?" the user is implicitly asking.
+
+The artifact (Bash patches, JSON snippets, etc.) lives in the
+observation card above; don't duplicate it in the timeline.
+
+Card shape:
+```html
+<div class="action-card">
+  <div class="num">1</div>
+  <div class="body">
+    <strong>Rotate the credentials</strong>
+    <span class="ref">#user-1 · security</span>
+    <p>Every value that lived in your allow list is on disk in plaintext.</p>
+    <div class="outcome">Secrets off disk, out of the auto-approve list.</div>
+  </div>
+</div>
+```
+
+#### 6d. Markdown ↔ HTML reconciliation
+
+The markdown still ships the same six sections (opening, what's
+working, headline, observations, what-to-do-next, closing). The
+HTML re-arranges into:
+
+- Hero
+- Chapter spine (HTML only — there's no good markdown shape)
+- Per-pass: pass header → strengths → observations
+- Action timeline (HTML version of "What to do next")
+- Closing
+
+The HTML is not a 1:1 of the markdown. It's a redesign of the same
+content for the visual medium.
+
+#### 6e. Fill placeholders + write file
+
+Read the template. For substitution, use `Bash` with `python3 -c`
+(safer than sed for HTML content). Fill all 10 placeholders. Write
+to `./cc-lab-diagnosis-<repo>-<YYYY-MM-DD>.html` in the user's
+cwd.
+
+Recommended substitution shape:
+
+```bash
+python3 - <<'PY'
+import json, re
+from pathlib import Path
+tpl = Path("${CLAUDE_PLUGIN_ROOT}/skills/cc-lab-diagnose/template.html").read_text()
+ver = json.loads(Path("${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json").read_text())["version"]
+mapping = {
+    "{{LANG}}": "en",
+    "{{REPO}}": "<repo>",
+    "{{HEADLINE}}": "<headline html-escaped>",
+    "{{MODE_LABEL}}": "Project + user",
+    "{{DATE}}": "<YYYY-MM-DD>",
+    "{{VERSION}}": ver,
+    "{{SPINE}}": "<spine html>",
+    "{{CONTENT}}": "<content html>",
+    "{{TIMELINE}}": "<timeline html>",
+    "{{CLOSING}}": "<closing html>",
+}
+for k, v in mapping.items():
+    tpl = tpl.replace(k, v)
+Path("./cc-lab-diagnosis-<repo>-<YYYY-MM-DD>.html").write_text(tpl)
+PY
+```
+
+Use heredocs for the values to avoid quote escaping headaches. If
+you keep getting stuck on shell quoting, write the values to temp
+files and read them in the python script.
 
 5. **Mention the HTML in two places** so the user sees it both on
    first scroll and at the action surface:
