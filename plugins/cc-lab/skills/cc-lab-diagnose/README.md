@@ -1,10 +1,25 @@
 # cc-lab-diagnose
 
-A Claude Code skill that reads your repo and gives you 3-5 specific
-observations about your Claude Code setup. Each observation quotes a
-real line from your files. None of them score, grade, or rank.
+A Claude Code skill that reads your repo and/or your personal
+`~/.claude/` setup and gives you 3-5 specific observations about how
+well-tuned your harness is. Each observation quotes a real line from
+your files. None of them score, grade, or rank.
 
 It's the diagnostic the lab wishes existed when it was being written.
+
+## Two modes
+
+| Mode | Question it answers | Reads |
+|---|---|---|
+| **project** (default) | Would a teammate cloning this repo succeed today? | `./CLAUDE.md`, `./.claude/`, `./.mcp.json`, recent git log, project plugin entries |
+| **user** | Is your personal harness well-tuned? | `~/.claude/CLAUDE.md`, `~/.claude/{skills,agents,commands,hooks}/`, `~/.claude.json` (MCPs), installed plugins, auto-memory |
+| **both** | Both questions, two output sections | Everything above |
+
+Project mode is the default — it's the more common need. The
+distinction matters because the rubric for "is this team-shareable?"
+is different from "is your personal config sharp?" — and the
+diagnostic refuses to recommend committing personal preferences to a
+team repo, or putting project-specific facts in your user CLAUDE.md.
 
 ## Install
 
@@ -36,33 +51,49 @@ above.
 
 ## Use
 
-Open Claude Code in any of your active repos. Then either:
+Open Claude Code in any of your active repos. Then:
 
-- Say "diagnose my setup" / "check my Claude Code config" / "review
-  my CLAUDE.md" / "what am I missing" — the skill auto-activates from
-  these phrasings.
-- Or invoke `/cc-lab-diagnose` directly.
-
-The skill reads `CLAUDE.md`, the `.claude/` tree, and your last 30
-commits. It returns a markdown document — 3-5 observations, each one
-grounded in a quoted line from your repo.
-
-## What it does
-
-| | |
+| To run | Say (or invoke) |
 |---|---|
-| Reads | `CLAUDE.md`, `.claude/skills/*/SKILL.md`, `.claude/settings.json`, `.claude/agents/`, `.claude/commands/`, `git log --oneline -30`, `docs/solutions/` |
-| Returns | A markdown doc with 3-5 observations, each with quoted evidence, a confidence tag, a copy-paste artifact, and a chapter link |
-| Categories | Context discipline, skill design, hook usage, agent and command patterns, iteration discipline, knowledge capture |
+| Project mode (default) | "diagnose my project" / "audit this repo" / `/cc-lab-diagnose` / `/cc-lab-diagnose project` |
+| User mode | "diagnose my setup" / "review my user config" / `/cc-lab-diagnose user` |
+| Both modes | "diagnose everything" / "full diagnostic" / `/cc-lab-diagnose both` |
+
+The skill returns a markdown document — 3-5 observations per section,
+each grounded in a quoted line from your files.
+
+## What it returns
+
+Each observation has five fields:
+
+- **Title** — names the pattern (5-9 words)
+- **What I see** — 2-3 sentences quoting your actual files
+- **Confidence** — `high` / `medium` / `I can't tell`
+- **Try this** — copy-paste artifact you can apply this session
+- **Read more** — one cc-lab chapter link for the longer version
+
+## Categories
+
+**Project mode** (9 categories): project memory (CLAUDE.md), project
+skills/agents/commands, hooks, MCPs, permissions, hygiene
+(gitignore + secrets), plugin declarations, knowledge capture,
+iteration discipline.
+
+**User mode** (6 categories): user memory, plugin hygiene, user-scope
+skills/agents/commands, user MCPs, user hooks, auto-memory state.
 
 ## What it doesn't do
 
-- Modify any file in your repo (read-only)
+- Modify any file (read-only)
 - Score, grade, or rank your setup
 - Praise without grounding ("great job!" — never)
 - Recommend tools your repo doesn't already reference
-- Run anything outside `git`, `rg`, `wc`, file reads
-- Phone home — no telemetry, no aggregate-data collection in v0
+- Recommend creating skills that duplicate Claude Code built-ins
+  (`/clear`, `/compact`, `/review`, `/debug`, etc.)
+- Recommend committing personal preferences to your team repo, or
+  putting project-specific facts in your user CLAUDE.md
+- Run anything outside `git`, `rg`, `wc`, `ls`, file reads
+- Phone home — no telemetry, no aggregate-data collection
 
 ## When the output is sparse
 
