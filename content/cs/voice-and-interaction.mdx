@@ -41,7 +41,16 @@ Tohle je povrch, který většina vývojářů používá nejvíc. Žádné nast
 
 ### Terminál — `/voice` je vestavěné
 
-Terminálové CLI Claude Code má diktování zabudované. Spustíš `/voice` a je zapnuté. Pak:
+Terminálové CLI Claude Code má diktování zabudované. Spustíš `/voice` a je zapnuté.
+
+<TerminalOutput
+  src="/visuals/voice-terminal-enabled.svg"
+  alt="Terminál ukazující příkaz /voice v Claude Code následovaný potvrzením 'Voice mode enabled (hold). Hold Space to record. Dictation language: en (/config to change).'"
+  caption="Spusť /voice. Drž Space. Mluv."
+  text={`> /voice\nVoice mode enabled (hold). Hold Space to record. Dictation language: en (/config to change).`}
+/>
+
+Pak:
 
 - **Hold mode (výchozí)** — drž `Space` a mluv, pusť a přepis se vloží. Zkontroluj, případně uprav, `Enter` odešle.
 - **Tap mode** — `/voice tap`. Klepni `Space` pro start, klepni znovu pro stop. Automaticky odešle, když má přepis aspoň tři slova.

@@ -41,7 +41,16 @@ This is the surface most builders use most. No setup, no third-party tools, tran
 
 ### Terminal — `/voice` is built in
 
-Claude Code's terminal CLI has voice dictation built in. Run `/voice` once to enable it. After that:
+Claude Code's terminal CLI has voice dictation built in. Run `/voice` once to enable it.
+
+<TerminalOutput
+  src="/visuals/voice-terminal-enabled.svg"
+  alt="Terminal showing the /voice command invocation in Claude Code, followed by the confirmation 'Voice mode enabled (hold). Hold Space to record. Dictation language: en (/config to change).'"
+  caption="Run /voice. Hold Space. Speak."
+  text={`> /voice\nVoice mode enabled (hold). Hold Space to record. Dictation language: en (/config to change).`}
+/>
+
+After that:
 
 - **Hold mode (default)** — hold `Space` to record, release to insert the transcript. Review, edit if you want, press `Enter` to send.
 - **Tap mode** — `/voice tap`. Tap `Space` to start, tap again to stop. Auto-submits when the transcript is at least three words.
