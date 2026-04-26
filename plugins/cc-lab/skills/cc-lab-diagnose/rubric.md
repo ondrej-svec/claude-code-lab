@@ -223,35 +223,89 @@ declaration AND the project file that references the MCP.
 
 ---
 
-## A5 — Project permissions
+## A5 — Project permissions (rules + modes)
+
+Two related but distinct concerns. **Rules** (allow/deny lists) say
+*what's allowed*; **modes** say *how Claude asks before doing it*.
+Both shape the user experience and both belong in a well-tuned
+project.
+
+### A5a — Permission rules (allow/deny lists)
 
 What the lab teaches: an explicit `permissions` block buys you the
 gap between **permission fatigue** (every command prompts → developer
 mashes `y`) and **silent damage** (auto-approved `rm -rf` → one bad
 invocation nukes the tree). Allowlist read-only patterns; denylist
-the irreversibles.
+the irreversibles. The brake without the accelerator is permission
+fatigue; the accelerator without the brake is silent damage.
 ([Chapter 6: The ecosystem](https://cc-lab.ondrejsvec.com/en/ecosystem))
 
-### Heuristics
+#### Heuristics
 
 | Check | Signal | Confidence |
 |---|---|---|
 | `.claude/settings.json` has no `permissions` block | "every command will prompt — permission fatigue likely" | medium |
 | `permissions.allow` includes `Bash(*)` or `Edit(*)` (wildcards on dangerous tools) | "wildcards on Bash/Edit auto-approve everything — silent damage risk" | high |
 | `permissions.deny` is empty or missing | "no destructive-command guard — `rm -rf`, `git push --force` not blocked" | high |
-| `permissions.allow` lists frequently-prompted safe patterns (`Bash(ls:*)`, `Bash(rg:*)`, `Bash(git status:*)`, `Read`, `Glob`, `Grep`) | (positive) — flow-preserving allowlist | n/a |
-| `permissions.deny` includes `Bash(rm -rf:*)`, `Bash(git push --force:*)`, `Bash(git reset --hard:*)` | (positive) — destructive-command guard | n/a |
+| `permissions.deny` is comprehensive but `permissions.allow` is empty/missing | "the brake is shipped but the accelerator is missing — every safe command still prompts, fatigue likely" | high |
+| `permissions.allow` lists frequently-prompted safe patterns (`Bash(ls:*)`, `Bash(rg:*)`, `Bash(git status:*)`, `Read`, `Glob`, `Grep`, the project's build/test commands) | (positive) — flow-preserving allowlist | n/a |
+| `permissions.deny` includes `Bash(rm -rf:*)`, `Bash(git push --force:*)`, `Bash(git reset --hard:*)`, `Bash(sudo *)`, `Bash(curl * | sh*)` | (positive) — destructive-command guard | n/a |
 
-### LLM-judge prompts
+#### LLM-judge prompts
 
 - "Read this `permissions` block. Does the allowlist match the
-  team's actual workflow (do they really run `Bash(npm test:*)` 50
+  team's actual workflow (do they really run `Bash(bun test:*)` 50
   times a session)? Or is it copy-pasted defaults?"
+- "If the allow list is empty but the deny list is full, what
+  happens to the developer's flow on the 50th `Bash(git status)`
+  prompt of the day?"
 
-### Evidence requirement
+#### Evidence requirement
 
 Quote the `permissions` block (or its absence). For wildcard finds,
-quote the exact line.
+quote the exact line. For "brake without accelerator" finds, quote
+both the deny list (showing it's substantive) and the missing/empty
+allow list.
+
+### A5b — Permission modes
+
+What the lab teaches: Claude Code has five permission modes — **Ask
+permissions** (default, prompts before each edit), **Accept edits**
+(edits freely, you review the diff), **Plan mode** (read-only think
+mode, no destructive ops), **Bypass permissions** (no asking; same
+as `--dangerously-skip-permissions`; settings-gated), **Auto mode**
+(classifier-driven, asks only on ambiguous ones; settings-gated). The
+mode is project-level config (`defaultMode` in `permissions`) and a
+runtime toggle (Shift+Tab cycles, `--permission-mode <mode>` sets at
+launch).
+([Chapter 4: Iteration and control](https://cc-lab.ondrejsvec.com/en/iteration-and-control))
+
+A team-shared project benefits from a deliberate `defaultMode` in
+`.claude/settings.json` so a fresh clone starts in the right posture.
+
+#### Heuristics
+
+| Check | Signal | Confidence |
+|---|---|---|
+| `.claude/settings.json` has no `permissions.defaultMode` | "every teammate starts in `default` (ask-on-everything) — fine for risky repos, friction for read-heavy work" | low (sometimes correct) |
+| `permissions.defaultMode: "bypassPermissions"` committed at project level | "bypass committed as team default — guardrails removed for everyone, including teammates who won't expect it" | high |
+| `permissions.defaultMode: "auto"` set without `permissions.allow`/`deny` block | "auto mode without rules — the classifier alone is the only safety; pair with allow/deny" | medium |
+| CLAUDE.md mentions plan mode or specific permission posture but `.claude/settings.json` has no `defaultMode` | "voice says one mode; config says default — drift" | medium |
+| `permissions.defaultMode: "acceptEdits"` for a project where the team reviews PRs (most projects) | (positive) — fast loop with PR review as the safety net | n/a |
+| `permissions.defaultMode: "plan"` set at project level | "plan as default — only fits projects where exploration dominates execution" | low (rare but valid) |
+
+#### LLM-judge prompts
+
+- "Read CLAUDE.md and `.claude/settings.json` together. Is the
+  team's permission posture stated anywhere — should they default to
+  ask-on-everything, accept-edits, plan, auto? Quote where it's
+  stated, or note the absence."
+
+#### Evidence requirement
+
+Quote the `defaultMode` line (or its absence) AND any CLAUDE.md
+sentences about permission posture. The observation must show the
+gap or alignment between the two.
 
 ---
 
@@ -576,9 +630,9 @@ The diagnostic links only to slugs that exist in the lab. As of
 | `before-we-start` | Before we start | — |
 | `first-task` | Your first task | — |
 | `teach-claude-your-project` | Teach Claude your project | A1, B1 |
-| `iteration-and-control` | Iteration and control | A9 |
+| `iteration-and-control` | Iteration and control | A5b (permission modes), A9 |
 | `voice-and-interaction` | Voice and modalities | — |
-| `ecosystem` | The ecosystem | A2, A3, A4, A5, A7, B2, B3, B4, B5 |
+| `ecosystem` | The ecosystem | A2, A3, A4, A5a, A7, B2, B3, B4, B5 |
 | `compound-engineering` | Compound engineering | A8, B6 |
 | `next-steps` | Where to go next | — |
 | `reference` | Reference | — |

@@ -9,7 +9,7 @@
       "name": "cc-lab",
       "source": "./plugins/cc-lab",
       "description": "cc-lab companion skills — diagnostic and authoring tools that pair with the cc-lab.ondrejsvec.com guide",
-      "version": "0.2.0"
+      "version": "0.2.1"
     }
   ]
 }

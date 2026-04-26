@@ -1,7 +1,7 @@
 ---
 name: cc-lab-diagnose
 description: Diagnose a Claude Code setup against cc-lab patterns. Two modes — project (would a teammate cloning this repo succeed today?) or user (is your personal harness well-tuned?). Returns 3-5 evidence-grounded observations with copy-paste artifacts and chapter links. Activate when the user says "diagnose my setup", "review my CLAUDE.md", "audit this repo", or invokes /cc-lab-diagnose [project|user|both].
-allowed-tools: Read, Glob, Grep, Bash
+allowed-tools: Read, Glob, Grep, Bash, AskUserQuestion
 ---
 
 # cc-lab-diagnose
@@ -22,12 +22,10 @@ You do not coach, score, or sell.
 - User says "diagnose my setup" / "review my user config" / "check my
   ~/.claude" → **user mode**
 - User says "diagnose everything" / "full diagnostic" → **both modes**
-- User invokes `/cc-lab-diagnose` (default = **project mode**)
 - User invokes `/cc-lab-diagnose project|user|both` (explicit mode)
-
-If the invocation is ambiguous, default to **project mode** — that's
-the more common need. Don't ask; default and proceed. The user can
-re-run with `/cc-lab-diagnose user` if they wanted the other mode.
+- User invokes `/cc-lab-diagnose` with no argument and no scope keyword
+  in the natural-language prompt → **prompt the user via
+  `AskUserQuestion`** (see Step 1) before reading any files
 
 ## Two modes — pick exactly one path through the rubric
 
@@ -90,14 +88,32 @@ the procedure correctly.
 
 ### 1. Determine the mode
 
-Parse the invocation:
+Parse the invocation. Pick the first rule that matches:
 
-- Explicit args (`/cc-lab-diagnose project|user|both`) take precedence
-- Natural-language phrasing: "project", "repo", "audit this repo",
-  "is this codebase set up" → project mode; "user", "my setup",
-  "my config", "~/.claude" → user mode; "everything", "full",
-  "both" → both modes
-- Default → project mode
+1. **Explicit arg** — `/cc-lab-diagnose project|user|both` → use that.
+2. **Scope keyword in the prompt:**
+   - "project", "repo", "this codebase", "audit this repo",
+     "is the repo set up", "would a teammate succeed" → **project**
+   - "user", "my setup", "my config", "~/.claude",
+     "personal harness", "user scope" → **user**
+   - "everything", "full diagnostic", "both", "all of it" → **both**
+3. **Otherwise — ambiguous.** Use `AskUserQuestion` to disambiguate.
+   Don't guess; the wrong default wastes the user's read. Use this
+   exact shape:
+
+   - **header**: "Diagnostic scope"
+   - **question**: "Which scope should I read?"
+   - **options** (in this order, with the first as default):
+     1. **Project** — diagnose this repo. Reads `./CLAUDE.md`,
+        `./.claude/`, `./.mcp.json`, recent commits. Asks: would a
+        teammate cloning this succeed today?
+     2. **User** — diagnose `~/.claude/`. Reads user CLAUDE.md,
+        user-scope skills/agents/commands, plugins, MCPs, hooks.
+        Asks: is your personal harness pulling its weight?
+     3. **Both** — run both passes, two output sections.
+
+   Take the user's answer. If they decline or escape the prompt,
+   fall back to **project** mode and proceed.
 
 Note the chosen mode at the top of your reasoning. The output will
 say which mode ran.
