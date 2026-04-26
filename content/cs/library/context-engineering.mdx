@@ -1,0 +1,110 @@
+---
+slug: context-engineering
+title: Kontext jako každodenní praxe
+chapter: iteration-and-control
+tags: [practice, context]
+readTime: 8 min
+---
+
+# Kontext jako každodenní praxe
+
+Kontextové okno je rozpočet. Každé kolo z něj něco utratí. Každý soubor, který si Claude přečte, utratí ještě víc. Ve chvíli, kdy ti konverzace začne připadat dlouhá, půlka rozpočtu už padla na věci, které svou práci dávno odvedly.
+
+Práce s kontextem je denní návyk — ten rozpočet aktivně řídit, ne čekat, až se naplní a jednoho dne dojde.
+
+Většina lidí se naučí příkazy (`/compact`, `/clear`, `/resume`) a tím to končí. Jenže ty příkazy nejsou ta praxe. Praxe je vědět, který sedne na kterou situaci, a všimnout si té situace dost brzo na to, abys měl z čeho vybírat.
+
+## Čtyři tahy
+
+Máš čtyři způsoby, jak uvolnit kontext. Každý něco jiného obětuje.
+
+| Tah | Co si nechá | Co ztratí | Kdy po něm sáhnout |
+|---|---|---|---|
+| `/compact [focus]` | Niť. Rozhodnutí, která jsi udělal. Mentální model agenta. | Doslovnou historii. Pomocné kroky. Odbočky. | Uprostřed úkolu, potřebuješ se nadechnout, ale nechceš znovu vysvětlovat cíl. |
+| `/clear` | Nic v aktivním okně. Stará konverzace se zaarchivuje (dá se obnovit). | Celou konverzaci. Včetně toho, co bys radši nechal. | Přepnul jsi do jiné oblasti. Nebo má konverzace 30+ kol a drifftuje. |
+| `/resume` | Konkrétní minulou konverzaci, obnovenou. | Cokoliv, co běželo v té současné. | Došlo ti, že odpověď na dnešní otázku žije ve včerejší session. |
+| Vstaň a začni znovu. | Čistou tabuli. Nový `CLAUDE.md`. Ostřejší prompty. | Všechen stav, který sis nezapsal. | Už nevíš, co vlastně chceš, nebo tě předchozí pokusy ovlivnily v promptech tak, že si nevěříš. |
+
+Levný a přepoužívaný tah je `/compact`. Drahý a podceňovaný tah je ten čtvrtý. Vstát od session, která se zvrtla, je skoro vždycky rychlejší než ji zachraňovat.
+
+## Tři vrstvy paměti
+
+Kontext konverzace je jedna vrstva. Jsou další dvě a stojí míň.
+
+**Aktivní kontext** je to, co je v aktuální konverzaci. Token-tlustý, drahé to držet, dokonale čerstvé. Každé kolo žije tady.
+
+**Shrnutý kontext** je to, co produkuje `/compact` — Claudem napsaný výtah z dosavadních kol. Levnější než doslova, záměrně ztrátový. Užitečný, dokud ten výtah pořád přesně popisuje práci.
+
+**Externalizovaný kontext** žije úplně mimo konverzaci. `CLAUDE.md`, plánovací dokumenty, brainstorm soubory, scratchpady. Nula tokenů v aktivním okně — Claude si je přečte, když je potřebuje. S `/clear` nezmizí.
+
+Dovednost je posunout věc o vrstvu níž, než tě začne stát.
+
+<Prompt>Shrň, co jsme zrovna zjistili o auth flow, do docs/notes/auth-decisions.md. Pak uděláme clear a začneme implementaci na čisto.</Prompt>
+
+Tenhle tah promění čtyřicet kol konverzace v soubor, který si Claude přečte v jednom. Implementační konverzace startuje s nulovou cenou kontextu a plnou informační hodnotou. To je celá hra.
+
+## Recepty pro `/compact`
+
+`/compact` bez argumentu drží vyvážené shrnutí. S focus argumentem si nechá to podstatné a zbytek zapomene.
+
+<Prompt>/compact focus on the API design decisions; drop the debugging tangents</Prompt>
+
+<Prompt>/compact focus on the failing test and what we tried; drop the file-reading turns</Prompt>
+
+Dobrý focus argument je **konkrétní v tom, co si nechat**, ne v tom, co zahodit. „Keep X“ dává Claudovi cíl. „Drop Y“ nechává zbytek mlhavý.
+
+**Pro tip:** před handoffem pusť `/compact focus on what's left to do and why this approach`. Shrnutí ti zadarmo udělá poznámky pro předání.
+
+## Recepty pro `/clear`
+
+`/clear` je nejlevnější tah a ten, kterému se většina lidí vyhýbá ze strachu, že něco ztratí. Stará konverzace nezmizela — je v archivu. `/resume` ji vrátí, když ji budeš potřebovat.
+
+Tři vysoce hodnotné momenty pro `/clear`:
+
+- **Mezi fázemi [Compound Engineeringu](/cs/lab/compound-engineering).** Brainstormová kola zanesou plán. Plánovací kola zabarví implementaci. `/clear` mezi fázemi dá každé z nich ostrý kontext.
+- **Mezi nesouvisejícími úkoly.** Dotáhl jsi auth refactor. Teď saháš na search index. Auth konverzace nepřispívá ničím užitečným, jen šumem.
+- **Když konverzace ztratila zápletku.** Opravoval jsi Claude čtyřikrát. Ty opravy jsou teď samy v kontextu. Začni znovu s těsnějším promptem.
+
+Příznak, že jsi měl udělat clear dřív: znovu vysvětluješ něco, co Claude věděl třicet kol zpátky.
+
+## Mechanika `/resume`
+
+Konverzace nemizí. `/resume` ti ukáže nedávné, vybereš jednu, jsi zpátky tam, kde jsi byl.
+
+Tohle je důležitější, než to zní. Dva vzory:
+
+- **Záchrana „uklidil jsem moc rychle“.** Cleared, začal jsi na čisto, narazil jsi do zdi, došlo ti, že odpověď byla v té předchozí. `/resume`, zkopíruj relevantní kolo, znovu `/clear`, vlož to jako kontext. Levnější než stavět od začátku.
+- **„Včerejší session“ navrácení.** Včera jsi něco zkoumal, narazil, vyspal se na to. Dneska máš nový úhel. `/resume` starou konverzaci místo studeného startu — včerejší pochopení je pořád načtené.
+
+`/resume` je taky způsob, jak rozdělit dlouhý thread napříč dny, aniž bys ztratil niť.
+
+## Externalizuj dřív, než zapomeneš
+
+Nejsilnější návyk při práci s kontextem je ten nudný: zapisuj věci mimo konverzaci.
+
+- **Rozhodnutí** → `docs/decisions/<topic>.md`. Jeden řádek, jedno datum, proč.
+- **Plány** → `docs/plans/<feature>.md`. Agent si to přečte pokaždé, když na té featuře pracuje.
+- **Vzory** → `CLAUDE.md`. Pravidla a tvary platné napříč repem, které se nemají znova učit.
+- **Scratch** → `scratchpad.md`, který necommitneš. Volné přemýšlení, které agent vidí, ale nezanáší git historii.
+
+Když píšeš do souboru, posouváš kontext z aktivní vrstvy (drahé, ztratitelné při `/clear`) do externalizované (levné, trvanlivé napříč session). Konverzace se zkracuje, projekt zmoudří.
+
+200 tokenů v `CLAUDE.md` nahradí stovky tokenů opakovaného vysvětlování v každé budoucí session. Zaplatí se to do týdne.
+
+## Anti-vzory
+
+**Compact a doufej.** Konverzace je nafouklá. Pustíš `/compact` bez focus argu a doufáš, že shrnutí vyjde. Někdy ano. Často ztratí ten jeden detail, na kterém záleželo. Compact s cílem.
+
+**Clear a ztrať stav.** `/clear` bez toho, abys nejdřív zapsal, co bys ztratil. Prompt, který fungoval, cesta k souboru, kterou jsi objevil, omezení, na které Claude přišel — pryč, ne v `/resume`, protože jsi už dál. Dvě sekundy návyku: před clearem řekni Claude, ať stav vyplivne do souboru.
+
+**Přebobtnaný `CLAUDE.md`.** Externalizace je dobrá; věčná externalizace špatná. `CLAUDE.md`, který narostl na 800 řádků, je teď cena kontextu v každé session. Stříhej nemilosrdně. Vzory specifické pro projekt přesuň do feature dokumentů, které agent čte, jen když na ten povrch sahá.
+
+**Vyhýbat se `/clear` ze sentimentu.** Konverzace, která ti pomohla, není ta, která ti pomůže příště. Stará kola jsou utopené náklady. Archiv je jeden příkaz daleko.
+
+## Jak tohle navazuje na páteř
+
+[Kapitola 4 — Iterace a kontrola](/cs/lab/iteration-and-control) představuje `/compact` a `/clear` na úrovni, kterou kapitola zvládne. Tahle entry jde dál, než kde by kapitola mohla bez toho, aby nabobtnala.
+
+[Kapitola 3 — Nauč Claude tvůj projekt](/cs/lab/teach-claude-your-project) je externalizační konec práce s kontextem — `CLAUDE.md`, projektové dokumenty, ta trvanlivá vrstva. Čti ji vedle této entry.
+
+[Kapitola 7 — Compound engineering](/cs/lab/compound-engineering) je místo, kde čtyři tahy a tři vrstvy začnou fungovat jako workflow. Tahle entry ti dává tahy; ta kapitola dává choreografii.
