@@ -65,6 +65,11 @@ Run these when diagnosing the cwd repo for team-shareability. The
 question this part answers: *if a teammate clones this repo today,
 will their Claude Code setup work?*
 
+When the skill provides a **Usage profile** in the brief, treat it as
+additional grounded evidence — same evidence-quoting bar as files.
+Categories A1-A9 are unchanged; A10 contains usage-only heuristics
+that *only* fire when a profile is present.
+
 ## A1 — Project memory (CLAUDE.md)
 
 What the lab teaches: a CLAUDE.md that earns its weight is a
@@ -415,6 +420,76 @@ like `8b2a93f — plan(cclab): session checkpoint`, not "your commits."
 
 ---
 
+## A10 — Usage signals (from session profile)
+
+Only run this category when the skill brief includes a **Usage
+profile** section. Skip it entirely (no observation, no "I can't
+tell") if the profile is missing or marked unavailable.
+
+What the lab teaches: a harness is judged by what it *does*, not what
+it *contains*. Skills that never fire, agents that never get
+dispatched, permission prompts that repeat — these are config-level
+findings the file pass alone can't see. The profile is bounded
+evidence: facts and counts only, never raw user prompts. Quote from it
+the same way you quote from `CLAUDE.md` — by section name and figure.
+
+**Boundary:** the profile is project-bound and time-bound. An
+observation here must reference both — name the window
+(*"in the last 30 days"* / *"across the last 12 sessions"*) so the
+reader can tell what era you're judging. Don't extrapolate to "you
+never use X" from "you didn't use X this month."
+
+**Cross-scope cascade still applies.** If the profile shows a skill
+"installed but never invoked" but it's a built-in or plugin skill the
+user has no reason to run on this repo, that's not a finding — it's
+noise. A10 fires when there's a *gap* between something the
+project's setup invites (CLAUDE.md tells the agent to use it; the
+skill's description matches the work happening in this repo) and
+what the profile shows actually happens.
+
+### Heuristics
+
+| Check | Signal | Confidence |
+|---|---|---|
+| Skill or command is in scope inventory, profile shows 0 invocations in window AND CLAUDE.md references it by name | "CLAUDE.md tells the agent to use `/X`; profile shows 0 invocations in <window> — instruction not landing" | high |
+| Subagent is in scope inventory with description matching work happening in window (per tool histogram) AND profile shows 0 dispatches | "agent `<name>` matches the work but isn't being reached for — naming or activation gap" | medium |
+| Profile permission events show ≥3 prompts on the same Bash shape (e.g. `Bash(rg)×5`) AND `.claude/settings.json` `permissions.allow` doesn't cover that shape | "repeated prompts on `<shape>` — `permissions.allow` gap" | high |
+| Profile hook errors > 0 with named hook AND that hook is declared in `.claude/settings.json` | "`<hook>` failing in window — silent breakage in the harness" | high |
+| Profile's Bash first-token histogram shows `cat`/`head`/`tail`/`sed` ≥5 entries | "Bash-as-Read antipattern recurring — agent missed Read tool affordance" | medium |
+| Profile shows ≥3 retry-after-error pairs on the same tool (same tool fails, immediately retried) | "recurring failure-retry loop on `<tool>` — environmental or instruction issue" | medium |
+| Profile shows sidechain ratio < 5% AND ≥3 subagents are in scope inventory | "subagents installed, almost all work happens on the main thread — context bloat risk" | low |
+| Profile shows sidechain ratio > 70% | "main thread mostly delegates — verify the parent still tracks results" | low |
+| Profile shows stopReason histogram with ≥2 `refusal` or `error` events on the main thread | "sessions ending in refusal/error — investigate the prompt or permission posture" | medium |
+| Profile shows Edit-without-Read events ≥1 (Edit-before-Read on same path within session) | "Three Laws violation — Edit fired without prior Read of the same file" | high (if cited in CLAUDE.md) / medium (if not) |
+
+### LLM-judge prompts
+
+- "Read the usage profile's *Skills / commands invoked* section
+  alongside the project's CLAUDE.md. Of the skills/commands the
+  CLAUDE.md mentions by name, which appear in the invoked list and
+  which don't? Quote both: the CLAUDE.md sentence inviting the
+  capability, and the profile line showing zero invocations."
+- "Read the usage profile's *Permission events* section. If a Bash
+  shape is triggering repeated prompts, does `.claude/settings.json`
+  `permissions.allow` cover it? Quote the profile's prompt count and
+  the absent allow-list pattern."
+
+### Evidence requirement
+
+Quote both: a line from the profile (with section name) AND a line
+from a real file (CLAUDE.md, settings.json, an agent definition)
+showing the gap. The profile alone is not enough — usage observations
+must point at *what the user can change*, which lives in files.
+
+Example evidence shape for the "try this" artifact:
+- Cite the profile section: `Profile · Skills/commands invoked: /compound — installed, 0 invocations in window`
+- Cite the file gap: `CLAUDE.md:88 — "after solving a non-trivial bug, run /compound"`
+- Artifact: a settings.json hook patch, a CLAUDE.md tightening, a
+  permission-allow line — same shape as any other observation's
+  artifact.
+
+---
+
 # Part B — User-mode rubric
 
 Run these when diagnosing the developer's personal `~/.claude/` setup.
@@ -630,9 +705,9 @@ The diagnostic links only to slugs that exist in the lab. As of
 | `before-we-start` | Before we start | — |
 | `first-task` | Your first task | — |
 | `teach-claude-your-project` | Teach Claude your project | A1, B1 |
-| `iteration-and-control` | Iteration and control | A5b (permission modes), A9 |
+| `iteration-and-control` | Iteration and control | A5b (permission modes), A9, A10 (workflow shape, retry patterns) |
 | `voice-and-interaction` | Voice and modalities | — |
-| `ecosystem` | The ecosystem | A2, A3, A4, A5a, A7, B2, B3, B4, B5 |
+| `ecosystem` | The ecosystem | A2, A3, A4, A5a, A7, A10 (dead skills/agents/commands, hook errors, permission gaps), B2, B3, B4, B5 |
 | `compound-engineering` | Compound engineering | A8, B6 |
 | `next-steps` | Where to go next | — |
 | `reference` | Reference | — |
