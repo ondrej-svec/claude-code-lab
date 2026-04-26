@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/charmbracelet/freeze/main/schema.json",
+  "theme": "rose-pine-moon",
+  "background": "#232136",
+  "border": {
+    "radius": 12,
+    "width": 1,
+    "color": "#44415a"
+  },
+  "shadow": {
+    "blur": 24,
+    "x": 0,
+    "y": 8
+  },
+  "margin": [0, 0, 0, 0],
+  "padding": [20, 24, 20, 24],
+  "font": {
+    "family": "JetBrains Mono",
+    "size": 14,
+    "ligatures": true
+  },
+  "line_height": 1.5,
+  "window": false,
+  "width": 1200,
+  "show_line_numbers": false
+}

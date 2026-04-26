@@ -5,6 +5,8 @@ import { BuildStats } from "./build-stats";
 import { Diagram } from "./diagram";
 import { Prompt } from "./prompt";
 import { Screenshot } from "./screenshot";
+import { TerminalCast } from "./terminal-cast";
+import { TerminalOutput } from "./terminal-output";
 
 function H1({ children }: { children?: ReactNode }) {
   return (
@@ -322,4 +324,6 @@ export const mdxComponents: MDXComponents = {
   Diagram,
   Prompt,
   Screenshot,
+  TerminalCast,
+  TerminalOutput,
 };
