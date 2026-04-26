@@ -1,8 +1,8 @@
 # Hlas a modality
 
-Ťukání zdržuje. Nejrychlejší vývojáři mluví na Claude, sdílejí s ním obrazovku a posílají mu screenshoty toho, na co se zrovna dívali — obvykle všechno v jednom promptu. Tahle kapitola je o tom, jak na to bez okázalostí.
+Ťukání zdržuje. Nejrychlejší vývojáři Claudovi mluví do mikrofonu, ukazují mu obrazovku a hází mu screenshoty toho, co zrovna viděli — obvykle všechno v jednom promptu. Bez triků, bez vaty.
 
-V minulé kapitole ses naučil iterovat text. Tady rozšíříš to, co Claudovi posíláš: hlas všude, kde dává smysl, multimodální kontext (screenshoty, vložení obrázku, drag-drop) jako rovnocenný signál a pár drobných posunů, díky kterým hlasové prompty fungují stejně dobře jako psané.
+V minulé kapitole ses naučil iterovat text. Teď přidáš hlas všude, kde se to hodí; multimodální kontext (screenshoty, vložení obrázku, drag-drop) jako rovnocenný signál; a pár drobných úprav, díky kterým hlas funguje stejně dobře jako psaní.
 
 ## Kdy hlasem víc než psaním
 
@@ -29,7 +29,7 @@ Claude poslouchá na každém povrchu jinak. Klávesová zkratka, latence, kvali
 
 ### Desktopová aplikace — nativní mikrofon
 
-Desktopová aplikace Claude má vedle promptového vstupu zabudovaný mikrofon. Klikni, mluv, klikni znovu. Přepis ti naskakuje do promptu, jak mluvíš. Před odesláním si ho ještě můžeš upravit.
+Hned vedle vstupního pole pro prompt je mikrofon. Klikni, mluv, klikni znovu. Přepis ti naskakuje do promptu, jak mluvíš. Před odesláním si ho ještě můžeš projít.
 
 <Screenshot
   src="/screenshots/voice-desktop-mic.png"
@@ -60,7 +60,7 @@ Dvě věci dělají z `/voice` lepší volbu než obecný diktovací nástroj:
 - **Vyladěné na vývojářský slovník.** `regex`, `OAuth`, `JSON`, `localhost` se přepisují správně. Název tvého aktuálního projektu a název gitové větve se automaticky přidávají jako vodítko pro rozpoznávání.
 - **Dvacet jazyků včetně češtiny.** Nastavíš v `/config` nebo přímo v souboru s nastavením. Výchozí je angličtina.
 
-Audio se posílá k Anthropicu k přepisu (ne lokálně). Zdarma — nespotřebovává tokeny ani se nepočítá do limitů v `/usage`. Vyžaduje účet Claude.ai (ne API klíč / Bedrock / Vertex / Foundry). Nejede přes SSH ani z vzdálené relace — potřebuje lokální mikrofon. K dispozici od Claude Code v2.1.69; tap mode od v2.1.116.
+Audio se posílá k Anthropicu k přepisu (ne lokálně). Zdarma — neubírá ti tokeny ani se nepočítá do limitů v `/usage`. Funguje jen s účtem Claude.ai (ne přes API klíč / Bedrock / Vertex / Foundry). Nefunguje přes SSH ani ve vzdálené relaci — potřebuje lokální mikrofon. K dispozici od Claude Code v2.1.69; tap mode od v2.1.116.
 
 ### Terminál — systémové alternativy
 
@@ -70,17 +70,17 @@ Audio se posílá k Anthropicu k přepisu (ne lokálně). Zdarma — nespotřebo
 - Jedeš na API klíči / Bedrocku / Vertexu, kde `/voice` nefunguje
 - Chceš lokální přepis kvůli soukromí
 
-[Wispr Flow](https://wisprflow.ai) je oblíbená volba — tichý, podržíš zkratku, naťuká přepis do té aplikace, kterou máš v popředí. Bezplatná verze zvládne většinu vývojářské zátěže.
+[Wispr Flow](https://wisprflow.ai) je oblíbená volba — tichý, podržíš zkratku, naťuká přepis do té aplikace, kterou máš v popředí. Bezplatná verze ti vystačí na většinu denní práce.
 
-[Super Whisper](https://superwhisper.com) běží Whisper lokálně. Stejný princip se zkratkou. Vyber, jestli ti soukromí znamená víc než příjemnější UX od Wispr.
+[Super Whisper](https://superwhisper.com) běží Whisper lokálně. Stejný princip se zkratkou. Sáhni po něm, když ti soukromí znamená víc než hladší UX od Wispr.
 
-[macOS Diktování](https://support.apple.com/cs-cz/guide/mac-help/mh40583/mac) je baseline bez instalace (`Fn Fn` ve výchozím nastavení). Použij, ať si ověříš, že hardware funguje, než za něco zaplatíš; na denní použití to není.
+[macOS Diktování](https://support.apple.com/cs-cz/guide/mac-help/mh40583/mac) je varianta bez instalace (výchozí zkratka `Fn Fn`). Hodí se na to, abys ověřil, že hardware funguje, než za něco zaplatíš; jako každodenní nástroj to není.
 
 ### Mobil — telefon je tvůj terminál
 
-Mobilní aplikace Claude na iOS i Androidu mají nativní diktování. Vstup tam vypadá jinak než na desktopu: obvykle jedna ruka, často při chůzi, často spíš zachycuješ myšlenku, než vykonáváš úkol.
+Mobilní aplikace Claude na iOS i Androidu mají nativní diktování. Na mobilu to ale vypadá jinak než na desktopu: obvykle jedna ruka, často při chůzi, spíš zachycuješ myšlenku, než vykonáváš úkol.
 
-Na mobilu se hlas ukáže nejvýrazněji — ten prompt bys nenapsal, nezvedl bys notebook, abys tu myšlenku zachytil; hlas je jediný způsob, jak ji vůbec zachytit.
+Tady se hlas ukáže nejvíc. Ten prompt bys nenapsal, nezvedl bys kvůli němu notebook — hlas je jediný způsob, jak tu myšlenku vůbec uchopit.
 
 ### Prohlížeč — claude.ai web
 
@@ -125,7 +125,7 @@ Hlas mění, jak prompt zní. Podstata se měnit nemá, ale povrch ano.
 - **Mluvené prompty se táhnou.** Před odesláním přepis projdi — rozděl ho do vět, vyhoď „ehm"y. Dvě sekundy úpravy zdvojnásobí kvalitu hlasového promptu.
 - **Názvy souborů se diktují špatně.** Hlasem řekni *záměr*, naťukej *cestu*. „Přidej validaci do komponenty Prompt" + pak doplň cestu k souboru.
 - **Seznamy málokdy přežijí diktování.** Jestli vyjmenováváš čtyři věci, naťukej je. Jestli popisuješ cíl, řekni ho hlasem.
-- **Hlas se hůř zhustí než text.** Třicetisekundový hlasový prompt bývá tří­větný textový prompt s vatou. Oba fungují; textovou verzi rychleji projdeš při kontrole.
+- **Hlas se hůř zhustí než text.** Třicetisekundový hlasový prompt bývá třívětný textový prompt s vatou. Oba fungují; textovou verzi rychleji projdeš při kontrole.
 
 ## Kdy povrch záleží
 
