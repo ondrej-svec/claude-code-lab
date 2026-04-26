@@ -1,0 +1,67 @@
+[
+  {
+    "filename": "voice-desktop-mic.png",
+    "target": "desktop",
+    "app": "Claude",
+    "steps": [
+      { "action": "open_app", "name": "Claude" },
+      { "action": "wait", "ms": 600 },
+      { "action": "key", "combo": "cmd+n" },
+      { "action": "wait", "ms": 400 },
+      { "action": "click", "target": { "label": "Microphone" } },
+      { "action": "wait", "ms": 300 },
+      { "action": "type", "text": "Add a slash usage command that shows context budget" },
+      { "action": "wait", "ms": 800 }
+    ],
+    "region": "window",
+    "caption": {
+      "en": "Press mic. Speak. Watch the prompt fill.",
+      "cs": "Stiskni mikrofon. Mluv. Sleduj, jak se prompt vyplňuje."
+    },
+    "alt": "Claude desktop app with microphone activated mid-dictation, transcribed text 'Add a slash usage command' in the prompt area.",
+    "dark_mode": true,
+    "chapter": "voice-and-interaction"
+  },
+  {
+    "filename": "voice-multimodal-paste.png",
+    "target": "desktop",
+    "app": "Claude",
+    "steps": [
+      { "action": "open_app", "name": "Claude" },
+      { "action": "wait", "ms": 600 },
+      { "action": "key", "combo": "cmd+n" },
+      { "action": "wait", "ms": 400 },
+      { "action": "key", "combo": "cmd+v" },
+      { "action": "wait", "ms": 600 },
+      { "action": "type", "text": "What's wrong here?" },
+      { "action": "wait", "ms": 400 }
+    ],
+    "region": "window",
+    "caption": {
+      "en": "Drag a screenshot in. Claude sees what you see.",
+      "cs": "Přetáhni screenshot. Claude vidí to, co ty."
+    },
+    "alt": "Claude desktop app with a pasted error screenshot thumbnail in the prompt area and the question 'What's wrong here?' typed below.",
+    "dark_mode": true,
+    "chapter": "voice-and-interaction"
+  },
+  {
+    "filename": "voice-wispr-flow-menu.png",
+    "target": "desktop",
+    "app": "Wispr Flow",
+    "steps": [
+      { "action": "open_app", "name": "Wispr Flow" },
+      { "action": "wait", "ms": 800 },
+      { "action": "click", "target": { "label": "Wispr Flow menu bar icon" } },
+      { "action": "wait", "ms": 400 }
+    ],
+    "region": "window",
+    "caption": {
+      "en": "Wispr Flow turns voice into text in any app.",
+      "cs": "Wispr Flow promění hlas v text v jakékoli aplikaci."
+    },
+    "alt": "Wispr Flow menu bar dropdown showing live transcription with a recent dictation snippet visible.",
+    "dark_mode": true,
+    "chapter": "voice-and-interaction"
+  }
+]
