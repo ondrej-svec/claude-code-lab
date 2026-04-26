@@ -36,48 +36,52 @@ export default async function LandingPage({
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center px-8 py-16">
-        <div className="max-w-2xl w-full landing-rise">
-          <div
-            className="mb-10 rounded-xl overflow-hidden"
-            style={{
-              border: "1px solid var(--border)",
-              boxShadow: "var(--shadow-soft)",
-            }}
-          >
-            <Image
-              src="/hero.png"
-              alt="Heart of Gold spaceship with a Claude Code terminal as its viewport"
-              width={1920}
-              height={960}
-              priority
-              className="w-full h-auto block"
-            />
-          </div>
-          <p
-            className="text-xs uppercase tracking-[0.2em] mb-4"
-            style={{ color: "var(--text-muted)" }}
-          >
-            {m.landing.eyebrow}
-          </p>
-          <h1
-            className="text-5xl md:text-6xl font-semibold leading-[1.05] mb-6"
-            style={{ color: "var(--text-primary)" }}
-          >
-            {m.landing.title}
-          </h1>
-          <p
-            className="text-lg leading-relaxed mb-10"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            {m.landing.lede}
-          </p>
+      <main className="flex-1 flex items-center justify-center px-8 py-10 lg:py-16">
+        <div className="max-w-2xl lg:max-w-5xl w-full landing-rise">
+          <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 lg:items-center">
+            <div
+              className="lg:order-2 rounded-xl overflow-hidden"
+              style={{
+                border: "1px solid var(--border)",
+                boxShadow: "var(--shadow-soft)",
+              }}
+            >
+              <Image
+                src="/hero.png"
+                alt="Heart of Gold spaceship with a Claude Code terminal as its viewport"
+                width={1920}
+                height={960}
+                priority
+                className="w-full h-auto block"
+              />
+            </div>
+            <div className="lg:order-1">
+              <p
+                className="text-xs uppercase tracking-[0.2em] mb-4"
+                style={{ color: "var(--text-muted)" }}
+              >
+                {m.landing.eyebrow}
+              </p>
+              <h1
+                className="text-4xl md:text-5xl font-semibold leading-[1.05] mb-6"
+                style={{ color: "var(--text-primary)" }}
+              >
+                {m.landing.title}
+              </h1>
+              <p
+                className="text-lg leading-relaxed mb-8"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                {m.landing.lede}
+              </p>
 
-          <div className="flex items-center gap-4">
-            <LandingCta
-              href={`/${validLocale}/lab`}
-              label={m.landing.cta}
-            />
+              <div className="flex items-center gap-4">
+                <LandingCta
+                  href={`/${validLocale}/lab`}
+                  label={m.landing.cta}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </main>
