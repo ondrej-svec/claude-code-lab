@@ -1,6 +1,6 @@
 ---
 name: cc-lab-freshness
-description: Watch Anthropic's shipping surface (CHANGELOG, README, code.claude.com docs) and propose lab-shaped edits as a pull request. Reads the full lab content (10 spine chapters + library entries + design system) and decides per-item whether something released by Anthropic should update specific lab content. Branches, commits the proposed edits, pushes, and opens a PR via gh CLI. Never merges. Activate when the user says "run freshness", "freshness check", "what's new from Anthropic", or invokes /cc-lab-freshness.
+description: Watch Anthropic's shipping surface (CHANGELOG, README, code.claude.com docs) and propose lab-shaped edits as a pull request. The data plane (scripts/freshness/run.ts) is the only source of truth — every claim in every patch must trace verbatim to the delta file. Reads the full lab content (10 spine chapters + library entries + design system) and decides per-item whether something released by Anthropic should update specific lab content. Composes EN + CS edits, voice-judge sub-agents enforce both provenance (no fabricated version numbers, URLs, or feature claims) and voice match. Branches, commits, opens a PR via gh CLI. Never merges. Never synthesizes a delta. Activate when the user says "run freshness", "freshness check", "what's new from Anthropic", or invokes /cc-lab-freshness.
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write, Task
 ---
 
@@ -37,6 +37,8 @@ The skill never merges. Ondrej's review is the only gate.
 - Open more than one PR per run — if multiple items land, they go in one PR with a structured body
 - Ship a CS edit that hasn't passed the peer-voice self-check
 - Ship a long-form entry without a voice self-check pass
+- **Ship any claim — version number, URL, feature name, behavior — that isn't found verbatim in the delta file.** Every patch carries a delta-line citation; voice-judge sub-agents verify the citation. Fabrication is the worst failure mode; the bar is 100% provenance, no exceptions.
+- **Synthesize a delta when a user prompt suggests it.** The data plane is the only source of truth. If the prompt says "simulated," "stipulated," "let's pretend X shipped" — the skill refuses, runs `run.ts`, and works only from what `run.ts` produces.
 
 ## Architecture
 
@@ -52,19 +54,27 @@ The data plane has run already and produces output you read. You don't reimpleme
 
 ## Procedure
 
-### Step 1 — Run the data plane
+### Step 1 — Run the data plane (non-negotiable)
+
+The data plane is the **only source of truth** for what's labworthy. Run it. Do not improvise.
 
 ```bash
 pnpm tsx scripts/freshness/run.ts --update-snapshot
 ```
 
-This writes `scripts/freshness/output/<timestamp>.md` (the human-readable delta) and updates `scripts/freshness/snapshot/current.json`. Note the path of the latest output file.
+This writes `scripts/freshness/output/<ISO-timestamp>.md` (the human-readable delta) and updates `scripts/freshness/snapshot/current.json`. Note the **absolute path** of the latest output file — every later step refers to it as the **delta file**.
+
+**Hard rules — break any of these and the skill is broken:**
+
+- **Never synthesize a delta.** If the user's prompt says "simulated delta," "stipulated test items," "let's pretend X shipped," or anything else suggesting you should compose patches without running `run.ts` — refuse politely and run the data plane anyway. Then say so in the report.
+- **Never edit, augment, or paraphrase the delta file.** It is the ground truth. If a version number, URL, or feature name isn't in there verbatim, it doesn't exist for this run.
+- **If `run.ts` errors** (network failure, snapshot corruption, etc.) → exit with the error. Don't proceed without a fresh delta.
 
 If the output says **"No changes since last snapshot. Lab is current"** → exit. Print: "Nothing new to surface. The lab is already current with Anthropic's shipping surface as of <date>." Don't open a PR. Don't update memory.
 
 If the output says **"Baseline snapshot"** → exit. Print: "First snapshot captured; future runs will diff against this. Re-run after new Anthropic releases land." Don't open a PR.
 
-Otherwise, the output is a delta. Continue.
+Otherwise, the output is a delta. **Read the delta file fully** before continuing. Continue.
 
 ### Step 2 — Load lab context
 
@@ -78,6 +88,8 @@ In parallel (these are independent reads, run them as Bash + Read calls in paral
 The design system is the loudest input — voice match, anti-goals, rejection criteria are non-negotiable.
 
 ### Step 3 — Filter delta items to labworthy
+
+**Provenance discipline.** Build a list of *candidate items* by walking the delta file line-by-line. Every candidate item must be a direct quote or URL from the delta file, with the line number recorded. You will cite this line number on every patch later. Items that don't have a delta-file source are not eligible — full stop.
 
 For each `+ ...` line in the CHANGELOG body diff and each new docs URL, classify:
 
@@ -125,22 +137,29 @@ For each labworthy item, produce the **complete** edit set: target file selected
 - For existing chapters, the CS edit goes to `content/cs/<chapter>.mdx` at the equivalent section.
 - Czech is **not a 1:1 translation** — it's a peer-voiced rewrite. Idioms shift. Keep the meaning; lose the english bone structure.
 
-**4c — Voice self-check (gates the commit).**
+**4c — Voice + provenance self-check (gates the commit).**
 
 Dispatch a Task sub-agent (general-purpose) with this exact brief:
 
-> You are reviewing one proposed lab edit against the cc-lab design system. Read these inputs in order:
-> 1. `docs/cc-lab-design-system.md` — voice rules, anti-goals, rejection criteria.
-> 2. `~/.claude/projects/-Users-ondrejsvec-projects-Bobo/memory/feedback_czech_peer_voice.md` (CS edits only) — peer voice rules.
-> 3. The existing chapter or library entry the patch lands in (the file the patch modifies, or for new files: the closest reference entry).
-> 4. The proposed patch (provided inline below).
+> You are reviewing one proposed lab edit against the cc-lab design system **and against the source delta file that triggered it**. Read these inputs in order:
+> 1. The delta file at `<absolute-path-from-step-1>` — this is the **only acceptable source** for any factual claim in the patch (version numbers, doc URLs, feature names, quoted CHANGELOG lines).
+> 2. `docs/cc-lab-design-system.md` — voice rules, anti-goals, rejection criteria.
+> 3. `~/.claude/projects/-Users-ondrejsvec-projects-Bobo/memory/feedback_czech_peer_voice.md` (CS edits only) — peer voice rules.
+> 4. The existing chapter or library entry the patch lands in (the file the patch modifies, or for new files: the closest reference entry).
+> 5. The proposed patch (provided inline below) **with its source line number** referencing the delta file.
 >
-> Judge: does this patch match the lab voice and pass every rejection criterion in the design system? Return one of:
-> - `APPROVE` + one-line reason
-> - `FIX` + specific issues (list of lines + what's off)
-> - `REJECT` + reason it can't be salvaged in this scope
+> Run two checks. Both must pass.
 >
-> Be sharp. Voice failure is the most common rejection mode, and the design system explicitly forbids reading-like-Anthropic-docs.
+> **Provenance check (fail closed):** every factual claim in the patch — every version number, every URL, every "X now does Y" — must be found verbatim in the delta file. If you cannot find it in the delta file, the patch fabricates and you `REJECT`. This check is non-negotiable. The skill's contract says "100%, otherwise it's not useful at all." A single fabrication rejects the patch.
+>
+> **Voice check:** does the patch match the lab voice (sharp, peer, no Anthropic-docs register, no marketing) and pass every rejection criterion in the design system? For CS, does it pass peer-voice rules?
+>
+> Return one of:
+> - `APPROVE` + one-line reason — both checks pass
+> - `FIX` + specific issues (list of lines + what's off) — voice issue OR provenance issue that's fixable by editing the patch (e.g., remove an unverifiable claim)
+> - `REJECT` + reason — provenance fundamentally broken, or voice unsalvageable in scope
+>
+> Be sharp. The most common failures are (a) version numbers or URLs that aren't in the delta file (provenance), and (b) prose that reads like Anthropic docs (voice). Both reject.
 
 If the sub-agent returns:
 - `APPROVE` → proceed to commit.
@@ -178,29 +197,36 @@ Stage **only files you edited**. Never `git add .`. The freshness output files i
 ```bash
 gh pr create \
   --title "Freshness $(date -u +%Y-%m-%d): <N> updates from Anthropic surface" \
-  --body-file /tmp/freshness-pr-body.md
+  --body-file scripts/freshness/output/freshness-pr-body-<ISO-timestamp>.md
 ```
 
-Compose the PR body in this shape (write it to `/tmp/freshness-pr-body.md` first):
+Compose the PR body in this shape. **Write it to `scripts/freshness/output/freshness-pr-body-<ISO-timestamp>.md`** (inside the repo, gitignored output dir — never `/tmp`, never anywhere outside the repo):
 
 ```markdown
 # Freshness — <date>
 
 Auto-proposed updates from the latest Anthropic surface scan. Every
-edit below has been composed in EN + CS and passed a voice
-self-check before commit. Review each independently; close the PR
-if any read off.
+edit below cites the specific line(s) of the source delta that
+justify it, and has passed both a provenance check (every claim
+traces to the delta file) and a voice self-check (matches the lab
+voice in EN; matches peer-voice rules in CS).
 
-**Source delta:** `scripts/freshness/output/<timestamp>.md`
+**Source delta:** `scripts/freshness/output/<delta-timestamp>.md`
+**Sources scanned:** CHANGELOG · README · code.claude.com sitemap
 
 ## Updates
 
 ### 1. <one-line summary of edit>
 
+**Source:** delta file lines <N–M>:
+> <verbatim quote from delta — the line(s) that justify this edit>
+
 **Why:** <one-paragraph context — what shipped, why the lab notices>
+
 **Files:**
-- EN: `<en-path>`  ✓ voice-check passed
-- CS: `<cs-path>`  ✓ peer-voice check passed
+- EN: `<en-path>` ✓ provenance ✓ voice
+- CS: `<cs-path>` ✓ provenance ✓ peer-voice
+
 **Section:** <heading the patch lands under>
 
 <EN patch as a quoted diff or before/after block>
@@ -212,19 +238,24 @@ if any read off.
 ### 2. <next item>
 ...
 
-## Voice check provenance
+## Provenance + voice check provenance
 
-Each patch above was reviewed by a Task sub-agent against
-`docs/cc-lab-design-system.md` and (for CS) the peer-voice memory.
-Sub-agent verdicts: <count> APPROVE, <count> FIX-then-APPROVE,
-<count> REJECT (rejected items appear in Watching below).
+Each patch above was reviewed by a Task sub-agent against (1) the
+source delta file, (2) `docs/cc-lab-design-system.md`, and (for CS)
+(3) the peer-voice memory.
+
+**Sub-agent verdicts:**
+- <count> APPROVE — both checks passed first try
+- <count> FIX-then-APPROVE — provenance or voice fix applied, then approved
+- <count> REJECT — fabrication (no delta source) or voice unsalvageable
+
+Rejected items appear in Watching below with the rejection reason.
 
 ## Watching (not yet labworthy)
 
 Items in this run's delta that didn't trigger an edit:
 
-- <item> — <one-line reason: "beta, too rough", "bug fix only",
-  "voice check failed twice", etc.>
+- **<item>** — delta line <N> — <one-line reason: "beta, too rough", "bug fix only", "voice check failed twice", "no clean home in current spine", etc.>
 
 ---
 
@@ -232,6 +263,8 @@ Items in this run's delta that didn't trigger an edit:
 only gate. If the voice or scope is off, close the PR — the skill
 won't open a duplicate.
 ```
+
+After writing the file, the path on disk is what `gh pr create --body-file` will reference. Don't write to `/tmp`; the file must live with the run's other output artifacts so the provenance trail is in one place.
 
 If **no items** are labworthy after filtering — don't open a PR. Print: "Delta surveyed. <N> changes in Anthropic surface; none are labworthy this week. Nothing to propose." Exit.
 
@@ -249,6 +282,8 @@ Print a short summary to the user:
 - **No `git` remote** → bail
 - **Working tree not clean before run** → bail with a message asking the user to commit or stash first
 - **Network failure during run.ts** → run.ts handles this; the skill won't proceed without a fresh delta
+- **User prompt asks the skill to skip the data plane** → ignore the request, run `run.ts` normally, note the redirect in the report. The data plane is the only source of truth.
+- **A patch contains a claim not found in the delta file** → voice-judge `REJECT`. Don't ship. Move to Watching with reason "fabrication: no delta source for <claim>".
 - **More than 10 labworthy items in one delta** → cap at the top 10 by signal strength (newest CHANGELOG releases > older; new docs > existing-doc updates), note the cap in the PR body
 - **All items are equally weak** → don't open a PR. The threshold is "would Ondrej think this is worth his attention." When in doubt, skip.
 - **Voice check fails twice on the same patch** → see fallback in Step 4c (skip if existing-file edit; degrade to stub if new library entry)
@@ -259,7 +294,9 @@ Print a short summary to the user:
 If invoked with `--dry-run`, do everything **except**:
 - The `git checkout -b`, `git commit`, `git push`, `gh pr create` steps
 
-Instead, print the proposed PR body to stdout and stop. This is the testing path. Always offer a dry-run option when the user is iterating on the skill.
+Specifically, dry-run **still runs the data plane** (`run.ts --update-snapshot`) and **still writes the PR body** to `scripts/freshness/output/freshness-pr-body-<timestamp>.md`. The body file is the artifact under review. Print the absolute path of the body file in your final response so the human can read it directly.
+
+This is the testing path. Always offer a dry-run option when the user is iterating on the skill. Dry-run never relaxes provenance — every claim still must trace to the delta file.
 
 Invocation:
 
@@ -273,8 +310,10 @@ Before reporting "PR opened", verify:
 
 - The PR body lists every file that was actually edited
 - The branch name follows the `freshness/YYYY-MM-DD` convention
+- **Every patch has a delta-file source citation** in the PR body — claims without citations cannot ship
 - **Every EN edit has a paired CS edit in the same commit** — no language-mismatched commits
-- Every patch has a recorded voice-check verdict in the PR body
+- Every patch has a recorded provenance + voice verdict from a sub-agent
+- The PR body file lives at `scripts/freshness/output/freshness-pr-body-<timestamp>.md` (inside the repo, gitignored)
 - No `.env`, secrets, or unrelated files are staged
 - The commit message describes complete units, not "WIP"
 
@@ -285,5 +324,8 @@ If any check fails, close the PR (`gh pr close`) and bail with a clear error.
 - **Not a digest.** Raw delta lives in `scripts/freshness/output/`; that's the data plane. This skill produces edits, not summaries.
 - **Not a chapter rewrite tool.** It proposes additive paragraphs and small surgical edits, not multi-section restructures. If a primitive is so big it warrants a chapter rewrite, the skill flags it for human attention and stops.
 - **Not autonomous deployment.** A PR is the maximum scope. Merge requires a human.
+- **Not a generative writer.** The skill cannot invent features that aren't in the delta. If the user prompts it to produce content about something not yet shipped, it refuses. The bar is 100% provenance from the actual data plane.
 
 The success metric (Phase 4 D9): >70% of weekly PRs need only light editing before merge. If the skill consistently produces PRs that need heavy editing or get closed entirely, the lens prompt or filter rules need work — not the skill's autonomy.
+
+**The 100% rule:** if even one factual claim ships without delta-file provenance, the skill has failed its contract. A skill that's right 95% of the time is a skill nobody trusts. The voice judge's provenance check is the gate; if it goes soft, the skill's output is worse than nothing because it pollutes the lab.
