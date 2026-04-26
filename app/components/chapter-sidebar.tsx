@@ -44,6 +44,24 @@ export function ChapterSidebar({
           </Link>
         );
       })}
+      <div
+        className="mt-4 pt-4 border-t"
+        style={{ borderColor: "var(--border)" }}
+      >
+        <Link
+          href={`/${locale}/lab/library`}
+          className="motion-link block py-1.5 text-sm leading-snug"
+          style={{ color: "var(--text-secondary)" }}
+        >
+          <span
+            className="inline-block w-6 font-mono text-xs"
+            style={{ color: "var(--text-muted)" }}
+          >
+            +
+          </span>
+          {locale === "cs" ? "Knihovna" : "Library"}
+        </Link>
+      </div>
     </nav>
   );
 }

@@ -21,6 +21,65 @@ export type LibraryEntry = LibraryEntryFrontmatter & {
 // tags, read time). One source of truth per entry.
 export const LIBRARY_SLUGS: readonly string[] = ["context-engineering"] as const;
 
+export type LibraryEntrySummary = LibraryEntryFrontmatter & {
+  affinity: Chapter | null;
+  snippet: string;
+};
+
+// Reads every library entry's frontmatter + a short snippet of its
+// opening prose. Used by the library index. Skips entries that are
+// missing in the requested locale (e.g. EN-only ships during the
+// initial lift).
+export async function getAllLibraryEntries(
+  locale: Locale,
+): Promise<LibraryEntrySummary[]> {
+  const summaries = await Promise.all(
+    LIBRARY_SLUGS.map(async (slug) => {
+      const entry = await getLibraryEntry(locale, slug);
+      if (!entry) return null;
+      return {
+        slug: entry.slug,
+        title: entry.title,
+        chapter: entry.chapter,
+        tags: entry.tags,
+        readTime: entry.readTime,
+        affinity: entry.affinity,
+        snippet: extractFirstParagraph(entry.source),
+      } satisfies LibraryEntrySummary;
+    }),
+  );
+  return summaries.filter((e): e is LibraryEntrySummary => e !== null);
+}
+
+// Library entries that target a given spine chapter. Used by the
+// chapter page's "Go deeper" surface.
+export async function getLibraryEntriesForChapter(
+  locale: Locale,
+  chapterSlug: string,
+): Promise<LibraryEntrySummary[]> {
+  const all = await getAllLibraryEntries(locale);
+  return all.filter((entry) => entry.chapter === chapterSlug);
+}
+
+function extractFirstParagraph(source: string): string {
+  // Skip leading blank lines, the H1, and any blank lines after it.
+  // The first non-empty paragraph after the H1 is the snippet.
+  const lines = source.split("\n");
+  let i = 0;
+  while (i < lines.length && lines[i].trim() === "") i++;
+  if (i < lines.length && lines[i].startsWith("# ")) i++;
+  while (i < lines.length && lines[i].trim() === "") i++;
+  const buf: string[] = [];
+  while (i < lines.length && lines[i].trim() !== "") {
+    buf.push(lines[i]);
+    i++;
+  }
+  return buf
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export async function getLibraryEntry(
   locale: Locale,
   slug: string,

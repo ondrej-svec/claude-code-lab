@@ -14,6 +14,7 @@ import {
   getNextChapter,
   getPreviousChapter,
 } from "@/lib/chapters";
+import { getLibraryEntriesForChapter } from "@/lib/library";
 import { DEFAULT_LOCALE, LOCALES, isLocale } from "@/lib/i18n";
 
 export function generateStaticParams() {
@@ -38,10 +39,21 @@ export default async function ChapterPage({
   const toc = extractToc(source);
   const next = getNextChapter(slug);
   const prev = getPreviousChapter(slug);
+  const libraryEntries = await getLibraryEntriesForChapter(validLocale, slug);
 
   const labels = {
-    en: { previous: "Previous", next: "Next" },
-    cs: { previous: "Předchozí", next: "Další" },
+    en: {
+      previous: "Previous",
+      next: "Next",
+      goDeeper: "Go deeper",
+      goDeeperLede: "Library entries that build on this chapter.",
+    },
+    cs: {
+      previous: "Předchozí",
+      next: "Další",
+      goDeeper: "Jít hlouběji",
+      goDeeperLede: "Záznamy z knihovny, které navazují na tuto kapitolu.",
+    },
   };
   const l = labels[validLocale];
 
@@ -67,6 +79,55 @@ export default async function ChapterPage({
               },
             }}
           />
+
+          {libraryEntries.length > 0 ? (
+            <section
+              className="mt-16 pt-8 border-t"
+              style={{ borderColor: "var(--border)" }}
+              aria-label={l.goDeeper}
+            >
+              <p
+                className="text-xs uppercase tracking-[0.18em] mb-2"
+                style={{ color: "var(--text-muted)" }}
+              >
+                {l.goDeeper}
+              </p>
+              <p
+                className="text-sm mb-6"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                {l.goDeeperLede}
+              </p>
+              <div className="space-y-3">
+                {libraryEntries.map((entry) => (
+                  <Link
+                    key={entry.slug}
+                    href={`/${validLocale}/lab/library/${entry.slug}`}
+                    className="motion-card block p-4 rounded-lg border"
+                    style={{
+                      background: "var(--surface-elevated)",
+                      borderColor: "var(--border)",
+                    }}
+                  >
+                    <div className="flex items-baseline justify-between gap-4">
+                      <span
+                        className="font-semibold"
+                        style={{ color: "var(--text-primary)" }}
+                      >
+                        {entry.title}
+                      </span>
+                      <span
+                        className="text-xs whitespace-nowrap"
+                        style={{ color: "var(--text-muted)" }}
+                      >
+                        {entry.readTime}
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ) : null}
 
           <nav
             className="mt-16 pt-8 grid gap-4 md:grid-cols-2 border-t"
