@@ -333,12 +333,19 @@ The reader has six observations. They need an order. This section is
 the prioritized close: which fixes belong in *this session*, which
 in *this week*, and which can compound over time.
 
+**Lead with a link to the HTML.** This section is the action surface
+— the user is deciding what to do — and the HTML version has copy
+buttons on every artifact. Make it one click away from the action
+list, not buried at the top of the message.
+
 Three time buckets, in this exact order:
 
 ```
 ---
 
 ## What to do next
+
+→ **Open the visual version:** `<path/to/cc-lab-diagnosis-<repo>-<date>.html>` — copy buttons on every artifact below.
 
 **This session (15-30 min):**
 

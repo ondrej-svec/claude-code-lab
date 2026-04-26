@@ -1,6 +1,6 @@
 {
   "name": "cc-lab",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Companion skills for cc-lab.ondrejsvec.com — diagnostic, freshness, and other tools that pair with the lab",
   "author": {
     "name": "ondrej-svec",

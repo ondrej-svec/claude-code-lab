@@ -265,15 +265,30 @@ template lives at
 4. Write to `./cc-lab-diagnosis-<repo>-<YYYY-MM-DD>.html` in the
    user's cwd.
 
-5. At the **top of your markdown response**, add one line linking
-   to the file:
+5. **Mention the HTML in two places** so the user sees it both on
+   first scroll and at the action surface:
+
+   **At the top of the markdown response** (one line, subtle):
    ```
    Saved a visual version: `./cc-lab-diagnosis-<repo>-<YYYY-MM-DD>.html` — open it for the journey view.
    ```
 
+   **As the first line of the "What to do next" section** (more
+   prominent, since this is where the user decides what to act on
+   and the HTML has copy buttons on every artifact):
+   ```
+   → **Open the visual version:** `./cc-lab-diagnosis-<repo>-<YYYY-MM-DD>.html` — copy buttons on every artifact below.
+   ```
+
+   The "What to do next" placement is the more important of the
+   two — by the time the user reaches the action plan, they've
+   scrolled past the top mention. The HTML is the working surface;
+   put it where they'll act.
+
 If HTML write fails (no write permission, etc.), proceed with
-markdown only and note the failure as a one-liner. Don't fail the
-whole run.
+markdown only and note the failure as a one-liner at the top. Don't
+fail the whole run, and don't add the action-surface mention if
+there's no file to link to.
 
 ### 7. Self-check
 
