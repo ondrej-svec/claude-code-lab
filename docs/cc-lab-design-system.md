@@ -274,6 +274,106 @@ before adding a new one.
 
 ---
 
+## Library architecture (hybrid)
+
+The lab has two surfaces:
+
+- **Spine** — the ten ordered chapters. Teaches the path. One reading
+  order. Bilingual EN+CS parity, non-negotiable.
+- **Library** — depth on demand. Unordered. Each entry sits next to
+  one or two spine chapters and goes further than the chapter could
+  without bloating the path.
+
+The library is **chapter-affinity primary, topic-tagged secondary.**
+Every entry declares one primary chapter (where it lives in
+navigation) and zero or more topic tags (skills, hooks, mcp, recipes,
+references) that surface it on filtered browse.
+
+### Why hybrid
+
+A pure topic taxonomy (skills/hooks/MCP/recipes/references) was
+considered and rejected — half the priority entries don't fit the
+buckets cleanly. *Context engineering as practice* is a practice, not
+a skill or hook. *Failure modes* is a catalog. Forcing them into
+topic buckets either invents fake topics or distorts the entries.
+
+A pure chapter-affinity model was considered and almost picked. It
+maps directly to the Subjective Contract — *spine teaches the path;
+library is depth on demand.* But cross-cutting entries (Failure
+modes, Decision frameworks, the Diagnostic library entry) want a
+home that isn't a single chapter. Tags solve that without inventing
+a competing primary navigation.
+
+Hybrid is the most reversible of the three. If chapter affinity ever
+stops fitting, tags can be promoted; if tags ever feel like dead
+weight, they can be dropped. Neither rewrites the entries.
+
+### Route shape
+
+```
+/[locale]/lab/library                     — library index
+/[locale]/lab/library/[slug]              — entry page
+```
+
+Library lives as a sub-tree of `lab`, not at the root of the locale.
+The lab is the product; the library is part of the lab.
+
+### Entry frontmatter contract
+
+Every library MDX file declares:
+
+```yaml
+---
+slug: context-engineering
+title: Context engineering as practice
+chapter: iteration-and-control      # primary chapter affinity
+tags: [practice, context]           # optional, lowercase, kebab-case
+readTime: 8 min                     # rough estimate, same shape as chapter readTime
+---
+```
+
+`chapter` is required and must match a chapter slug. `tags` is
+optional. `readTime` is rough — the goal is a heads-up, not a metric.
+
+### Discovery rules
+
+- The **chapter page** surfaces affiliated library entries at the
+  bottom under "Go deeper", not in-line with the chapter body.
+  Affiliation is computed from `chapter` frontmatter; no manual
+  cross-linking.
+- The **library index** lists every entry, grouped first by chapter
+  (in spine order), with tag chips on each entry for filter.
+- A **chapter body** can still link to a library entry inline using
+  a regular link — when the entry is the natural next step in the
+  argument, not a "see also" footnote.
+- A **library entry** can link to other library entries and to spine
+  chapters freely.
+
+### Voice for library entries
+
+Same voice as chapters (peer, sharp, no bullshit). One difference:
+library entries can be slightly more reference-shaped — annotated
+lists, decision tables, more `<Prompt>` and `<TerminalOutput>` than
+prose where appropriate. The Subjective-Contract rejection criterion
+*"library entry that doesn't compound on the spine"* still applies —
+an entry that just restates a chapter is wrong shape.
+
+### What the library is *not*
+
+- **Not a curated awesome-list.** Every entry is written; nothing is
+  syndicated link-rot.
+- **Not a search-driven dump.** No SEO-shaped title templates. No
+  `topic: best practices for X` filler.
+- **Not a course platform.** No badges, no progression, no
+  prerequisites. The 2026-04-24 in-lab plan's anti-goal still holds.
+- **Not a tag taxonomy fight.** Tags are minimal and editorial — if
+  three entries don't share a tag, the tag isn't worth having.
+- **Not stricter than the spine.** Library entries can ship EN-first
+  with CS pending, on Ondrej's call, when bandwidth tightens. Spine
+  parity is non-negotiable; library parity is a strong default.
+
+---
+
 ## Subjective contract
 
 (Inherited from the cc-lab mastery evolution plan; restated here so

@@ -1,0 +1,110 @@
+---
+slug: context-engineering
+title: Context engineering as practice
+chapter: iteration-and-control
+tags: [practice, context]
+readTime: 8 min
+---
+
+# Context engineering as practice
+
+The context window is a budget. Every turn spends some. Every file Claude reads spends more. By the time the conversation feels long, half the budget is gone to material that already did its job.
+
+Context engineering is the daily habit of treating that budget as something you actively manage — not something that fills up and one day runs out.
+
+Most builders learn the commands (`/compact`, `/clear`, `/resume`) and then stop. The commands aren't the practice. The practice is knowing which one fits the situation, and noticing the situation early enough to choose.
+
+## The four moves
+
+You have four ways to free context. Each one trades something different.
+
+| Move | What it keeps | What it loses | When to reach for it |
+|---|---|---|---|
+| `/compact [focus]` | The thread. Decisions you made. The agent's mental model. | Verbatim history. Scratch work. Tangents. | Mid-task, you need breathing room but don't want to re-explain the goal. |
+| `/clear` | Nothing in the active window. The old conversation is archived (resumable). | The whole conversation. Including the bits you'd rather keep. | Pivoted to a different area. Or the conversation has 30+ turns and is drifting. |
+| `/resume` | A specific past conversation, restored. | Whatever was running in the current one. | You realized the answer to today's question lives in yesterday's session. |
+| Walk away. Start fresh. | A clean board. New `CLAUDE.md`. Sharper prompts. | Any state you didn't write down. | You're not sure what you want anymore, or the previous attempts have shaped your prompts in ways you don't trust. |
+
+The cheap-but-overused move is `/compact`. The expensive-but-underused move is the fourth one. Walking away from a session that's gone sideways is almost always faster than rescuing it.
+
+## Three layers of memory
+
+Conversation context is one layer. There are two more, and they cost less.
+
+**Active context** is what's in the current conversation. Token-heavy, expensive to keep, perfectly fresh. Every turn lives here.
+
+**Summarized context** is what `/compact` produces — a Claude-written précis of the turns so far. Cheaper than verbatim, lossy by design. Useful as long as the summary still describes the work accurately.
+
+**Externalized context** lives outside the conversation entirely. `CLAUDE.md`, plan docs, brainstorm files, scratchpads. Token-zero in the active window — Claude reads them on demand. They don't decay when you `/clear`.
+
+The skill is moving things down a layer before they cost you.
+
+<Prompt>Summarize what we just figured out about the auth flow into docs/notes/auth-decisions.md, then we'll clear and start the implementation fresh.</Prompt>
+
+That move turns 40 turns of conversation into a file Claude can read in one. The implementation conversation starts at zero context cost and full informational value. That's the whole game.
+
+## `/compact` recipes
+
+`/compact` with no argument keeps a balanced summary. With a focus argument, it keeps what matters and forgets the rest.
+
+<Prompt>/compact focus on the API design decisions; drop the debugging tangents</Prompt>
+
+<Prompt>/compact focus on the failing test and what we tried; drop the file-reading turns</Prompt>
+
+A good focus argument is **specific about what to keep**, not what to drop. "Keep X" gives Claude a target. "Drop Y" leaves the rest ambiguous.
+
+**Pro move:** before a handoff, run `/compact focus on what's left to do and why this approach`. The summary becomes a handoff note for free.
+
+## `/clear` recipes
+
+`/clear` is the cheapest move and the one most builders avoid out of loss aversion. The previous conversation isn't gone — it's archived. `/resume` brings it back if you need it.
+
+Three high-value moments to clear:
+
+- **Between phases of [Compound Engineering](/en/lab/compound-engineering).** Brainstorm turns muddy a plan. Plan turns colour an implementation. `/clear` between phases gives each one sharp context.
+- **Between unrelated tasks.** You finished the auth refactor. Now you're touching the search index. The auth conversation contributes nothing useful and a lot of noise.
+- **When the conversation has lost the plot.** You've corrected Claude four times. The corrections themselves are now in context. Start over with a tighter prompt.
+
+The tell that you should have cleared earlier: re-explaining something that Claude knew thirty turns ago.
+
+## `/resume` mechanics
+
+Conversations don't disappear. `/resume` lists recent ones; pick one, you're back where you were.
+
+This matters more than it sounds. Two patterns:
+
+- **The "I cleared too eagerly" recovery.** Cleared, started fresh, hit a wall, realized the answer was already in the previous conversation. `/resume`, copy the relevant turn, `/clear` again, paste it as context. Cheaper than rebuilding from scratch.
+- **The "yesterday's session" recall.** You explored an approach yesterday, hit a wall, slept on it. Today you have a new angle. `/resume` the old conversation rather than starting cold — yesterday's understanding is still loaded.
+
+`/resume` is also how you split a long-running thread across days without losing the thread.
+
+## Externalize before you forget
+
+The strongest context-engineering habit is the boring one: write things down outside the conversation.
+
+- **Decisions** → `docs/decisions/<topic>.md`. One line, one date, why.
+- **Plans** → `docs/plans/<feature>.md`. The agent reads this every time it works on the feature.
+- **Patterns** → `CLAUDE.md`. Repo-wide rules and shapes that should never be relearned.
+- **Scratch** → a `scratchpad.md` you don't commit. Free-form thinking that the agent can read but doesn't pollute git history.
+
+When you write to a file, you're moving context from the active layer (expensive, lossy on `/clear`) to the externalized layer (cheap, durable across sessions). The conversation gets shorter; the project gets smarter.
+
+A 200-token line in `CLAUDE.md` replaces hundreds of tokens of repeated re-explanation across every future session. It pays for itself within a week.
+
+## Anti-patterns
+
+**Compact and pray.** The conversation is bloated. You run `/compact` without a focus arg, hoping the summary is good. Sometimes it is. Often it loses the one detail that mattered. Compact with a target.
+
+**Clear and lose state.** `/clear` without first writing down what you'd lose. The prompt that worked, the file path you discovered, the constraint Claude figured out — gone, not in `/resume` because you've already moved on. Two-second habit: before clearing, ask Claude to dump the state into a file.
+
+**Over-stuffed `CLAUDE.md`.** Externalization is good; eternal externalization is bad. A `CLAUDE.md` that has grown to 800 lines is now a context cost on every session. Trim ruthlessly. Move project-specific patterns to feature-scoped docs that the agent reads only when it touches that surface.
+
+**Avoiding `/clear` out of sentimentality.** The conversation that helped you is not the conversation that helps you next. Old turns are sunk cost. The archive is one command away.
+
+## How this connects to the spine
+
+[Chapter 4 — Iteration and control](/en/lab/iteration-and-control) introduces `/compact` and `/clear` at the level a chapter can support. This entry goes further than the chapter could without ballooning the path.
+
+[Chapter 3 — Teach Claude your project](/en/lab/teach-claude-your-project) is the externalization end of context engineering — `CLAUDE.md`, project docs, the durable layer. Read it alongside this entry.
+
+[Chapter 7 — Compound engineering](/en/lab/compound-engineering) is where the four moves and three layers come together as a workflow. This entry gives you the moves; that chapter gives you the choreography.
