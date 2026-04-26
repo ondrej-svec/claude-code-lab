@@ -36,9 +36,9 @@ export default async function LandingPage({
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center px-8 py-10 lg:py-16">
+      <main className="flex-1 flex items-center justify-center px-6 sm:px-8 py-6 sm:py-10 lg:py-16">
         <div className="max-w-2xl lg:max-w-5xl w-full landing-rise">
-          <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 lg:items-center">
+          <div className="grid gap-6 sm:gap-8 lg:grid-cols-2 lg:gap-12 lg:items-center">
             <div
               className="lg:order-2 rounded-xl overflow-hidden"
               style={{
@@ -69,7 +69,7 @@ export default async function LandingPage({
                 {m.landing.title}
               </h1>
               <p
-                className="text-lg leading-relaxed mb-8"
+                className="text-base sm:text-lg leading-relaxed mb-6 sm:mb-8"
                 style={{ color: "var(--text-secondary)" }}
               >
                 {m.landing.lede}
