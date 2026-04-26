@@ -50,3 +50,6 @@ next-env.d.ts
 # Claude Code local worktrees / session artifacts
 .claude/worktrees/
 **/.claude/worktrees/
+
+# freshness skill — per-run delta outputs (snapshot/current.json IS committed)
+scripts/freshness/output/

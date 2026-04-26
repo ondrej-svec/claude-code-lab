@@ -1,0 +1,23 @@
+{
+  "sources": [
+    {
+      "id": "claude-code-changelog",
+      "label": "Claude Code CHANGELOG",
+      "url": "https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md",
+      "kind": "markdown"
+    },
+    {
+      "id": "claude-code-readme",
+      "label": "Claude Code README",
+      "url": "https://raw.githubusercontent.com/anthropics/claude-code/main/README.md",
+      "kind": "markdown"
+    },
+    {
+      "id": "code-claude-com-sitemap",
+      "label": "code.claude.com docs (EN)",
+      "url": "https://code.claude.com/sitemap.xml",
+      "kind": "xml-sitemap",
+      "filterPathPrefix": "/docs/en/"
+    }
+  ]
+}

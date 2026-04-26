@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  cc-lab freshness — Mac mini launchctl job (template).
+
+  Runs the freshness skill once a week on Sunday at 18:00 local time,
+  produces an issue body, and commits the snapshot update if there
+  were changes. The output is read manually by Ondrej before any
+  GitHub issue is opened (no auto-merge of any kind).
+
+  Install:
+    cp scripts/freshness/com.cclab.freshness.plist ~/Library/LaunchAgents/
+    launchctl load ~/Library/LaunchAgents/com.cclab.freshness.plist
+
+  Edit the WorkingDirectory and StandardOut paths to match the
+  Mac mini's local setup before loading.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.cclab.freshness</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>-c</string>
+    <string>cd "${HOME}/projects/claude-code-lab" &amp;&amp; /opt/homebrew/bin/pnpm tsx scripts/freshness/run.ts --update-snapshot</string>
+  </array>
+
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key>
+    <integer>0</integer>
+    <key>Hour</key>
+    <integer>18</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+
+  <key>RunAtLoad</key>
+  <false/>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/cclab-freshness.out.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/tmp/cclab-freshness.err.log</string>
+</dict>
+</plist>
