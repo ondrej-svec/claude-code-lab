@@ -31,9 +31,11 @@ Claude listens differently on each surface. The shortcut, the latency, the trans
 
 The Claude desktop app has a built-in microphone button next to the prompt input. Click it, speak, click again. Transcript appears live in the prompt area. Edit it before sending if you want.
 
-<Callout variant="note">
-**Screenshot pending capture.** Will show: Claude desktop app with the microphone button active mid-dictation, transcribed text *"Add a /usage command"* visible in the prompt area. Caption: *Press mic. Speak. Watch the prompt fill.*
-</Callout>
+<Screenshot
+  src="/screenshots/voice-desktop-mic.png"
+  alt="Claude desktop app with the microphone activated (blue icon in the bottom toolbar), the text 'Refactor the auth middleware to use the new token validation' typed into the prompt area"
+  caption="Press mic. Speak. Watch the prompt fill."
+/>
 
 This is the surface most builders use most. No setup, no third-party tools, transcription is already good. The one trick worth knowing: dictate the rough thought, then *edit the transcript before sending* — voice + light edit beats voice-and-send every time.
 
@@ -85,9 +87,11 @@ A pasted screenshot is a prompt's missing context made visible. Three places it 
 
 Drag a Figma export or screenshot of the page into the prompt. Ask: "Wire this up against my existing components." Claude reads the visual, names the components it sees, asks about the ones it can't infer, and writes the JSX. You skipped the description-of-the-mockup paragraph entirely.
 
-<Callout variant="note">
-**Screenshot pending capture.** Will show: Claude desktop app with a pasted error-screenshot thumbnail in the prompt area and the question *"What's wrong here?"* typed below. Caption: *Drag a screenshot in. Claude sees what you see.*
-</Callout>
+<Screenshot
+  src="/screenshots/voice-multimodal-paste.png"
+  alt="Claude desktop app with a pasted screenshot thumbnail in the prompt area and the question 'What's wrong here?' typed below"
+  caption="Drag a screenshot in. Claude sees what you see."
+/>
 
 ### Error debugging — show the error, skip the transcription
 
