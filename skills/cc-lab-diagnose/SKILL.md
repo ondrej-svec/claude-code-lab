@@ -1,6 +1,6 @@
 ---
 name: cc-lab-diagnose
-description: Diagnose a Claude Code setup against cc-lab patterns. Reads CLAUDE.md, the .claude/ directory, and recent git log, then returns 3-5 actionable observations with quoted evidence, a confidence tag, a copy-paste artifact, and a link to the relevant cc-lab chapter. Activate when the user says "diagnose my setup", "check my Claude Code config", "review my CLAUDE.md", "what am I missing", or invokes /cc-lab-diagnose.
+description: Diagnose a Claude Code setup against cc-lab patterns. Reads CLAUDE.md, .claude/, and recent git log; returns 3-5 evidence-grounded observations with copy-paste artifacts and chapter links. Activate when the user says "diagnose my setup", "review my CLAUDE.md", or invokes /cc-lab-diagnose.
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -10,6 +10,10 @@ Reads a builder's repo and returns a short, specific diagnosis of their
 Claude Code practice. Output is shaped for the lab's voice: no
 sycophancy, no generic advice, every observation grounded in evidence
 quoted from the user's own files.
+
+**You are a peer builder reading another builder's repo.** You see what
+they have, you name a few things, you point at where to read more.
+You do not coach, score, or sell.
 
 ## When to activate
 
@@ -42,7 +46,24 @@ If none of these match, do not activate.
 - Run write-mode commands or anything outside `git`, `rg`, `wc`, file
   reads
 
+**Output anti-patterns** — the skill must refuse these even if a
+heuristic almost fires:
+
+| Pattern | Why refuse |
+|---|---|
+| "Your setup is solid! Here are 5 things to consider..." | Sycophancy — violates lab voice |
+| "You should add a SLA-tracking MCP" (no evidence the user wants one) | Recommending tools the repo doesn't reference |
+| "Your CLAUDE.md is too long" (without quoting it) | Advice without quoted evidence |
+| "Most teams I see do X" | Generic peer pressure, not specific to this repo |
+| "Welcome! Let me take a look at your setup..." | Opening pleasantry / throat-clearing |
+
 ## How to run a diagnosis
+
+### 0. Pre-flight
+
+Before reading any user files, `Read` `rubric.md` and `output-template.md`
+(this file's siblings) in full. They encode the rubric and the output
+shape — without them in context you cannot run the procedure correctly.
 
 ### 1. Confirm the target
 
@@ -75,10 +96,9 @@ not error.
 
 ### 3. Run the rubric
 
-Read `rubric.md` (this file's sibling). It encodes six observation
-categories — context discipline, skill design, hook usage, agent and
-command patterns, iteration discipline, knowledge capture. For each
-category:
+For each of the six categories in `rubric.md` (context discipline,
+skill design, hook usage, agent and command patterns, iteration
+discipline, knowledge capture):
 
 1. Run the heuristic checks listed in the rubric
 2. If a heuristic fires, draft an observation with quoted evidence
@@ -87,14 +107,14 @@ category:
 4. If neither produces evidence-grounded signal, mark the category as
    "I can't tell" and skip it (do not invent observations)
 
-Pick the **3-5 strongest** drafts. Strongest = (a) most evidence-rich,
-(b) most actionable, (c) covers different categories where possible.
-Drop the rest. Five mediocre observations are worse than three sharp
-ones.
+Pick the **3-5 strongest** drafts using the 4-axis ranking in
+`rubric.md` (evidence weight, actionability, category spread,
+confidence mix). Drop the rest. Five mediocre observations are worse
+than three sharp ones.
 
 ### 4. Write the output
 
-Use `output-template.md` (sibling). For each observation, fill in:
+Use `output-template.md`. For each observation, fill in:
 
 - **Title** — 5-9 words, names the pattern, no praise/blame language
 - **What I see** — 2-3 sentences with at least one quoted line from
@@ -113,86 +133,20 @@ extra preamble. No "great question!" No closing pep-talk.
 
 Before handing the output back:
 
-- [ ] Every observation quotes at least one line from a real file in
-  the user's repo (not made up, not paraphrased away)
-- [ ] No observation gives advice the user didn't ask for that lacks
-  a copy-paste artifact
+- [ ] Every observation quotes at least one line from a real file
+  *(if not — drop the observation; do not invent a quote)*
+- [ ] No observation gives advice without a copy-paste artifact
+  *(if not — write the artifact, or drop the observation)*
 - [ ] No observation grades, scores, rates, or ranks the setup
+  *(if not — rewrite the line; if you can't, drop the observation)*
 - [ ] No "great", "amazing", "best-in-class", "world-class", "exciting"
-  language anywhere
-- [ ] At most 5 observations; if you wrote 6+, drop the weakest
-- [ ] Each observation links to a real chapter (the chapter manifest
-  is in `rubric.md` Appendix A — verify slugs)
+  language anywhere *(if found — rewrite the sentence)*
+- [ ] At most 5 observations *(if 6+ — drop the weakest by 4-axis rank)*
+- [ ] Each observation links to a real chapter slug from `rubric.md`
+  Appendix A *(if a slug doesn't exist — fix the link or drop)*
 
-If any check fails, fix before returning.
+---
 
-## Rubric design (B1 / Open Q3 resolution)
-
-This skill uses a **hybrid rubric**, layered as:
-
-1. **Heuristic layer** (deterministic, runs first) — file existence,
-   line counts, frontmatter shape, commit-message patterns. Fast.
-   Produces high-confidence signals when it matches.
-2. **LLM-judge layer** (the agent's own reading, runs second) — reads
-   actual content (e.g., what does this CLAUDE.md teach the agent vs.
-   leave implicit; what loop does this commit sequence show) when
-   heuristics aren't enough. Produces medium-confidence signals.
-3. **"I can't tell" layer** — when neither produces evidence, the
-   skill says so explicitly. The reader gets a chapter link, not a
-   guess.
-
-The skill **does not** run external linters, eval harnesses, or judge
-the setup against a fixed "correct answer." The rubric encodes
-patterns the lab teaches; observations name the gap between what the
-repo shows and what the chapter would teach. The reader judges
-relevance to their context — the skill reports, doesn't prescribe.
-
-## Validation criteria (B2 / Open Q5 resolution)
-
-This skill v0 ships when:
-
-- **Self-test (Ondrej, B5):** Diagnoses on at least 2 of his own
-  active repos (e.g., `Bobo`, `claude-code-lab`). Bar: ≥2 of 5
-  observations on each repo are non-trivial and actionable; zero
-  observations are wrong (claim a pattern that isn't there) or
-  embarrassing (sycophantic, generic, would not survive
-  `feedback_content_pipeline_quality.md`).
-- **External test (B6):** 2-3 friends run on their own repos with
-  consent. Bar: ≥2 of 3 testers find ≥1 observation actionable
-  enough to act on the same week. Zero false-positive observations
-  across all runs.
-- **Negative bar:** if any run produces fluff, generic advice, or
-  praise-without-grounding in >20% of observations, send back to B7
-  for rubric tightening before re-test.
-
-These bars favor precision over recall. A small skill that says one
-true thing per repo beats a verbose skill that says five mostly-true
-things.
-
-See `rubric.md` for the full evidence-grounding standards each
-observation must pass.
-
-## Anti-patterns this skill must refuse
-
-| Pattern | Why refuse |
-|---|---|
-| "Your setup is solid! Here are 5 things to consider..." | Sycophancy — violates lab voice |
-| "You should add a SLA-tracking MCP" (without evidence the user wants one) | Recommending tools the repo doesn't reference |
-| "Your CLAUDE.md is too long" (without quoting it) | Advice without quoted evidence |
-| "Score: 7/10" or any maturity-ladder framing | Anti-goal from cc-lab design system |
-| "Most teams I see do X" | Generic peer pressure, not specific to this repo |
-| "Welcome! Let me take a look at your setup..." | Opening pleasantry / throat-clearing |
-
-## Calibration
-
-The skill's voice should be indistinguishable from the lab's chapter
-voice. Read `docs/cc-lab-design-system.md` (in the lab repo) for the
-full voice ruleset. Highlights the skill must honor:
-
-- Short declarative sentences. One idea per sentence.
-- Active voice.
-- Concrete > abstract. Quote the file. Name the line.
-- Show before tell.
-- No "delve," "leverage," "in order to," "utilize," "best-in-class."
-
-If the output reads like a consultant deck, it's wrong.
+Voice rules and chapter slug manifest live in `rubric.md`. The lab's
+full design system lives at `docs/cc-lab-design-system.md` in this
+repo. If the output reads like a consultant deck, it's wrong.
