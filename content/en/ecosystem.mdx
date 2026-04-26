@@ -26,7 +26,7 @@ A **skill** is a bundle of instructions + optional scripts that Claude loads on 
 
 **Open standard.** Skills follow the [Agent Skills open format](https://agentskills.io) — spec is public, skills are portable across Claude Code and other tools that adopt the standard. Anthropic maintains a [reference repo](https://github.com/anthropics/skills) with 17 production skills you can read as exemplars.
 
-Chapter 6 shows how to have Claude build one of these for you.
+Chapter 7 shows how to have Claude build one of these for you.
 
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
@@ -34,7 +34,7 @@ Chapter 6 shows how to have Claude build one of these for you.
 
 A **plugin** bundles related skills, commands, and hooks into one installable unit. Install once, get the whole workflow.
 
-Chapter 6 walks through installing and using the [Compound Engineering plugin](https://github.com/EveryInc/compound-engineering-plugin) — Avery's full brainstorm → plan → work → review → compound loop. That's the one to try first. [Super Powers](https://github.com/iannuttall/claude-super-powers) is another worth knowing about — a broader pick-and-choose toolkit.
+Chapter 7 walks through installing and using the [Compound Engineering plugin](https://github.com/EveryInc/compound-engineering-plugin) — Avery's full brainstorm → plan → work → review → compound loop. That's the one to try first. [Super Powers](https://github.com/iannuttall/claude-super-powers) is another worth knowing about — a broader pick-and-choose toolkit.
 
 As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) is a small collection of skills I bundled for my daily work (visualize is one of them). Not something to install now — an example of what emerges once you've written three or four skills you don't want to lose. You'll build one of your own.
 
@@ -116,7 +116,7 @@ Claude opens the page, inspects, reports back. This is the moment MCPs stop bein
 - **Postgres, Linear, Sentry, GitHub, Playwright** — community MCPs, one `claude mcp add` away
 - **Build your own** — `mcp-builder` skill in `anthropics/skills` scaffolds one
 
-**Security note.** MCPs that fetch untrusted content (web pages, issues, emails) can inject instructions into your session. Anthropic's warning stands: third-party MCPs at your own risk. Chapter 8.5 has more.
+**Security note.** MCPs that fetch untrusted content (web pages, issues, emails) can inject instructions into your session. Anthropic's warning stands: third-party MCPs at your own risk. Chapter 9.5 has more.
 
 → [MCP docs](https://code.claude.com/docs/en/mcp)
 

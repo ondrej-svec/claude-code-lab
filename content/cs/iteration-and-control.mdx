@@ -57,7 +57,7 @@ Kontextová okna jsou velká, ale nejsou nekonečná. Dva příkazy, dva nástro
 
 Čistá konverzace s dobrým `CLAUDE.md` je skoro vždycky rychlejší než dlouhá.
 
-**Pro tip pro Compound Engineering smyčku** (kapitola 6): dělej `/clear` mezi fázemi. `/clear` před `/plan` znamená, že brainstormingové kolo nezaneřádí plánování. `/clear` před `/work` znamená, že debatování nad plánem neobarví implementaci. Každá fáze dostane ostrý kontext; `/compound` na konci má čistý materiál k shrnutí.
+**Pro tip pro Compound Engineering smyčku** (kapitola 7): dělej `/clear` mezi fázemi. `/clear` před `/plan` znamená, že brainstormingové kolo nezaneřádí plánování. `/clear` před `/work` znamená, že debatování nad plánem neobarví implementaci. Každá fáze dostane ostrý kontext; `/compound` na konci má čistý materiál k shrnutí.
 
 ## Posun: od kontroly k harnessu, kterému věříš
 
@@ -67,7 +67,7 @@ Jakmile s Claude Code pracuješ denně, tenhle postoj se stává úzkým hrdlem
 
 Lepší cesta: **postav si kolem Claude Code harness, který dělá jeho práci ověřitelnou bez toho, aby tvé oči byly na každém řádku.** Tvoje role se posune z reviewera na architekta harnessu.
 
-Jak ten harness v praxi vypadá: testovací disciplína (tracer bullets, TDD, mutační kontroly), review vedené agentem (`/security-review`, `claude-code-action`, Semgrep nebo Snyk v CI), bezpečnostní postoj proti lethal trifectě a automatizace (hooky, Playwright, benchmark asserce). [Kapitola 7](/cs/lab/next-steps) je místo, kde je tohle rozvedené — vyber jednu věc, přečti si odkazy, zkus ji na skutečném úkolu.
+Jak ten harness v praxi vypadá: testovací disciplína (tracer bullets, TDD, mutační kontroly), review vedené agentem (`/security-review`, `claude-code-action`, Semgrep nebo Snyk v CI), bezpečnostní postoj proti lethal trifectě a automatizace (hooky, Playwright, benchmark asserce). [Kapitola 8](/cs/lab/next-steps) je místo, kde je tohle rozvedené — vyber jednu věc, přečti si odkazy, zkus ji na skutečném úkolu.
 
 <Screenshot
   src="/screenshots/ch4-control-to-harness.png"
@@ -108,7 +108,7 @@ Plan mode je ten, který má smysl znát nejvíc v každodenní práci. Claude 
   caption="Plan mode. Indikátor dole říká, že editace a spouštění jsou vypnuté."
 />
 
-**Plan mode plán nikam neukládá.** Plán žije v konverzaci a s `/clear` zmizí. Pokud chceš plány zapsané na disk — abys je mohl později zkontrolovat, sdílet s kolegou nebo aby proti nim běžel `/work` — přesně to dělá skill `/plan` z Compound Engineeringu (kapitola 6). Je to doporučený flow, jakmile máš reálnou víc-krokovou práci.
+**Plan mode plán nikam neukládá.** Plán žije v konverzaci a s `/clear` zmizí. Pokud chceš plány zapsané na disk — abys je mohl později zkontrolovat, sdílet s kolegou nebo aby proti nim běžel `/work` — přesně to dělá skill `/plan` z Compound Engineeringu (kapitola 7). Je to doporučený flow, jakmile máš reálnou víc-krokovou práci.
 
 Kdy se plan mode vyplatí:
 
@@ -122,11 +122,11 @@ Kdy se nevyplatí:
 - Refactor jedné funkce
 - Rychlé dotazy
 
-Ještě jedna dimenze, kterou stojí za to znát: **`/sandbox`**. Je to samostatný toggle, nezávislý na těchhle pěti režimech — obalí každý bash příkaz, který Claude pouští, sandboxem na úrovni OS (filesystem + síť). I v „accept edits" nebo „auto" pak Claude nemůže sáhnout mimo projekt ani na neschválené domény. [Kapitola 7](/cs/lab/next-steps#sandboxing) to rozebírá včetně flagů pro firemní nasazení.
+Ještě jedna dimenze, kterou stojí za to znát: **`/sandbox`**. Je to samostatný toggle, nezávislý na těchhle pěti režimech — obalí každý bash příkaz, který Claude pouští, sandboxem na úrovni OS (filesystem + síť). I v „accept edits" nebo „auto" pak Claude nemůže sáhnout mimo projekt ani na neschválené domény. [Kapitola 8](/cs/lab/next-steps#sandboxing) to rozebírá včetně flagů pro firemní nasazení.
 
 ## Doporučený flow, až budeš připravený
 
-Tahle kapitola je o denních návycích. [Kapitola 6](/cs/lab/compound-engineering) je **praxe**, která je balí do opakovatelné smyčky: brainstorm → plan → work → review → compound. Compound Engineering plugin si nainstaluj, až budeš připravený — je to nejkratší cesta z *„iteruju po jednom promptu“* k *„mám praxi, která vyrábí spolehlivě dobrou práci.“*
+Tahle kapitola je o denních návycích. [Kapitola 7](/cs/lab/compound-engineering) je **praxe**, která je balí do opakovatelné smyčky: brainstorm → plan → work → review → compound. Compound Engineering plugin si nainstaluj, až budeš připravený — je to nejkratší cesta z *„iteruju po jednom promptu“* k *„mám praxi, která vyrábí spolehlivě dobrou práci.“*
 
 ## Praxe: pokračuj se svou ukázkou
 

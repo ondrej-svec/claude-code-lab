@@ -15,20 +15,20 @@ export default async function LabIndex({
   const headings = {
     en: {
       eyebrow: "The lab",
-      title: "Nine chapters. One practice.",
+      title: "Ten chapters. One practice.",
       lede: "Go top to bottom, or pick what you need. Every chapter ends with something you can try immediately.",
       journey: {
         alt: "Six-panel comic of a Heart-of-Gold-style spaceship traveling through the lab's learning arc: docking at first contact, a small first task, learning context (CLAUDE.md), the shift from control to a verification harness, gaining ecosystem extensions, and a final compounding journey trail with a tiny towel draped on the antenna.",
-        caption: "Six beats. Nine chapters. One practice.",
+        caption: "Six beats. Ten chapters. One practice.",
       },
     },
     cs: {
       eyebrow: "Lab",
-      title: "Devět kapitol. Jedna praxe.",
+      title: "Deset kapitol. Jedna praxe.",
       lede: "Projdi odshora dolů, nebo si vyber, co ti zrovna sedí. Každá kapitola končí něčím, co můžeš hned zkusit.",
       journey: {
         alt: "Šestipanelový komiks vesmírné lodi ve stylu Heart of Gold, která prochází obloukem labu: zakotvení při prvním kontaktu, malý první úkol, učení kontextu (CLAUDE.md), posun od kontroly k ověřovacímu harnessu, získání ekosystémových rozšíření a závěrečná cesta se smyčkou compoundingu — s malým ručníkem přehozeným přes anténu.",
-        caption: "Šest zastavení. Devět kapitol. Jedna praxe.",
+        caption: "Šest zastavení. Deset kapitol. Jedna praxe.",
       },
     },
   };
