@@ -1,6 +1,6 @@
 ---
 name: cc-lab-diagnose
-description: Diagnose a Claude Code setup against cc-lab patterns. Two modes — project (would a teammate cloning this repo succeed today?) or user (is your personal harness well-tuned?). Returns 3-5 evidence-grounded observations grounded in cc-lab chapter knowledge, with copy-paste artifacts and chapter links. Activate when the user says "diagnose my setup", "review my CLAUDE.md", "audit this repo", or invokes /cc-lab-diagnose [project|user|both].
+description: Diagnose a Claude Code setup against cc-lab patterns. Two modes — project (would a teammate cloning this repo succeed today?) or user (is your personal harness well-tuned?). When invoked without an explicit mode arg or scope keyword, asks via AskUserQuestion before reading any files. Returns 3-5 evidence-grounded observations grounded in cc-lab chapter knowledge, with copy-paste artifacts and chapter links. Activate when the user says "diagnose my setup", "review my CLAUDE.md", "audit this repo", or invokes /cc-lab-diagnose [project|user|both].
 allowed-tools: Read, Glob, Grep, Bash, AskUserQuestion, Task
 ---
 
@@ -56,33 +56,66 @@ leak detection and to suppress false positives (don't flag "no
 
 ## How to run a diagnosis
 
-### 0. Pre-flight
+### 1. Determine the mode — ask before doing anything else
 
-`Read` `rubric.md` and `output-template.md` (this file's siblings)
-in full so you understand the rubric the judge will apply and the
-output shape the judge will produce.
+**Before reading any files (yes — even rubric.md), resolve the mode.**
+This is the first action of every run. The mode determines what the
+rest of the skill does; getting it wrong wastes the user's read.
 
-### 1. Determine the mode
+Decide as follows, in this exact order:
 
-Pick the first rule that matches:
+#### 1a. Did the user pass an explicit arg?
 
-1. **Explicit arg** — `/cc-lab-diagnose project|user|both` → use that
-2. **Scope keyword in the prompt:**
-   - "project", "repo", "this codebase", "audit this repo" → **project**
-   - "user", "my setup", "my config", "~/.claude" → **user**
-   - "everything", "full diagnostic", "both" → **both**
-3. **Otherwise — ambiguous.** Use `AskUserQuestion`:
-   - **header**: "Diagnostic scope"
-   - **question**: "Which scope should I read?"
-   - **options** (Project as default, in this order):
-     1. **Project** — diagnose this repo
-     2. **User** — diagnose `~/.claude/`
-     3. **Both** — run both passes, two output sections
-   - If the user declines, fall back to **project**
+If the invocation is `/cc-lab-diagnose project`, `/cc-lab-diagnose
+user`, or `/cc-lab-diagnose both` — use that mode and proceed to Step 2.
 
-Note the chosen mode for the next step.
+#### 1b. Is there a scope keyword in the user's natural-language prompt?
 
-### 2. Confirm the target exists
+If the user typed something like "audit my repo", "review my user
+setup", or "diagnose everything" before invoking the skill, that
+keyword resolves the mode:
+
+| Keyword in prompt | Mode |
+|---|---|
+| "project", "repo", "this codebase", "audit this repo", "would a teammate succeed" | **project** |
+| "user", "my setup", "my config", "~/.claude", "personal harness" | **user** |
+| "everything", "full diagnostic", "both", "all of it" | **both** |
+
+If a keyword matches, use that mode and proceed to Step 2.
+
+#### 1c. Otherwise — ASK. Do not default.
+
+This includes the cold-start case where the user just typed
+`/cc-lab-diagnose` with no args and no surrounding chat. **That is
+the canonical case where you must ask** — not the case where you
+default. There's no information to default *from*.
+
+Call `AskUserQuestion` with this exact shape:
+
+- **header**: `"Diagnostic scope"`
+- **question**: `"Which scope should I read?"`
+- **options** (in this order, Project listed first):
+  1. **Project** — diagnose this repo. Reads `./CLAUDE.md`,
+     `./.claude/`, `./.mcp.json`, recent commits. Asks: would a
+     teammate cloning this succeed today?
+  2. **User** — diagnose `~/.claude/`. Reads user CLAUDE.md,
+     user-scope skills/agents/commands, plugins, MCPs, hooks.
+     Asks: is your personal harness pulling its weight?
+  3. **Both** — run both passes, two output sections.
+
+Take the user's answer literally. **Only fall back to project mode
+if `AskUserQuestion` itself fails or returns nothing** — not because
+the cold-start invocation "feels like project mode" or because
+defaulting feels efficient. Asking is the work.
+
+### 2. Pre-flight reads
+
+Now that the mode is resolved, `Read` `rubric.md` and
+`output-template.md` (this file's siblings) so you understand the
+rubric the judge will apply and the output shape the judge will
+produce.
+
+### 3. Confirm the target exists
 
 **For project mode (or `both`):**
 - The cwd is a git repo (`git rev-parse --is-inside-work-tree`)
@@ -94,7 +127,7 @@ Note the chosen mode for the next step.
   `plugins/installed_plugins.json`, `settings.json`
 - If none, return the empty-signal closing for user mode
 
-### 3. Gather inputs (read-only)
+### 4. Gather inputs (read-only)
 
 Run the gather pass for the chosen mode. The judge will read what
 you find — your job is to surface paths and ensure files exist; the
@@ -132,7 +165,7 @@ judge does the deep reads.
 | Plugin skills (active per `installed_plugins.json`) | `Glob` per plugin path |
 | Auto-memory | `Glob` `~/.claude/projects/*/memory/MEMORY.md`, identify cwd's repo |
 
-### 4. Build the scope inventory
+### 5. Build the scope inventory
 
 Assemble the union of available capabilities (don't output it; pass
 it to the judge):
@@ -143,7 +176,7 @@ it to the judge):
 - **MCPs configured** — `.mcp.json` (project) + `~/.claude.json` `mcpServers` (user)
 - **Hooks configured** — both `settings.json` `hooks` blocks
 
-### 5. Dispatch `cc-lab-judge`
+### 6. Dispatch `cc-lab-judge`
 
 Call the Task tool with:
 
@@ -155,7 +188,7 @@ Call the Task tool with:
   - Today's date (`YYYY-MM-DD`)
   - The list of file paths your gather pass produced, organized by
     rubric category — make the agent's life easy by pre-grouping
-  - The scope inventory (from Step 4)
+  - The scope inventory (from Step 5)
   - Explicit instruction to read
     `${CLAUDE_PLUGIN_ROOT}/knowledge/` chapters before judging, and
     to apply `${CLAUDE_PLUGIN_ROOT}/skills/cc-lab-diagnose/rubric.md`
@@ -202,7 +235,7 @@ Return only the final markdown — opening + 3-5 observations +
 closing. Don't include reasoning or summary.
 ```
 
-### 6. Print the judge's response
+### 7. Print the judge's response
 
 The judge returns markdown. Print it as your final response. Do not
 edit, summarize, or annotate. The judge ran the rubric, ran the
