@@ -64,22 +64,33 @@ each grounded in a quoted line from your files.
 
 ## What it returns
 
-Markdown structured as:
+Two artifacts, every run:
+
+**1. Markdown in your terminal** — full diagnosis, structured as:
 
 1. **Opening** — names the mode and date
-2. **Headline** — 2-4 sentences naming the load-bearing findings.
+2. **What's working** — 1-3 evidence-grounded strengths (or honestly
+   skipped if there's nothing to ground)
+3. **Headline** — 2-4 sentences naming the load-bearing findings.
    Reader's two-second answer to "if I only fix one thing, what is
    it?"
-3. **Observations** (3-5 per mode section) — each with five fields:
-   - **Title** — names the pattern (5-9 words)
-   - **What I see** — 2-3 sentences quoting your actual files
-   - **Confidence** — `high` / `medium` / `I can't tell`
-   - **Try this** — copy-paste artifact you can apply this session
-   - **Read more** — one cc-lab chapter link
-4. **What to do next** — prioritized action list in three time
+4. **Observations** (3-5 per mode section) — each with title,
+   evidence-quoted "What I see," confidence tag, copy-paste "Try
+   this" artifact, and one chapter link
+5. **What to do next** — prioritized action list in three time
    buckets (this session / this week / when you have time), each
    action mapped to an observation
-5. **Closing** — short tail commentary on the read
+6. **Closing** — short tail commentary on the read
+
+**2. HTML file in your cwd** — `cc-lab-diagnosis-<repo>-<YYYY-MM-DD>.html`,
+single-file self-contained, cc-lab visual identity
+(rose-pine-moon dark, dawn light), copy buttons on every artifact,
+theme switcher. Open it in a browser when you actually want to act
+on the diagnosis — markdown is fine for skimming, HTML is the
+working surface.
+
+The path appears at the top of the markdown response so you know
+it's there.
 
 ## Pairs well with (optional)
 

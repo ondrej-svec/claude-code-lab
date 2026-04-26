@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="{{LANG}}" data-theme="auto">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#232136" />
+  <title>cc-lab diagnosis — {{REPO}}</title>
+  <style>
+    :root {
+      --radius-2xl: 28px;
+      --radius-xl: 22px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --shadow-soft: 0 18px 60px rgba(0, 0, 0, 0.32);
+      --shadow-low: 0 8px 24px rgba(0, 0, 0, 0.18);
+      --space-1: 8px;
+      --space-2: 12px;
+      --space-3: 16px;
+      --space-4: 20px;
+      --space-5: 24px;
+      --space-6: 32px;
+      --space-7: 40px;
+      --space-8: 56px;
+      --max-main: 1200px;
+      --body-max: 68ch;
+      --font-sans: Manrope, Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    /* Rose Pine Moon (dark) */
+    :root,
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #232136;
+      --bg-elevated: #2a283e;
+      --bg-soft: #393552;
+      --panel: rgba(57, 53, 82, 0.62);
+      --panel-strong: rgba(42, 40, 62, 0.94);
+      --text: #e0def4;
+      --text-strong: #f6f3ff;
+      --muted: #b4b0d0;
+      --muted-2: #908caa;
+      --border: rgba(224, 222, 244, 0.12);
+      --accent: #c4a7e7;
+      --accent-2: #9ccfd8;
+      --accent-3: #f6c177;
+      --success: #9ccfd8;
+      --warn: #f6c177;
+      --danger: #eb6f92;
+      --link: #ea9a97;
+      --hero-glow: radial-gradient(circle at 30% 0%, rgba(196, 167, 231, 0.18), transparent 55%),
+                   radial-gradient(circle at 80% 30%, rgba(156, 207, 216, 0.12), transparent 55%);
+    }
+
+    /* Rose Pine Dawn (light) */
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --bg: #faf4ed;
+      --bg-elevated: #fffaf3;
+      --bg-soft: #f2e9e1;
+      --panel: rgba(255, 250, 243, 0.86);
+      --panel-strong: rgba(255, 250, 243, 0.98);
+      --text: #575279;
+      --text-strong: #2a273f;
+      --muted: #6e6a86;
+      --muted-2: #797593;
+      --border: rgba(87, 82, 121, 0.14);
+      --accent: #907aa9;
+      --accent-2: #56949f;
+      --accent-3: #ea9d34;
+      --success: #56949f;
+      --warn: #d7827e;
+      --danger: #b4637a;
+      --link: #b4637a;
+      --hero-glow: radial-gradient(circle at 30% 0%, rgba(144, 122, 169, 0.10), transparent 55%),
+                   radial-gradient(circle at 80% 30%, rgba(86, 148, 159, 0.08), transparent 55%);
+      --shadow-soft: 0 14px 40px rgba(87, 82, 121, 0.10);
+      --shadow-low: 0 6px 16px rgba(87, 82, 121, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    html, body { margin: 0; padding: 0; min-height: 100%; }
+    body {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text);
+      background: var(--hero-glow), linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg) 100%);
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    main {
+      max-width: var(--max-main);
+      margin: 0 auto;
+      padding: var(--space-5) var(--space-4) var(--space-8);
+    }
+
+    a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+    a:hover { text-decoration-thickness: 2px; }
+
+    code, pre {
+      font-family: var(--font-mono);
+      font-size: 0.92em;
+    }
+
+    pre {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-3) var(--space-4);
+      overflow-x: auto;
+      line-height: 1.5;
+      margin: var(--space-3) 0;
+      position: relative;
+    }
+
+    code:not(pre code) {
+      background: var(--panel-soft, rgba(255, 255, 255, 0.04));
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 0.9em;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: var(--bg-elevated);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.15s, color 0.15s;
+    }
+    .copy-btn:hover { opacity: 1; color: var(--text-strong); }
+    .copy-btn.copied { color: var(--success); border-color: var(--success); }
+
+    .topbar {
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--space-2);
+      margin-bottom: var(--space-4);
+    }
+    .theme-switcher {
+      display: inline-flex;
+      gap: 4px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px;
+    }
+    .theme-option {
+      font: inherit;
+      color: var(--muted);
+      background: none;
+      border: 0;
+      padding: 4px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .theme-option[aria-pressed="true"] {
+      background: var(--bg-elevated);
+      color: var(--text-strong);
+    }
+
+    /* Hero */
+    .hero {
+      padding: var(--space-7) var(--space-6) var(--space-6);
+      border-radius: var(--radius-2xl);
+      background: var(--panel-strong);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      margin-bottom: var(--space-6);
+    }
+    .hero .eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted-2);
+      margin-bottom: var(--space-2);
+    }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      line-height: 1.1;
+      color: var(--text-strong);
+      margin: 0 0 var(--space-3);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .hero p.headline {
+      font-size: 18px;
+      line-height: 1.55;
+      color: var(--muted);
+      margin: 0 0 var(--space-4);
+      max-width: var(--body-max);
+    }
+    .hero .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      font-size: 13px;
+      color: var(--muted-2);
+    }
+    .hero .meta span {
+      background: var(--bg-soft);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    /* Sections */
+    .section {
+      margin-bottom: var(--space-7);
+    }
+    .section > .label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted-2);
+      margin-bottom: var(--space-2);
+    }
+    .section > h2 {
+      font-size: 22px;
+      color: var(--text-strong);
+      margin: 0 0 var(--space-4);
+      font-weight: 600;
+    }
+
+    .pass-divider {
+      height: 1px;
+      background: var(--border);
+      margin: var(--space-7) 0;
+      border: 0;
+    }
+
+    .pass-header {
+      font-size: 28px;
+      color: var(--text-strong);
+      margin: 0 0 var(--space-2);
+      font-weight: 700;
+    }
+    .pass-header .subtitle {
+      font-size: 14px;
+      color: var(--muted-2);
+      font-weight: 400;
+      display: block;
+      margin-top: 4px;
+    }
+
+    /* Strengths */
+    .strengths {
+      display: grid;
+      gap: var(--space-2);
+    }
+    .strength {
+      padding: var(--space-3) var(--space-4);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--success);
+      border-radius: var(--radius-md);
+    }
+    .strength strong {
+      color: var(--text-strong);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .strength p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    /* Observations */
+    .observations {
+      display: grid;
+      gap: var(--space-4);
+    }
+    .observation {
+      padding: var(--space-5);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+    }
+    .observation .obs-head {
+      display: flex;
+      gap: var(--space-2);
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: var(--space-3);
+    }
+    .observation .obs-num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted-2);
+      background: var(--bg-soft);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .observation h3 {
+      margin: 0;
+      flex: 1 1 auto;
+      font-size: 18px;
+      color: var(--text-strong);
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    .observation .conf {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .conf.high { background: rgba(235, 111, 146, 0.16); color: var(--danger); }
+    .conf.medium { background: rgba(246, 193, 119, 0.18); color: var(--warn); }
+    .conf.cant-tell { background: var(--bg-soft); color: var(--muted); }
+
+    .observation .what-i-see {
+      margin: 0 0 var(--space-3);
+      color: var(--text);
+    }
+    .observation .what-i-see code { font-size: 0.85em; }
+
+    .observation .read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: var(--space-2);
+    }
+
+    /* Action plan */
+    .actions {
+      display: grid;
+      gap: var(--space-4);
+    }
+    .action-bucket {
+      padding: var(--space-4) var(--space-5);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+    }
+    .action-bucket .bucket-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: var(--space-3);
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+    .action-bucket .bucket-title {
+      font-size: 16px;
+      color: var(--text-strong);
+      font-weight: 600;
+      margin: 0;
+    }
+    .action-bucket .bucket-time {
+      font-size: 12px;
+      color: var(--muted-2);
+      letter-spacing: 0.04em;
+    }
+    .action-bucket.urgent { border-left: 3px solid var(--danger); }
+    .action-bucket.important { border-left: 3px solid var(--warn); }
+    .action-bucket.compound { border-left: 3px solid var(--accent-2); }
+
+    .action-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: var(--space-2);
+    }
+    .action-list li {
+      padding: var(--space-2) var(--space-3);
+      background: var(--bg-soft);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .action-list strong { color: var(--text-strong); }
+    .action-list .ref {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted-2);
+      margin-left: 4px;
+    }
+
+    /* Closing */
+    .closing {
+      margin-top: var(--space-7);
+      padding: var(--space-4) var(--space-5);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    footer {
+      margin-top: var(--space-8);
+      padding-top: var(--space-5);
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted-2);
+      text-align: center;
+    }
+    footer a { color: var(--muted); }
+
+    /* Mobile */
+    @media (max-width: 640px) {
+      main { padding: var(--space-3) var(--space-3) var(--space-7); }
+      .hero { padding: var(--space-5) var(--space-4); border-radius: var(--radius-xl); }
+      .observation { padding: var(--space-4); }
+      .observation h3 { font-size: 16px; }
+      .pass-header { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="topbar">
+      <div class="theme-switcher" role="group" aria-label="Theme">
+        <button class="theme-option" type="button" data-theme-value="light" aria-pressed="false">Light</button>
+        <button class="theme-option" type="button" data-theme-value="auto" aria-pressed="true">Auto</button>
+        <button class="theme-option" type="button" data-theme-value="dark" aria-pressed="false">Dark</button>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="eyebrow">cc-lab diagnosis</div>
+      <h1>{{REPO}}</h1>
+      <p class="headline">{{HEADLINE}}</p>
+      <div class="meta">
+        <span>{{MODE_LABEL}}</span>
+        <span>{{DATE}}</span>
+      </div>
+    </section>
+
+    {{CONTENT}}
+
+    <div class="closing">{{CLOSING}}</div>
+
+    <footer>
+      Generated by <code>/cc-lab-diagnose</code> v{{VERSION}} ·
+      <a href="https://cc-lab.ondrejsvec.com">cc-lab.ondrejsvec.com</a>
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const meta = document.querySelector('meta[name="theme-color"]');
+      const key = 'cc-lab-diagnose-theme';
+      const mq = window.matchMedia('(prefers-color-scheme: dark)');
+      const opts = Array.from(document.querySelectorAll('.theme-option'));
+
+      const compute = (m) => m === 'auto' ? (mq.matches ? 'dark' : 'light') : m;
+      const themeColor = (m) => compute(m) === 'dark' ? '#232136' : '#fffaf3';
+
+      const apply = (m) => {
+        if (m === 'auto') root.removeAttribute('data-theme');
+        else root.dataset.theme = m;
+        if (meta) meta.setAttribute('content', themeColor(m));
+        opts.forEach(o => o.setAttribute('aria-pressed', o.dataset.themeValue === m ? 'true' : 'false'));
+      };
+
+      const saved = localStorage.getItem(key) || 'auto';
+      apply(saved);
+      opts.forEach(o => o.addEventListener('click', () => {
+        const m = o.dataset.themeValue;
+        localStorage.setItem(key, m);
+        apply(m);
+      }));
+      mq.addEventListener('change', () => {
+        if ((localStorage.getItem(key) || 'auto') === 'auto') apply('auto');
+      });
+    })();
+
+    // Copy buttons on every <pre>
+    document.querySelectorAll('pre').forEach(pre => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', () => {
+        const code = pre.querySelector('code')?.textContent || pre.textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = 'Copied';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1400);
+        }).catch(() => {
+          btn.textContent = 'Failed';
+          setTimeout(() => { btn.textContent = 'Copy'; }, 1400);
+        });
+      });
+      pre.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

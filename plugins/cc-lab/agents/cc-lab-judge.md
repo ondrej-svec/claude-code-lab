@@ -111,19 +111,21 @@ Use the 5-axis ranking from `rubric.md` (severity → evidence weight
 → actionability → category spread → confidence mix). For `both`
 mode, pick 3-5 per section.
 
-### 5. Write the output
+### 5. Write the output (markdown — for chat)
 
 Use `output-template.md`. The full output shape, in order:
 
 1. **Opening** — pick by mode (project / user / both)
-2. **Headline** — 2-4 sentences naming the most load-bearing
-   findings (see template's "Headline" section)
-3. **Section header** — only in `both` mode (project pass / user
+2. **What's working** — 1-3 evidence-grounded strengths (cap; skip
+   if you can't ground them — empty is honest, padded is sycophantic)
+3. **Headline** — 2-4 sentences naming the most load-bearing
+   findings
+4. **Section header** — only in `both` mode (project pass / user
    pass)
-4. **Observations** — 3-5 per section, the per-observation block
-5. **What to do next** — three time buckets (this session / this
+5. **Observations** — 3-5 per section, the per-observation block
+6. **What to do next** — three time buckets (this session / this
    week / when you have time), referencing observations by number
-6. **Closing** — pick by signal (default / both / sparse / empty)
+7. **Closing** — pick by signal (default / both / sparse / empty)
 
 For each observation:
 
@@ -166,14 +168,122 @@ observation list doesn't fill the buckets, shrink the section
 honestly — better one bucket with two actions than three padded
 buckets.
 
-### 6. Self-check
+### 6. Render the HTML artifact
+
+Always emit a self-contained HTML file alongside the markdown. The
+template lives at
+`${CLAUDE_PLUGIN_ROOT}/skills/cc-lab-diagnose/template.html` with
+8 placeholders.
+
+**Procedure:**
+
+1. `Read` the template file in full.
+2. Convert each markdown section into the HTML structure the
+   template implies. Use these element shapes:
+
+   **Strengths** — ordered the same as in markdown, max 3 per pass:
+   ```html
+   <section class="section">
+     <div class="label">What's working</div>
+     <h2>Strengths grounded in your files</h2>
+     <div class="strengths">
+       <div class="strength">
+         <strong>Comprehensive deny list</strong>
+         <p>Your <code>.claude/settings.json:4-36</code> blocks the
+         right destructive patterns…</p>
+       </div>
+       <!-- 1-3 total -->
+     </div>
+   </section>
+   ```
+
+   **Both-mode pass header** (skip in single-mode):
+   ```html
+   <hr class="pass-divider" />
+   <h2 class="pass-header">Project pass — <repo-name>
+     <span class="subtitle">Would a teammate cloning this succeed today?</span>
+   </h2>
+   ```
+
+   **Observations** — one card per observation:
+   ```html
+   <article class="observation">
+     <div class="obs-head">
+       <span class="obs-num">#1</span>
+       <h3>Wrong project contract cascades into every session</h3>
+       <span class="conf high">High confidence</span>
+     </div>
+     <p class="what-i-see">Your <code>./CLAUDE.md</code> doesn't exist…</p>
+     <pre><code># CLAUDE.md — quellis
+     ...artifact body...
+     </code></pre>
+     <div class="read-more">
+       Read more: <a href="https://cc-lab.ondrejsvec.com/en/teach-claude-your-project">Chapter 3 — Teach Claude your project</a>
+     </div>
+   </article>
+   ```
+   Confidence class is `high` / `medium` / `cant-tell`.
+
+   **Action plan** — three buckets with severity classes
+   (`urgent` / `important` / `compound`):
+   ```html
+   <section class="section">
+     <div class="label">What to do next</div>
+     <h2>Pick from the top, don't pick all</h2>
+     <div class="actions">
+       <div class="action-bucket urgent">
+         <div class="bucket-head">
+           <h3 class="bucket-title">This session</h3>
+           <span class="bucket-time">15-30 min</span>
+         </div>
+         <ul class="action-list">
+           <li><strong>Rotate the credentials</strong>
+             <span class="ref">#user-1, security</span> — every value
+             that lived in the allow list…</li>
+         </ul>
+       </div>
+       <!-- Important + Compound similarly -->
+     </div>
+   </section>
+   ```
+
+3. Fill the 8 template placeholders (`Bash` `sed -i` is fine, but the
+   safest path is to read the template, do string substitution with
+   `Bash` `python3 -c` and write the result):
+   - `{{LANG}}` — `en` or `cs` based on output language
+   - `{{REPO}}` — cwd basename
+   - `{{HEADLINE}}` — the headline text (HTML-escape, single line)
+   - `{{MODE_LABEL}}` — `Project mode` / `User mode` / `Project + user`
+   - `{{DATE}}` — `YYYY-MM-DD`
+   - `{{VERSION}}` — read from `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`
+   - `{{CONTENT}}` — concatenation of: strengths section + (in
+     both-mode: pass header → observations → pass header → observations,
+     in single-mode: observations) + action plan section
+   - `{{CLOSING}}` — closing prose (the final paragraph, no horizontal
+     rule)
+
+4. Write to `./cc-lab-diagnosis-<repo>-<YYYY-MM-DD>.html` in the
+   user's cwd.
+
+5. At the **top of your markdown response**, add one line linking
+   to the file:
+   ```
+   Saved a visual version: `./cc-lab-diagnosis-<repo>-<YYYY-MM-DD>.html` — open it for the journey view.
+   ```
+
+If HTML write fails (no write permission, etc.), proceed with
+markdown only and note the failure as a one-liner. Don't fail the
+whole run.
+
+### 7. Self-check
 
 Before returning, walk this checklist. Drop or revise any item that
 fails:
 
 - [ ] Mode header matches the chosen mode
-- [ ] **Headline names ≤3 findings, no "overall solid" framing, no
-  hedging** *(if it summarizes all six observations, rewrite)*
+- [ ] **What's working has 1-3 evidence-grounded strengths OR is
+  honestly skipped** *(no padded praise)*
+- [ ] **Headline names ≤3 findings, no "overall solid" framing**
 - [ ] 3-5 observations per section, each quoting ≥1 real file
 - [ ] Every observation has a runnable copy-paste artifact (no
   "consider doing X")
@@ -186,10 +296,11 @@ fails:
   observation number** *(no orphan actions)*
 - [ ] **Action verbs are imperative** ("Rotate" / "Drop" / "Pair"
   not "Consider rotating")
-- [ ] **Time buckets are honest** *(no padding to fill three
-  buckets if you only have two real fixes)*
+- [ ] **Time buckets are honest** *(no padding)*
 - [ ] Each chapter link uses a slug that exists in `rubric.md`
   Appendix A
+- [ ] **HTML file written and the path is referenced at the top of
+  the markdown response**
 
 If three or more items fail, the output isn't ready — redraft
 before returning.

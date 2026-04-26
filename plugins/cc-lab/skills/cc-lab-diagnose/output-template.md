@@ -48,7 +48,85 @@ use the empty-signal closing.
 
 ---
 
-## Headline (always second — right after the opening)
+## What's working (always second — right after the opening)
+
+A short, evidence-grounded "what's already there" pass before the
+headline names what's missing. The rule for this section is the
+same as for observations: every strength must quote evidence from a
+real file. Without grounding, this becomes sycophancy and the
+diagnostic stops being trusted.
+
+Cap: **1-3 strengths per mode section.** Skip entirely if you can't
+find evidence-grounded ones — empty is honest; padded is sycophantic.
+
+### Shape
+
+```
+## What's working
+
+- **<Strength title — 5-9 words>** — <one sentence quoting a real file
+  or line that demonstrates the pattern is in place. No "great job!"
+  framing.>
+- **<Strength title>** — <one sentence with evidence>
+```
+
+### Examples
+
+Project mode:
+```
+## What's working
+
+- **Comprehensive deny list** — your `.claude/settings.json:4-36`
+  blocks the right destructive patterns (`rm -rf` variants, force
+  push, sudo, pipe-to-shell). The brake is in place.
+- **Conventional commit discipline** — recent commits like
+  `98cda59 — fix(onboarding): bootstrap stuck at isSending` show
+  scoped, imperative messages with context. History is readable.
+```
+
+User mode:
+```
+## What's working
+
+- **Voice rules in user CLAUDE.md** — `~/.claude/CLAUDE.md:98-107`
+  encodes the "always specify model" subagent rule with a concrete
+  table mapping each agent to its tier. The principle is stated
+  even if three files don't follow it yet (see #user-2).
+- **Auto-memory dir primed** — `~/.claude/projects/<encoded>/memory/`
+  exists for active repos, not just stub installs.
+```
+
+Both mode (one section per pass — strengths can differ between
+project and user findings):
+```
+## What's working
+
+**Project:**
+- **Comprehensive deny list** — `.claude/settings.json:4-36` covers
+  the destructive patterns.
+
+**User:**
+- **Voice rules stated** — `~/.claude/CLAUDE.md:98` encodes the
+  "always specify model" rule (even if not enforced yet).
+```
+
+### Anti-patterns
+
+| Pattern | Why it's wrong |
+|---|---|
+| "Your setup is overall solid!" | No evidence, no specificity — sycophancy |
+| "Great repo structure!" | No specific file, no quote |
+| "You're using Claude Code well!" | Generic praise — not a strength |
+| Listing strengths without quoted evidence | Same rule as observations |
+| Padding to hit 3 strengths when only 1 has evidence | Better one true than three vague |
+| Praising what every repo has | "You have a `.gitignore`" doesn't earn the section |
+
+The strengths frame the headline. If you can't find any with
+evidence, skip the section — go straight to the headline.
+
+---
+
+## Headline (third — right after What's working)
 
 A 2-4 sentence read of what matters most. Lead with the single most
 load-bearing finding, then add the second and (if relevant) third.

@@ -231,10 +231,17 @@ read ${CLAUDE_PLUGIN_ROOT}/skills/cc-lab-diagnose/rubric.md (use Part
 A for project, Part B for user, both for both), then return the 
 diagnostic markdown using ${CLAUDE_PLUGIN_ROOT}/skills/cc-lab-diagnose/output-template.md.
 
-The full output shape, in order: opening → headline (2-4 sentences 
-naming the load-bearing findings) → section headers (in both mode) 
-→ 3-5 observations per section → "What to do next" with three time 
-buckets (this session / this week / when you have time) → closing.
+The full output shape, in order: opening → **What's working** (1-3 
+evidence-grounded strengths, or honestly skipped) → headline (2-4 
+sentences naming the load-bearing findings) → section headers (in 
+both mode) → 3-5 observations per section → "What to do next" with 
+three time buckets → closing.
+
+Always also render an HTML artifact alongside the markdown using 
+${CLAUDE_PLUGIN_ROOT}/skills/cc-lab-diagnose/template.html and write 
+it to ./cc-lab-diagnosis-<repo>-<YYYY-MM-DD>.html in the user's cwd. 
+Reference the HTML path at the top of the markdown response so the 
+user knows it's there.
 
 Return only the final markdown. Don't include reasoning or a 
 summary of what you did.
