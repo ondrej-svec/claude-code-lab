@@ -9,6 +9,50 @@ If a category produces no evidence-grounded signal, mark it
 
 ---
 
+## Scope cascade — read this before any "missing" claim
+
+Claude Code inherits state from **two scopes simultaneously**:
+
+| Scope | Source | What lives here |
+|---|---|---|
+| **Project** | `./CLAUDE.md`, `./.claude/` | Repo-specific memory, hooks, skills |
+| **User** | `~/.claude/CLAUDE.md`, `~/.claude/{skills,agents,commands,hooks}/`, `~/.claude/plugins/` | Global memory, user-installed skills + plugin marketplaces |
+
+The agent operating in any repo sees the **union** of both.
+
+**The cascade rule:** before any heuristic in this rubric is allowed
+to claim "missing" or "absent," check whether the pattern exists in
+user scope. If yes, suppress the claim — the project doesn't need to
+redefine what's already provided.
+
+Concrete examples of the trap this rule prevents:
+
+| What the heuristic might claim | Why it's wrong |
+|---|---|
+| "No skill captures todo creation" | User has `marvin` (provides `/work`) and `deep-thought:plan` installed — todos are produced from those, not a project-local skill |
+| "No `/compound` workflow" | `marvin:compound` is installed user-scoped — compounding works fine |
+| "No review skill" | `deep-thought:review`, `marvin:quick-review` are installed |
+| "No hooks" | `~/.claude/settings.json` may carry hooks that fire in every project |
+| "No knowledge capture" | `~/.claude/docs/solutions/` exists, or a plugin's compound skill captures elsewhere |
+
+Two outcomes when scope-cascade catches a false positive:
+
+1. **Drop the observation entirely** — the gap doesn't exist; nothing
+   to say. Don't pad the count.
+2. **Reframe as "exists in user scope; project doesn't reference it"**
+   — only when the gap genuinely matters (e.g., the project
+   `CLAUDE.md` contradicts a user-scope skill, or onboarding
+   documentation would benefit from naming the user-scope dependency).
+   This output is rare; default is option 1.
+
+The skill must apply this rule to **every category below** that could
+trigger a "missing" claim — explicitly: skill design (Cat 2), hook
+usage (Cat 3), agent and command patterns (Cat 4), knowledge capture
+(Cat 6). Context discipline (Cat 1) and iteration discipline (Cat 5)
+are project-local concerns and don't cascade.
+
+---
+
 ## Category 1 — Context discipline
 
 What the lab teaches: a CLAUDE.md that earns its weight, sessions that
@@ -52,6 +96,12 @@ single-purpose. The frontmatter `description` is the activation
 contract. ([Chapter 6: The ecosystem](https://cc-lab.ondrejsvec.com/en/ecosystem),
 [Chapter 7: Compound engineering](https://cc-lab.ondrejsvec.com/en/compound-engineering))
 
+**Scope-cascade check (apply before any heuristic):** assemble the
+union of available skills from project (`.claude/skills/`), user
+(`~/.claude/skills/`), and installed plugins
+(`~/.claude/plugins/cache/<marketplace>/<plugin>/<sha>/skills/`). Any
+"missing skill" claim must survive a check against that union.
+
 ### Heuristics
 
 | Check | Signal | Confidence |
@@ -83,6 +133,11 @@ filename. Quote the line count if size is the issue.
 What the lab teaches: hooks turn intentions into harness behavior.
 "From now on do X" is a hook, not a memory. ([Chapter 6: The ecosystem](https://cc-lab.ondrejsvec.com/en/ecosystem))
 
+**Scope-cascade check (apply before any heuristic):** read both
+project `.claude/settings.json` and user `~/.claude/settings.json` for
+hook definitions. A project may inherit comprehensive hooks from user
+scope; "no hooks" is only true when both scopes are empty.
+
 ### Heuristics
 
 | Check | Signal | Confidence |
@@ -111,6 +166,12 @@ behavior, or (b) the actual `hooks:` block from settings.json.
 What the lab teaches: subagents specify model. Slash commands live in
 `.claude/commands/`. MCPs are configured deliberately, not by accident.
 ([Chapter 6: The ecosystem](https://cc-lab.ondrejsvec.com/en/ecosystem))
+
+**Scope-cascade check (apply before any heuristic):** assemble the
+union of available agents and commands from project, user
+(`~/.claude/agents/`, `~/.claude/commands/`), and installed plugins.
+Plugin-provided commands (e.g., `/compound`, `/work`, `/plan`) cover
+many use-cases that look "missing" at the project level.
 
 ### Heuristics
 
@@ -169,6 +230,13 @@ observation.
 What the lab teaches: solved problems become reusable artifacts.
 `/compound`, `docs/solutions/`, `docs/learnings/`, memory entries.
 ([Chapter 7: Compound engineering](https://cc-lab.ondrejsvec.com/en/compound-engineering))
+
+**Scope-cascade check (apply before any heuristic):** before claiming
+"no knowledge capture surface," check `~/.claude/docs/solutions/`,
+`~/.claude/memory/`, plugin-provided compound skills (e.g.,
+`marvin:compound`), and any other user-scope knowledge stores. A
+builder using a compound skill captures elsewhere — this is fine;
+don't pretend the project must hold the artifacts.
 
 ### Heuristics
 

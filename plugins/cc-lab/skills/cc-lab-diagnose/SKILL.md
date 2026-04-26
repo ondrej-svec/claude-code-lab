@@ -78,18 +78,54 @@ Claude Code setups; if there's nothing to read, there's nothing to
 diagnose. Suggest [Chapter 3: Teach Claude your project](https://cc-lab.ondrejsvec.com/en/teach-claude-your-project)
 as a starting point and exit.
 
-### 2. Gather inputs (read-only)
+### 2. Gather inputs (read-only) — both project AND user scope
+
+Claude Code cascades context across **two scopes** that the agent
+inherits at the same time:
+
+- **Project scope** — files in the cwd (`CLAUDE.md`, `.claude/`)
+- **User scope** — files under `~/.claude/` (global memory, plugins,
+  user-installed skills/agents/commands)
+
+The diagnostic must read both. Otherwise it false-positives on
+"missing" patterns that are actually provided by an installed plugin
+or user-scoped skill (e.g., a builder with the `marvin` plugin
+installed has `/compound`, `/work`, etc. — the project doesn't need
+to redefine them).
 
 Read these in order, capping each at a reasonable size:
+
+**Project scope (cwd):**
 
 | Source | How | Cap |
 |---|---|---|
 | `CLAUDE.md` | `Read` (full file if ≤500 lines, else first 500) | 500 lines |
 | `.claude/` tree | `Glob` for everything under `.claude/**/*` | 200 paths |
-| Skill files | `Read` first 80 lines of each `.claude/skills/*/SKILL.md` | 80 lines × N |
-| Hook config | `Read` `.claude/settings.json` and `.claude/settings.local.json` | full |
+| Project skills | `Read` first 80 lines of each `.claude/skills/*/SKILL.md` | 80 lines × N |
+| Project hooks/settings | `Read` `.claude/settings.json` and `.claude/settings.local.json` | full |
 | Recent git log | `Bash` — `git log --oneline -30` and `git log -5 --stat` | 30 commits |
 | `docs/solutions/` | `Glob` if present, count entries | path count |
+
+**User scope (`~/.claude/`):**
+
+| Source | How | Cap |
+|---|---|---|
+| User-global memory | `Read` `~/.claude/CLAUDE.md` | 500 lines |
+| Installed plugins | `Read` `~/.claude/plugins/installed_plugins.json` — note which plugins have `scope: user` OR (`scope: project` AND `projectPath` matches cwd) | full |
+| Plugin skills (active) | For each active plugin, `Glob` `~/.claude/plugins/cache/<marketplace>/<plugin>/<sha>/skills/*/SKILL.md` and `Read` first 30 lines of each | 30 lines × N |
+| User-scope skills | `Glob` `~/.claude/skills/*/SKILL.md`, `Read` first 30 lines of each | 30 lines × N |
+| User-scope agents/commands | `Glob` `~/.claude/agents/*` and `~/.claude/commands/*` | path count |
+| User-scope settings/hooks | `Read` `~/.claude/settings.json` (especially `hooks` block) | full |
+
+Treat the union as the agent's effective context. Build a quick
+inventory before running the rubric:
+
+- **Active plugin names** (from `installed_plugins.json`)
+- **All available skill names** (project + user-scope + plugin skills) — this
+  is the set the rubric must consult before claiming any skill is "missing"
+- **All available command names** (project `.claude/commands/` +
+  user `~/.claude/commands/` + plugin commands)
+- **All available agent names** (similar union)
 
 If a path doesn't exist, note it and move on. Missing paths are signal,
 not error.
@@ -101,10 +137,17 @@ skill design, hook usage, agent and command patterns, iteration
 discipline, knowledge capture):
 
 1. Run the heuristic checks listed in the rubric
-2. If a heuristic fires, draft an observation with quoted evidence
-3. If no heuristic fires but the category is interesting, run an
+2. **Apply the scope-cascade rule** (rubric.md §"Scope cascade"):
+   before claiming any pattern is "missing," check whether
+   user-scope or installed plugins already provide it. If yes,
+   suppress the false positive — either skip the category or reframe
+   the observation as "exists in user scope; project doesn't reference
+   it" (only if the gap actually matters).
+3. If a heuristic fires AND scope-cascade doesn't suppress it, draft
+   an observation with quoted evidence
+4. If no heuristic fires but the category is interesting, run an
    LLM-judged read of the relevant files and draft an observation
-4. If neither produces evidence-grounded signal, mark the category as
+5. If neither produces evidence-grounded signal, mark the category as
    "I can't tell" and skip it (do not invent observations)
 
 Pick the **3-5 strongest** drafts using the 4-axis ranking in
@@ -144,6 +187,9 @@ Before handing the output back:
 - [ ] At most 5 observations *(if 6+ — drop the weakest by 4-axis rank)*
 - [ ] Each observation links to a real chapter slug from `rubric.md`
   Appendix A *(if a slug doesn't exist — fix the link or drop)*
+- [ ] No observation claims something is missing that exists in user
+  scope or an installed plugin *(check the scope inventory from Step 2;
+  if a "missing" claim slipped through — drop the observation)*
 
 ---
 
