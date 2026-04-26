@@ -109,6 +109,59 @@ respects `prefers-reduced-motion: reduce` by collapsing to the still.
 - Caption missing for any published locale
 - Manual capture used without explicit fallback documentation
 
+## Lessons from the first end-to-end run (2026-04-26 — voice chapter)
+
+The voice chapter shipped two real Claude desktop screenshots
+(`voice-desktop-mic.png`, `voice-multimodal-paste.png`) and one freeze
+SVG (`voice-terminal-enabled.svg`). Findings worth folding into the
+`cc-lab-screenshot` skill conventions before the next chapter:
+
+**What worked.**
+- `screencapture -x <path>` + `sips -c h w --cropOffset y x <path>` is
+  the cleanest path to controlled capture + crop. More reliable than
+  computer-use's `screenshot` + `save_to_disk` (path retrieval was
+  inconsistent in this session).
+- `freeze` with `--language ansi` + the project config produces
+  publication-ready terminal stills in one shot. Embedded in MDX via
+  `<TerminalOutput>` it sits naturally next to dark Claude desktop
+  screenshots — the rose-pine palette carries the consistency.
+- Computer-use MCP gets the job done for desktop captures, *after* the
+  one-time macOS Accessibility + Screen Recording grant.
+
+**What hurt.**
+- macOS Accessibility + Screen Recording perms are a one-time human
+  step before any computer-use call works. `request_access` returns a
+  not-yet-granted error until the user toggles the perms. Document
+  this prominently in the cc-lab-screenshot SKILL.md so future runs
+  don't blank-stare at the permission panel.
+- Claude desktop's slash-command autocomplete fights the `type` tool.
+  Typing `/usage` got substituted to `/extra-usage` (a real installed
+  skill on this machine), and `Escape` didn't always dismiss the
+  dropdown cleanly. **Convention update:** when the prompt text needs
+  a slash command, either escape autocomplete deterministically (test
+  the sequence on the live machine first) or pick a non-slash
+  representative prompt and update the alt text to match. Do not
+  pretend the screenshot shows what the chapter promised when it
+  doesn't — better honest text in the alt than a misleading shot.
+- Voice mic state is fragile. Toggling can leave dictation active
+  invisibly and capture stray text into the next typed input. **Always
+  zoom on the bottom toolbar** after activation and confirm the icon
+  is the right state before capture.
+- `sips` SVG → PNG conversion does not always honor ANSI color
+  escapes; the magenta `/voice` rendered flat in the preview PNG. The
+  browser-rendered SVG honors the colors. Don't trust `sips` previews
+  for ANSI-colored output — verify in-browser.
+
+**Path forward.**
+- The cc-lab-screenshot skill (`skills/cc-lab-screenshot/`) covers the
+  conventions but the SKILL.md section on slash-command autocomplete +
+  voice-state verification needs the lessons above folded in before
+  the next chapter that uses it.
+- The hybrid visual strategy is validated: real screenshots for daily
+  surfaces, freeze for terminal artifacts, GPT Image 2 reserved for
+  conceptual diagrams. Apply the same split to library entries
+  (Phase 5) when their visual asset briefs are written.
+
 ## Where the briefs live
 
 Per-chapter shot lists: `scripts/visuals/shot-lists/<chapter>.json`.

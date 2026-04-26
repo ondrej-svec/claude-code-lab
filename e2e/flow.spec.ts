@@ -22,7 +22,7 @@ test.describe("chapter navigation", () => {
   test("lab index lists all chapters", async ({ page }) => {
     await page.goto("/en/lab");
     const chapterCards = page.locator("main a[href*='/en/lab/']");
-    await expect(chapterCards).toHaveCount(9);
+    await expect(chapterCards).toHaveCount(10);
   });
 
   test("chapter 1 renders and links to chapter 2", async ({ page }) => {
