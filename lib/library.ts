@@ -19,7 +19,11 @@ export type LibraryEntry = LibraryEntryFrontmatter & {
 // The library is hand-curated. Slugs are listed here; the MDX file is
 // the source of truth for everything else (title, chapter affinity,
 // tags, read time). One source of truth per entry.
-export const LIBRARY_SLUGS: readonly string[] = ["context-engineering"] as const;
+export const LIBRARY_SLUGS: readonly string[] = [
+  "context-engineering",
+  "autonomous-loops",
+  "cc-lab-diagnose",
+] as const;
 
 export type LibraryEntrySummary = LibraryEntryFrontmatter & {
   affinity: Chapter | null;

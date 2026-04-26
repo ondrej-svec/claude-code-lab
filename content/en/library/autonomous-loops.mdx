@@ -1,0 +1,99 @@
+---
+slug: autonomous-loops
+title: Autonomous loops — when and when not
+chapter: iteration-and-control
+tags: [practice, autonomy]
+readTime: 7 min
+---
+
+# Autonomous loops — when and when not
+
+Autonomy isn't a feature you turn on. It's a posture you take with the agent — the agent runs, you don't watch every step, the work moves while you do other things.
+
+Sometimes that posture is leverage. Sometimes it's the agent confidently polishing the wrong thing forty times in a row.
+
+The skill is knowing which situation you're in *before* you walk away from the keyboard.
+
+## Two flavors of autonomy
+
+You can hand the agent more rope two ways.
+
+- **The loop.** Same task, run on an interval or self-paced until a condition is met. `/loop 5m /check-deploy` reruns every five minutes. `/loop /fix-typecheck` lets Claude self-pace toward a tests-pass condition. The conversation persists; each turn knows what the previous turn did.
+- **Auto mode.** A permission posture (covered in [chapter 4](/en/lab/iteration-and-control)) that lets Claude take many small actions without per-action approval. Different shape from the loop — same conversation, no scheduled re-entry, but Claude is allowed to fan out aggressively inside it.
+
+Both let the agent move without you. They fail differently.
+
+## When the loop earns its keep
+
+The loop is a fit when **success is mechanical** — when "is it done?" has an answer Claude can check on its own.
+
+- A type-check exit code.
+- A test suite turning green.
+- A linter producing zero violations.
+- A deploy log saying `Ready`.
+- A long fan-out: "go through these 200 files and apply the same transform; verify each one builds before moving on."
+
+Concretely, the prompt looks like:
+
+<Prompt>/loop run pnpm typecheck; if it fails, fix the smallest failure and try again; stop when it passes or you've made 10 attempts</Prompt>
+
+That's a loop with a mechanical success criterion (`pnpm typecheck` exit code), a bounded action ("smallest failure"), and a stop condition (success or 10 attempts). Walk away. Come back to either green or a tractable handoff.
+
+## The Ralph Wiggum loop
+
+Geoff Huntley named the failure mode: the agent gets confidently stuck on a wrong path and every iteration just polishes the wrong thing harder. Named after Ralph from The Simpsons, who also commits earnestly to bad ideas.
+
+Three flavors:
+
+| Failure | What it looks like | Why the loop amplifies it |
+|---|---|---|
+| Confident-wrong amplification | Iteration 1 misreads the goal. Iterations 2–N "improve" the misread version. | Each turn reads the previous turn's output as ground truth. Wrong premise, compounding. |
+| Boundary drift | "Fix typecheck" turns into rewriting unrelated modules to dodge the type errors. | Without a hard scope, the agent treats every adjacent file as fair game. |
+| Hidden cost spiral | You're afk. The loop runs 30 iterations chasing a problem it can't solve. | No human in the loop means no "wait, this isn't working" interrupt. Tokens accrue. |
+
+The tell that you're in a Ralph loop: each iteration looks more polished than the last, but the diff is moving away from anything a human reviewer would want.
+
+## Pre-flight checklist
+
+Before you walk away from a loop, four checks. Cheap to run, expensive to skip.
+
+1. **Is success mechanical?** Can Claude check "done" without your judgment? If "done" needs a human to taste it, the loop will loop forever.
+2. **Is the scope bounded?** A file glob, a branch, a max-iteration count, a time cap. Pick at least two.
+3. **Is the harness on?** Tests, lint, types running automatically on every change. Without it, autonomy is hope. The harness is what catches a Ralph loop in iteration 2 instead of iteration 30.
+4. **Can you stop without losing state?** Checkpoint commits, persistable progress, an interrupt that doesn't kill the conversation. If stopping means re-deriving everything, you'll let the loop run too long out of sunk-cost.
+
+If any of the four is missing, you're not running a loop — you're running a dice roll.
+
+## The harness is the precondition
+
+[Chapter 8 — Next steps](/en/lab/next-steps) is the chapter on harness building. It's not optional reading for autonomous loops; it's the precondition.
+
+A harness without autonomy is a careful manual practice — fine, slow, sustainable. **Autonomy without a harness is unmonitored hope.** The agent is moving fast in a direction nothing checks. The combination — autonomy on top of a harness — is where the real leverage is. Tests catch the regression before iteration 3. Lint catches the boundary drift. The harness is the ground truth the agent is iterating against.
+
+If you find yourself reaching for `/loop` and you don't have tests on the surface you're touching, write the test first. Then loop.
+
+## What walking away actually buys
+
+The point isn't "do less work." It's **redirect your attention.**
+
+Mechanical fan-out — applying the same shape across many files, fixing every instance of a deprecation warning, regenerating snapshots — is work that adds no value when you do it and no value when the agent does it either. The loop just moves it off your time.
+
+What you actually want your attention on: intent, design, judgment, the calls only a human can make. The loop runs the part of the work where being there doesn't help, so you can be present for the part where it does.
+
+That's the trade. It only pays if the part you walked away from really was mechanical.
+
+## Anti-pattern: the junior dev who never sleeps
+
+The seductive failure mode: the loop is "working" — the agent is moving, the diff is growing, things compile. So you let it run.
+
+But "working" and "doing the right thing" are not the same. A loop that fast-tracks the wrong solution is worse than no loop at all, because by the time you check, the diff is too large to throw away cheaply.
+
+The cheaper move: short loops with explicit stop conditions, then a human review, then another short loop. Not "set it and forget it." More like "set it, glance at it, course correct, set it again." Autonomy in increments, not autonomy as a vibe.
+
+## How this connects to the spine
+
+[Chapter 4 — Iteration and control](/en/lab/iteration-and-control) introduces auto mode and the basic shape of letting Claude move without per-action approval. This entry is the next layer — when to extend that posture into a scheduled or self-paced loop, and when not.
+
+[Chapter 6 — Ecosystem](/en/lab/ecosystem) is where skills like `/loop`, `/proactive`, and `/work` get installed and configured. Build the harness first; install the autonomy second.
+
+[Chapter 8 — Next steps](/en/lab/next-steps) is the harness. Read it before you ever walk away from a running loop.
