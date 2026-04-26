@@ -1,0 +1,355 @@
+# Reference
+
+Tuhle kapitolu si ulož. Je to lookup stránka — ne tutoriál. Když zapomeneš shortcut uprostřed práce, odskoč sem, vytáhni ho, pokračuj.
+
+## 8.1 Slash příkazy
+
+V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam filtrovaný podle tvého plánu, platformy a nainstalovaných pluginů. Tohle jsou vestavěné příkazy, které má smysl znát.
+
+### Session
+
+| Příkaz | Co dělá |
+|---|---|
+| `/clear` | Nová konverzace. Stará se archivuje — obnovíš ji přes `/resume`. |
+| `/compact [focus]` | Konverzace zůstává, Claude shrne historii a uvolní kontext. Volitelný focus zúží, co zachovat. |
+| `/resume` | Navázat na předchozí konverzaci. |
+| `/rewind` | Checkpoint menu — obnoví kód, konverzaci nebo obojí do dřívějšího stavu. Stejné jako dvojité Esc. |
+| `/branch` | Větvení konverzace od zadaného bodu. |
+| `/exit` | Ukončí Claude Code (nebo `Ctrl+D`). |
+
+### Konfigurace
+
+| Příkaz | Co dělá |
+|---|---|
+| `/init` | Prohlédne repo a navrhne startovní `CLAUDE.md`. Nastav `CLAUDE_CODE_NEW_INIT=1` pro nový interaktivní multi-fázový flow. |
+| `/memory` | Prohlédni nebo uprav CLAUDE.md soubory a načtenou paměť. |
+| `/permissions` | Spravuj allow/deny pravidla pro nástroje. |
+| `/model` | Přepni model uprostřed konverzace (např. Opus → Sonnet). |
+| `/effort` | Per-session override effortu. |
+| `/keybindings` | Otevře `~/.claude/keybindings.json`. |
+| `/hooks` | Konfigurace lifecycle hooků. |
+| `/config` | Otevře nastavení. |
+| `/theme` | Přepni téma terminálu. |
+
+### Info
+
+| Příkaz | Co dělá |
+|---|---|
+| `/help` | Seznam příkazů. |
+| `/powerup` | Interaktivní onboarding — deset animovaných průchodů po funkcích, které většina lidí přehlédne. |
+| `/context` | Vizualizace využití kontextového okna s tipy na optimalizaci. |
+| `/cost` | Dosavadní cena session. |
+| `/usage`, `/stats` | Širší metriky využití. |
+| `/doctor` | Diagnostika — vypíše konflikty v konfiguraci, chybějící nastavení. |
+
+### Workflow
+
+| Příkaz | Co dělá |
+|---|---|
+| `/agents` | Správa subagentů (vytvořit, upravit, smazat). |
+| `/tasks` | Správa úkolů na pozadí — rozjet dlouhý běh, výsledek vyzvednout později. |
+| `/plugin` | Instalace a správa pluginů. |
+| `/mcp` | Instalace a správa MCP serverů. |
+| `/skills` | Seznam nainstalovaných skillů. |
+| `/review` | Vestavěný skill pro PR-style review. |
+| `/security-review` | Vestavěný skill pro security review. |
+| `/diff` | Diff od posledního checkpointu. |
+
+### Remote
+
+| Příkaz | Co dělá |
+|---|---|
+| `/remote-control` (alias `/rc`) | Zpřístupní aktuální session z telefonu nebo prohlížeče. |
+| `/mobile` | QR kód pro otevření session v Claude mobilní aplikaci. |
+| `/teleport` (alias `/tp`) | Přetáhne Claude-Code-on-Web session do tvého terminálu. |
+| `/web-setup` | Nastaví Claude Code na Webu pro aktuální repo. |
+
+### Heart of Gold toolkit (pokud je nainstalovaný)
+
+| Příkaz | Co dělá |
+|---|---|
+| `/loop <interval> <task>` | Pouští `<task>` každý interval. |
+| `/schedule` | Vytvoří nebo spravuje cron-plánovaného remote agenta. |
+| `/learn` | Zapíše poznatky ze session do paměti. |
+| `/handoff` | Připraví handoff dokument pro další session nebo kolegu. |
+| `/compound` | Zaznamená vyřešený problém pro budoucí referenci. |
+
+→ [Commands docs](https://code.claude.com/docs/en/commands)
+
+## 8.2 Klávesové zkratky
+
+Zkratky v CLI jsou kontextové. Kompletní seznam je na [code.claude.com/docs/en/keybindings](https://code.claude.com/docs/en/keybindings). Vlastní si uprav v `~/.claude/keybindings.json` přes `/keybindings`.
+
+### Musíš znát
+
+| Zkratka | Akce |
+|---|---|
+| `Esc Esc` | **Rewind** — obnoví se předchozí zpráva (stejné jako `/rewind`). |
+| `Ctrl+C` | Přeruší aktuální vstup nebo odpověď. **Neukončuje Claude.** Rezervované. |
+| `Ctrl+D` | Ukončí Claude Code. Rezervované. |
+| `Shift+Tab` | Cyklí režim oprávnění: default → acceptEdits → plan → auto. |
+| `Ctrl+R` | Reverse-search v historii konverzace. |
+| `Ctrl+O` | Přepíná podrobný transkript (rozbalí zkrácené tool volání). |
+| `Ctrl+T` | Přepíná seznam úkolů. |
+| `Ctrl+B` | Úkol na pozadí. (Konfliktuje s tmux prefixem — zmáčkni dvakrát.) |
+| `Ctrl+J` | Nový řádek bez odeslání. |
+| `Ctrl+G` nebo `Ctrl+X Ctrl+E` | Otevře aktuální prompt v `$EDITOR`. |
+| `Ctrl+V` (`Cmd+V` v iTerm2) | Vloží obrázek ze schránky jako `[Image #N]`. |
+| `Cmd+P` / `Meta+P` | Výběr modelu. |
+| `Cmd+T` / `Meta+T` | Přepne rozšířené myšlení. |
+| `Shift+Enter` nebo `\+Enter` | Víceřádkový vstup. Nativně v iTerm2, WezTerm, Ghostty, Kitty, Warp, Apple Terminal. Jinde: `/terminal-setup`. |
+
+### Gotcha
+
+Option-klávesové zkratky na macOS tiše selhávají, dokud si v terminálu nenastavíš **Left/Right Option = Esc+** (iTerm2 atd.). Pokud `Alt+M` nedělá pro cyklení režimů nic, je to tohle — použij `Shift+Tab`.
+
+Zkratky desktop aplikace Anthropic oficiálně nedokumentuje — to, co tady vidíš, je CLI.
+
+## 8.3 Vstupní prefixy
+
+Claude Code čte první znak řádku jako signál režimu:
+
+<Screenshot
+  src="/screenshots/ch8-input-prefixes.png"
+  alt="Čtyři terminálová okna v mřížce 2x2 ukazující vstupní prefixy v broskvové: lomítko spustí plánovací příkaz, vykřičník spustí ls a ukáže výstup, zavináč připojí auth.ts jako kartu souboru, křížek přidá pravidlo do CLAUDE.md."
+  caption="Jeden znak, čtyři různá chování. Lomítko spustí příkaz, vykřičník spustí shell, zavináč připojí soubor, křížek přidá do paměti."
+/>
+
+| První znak | Režim |
+|---|---|
+| `/` | Slash příkaz — spustí příkaz, ne prompt. |
+| `!` | Bash passthrough — pustí shell, výsledek se dostane do tvého kontextu. |
+| `@` | Zmínka souboru — `@path/to/file` připojí soubor; `@Explore` zmíní subagenta. |
+| `#` | Memory add — text za `#` se připojí do správného `CLAUDE.md`. Claude vybere rozsah (projekt / uživatel / lokální). |
+| Cokoliv jiného | Normální prompt. |
+
+`#` použij, když se přistihneš, že opakovaně vysvětluješ stejné pravidlo. `!` použij, když chceš, aby Claude viděl výstup reálného příkazu. `@` použij, když chceš, aby Claude přečetl konkrétní soubor bez hádání.
+
+## 8.4 CLAUDE.md — jak na to
+
+Kanonická dokumentace paměti žije na [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory). Praktický tvar:
+
+### Cílová délka
+
+**Pod 200 řádků na soubor.** Oficiální doporučení. Za tím bobtná spotřeba kontextu a Claude se pravidel drží méně spolehlivě. Komunitní konsenzus jde ještě dál — dobré CLAUDE.md soubory mají často pod 80 řádků.
+
+### Co patří dovnitř
+
+- **Co** projekt je (jeden odstavec: doména, velikost, stack)
+- **Proč** je postavený takhle (jeden odstavec: architektura nebo omezení)
+- **Jak** se na něm pracuje (příkazy, konvence, ne-dělej)
+
+Multi-krokové postupy dej do skillů, ne do CLAUDE.md. Pravidla specifická pro cesty dej do `.claude/rules/*.md` s `paths:` frontmatter — aktivují se jenom, když jsou relevantní.
+
+### Hierarchie rozsahů
+
+Všechny `CLAUDE.md` soubory z aktuálního adresáře směrem k rootu se při startu session zřetězí. Priorita (pozdější vítězí při konfliktu):
+
+1. **Managed** — politika od enterprise adminu (pokud existuje)
+2. **User** — `~/.claude/CLAUDE.md` (o tobě, načítá se všude)
+3. **Project** — `./CLAUDE.md` nebo `./.claude/CLAUDE.md` (o codebase, commitnuté)
+4. **Local** — `./CLAUDE.local.md` (o tobě v tomto projektu, gitignorované)
+
+`CLAUDE.md` v podadresářích se načítají líně, když Claude sáhne do souboru uvnitř. Užitečné pro monorepa.
+
+### Tři šablony
+
+**Projekt (`./CLAUDE.md`):**
+
+```md
+# Projekt
+
+Interní onboarding nástroj. Postgres + Node, deploy na Vercel.
+
+## Konvence
+- TypeScript strict. Žádné `any` bez komentáře.
+- Testy vedle zdrojáku: `foo.ts` + `foo.test.ts`.
+- Migrace: číslované SQL soubory v `db/migrations/`.
+
+## Ne
+- Neinstaluj npm balíčky bez ptaní.
+- Nesahej do `app/legacy/`.
+
+## Příkazy
+- `pnpm dev`, `pnpm test`, `pnpm db:seed`
+```
+
+**Uživatel (`~/.claude/CLAUDE.md`):**
+
+```md
+# Osobní
+
+Preferuju přímé odpovědi. Žádné rozehřívání.
+V editoru používám vim keybindings.
+Když řeknu „ship it", nejdřív pusť testy, pak commit.
+```
+
+**Lokální (`./CLAUDE.local.md`, gitignorované):**
+
+```md
+# Lokální poznámky
+
+Staging DB: `postgresql://localhost:5433/app_staging`
+WIP branch: `wip/2026-04-refactor-auth`
+```
+
+### Importy
+
+`@path/to/file.md` se rozbalí inline — užitečné, ale **importovaný soubor pořád čerpá z kontextu**, načítá se při startu session. Max hloubka 5 skoků. Nepoužívej importy na „úsporu kontextu" — neušetří.
+
+### Co jde špatně
+
+- **Přeinstrukování** — pravidla se uniformně ignorují
+- **Osobnostní próza** — plýtvá tokeny bez zlepšení výstupu
+- **Konfliktní pravidla ve vnořených souborech** — Claude si vybere jedno libovolně
+- **Použité jako linter** — nech lintery lintovat; CLAUDE.md nastavuje záměr
+
+## 8.5 Privacy, bezpečnost a plány
+
+Odlehčený přehled. Aktuální privacy a trust stránky Anthropicu jsou zdrojem pravdy, odkazy jsou níže.
+
+### Co opustí tvůj stroj
+
+Každý prompt posílá: tvoji zprávu, soubory, které jsi explicitně sdílel (přes `@`, tool use, nebo které si Claude přečetl, aby odpověděl), a historii konverzace v aktuálním kontextovém okně.
+
+**Neposílá:** celý filesystem, soubory mimo projekt, nic, co sedí na `.gitignore` nebo `.claudeignore`.
+
+<Screenshot
+  src="/screenshots/ch8-data-flow.png"
+  alt="Diagram dvou zón. Levý panel s popiskem your machine: karty souborů auth.ts, main.py, .env, secrets.json a malý terminál. Pravý panel s popiskem anthropic: karta model. Broskvové šipky přes hranici s popisky prompt, @-mentioned files, what claude reads. Čárkované růžové šipky pro .env a secrets končí u filtrů s popisky .claudeignore a .gitignore. Tyrkysová šipka response vede zpět."
+  caption="Hranice není uzavřená brána — je to filtr. Prompt a soubory, které zmíníš, projdou; .env a cokoliv na .claudeignore nebo .gitignore ne."
+/>
+
+### Plány a retence
+
+| Plán | Pro koho | Jak je na tom s retencí |
+|---|---|---|
+| **Pro** | Jednotlivec | Standardní retence; používá se k vylepšování služby; opt-out v nastavení konzole. |
+| **Max** | Intenzivní jednotlivec | Stejné jako Pro. |
+| **Team** | Malé organizace (5–200 seats) | Nastavitelné adminem. Přísnější defaulty než Pro. |
+| **Enterprise** | Velké organizace | Zero retention k dispozici. Admin řídí politiku. SSO, SOC 2, DPA. |
+| **API přímo** | Vývojáři, některé funkce blokované | Retenci si nastavuješ sám v API konzoli; Remote Control, mobilní aplikace a týmové funkce jsou obvykle mimo hru. |
+
+Pokud má tvoje firma Team nebo Enterprise seat, **použij ho**. Rozdíly v retenci a admin politice jsou pro firemní použití důležité.
+
+### `.claudeignore`
+
+Nejjednodušší obrana bez ohledu na plán. Vedle `.gitignore`, vypisuje soubory nebo cesty, které Claude nikdy nevidí:
+
+```
+.env
+.env.*
+**/secrets.*
+customer-data/
+proprietary-algorithms/
+```
+
+Používej pro tajné klíče, zákaznická data, interní dokumenty — co ti diktuje compliance.
+
+### Sandboxing
+
+`/sandbox` obalí bash příkazy sandboxem na úrovni OS — filesystem + síť (Seatbelt na macOS, bubblewrap na Linuxu/WSL2). [Kapitola 8](/cs/lab/next-steps#sandboxing) to vysvětluje. Flagy, které jsou důležité pro spravovaná nasazení:
+
+| Flag | Efekt |
+|---|---|
+| `sandbox.failIfUnavailable: true` | Tvrdý fail, když sandbox nestartuje. Žádný tichý fallback. |
+| `allowUnsandboxedCommands: false` | Vypne escape hatch, přes který by jinak příkazy běžely mimo sandbox. |
+| `sandbox.network.allowManagedDomainsOnly: true` | Na síť jen admin-schválené domény. |
+| `sandbox.filesystem.allowWrite` | Cesty mimo CWD, kam můžou subprocesy zapisovat. Slučují se napříč scopy nastavení. |
+
+→ [Sandboxing docs](https://code.claude.com/docs/en/sandboxing)
+
+
+### MCP bezpečnost
+
+MCPs, které načítají nedůvěryhodný obsah (webové stránky, issues, maily), do tvé session můžou injektovat instrukce. Postoj Anthropicu: **třetí strany na vlastní riziko**. Před instalací MCP si zkontroluj, co dělá. Upřednostňuj first-party MCPs od organizací `anthropics/`, když jsou k dispozici.
+
+### Kanonické odkazy
+
+- [Anthropic Privacy Policy](https://www.anthropic.com/legal/privacy)
+- [Anthropic Trust Center](https://trust.anthropic.com) — certifikace, data processing addendum, security posture
+- [Claude Code data handling](https://code.claude.com/docs/en/data-handling)
+- [Enterprise plan](https://www.anthropic.com/enterprise)
+- [Permissions docs](https://code.claude.com/docs/en/settings#permissions)
+
+Pokud si nejsi jistý, co tvoje firma dovoluje, poraď se s adminem před tím, než sáhneš na produkční kód s Claudem.
+
+## 8.6 Jak Claude rozšiřovat
+
+### Skilly
+
+Agent Skills otevřený formát — specifikace a referenční implementace:
+
+- [agentskills.io](https://agentskills.io) — otevřený standard
+- [github.com/anthropics/skills](https://github.com/anthropics/skills) — 17 oficiálních skillů + meta-skilly `skill-creator` a `mcp-builder`
+- [Skills docs](https://code.claude.com/docs/en/skills)
+
+Kapitola 7 ukazuje agentní workflow psaní skillů (vyvoláš `skill-creator` nebo `craft-skill`, odpovíš na otázky objevování, zkontroluješ draft).
+
+### Pluginy
+
+Formát plugin manifestu, submission marketplace, rozdíl plugin vs. skill:
+
+- [Plugins docs](https://code.claude.com/docs/en/plugins)
+- [Plugins reference](https://code.claude.com/docs/en/plugins-reference)
+- Odeslat plugin: [claude.ai/settings/plugins/submit](https://claude.ai/settings/plugins/submit)
+
+### Hooky
+
+Shell příkazy, HTTP endpointy nebo LLM prompty spouštěné na konkrétních lifecycle událostech. Události zahrnují `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact` a řadu dalších.
+
+- [Hooks docs](https://code.claude.com/docs/en/hooks)
+- Konfigurace v `.claude/settings.json` pod `"hooks"`, nebo v `hooks/hooks.json` pluginu
+
+### MCPs
+
+Postav si vlastní MCP server s MCP SDK (Python nebo TypeScript):
+
+- [Model Context Protocol](https://modelcontextprotocol.io) — otevřený standard
+- Skill `mcp-builder` v `anthropics/skills` ti postaví základ
+- [Claude Code MCP docs](https://code.claude.com/docs/en/mcp)
+
+## 8.7 Kanonické zdroje
+
+Každý oficiální odkaz použitý v průvodci, všechno na jednom místě.
+
+### Anthropic — Claude Code
+
+- [Overview](https://code.claude.com/docs/en/overview)
+- [Memory / CLAUDE.md](https://code.claude.com/docs/en/memory)
+- [Skills](https://code.claude.com/docs/en/skills)
+- [Plugins](https://code.claude.com/docs/en/plugins)
+- [Sub-agents](https://code.claude.com/docs/en/sub-agents)
+- [MCP](https://code.claude.com/docs/en/mcp)
+- [Hooks](https://code.claude.com/docs/en/hooks)
+- [Commands](https://code.claude.com/docs/en/commands)
+- [Keybindings](https://code.claude.com/docs/en/keybindings)
+- [Interactive mode](https://code.claude.com/docs/en/interactive-mode)
+- [Remote Control](https://code.claude.com/docs/en/remote-control)
+- [Claude Code na Webu](https://code.claude.com/docs/en/claude-code-on-the-web)
+- [GitHub Actions](https://code.claude.com/docs/en/github-actions)
+- [Settings (permissions)](https://code.claude.com/docs/en/settings)
+- [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices)
+
+### Standardy + referenční repa
+
+- [Agent Skills spec](https://agentskills.io)
+- [anthropics/skills](https://github.com/anthropics/skills)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+
+### Ekosystém
+
+- [Compound Engineering plugin](https://github.com/EveryInc/compound-engineering-plugin)
+- [Super Powers plugin](https://github.com/iannuttall/claude-super-powers)
+- [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit)
+- [altk-evolve](https://github.com/AgentToolkit/altk-evolve) — IBM Research. Cross-session učení pro coding agenty přes MCP + vektorový store.
+
+### Privacy + compliance
+
+- [Anthropic Privacy Policy](https://www.anthropic.com/legal/privacy)
+- [Anthropic Trust Center](https://trust.anthropic.com)
+- [Enterprise plan](https://www.anthropic.com/enterprise)
+
+### Tenhle lab
+
+- [github.com/ondrej-svec/claude-code-lab](https://github.com/ondrej-svec/claude-code-lab) — zdroj, issues, hvězdy vítané.

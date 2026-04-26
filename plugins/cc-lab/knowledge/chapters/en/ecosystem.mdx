@@ -1,0 +1,206 @@
+# The ecosystem
+
+Claude Code alone is a good agent. With the ecosystem, it becomes a platform you extend instead of wait for.
+
+This chapter is a tour with enough steps to try each piece yourself. Skim it, pick one thing, come back later for depth.
+
+<Screenshot
+  src="/screenshots/ch5-ecosystem.png"
+  alt="Radial diagram. At the centre, a terminal window labeled 'claude code'. Six surfaces radiate out: skills (a skill.md card), plugins (a plugin.json card), mcps (a running mcp server), subagents (an @Explore invocation), web (a claude.ai/code browser tab), and remote (a phone-shaped card with a nested terminal)."
+  caption="The six surfaces Claude Code extends through. Install what saves you time; skip the rest."
+/>
+
+Everything we're about to cover — skills, plugins, MCPs, subagents — runs inside sessions. The app keeps several open at once, so one conversation can be mid-refactor while another is still planning.
+
+<Screenshot
+  src="/screenshots/ch5-multi-session-sidebar.png"
+  alt="Two recent sessions in the Claude Code sidebar — the active one highlighted, the previous one below."
+  caption="Multiple sessions live in the sidebar. Switch without losing context."
+/>
+
+## Skills
+
+A **skill** is a bundle of instructions + optional scripts that Claude loads on demand. A domain-specific playbook — lives in `~/.claude/skills/`, activates automatically when the situation matches.
+
+**An example worth a look:** [`visualize`](https://github.com/ondrej-svec/heart-of-gold-toolkit). Takes any markdown document — a plan, a brainstorm, an architecture doc — and turns it into a polished, shareable HTML artifact. One well-defined job, well-scoped instructions, a few helper scripts. The shape of a good skill.
+
+**Open standard.** Skills follow the [Agent Skills open format](https://agentskills.io) — spec is public, skills are portable across Claude Code and other tools that adopt the standard. Anthropic maintains a [reference repo](https://github.com/anthropics/skills) with 17 production skills you can read as exemplars.
+
+Chapter 7 shows how to have Claude build one of these for you.
+
+→ [Skills docs](https://code.claude.com/docs/en/skills)
+
+## Plugins
+
+A **plugin** bundles related skills, commands, and hooks into one installable unit. Install once, get the whole workflow.
+
+Chapter 7 walks through installing and using the [Compound Engineering plugin](https://github.com/EveryInc/compound-engineering-plugin) — Avery's full brainstorm → plan → work → review → compound loop. That's the one to try first. [Super Powers](https://github.com/iannuttall/claude-super-powers) is another worth knowing about — a broader pick-and-choose toolkit.
+
+As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) is a small collection of skills I bundled for my daily work (visualize is one of them). Not something to install now — an example of what emerges once you've written three or four skills you don't want to lose. You'll build one of your own.
+
+→ [Plugins docs](https://code.claude.com/docs/en/plugins)
+
+## Build your first skill — the agentic way
+
+Before you install more of other people's, write one of your own. When something repeats — the shape of the prompt, the format of the output, the sequence of steps — extract a skill. **And don't hand-write `SKILL.md`. Have Claude do it.**
+
+### Two meta-skills that write skills
+
+Both do the same job: guide you through discovery, draft a well-shaped `SKILL.md`, write it to disk. Pick one.
+
+- **`skill-creator`** — shipped by Anthropic in the [`anthropics/skills`](https://github.com/anthropics/skills) repo. Install via `/plugin` from that marketplace. Canonical, minimal, teaches the shape.
+- **`craft-skill`** — part of the [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit). Opinionated, five-phase workflow with a technique checklist, higher-conformance output by default.
+
+### The walkthrough
+
+With either installed, in a real project, run:
+
+```
+/skill-creator
+```
+
+(or `/craft-skill`, depending on which you installed).
+
+Claude asks, one question at a time:
+
+1. **What should this skill do?** One sentence. *"Turn a markdown brainstorm into a shareable HTML visual artifact."*
+2. **When should it activate?** Trigger phrases. *"visualize, mindmap, show me the structure, make this visual."*
+3. **Who's the user?** Specific. *"Me, when I've finished a brainstorm and want to share the shape with someone."*
+4. **What does success look like?** The output shape. *"A single HTML file, dashboard-style layout, that I can copy to share."*
+
+Answer each as specifically as you can. Vague answers make vague skills.
+
+Claude then drafts the `SKILL.md` — `name`, a description with those triggers in it, bounded tool allowlist, mission, boundaries, decision rules, examples. Shows you the diff. You review, tweak, accept.
+
+The file lands in `~/.claude/skills/my-skill/SKILL.md`. Next session, when you say one of the trigger phrases, the skill activates automatically.
+
+### Progressive disclosure
+
+Skills stay under ~500 lines. Longer content goes into bundled files: `references/` for reading material, `scripts/` for helpers, `assets/` for templates. This is called *progressive disclosure* — the metadata is always loaded, the body loads when triggered, the extras load only if needed.
+
+A mature skill like [`visualize` in the Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit/tree/main/plugins/babel-fish/skills/visualize) shows what that looks like at scale — one `SKILL.md`, half a dozen helper scripts beside it, decision trees for when each script applies. None of it was hand-written cold; each piece got added when a week of use revealed a gap.
+
+### Agent Skills open format
+
+The format is [an open spec](https://agentskills.io) — frontmatter fields, loader behaviour, progressive-disclosure rules. Anthropic's full reference is in [`anthropics/skills/spec/agent-skills-spec.md`](https://github.com/anthropics/skills/blob/main/spec/agent-skills-spec.md). Skills you write work in Claude Code today and will work in any tool that adopts the spec tomorrow.
+
+### The endgame
+
+Do this three or four times — extract a skill whenever something repeats — and suddenly you have a small collection. Bundle them with a `.claude-plugin/plugin.json`, publish to GitHub, and that's **your plugin**. Same shape as the Compound Engineering plugin you installed earlier, just yours. Your team installs once and inherits everything you've learned to systematise.
+
+That's compound, all the way down.
+
+→ [Skills docs](https://code.claude.com/docs/en/skills) · [Plugins docs](https://code.claude.com/docs/en/plugins)
+
+## MCPs — Claude's hands on external services
+
+**Model Context Protocol** is the open standard for wiring Claude to tools that live outside its conversation — filesystems, databases, browsers, APIs. If skills extend what Claude *knows*, MCPs extend what Claude can *do*.
+
+### Try one: Chrome DevTools MCP
+
+The standout for web work. Gives Claude live access to Chrome — console logs, network requests, Lighthouse, performance traces, screenshots.
+
+```bash
+claude mcp add --transport stdio chrome-devtools -- npx -y chrome-devtools-mcp@latest
+```
+
+Then in your session:
+
+<Prompt>Open https://example.com and tell me why its LCP is slow. Run Lighthouse if you need to.</Prompt>
+
+Claude opens the page, inspects, reports back. This is the moment MCPs stop being abstract.
+
+### Others worth knowing about
+
+- **Gmail, Google Drive, Calendar, Notion** — bundled on `claude.ai` for plan users
+- **Postgres, Linear, Sentry, GitHub, Playwright** — community MCPs, one `claude mcp add` away
+- **Build your own** — `mcp-builder` skill in `anthropics/skills` scaffolds one
+
+**Security note.** MCPs that fetch untrusted content (web pages, issues, emails) can inject instructions into your session. Anthropic's warning stands: third-party MCPs at your own risk. Chapter 9.5 has more.
+
+→ [MCP docs](https://code.claude.com/docs/en/mcp)
+
+## Subagents — delegate to keep your context clean
+
+A **subagent** is a specialised worker Claude spawns with its own context window, tools, and permissions. When Claude needs to do something heavy — explore a big codebase, run a review, summarise a long file — it can delegate to a subagent instead of burning your main context.
+
+You can invoke them directly, or let Claude choose.
+
+### Try one: the built-in Explore agent
+
+Ship-built. Read-only, fast (Haiku), ideal for "where is X?" questions in a large codebase.
+
+In any repo, ask:
+
+<Prompt>Use the Explore agent to find where authentication is handled, then summarise.</Prompt>
+
+Or more explicitly, mention it by name:
+
+<Prompt>@Explore: find every place we call the Stripe API.</Prompt>
+
+Your main conversation gets a two-paragraph summary. The actual file-reading happened in a side context that's now discarded. You spent ~100 tokens on the result, not ~20k on the exploration.
+
+### Create your own
+
+For recurring delegation — say, a reviewer that always applies your team's standards — run:
+
+```
+/agents
+```
+
+<Screenshot
+  src="/screenshots/ch5-agents-ui.png"
+  alt="/agents UI listing project, personal, and library subagents with descriptions"
+  caption="`/agents` lists what's available. Pick one, scope it, save — agents live as `.md` files."
+/>
+
+Choose Library → Create new agent → let Claude generate the definition. Scope it (Personal or Project), restrict its tools, save. Your agent is now `.claude/agents/my-agent.md` and available via `@my-agent` or natural language.
+
+**Note.** In Claude Code v2.1.63+, the internal `Task` tool was renamed to `Agent`. Older tutorials calling it Task still work — same thing.
+
+**Limit.** Subagents cannot spawn other subagents. For nested delegation, use skills with `context: fork` or chain from the main conversation.
+
+→ [Subagents docs](https://code.claude.com/docs/en/sub-agents)
+
+## Remote and mobile — Claude off your desk
+
+Two different products people confuse. Both need a Pro plan or higher — API-key-only setups are locked out.
+
+### Remote Control — your workstation, your files
+
+Claude Code runs **on your machine**, with full local filesystem access, your configured MCPs, your keys. You drive it from a browser or mobile app.
+
+Setup — four steps:
+
+1. Confirm version: `claude --version` (needs 2.1.51+)
+2. `claude` → `/login` to sign in through claude.ai
+3. In your project: `claude --remote-control "My Project"`
+4. Press `spacebar` at the terminal → QR code. Scan with the Claude mobile app ([iOS](https://apps.apple.com/app/claude), [Android](https://play.google.com/store/apps/details?id=com.anthropic.claude)) or open `claude.ai/code` in a browser.
+
+You can now drive the session from anywhere. Long-running builds, PR reviews from a meeting, "check the deploy" from your phone.
+
+### Claude Code on the Web — cloud-hosted, ephemeral
+
+Different product. Session runs on Anthropic-managed VMs, starting from a fresh clone of your GitHub repo. No local files, no local MCPs. Good for quick GitHub-based tasks from any device.
+
+Start via `claude.ai/code` on the web — pick a repo, start a session.
+
+### Mobile app
+
+Not a standalone Claude Code — a **controller** for Remote Control sessions and Claude Code on the Web. Push notifications for permission prompts. Review diffs, chat, approve tool calls from your phone. Starts web sessions on its own.
+
+→ [Remote Control docs](https://code.claude.com/docs/en/remote-control) · [Claude Code on the Web](https://code.claude.com/docs/en/claude-code-on-the-web)
+
+## Practice: continue your sample
+
+Working through the lab in order? Take what this chapter taught to the sample you started in chapter 2 — or to a codebase of your own, where it'll land harder.
+
+1. Install one of the meta-skills from this chapter: `/plugin install skill-creator` from `anthropics/skills`, or the Heart of Gold toolkit for `/craft-skill`. Pick one.
+2. Run it and let it walk you through authoring a skill called `scaffold-endpoint`. Purpose: add a new `GET /<name>` route matching your project's framework conventions — minimal-API `MapGet` in Varianta A, `@app.get` in Varianta B, or whatever your own repo uses. Trigger phrases: `scaffold endpoint`, `add a new route`.
+3. Once saved, trigger the skill in your project — ask it to add `GET /ping` returning `{ "pong": true }`. Review the output. If the scaffolding is off, edit the skill, not the output. That's the feedback loop.
+
+When it works: you have a reusable skill you didn't hand-write, living in `~/.claude/skills/` or your project's `.claude/skills/`. The next chapter's practice runs the full Compound Engineering loop on one real feature.
+
+---
+
+The ecosystem is a menu, not a checklist. Install what actually saves you time. Everything else can wait.

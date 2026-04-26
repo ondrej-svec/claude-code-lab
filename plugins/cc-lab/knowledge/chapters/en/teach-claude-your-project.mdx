@@ -1,0 +1,136 @@
+# Teach Claude your project
+
+Claude doesn't remember. Every conversation starts cold. A good `CLAUDE.md` gives it the shortcuts it would otherwise have to rediscover — which makes every prompt land better.
+
+## Why context matters more than the model
+
+Model quality is commoditized. The differentiator is **what you feed it**. A weaker model with great context usually beats a stronger one with none.
+
+Three failure modes you'll recognize:
+
+1. "It gave me code that ignores our conventions" → you didn't tell it the conventions
+2. "It suggested a library we don't use" → you didn't list the ones you do
+3. "It kept asking questions I already answered" → you didn't write it down
+
+`CLAUDE.md` is where you write it down once. Except — you don't write it. Claude does.
+
+## Let Claude draft it
+
+Inside your project, run:
+
+```
+/init
+```
+
+Claude scans the repo and proposes a `CLAUDE.md` with what it found — stack, structure, common scripts, obvious conventions. For the newer interactive flow that also proposes skills and hooks, set `CLAUDE_CODE_NEW_INIT=1` before running.
+
+<Screenshot
+  src="/screenshots/ch3-init-output.png"
+  alt="/init output showing Claude scanning a sample project and proposing a CLAUDE.md with build, test, and conventions sections"
+  caption="`/init` drafts a starting `CLAUDE.md`. You refine it over the next few prompts."
+/>
+
+The output is a **starting point, not a finished doc**. Now ask Claude to refine it:
+
+<Prompt>Re-read CLAUDE.md and add the three conventions we've been using this session — strict TypeScript with no any, tests next to the file they cover, database migrations as numbered SQL files. Keep each section short.</Prompt>
+
+Then:
+
+<Prompt>Re-read CLAUDE.md and add a **Don't** section with the rules we keep rediscovering — don't touch app/legacy/, don't install new packages without asking, don't run migrations automatically.</Prompt>
+
+Claude will edit the file and show you the diff. Review, accept, commit. The document grew by you *asking for* rules you know, not by you *typing* rules into a file.
+
+## What ends up in it
+
+If you're curious, here's the shape Claude usually produces. Don't type this — let Claude write it from your answers.
+
+```md
+# CLAUDE.md
+
+## Project
+Internal tool for customer onboarding. 3k DAU, Postgres + Node, deployed on Vercel.
+
+## Conventions
+- TypeScript strict mode. No `any` unless commented.
+- Tests live next to the file: `foo.ts` + `foo.test.ts`.
+- Database migrations are numbered SQL files in `/db/migrations/`.
+
+## Don't
+- Don't install new npm packages without asking.
+- Don't touch `app/legacy/` — that's frozen pending rewrite.
+- Don't run migrations automatically.
+
+## Useful commands
+- `pnpm dev` — local server on :3000
+- `pnpm test` — vitest, watch mode
+- `pnpm db:seed` — reset local DB to fixture state
+```
+
+**Target under 200 lines per file.** Longer files consume more context and reduce adherence. Chapter 9.4 has the deeper best-practices reference.
+
+## Update it as you learn
+
+When Claude does something you correct, you don't have to stop and edit `CLAUDE.md`. Just start your next message with `#`:
+
+<Prompt>#migrations must be reversible — write the down migration alongside the up one</Prompt>
+
+<Screenshot
+  src="/screenshots/ch3-memory-prefix.png"
+  alt="Claude Code confirming a memory addition, showing the target file, the rule, and the inferred scope"
+  caption="The `#` prefix adds the rule to the right `CLAUDE.md`. You stayed in flow."
+/>
+
+That's the **memory-add prefix**. Claude takes the line after `#`, decides which scope (project / user / local) it fits best, and appends it to the right `CLAUDE.md`. You stayed in flow, the rule got captured.
+
+<Callout variant="tip">
+Think of `CLAUDE.md` like onboarding docs for a new contractor — who needs to be productive fast, doesn't know your history, and works in eight-hour bursts.
+</Callout>
+
+## Scope: managed, user, project, local
+
+Up to four layers load at session start. Later in the chain wins when rules conflict:
+
+- **Managed policy** — enterprise-deployed via MDM. Can't be overridden locally. Only present on managed fleets.
+- **User** — `~/.claude/CLAUDE.md` — about **you**: editor preferences, shell habits, tone. Loads for every project.
+- **Project** — `./CLAUDE.md` or `./.claude/CLAUDE.md` — about **this codebase**: conventions, commands, don'ts. Committed, shared with the team.
+- **Local** — `./CLAUDE.local.md` — about **you in this project**: local paths, secrets, WIP notes. Gitignored.
+
+Nested `CLAUDE.md` files in subdirectories load lazily — only when Claude reads a file inside that subdir. Useful for monorepos. Alternative: `.claude/rules/*.md` with `paths:` frontmatter, which only activates when matching files are touched.
+
+<Screenshot
+  src="/screenshots/ch3-claude-md-precedence.png"
+  alt="Four CLAUDE.md scope cards stacked in precedence order — Managed policy, User, Project, Local"
+  caption="All layers concatenate at session start. Later in the chain wins on conflict."
+/>
+
+→ [Anthropic memory docs](https://code.claude.com/docs/en/memory) — the canonical reference.
+
+## Keep it a map, not a manual
+
+Context is scarce. A `CLAUDE.md` that tries to say everything crowds out the thing it was supposed to help with — the task, the code, the relevant docs.
+
+OpenAI's [Ryan Lopopolo](https://openai.com/index/harness-engineering/), writing about shipping a production system mostly from Codex, calls this out directly: keep your `AGENTS.md` / `CLAUDE.md` around 100 lines, and treat it as the **table of contents**. His framing: Claude should be *"a map, not a 1,000-page instruction manual."* The real knowledge lives elsewhere — structured docs the agent opens only when it needs them.
+
+What that looks like as a section in your `CLAUDE.md`:
+
+```md
+## Where to look
+- Architecture decisions — `docs/adr/`
+- On-call runbooks — `docs/runbooks/`
+- Payment refund flow — `docs/runbooks/refunds.md`
+- Style guide — `docs/style-guide.md`
+- Deeper API reference — `docs/api.md`
+```
+
+Now Claude scans the map in every session without reading the encyclopedia. When the task mentions refunds, it opens the runbook. When the task is a new endpoint, it reads the style guide. You write each doc once, in its own file, at its own size — and the map stays short.
+
+## Practice: continue your sample
+
+Working through the lab in order? Take what this chapter taught to the sample you started in chapter 2 — or to a codebase of your own, where it'll land harder.
+
+1. Open your project folder in Claude — `samples/dotnet-core` (Varianta A), `samples/python-react` (Varianta B), or a repo of your own. Sample folders ship with a starter `CLAUDE.md`; your own repo may or may not. Either way, read what's there before touching anything.
+2. Run `/init`. Claude proposes an updated `CLAUDE.md` based on what it sees. Compare the proposal with what you've got — what does it miss, what does it add that doesn't fit, what's genuinely better. Accept the parts that are, edit the rest.
+3. Use the `#` prefix to add one or two rules that came up in chapter 2, or that you've been repeating to teammates — "always return JSON errors with an `error` field", "before adding an endpoint, add a matching test." Watch which scope each lands in; project scope is what you want for codebase-wide rules.
+4. Add a **Where to look** section — one or two pointers to real destinations. If your repo has runbooks, an ADR folder, or a style guide, point at them. If not, point at where they'll live (`docs/runbooks/`, `docs/adr/`). The pointer is the commitment.
+
+When it works: your `CLAUDE.md` is *yours* — short, opinionated, and linking out to the docs you'll actually reach for. The next chapter's practice uses plan mode to add a second feature.
