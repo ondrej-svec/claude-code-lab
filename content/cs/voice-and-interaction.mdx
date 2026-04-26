@@ -1,35 +1,35 @@
 # Hlas a modality
 
-Psaní je pomalá cesta. Nejrychlejší vývojáři krmí Claude svým hlasem, svou obrazovkou a screenshotem toho, na co se zrovna dívali — obvykle všechno v jednom promptu. Tahle kapitola je o tom, jak to dělat bez gimicků.
+Ťukání zdržuje. Nejrychlejší vývojáři mluví na Claude, sdílejí s ním obrazovku a posílají mu screenshoty toho, na co se zrovna dívali — obvykle všechno v jednom promptu. Tahle kapitola je o tom, jak na to bez okázalostí.
 
-V předchozí kapitole ses naučil iterovat text. Tady rozšíříš vstupní stranu: hlas na každém povrchu, který ho má, multimodální kontext (screenshoty, vložení obrázku, drag-drop) jako prvotřídní signál a malé posuny v promptování, díky kterým hlasové prompty fungují stejně dobře jako psané.
+V minulé kapitole ses naučil iterovat text. Tady rozšíříš to, co Claudovi posíláš: hlas všude, kde dává smysl, multimodální kontext (screenshoty, vložení obrázku, drag-drop) jako rovnocenný signál a pár drobných posunů, díky kterým hlasové prompty fungují stejně dobře jako psané.
 
-## Kdy hlas vítězí nad psaním
+## Kdy hlasem víc než psaním
 
-Psaný prompt je věta, kterou jsi složil. Hlasový prompt je myšlenka, kterou jsi vyslovil. Mají různé tvary a různé úkoly.
+Psaný prompt je věta, co jsi složil. Hlasový prompt je myšlenka, co jsi vyslovil. Mají různé tvary a hodí se na různé věci.
 
-Hlas vítězí, když:
+Hlasem to dává smysl, když:
 
 - Popisuješ, co *vidíš* — chybu na obrazovce, tvar UI, diagram na tabuli
-- Jsi uprostřed něčeho jiného a nechce se ti přerušovat na složení odstavce
+- Jsi uprostřed něčeho jiného a nechce se ti přerušovat se a skládat odstavec
 - Myšlenka je rozpracovaná a chceš ji objevit, jak ji říkáš
-- Jdeš pěšky, vaříš nebo jsi jinak mimo klávesnici
+- Jdeš pěšky, vaříš nebo jsi jinak od klávesnice
 
-Psaní vítězí, když:
+Psaní vyhrává, když:
 
 - Prompt má strukturu, na které záleží (seznamy, kód, přesné názvy souborů)
-- Budeš ho kopírovat někam jinam
+- Budeš ho kopírovat dál
 - Mluvil bys jinak moc potichu nebo na veřejnosti
 
-Většina vývojářů končí tak, že to střídá věta po větě. Hlasem říkej tu rozbitou myšlenku, naťukej přesnou referenci.
+Většina vývojářů to nakonec střídá větu po větě. Hlasem řekni tu mlhavou myšlenku, naťukej přesnou referenci.
 
 ## Čtyři povrchy
 
-Claude poslouchá na každém povrchu jinak. Zkratka, latence, kvalita přepisu — každý působí jinak. Během týdne, co všechny čtyři vyzkoušíš, si vybereš oblíbence.
+Claude poslouchá na každém povrchu jinak. Klávesová zkratka, latence, kvalita přepisu — každý má svou náladu. Během týdne, co všechny čtyři vyzkoušíš, si vybereš oblíbence.
 
 ### Desktopová aplikace — nativní mikrofon
 
-Desktopová aplikace Claude má vedle vstupu pro prompt zabudovaný mikrofon. Klikni, mluv, klikni znovu. Přepis se objevuje v promptu živě. Před odesláním si ho můžeš upravit.
+Desktopová aplikace Claude má vedle promptového vstupu zabudovaný mikrofon. Klikni, mluv, klikni znovu. Přepis ti naskakuje do promptu, jak mluvíš. Před odesláním si ho ještě můžeš upravit.
 
 <Screenshot
   src="/screenshots/voice-desktop-mic.png"
@@ -37,11 +37,11 @@ Desktopová aplikace Claude má vedle vstupu pro prompt zabudovaný mikrofon. Kl
   caption="Stiskni mikrofon. Mluv. Sleduj, jak se prompt vyplňuje."
 />
 
-Tohle je povrch, který většina vývojářů používá nejvíc. Žádné nastavení, žádné nástroje třetích stran, přepis je už teď dobrý. Jeden trik, který stojí za to znát: nadiktuj hrubou myšlenku a pak *před odesláním přepis uprav* — hlas + lehká úprava poráží hlas-a-pošli pokaždé.
+Tohle je povrch, který většina vývojářů využívá nejvíc. Žádné nastavování, žádné nástroje třetích stran, přepis je už teď dobrý. Jeden trik za to stojí: nadiktuj hrubou myšlenku a *před odesláním přepis projdi a uprav* — hlas s lehkou úpravou je vždycky lepší než řekni-a-pošli.
 
 ### Terminál — `/voice` je vestavěné
 
-Terminálové CLI Claude Code má diktování zabudované. Spustíš `/voice` a je zapnuté.
+Claude Code má v terminálu diktování zabudované. Spustíš `/voice` a je zapnuté.
 
 <TerminalOutput
   src="/visuals/voice-terminal-enabled.svg"
@@ -53,48 +53,48 @@ Terminálové CLI Claude Code má diktování zabudované. Spustíš `/voice` a 
 Pak:
 
 - **Hold mode (výchozí)** — drž `Space` a mluv, pusť a přepis se vloží. Zkontroluj, případně uprav, `Enter` odešle.
-- **Tap mode** — `/voice tap`. Klepni `Space` pro start, klepni znovu pro stop. Automaticky odešle, když má přepis aspoň tři slova.
+- **Tap mode** — `/voice tap`. Stiskni `Space`, ať začne nahrávat, stiskni znovu, ať zastaví. Automaticky odešle, jakmile má přepis aspoň tři slova.
 
-Dvě věci, kvůli kterým je `/voice` lepší než obecný diktovací nástroj:
+Dvě věci dělají z `/voice` lepší volbu než obecný diktovací nástroj:
 
-- **Vyladěné na vývojářský slovník.** `regex`, `OAuth`, `JSON`, `localhost` se přepisují správně. Název tvého aktuálního projektu a jméno gitové větve se automaticky přidávají jako nápověda pro rozpoznávání.
-- **Dvacet jazyků včetně češtiny.** Nastav v `/config` nebo přímo v settings souboru. Defaultně angličtina.
+- **Vyladěné na vývojářský slovník.** `regex`, `OAuth`, `JSON`, `localhost` se přepisují správně. Název tvého aktuálního projektu a název gitové větve se automaticky přidávají jako vodítko pro rozpoznávání.
+- **Dvacet jazyků včetně češtiny.** Nastavíš v `/config` nebo přímo v souboru s nastavením. Výchozí je angličtina.
 
-Audio se streamuje k Anthropicu k přepisu (ne lokálně). Zdarma — nespotřebovává tokeny ani se nepočítá do limitů v `/usage`. Vyžaduje účet Claude.ai (ne API klíč / Bedrock / Vertex / Foundry). Nefunguje přes SSH ani vzdálené sezení — potřebuje lokální mikrofon. Dostupné od Claude Code v2.1.69; tap mode od v2.1.116.
+Audio se posílá k Anthropicu k přepisu (ne lokálně). Zdarma — nespotřebovává tokeny ani se nepočítá do limitů v `/usage`. Vyžaduje účet Claude.ai (ne API klíč / Bedrock / Vertex / Foundry). Nejede přes SSH ani z vzdálené relace — potřebuje lokální mikrofon. K dispozici od Claude Code v2.1.69; tap mode od v2.1.116.
 
 ### Terminál — systémové alternativy
 
-`/voice` je správný výchozí nástroj pro terminál. Důvody, proč k tomu přidat systémový nástroj:
+`/voice` je správný výchozí nástroj pro terminál. Důvody, proč si k tomu přidat ještě systémový nástroj:
 
-- Diktuješ i do desktopové aplikace, prohlížeče, Slacku, editoru — jeden nástroj všude poráží mikrofon na každou aplikaci zvlášť
+- Diktuješ i do desktopové aplikace, prohlížeče, Slacku, do editoru — jeden nástroj pro všechno je lepší než mít mikrofon do každé aplikace zvlášť
 - Jedeš na API klíči / Bedrocku / Vertexu, kde `/voice` nefunguje
 - Chceš lokální přepis kvůli soukromí
 
-[Wispr Flow](https://wisprflow.ai) je oblíbená volba — tichý, drž-zkratku, naťuká přepis do té aplikace, která je v popředí. Free tier zvládne většinu vývojářské zátěže.
+[Wispr Flow](https://wisprflow.ai) je oblíbená volba — tichý, podržíš zkratku, naťuká přepis do té aplikace, kterou máš v popředí. Bezplatná verze zvládne většinu vývojářské zátěže.
 
-[Super Whisper](https://superwhisper.com) běží Whisper lokálně. Stejný workflow s hotkey. Vyber, když ti soukromí znamená víc než lepší UX Wispr.
+[Super Whisper](https://superwhisper.com) běží Whisper lokálně. Stejný princip se zkratkou. Vyber, jestli ti soukromí znamená víc než příjemnější UX od Wispr.
 
-[macOS Diktování](https://support.apple.com/cs-cz/guide/mac-help/mh40583/mac) je nulový-instalace baseline (`Fn Fn` ve výchozím). Použij na ověření, že hardware funguje, než za něco zaplatíš; není to denní jezdec.
+[macOS Diktování](https://support.apple.com/cs-cz/guide/mac-help/mh40583/mac) je baseline bez instalace (`Fn Fn` ve výchozím nastavení). Použij, ať si ověříš, že hardware funguje, než za něco zaplatíš; na denní použití to není.
 
 ### Mobil — telefon je tvůj terminál
 
-Mobilní aplikace Claude na iOS i Androidu mají nativní diktování. Tvar interakce je jiný než na desktopu: obvykle jedna ruka, často při chůzi, často spíš zachycuješ myšlenku než vykonáváš úkol.
+Mobilní aplikace Claude na iOS i Androidu mají nativní diktování. Vstup tam vypadá jinak než na desktopu: obvykle jedna ruka, často při chůzi, často spíš zachycuješ myšlenku, než vykonáváš úkol.
 
-Mobil je místo, kde hlas dělá svou nejvíc charakteristickou práci — ten prompt bys nenapsal; nezvedl bys notebook, abys tu myšlenku zachytil; hlas je to, co vůbec umožňuje to zachycení.
+Na mobilu se hlas ukáže nejvýrazněji — ten prompt bys nenapsal, nezvedl bys notebook, abys tu myšlenku zachytil; hlas je jediný způsob, jak ji vůbec zachytit.
 
 ### Prohlížeč — claude.ai web
 
-Webová aplikace na `claude.ai` má mikrofon stejný jako desktopová aplikace. Použij, když jsi na cizím stroji, na Linuxu nebo v prostředí, kde nechceš nic instalovat.
+Webová aplikace na `claude.ai` má stejný mikrofon jako desktopová. Použij, jestli jsi na cizím stroji, na Linuxu nebo v prostředí, kde nechceš nic instalovat.
 
 ## Multimodální — screenshot je součást promptu
 
 Hlas rozšiřuje, co můžeš Claudovi *říct*. Multimodální vstup rozšiřuje, co můžeš *ukázat*.
 
-Vložený screenshot je chybějící kontext promptu zviditelněný. Tři místa, kde dopadne víc než jakýkoliv ekvivalentní odstavec:
+Vložený screenshot zviditelní to, co bys jinak musel popisovat slovy. Tři situace, kde dopadne líp než jakýkoliv ekvivalentní odstavec:
 
 ### Design review — ukaž mockup, polož otázku
 
-Přetáhni Figma export nebo screenshot stránky do promptu. Zeptej se: „Napoj to na moje existující komponenty." Claude přečte vizuál, pojmenuje komponenty, které vidí, zeptá se na ty, které neumí odhadnout, a napíše JSX. Odstavec popisující mockup jsi přeskočil úplně.
+Přetáhni export z Figmy nebo screenshot stránky do promptu. Zeptej se: „Napoj to na moje existující komponenty." Claude přečte obrázek, pojmenuje komponenty, které vidí, zeptá se na ty, které neumí odhadnout, a napíše JSX. Celý odstavec popisující mockup jsi přeskočil.
 
 <Screenshot
   src="/screenshots/voice-multimodal-paste.png"
@@ -102,30 +102,30 @@ Přetáhni Figma export nebo screenshot stránky do promptu. Zeptej se: „Napoj
   caption="Přetáhni screenshot. Claude vidí to, co ty."
 />
 
-### Debugging chyby — ukaž chybu, přeskoč přepisování
+### Debugging chyby — ukaž chybu, neopisuj ji
 
-Stack trace v terminálu? Browser devtools panel se selháním sítě? Nepřepisuj to. Vyfoť (`Cmd+Shift+4`), vlož do Claude, zeptej se „co se děje?". Chyba se přečte s okolním kontextem — čísla řádků, barvy, celý call site — který se kopírováním textu ztratí.
+Stack trace v terminálu? Panel devtools v prohlížeči se selháním sítě? Neopisuj to. Vyfoť (`Cmd+Shift+4`), vlož do Claude, zeptej se „co se děje?". Chyba se přečte i s okolním kontextem — čísla řádků, barvy, celé místo volání — co kopírováním textu ztrácíš.
 
 ### Mockup → kód — načrtni na papír, vyfoť, dodej
 
-Načrtni UI na papír. Vyfoť mobilem. Vlož do Claude. Dostaneš funkční komponentu. Věrnost není umělecká škola; ten workflow je reálný a šetří hodinu oproti kolečku přes Figmu.
+Načrtni UI na papír. Vyfoť mobilem. Vlož do Claude. Dostaneš funkční komponentu. Věrnost není umělecká škola; ten postup funguje a šetří hodinu oproti přepínání s Figmou.
 
-### Jeden workflow, který tohle všechno spojuje
+### Jeden postup, který tohle všechno spojuje
 
-Vzor, který se nejvíc skládá: **hlasem řekni cíl, vlož artefakt, naťukej omezení.** Tři modality, jeden prompt:
+Postup, který se nejvíc vyplatí: **hlasem řekni cíl, vlož artefakt, naťukej omezení.** Tři modality, jeden prompt:
 
 > *(hlas)* „Přidej dashboard metrik na tuhle stránku." *(vlož screenshot aktuální stránky)* *(naťukej)* `Použij existující dotazy z /lib/metrics; nová komponenta jde do app/components/metrics-card.tsx.`
 
-Hlas nese záměr. Vložení nese kontext. Psaní nese přesnou referenci. Žádná z těch tří sama o sobě nevyrobí to, co dohromady.
+Hlas nese záměr. Vložený obrázek nese kontext. Psaní nese přesnou referenci. Žádná z těch tří sama o sobě neudělá to, co všechny tři dohromady.
 
 ## Posuny v promptování pod hlasem
 
-Hlas mění, jak prompt zní. Podstata by se měnit neměla, ale povrch ano.
+Hlas mění, jak prompt zní. Podstata se měnit nemá, ale povrch ano.
 
-- **Vyslovené prompty se táhnou.** Před odesláním přepis uprav — rozděl ho do vět, vyhoď „ehm"y. Dvě sekundy úpravy zdvojnásobí kvalitu hlasového promptu.
-- **Názvy souborů se diktují špatně.** Hlasem řekni *záměr*, naťukej *cestu*. „Přidej validaci do prompt komponenty" + pak doplň cestu k souboru.
-- **Seznamy málokdy přežijí diktování.** Pokud vyjmenováváš 4 věci, naťukej je. Pokud popisuješ cíl, řekni ho hlasem.
-- **Hlas je méně stlačitelný než text.** 30sekundový hlasový prompt bývá 3větný textový prompt s vatou. Oba fungují; textová verze se rychleji čte při kontrole.
+- **Mluvené prompty se táhnou.** Před odesláním přepis projdi — rozděl ho do vět, vyhoď „ehm"y. Dvě sekundy úpravy zdvojnásobí kvalitu hlasového promptu.
+- **Názvy souborů se diktují špatně.** Hlasem řekni *záměr*, naťukej *cestu*. „Přidej validaci do komponenty Prompt" + pak doplň cestu k souboru.
+- **Seznamy málokdy přežijí diktování.** Jestli vyjmenováváš čtyři věci, naťukej je. Jestli popisuješ cíl, řekni ho hlasem.
+- **Hlas se hůř zhustí než text.** Třicetisekundový hlasový prompt bývá tří­větný textový prompt s vatou. Oba fungují; textovou verzi rychleji projdeš při kontrole.
 
 ## Kdy povrch záleží
 
@@ -134,22 +134,22 @@ Jiná práce, jiný povrch:
 | Práce | Povrch | Proč |
 |---|---|---|
 | Denní flow na reálném repu | Terminál + `/voice` | Agent běží tam; vestavěné diktování zná vývojářský slovník |
-| Diktování do desktopu, prohlížeče, Slacku — kamkoli | Wispr Flow / Super Whisper | Jeden systémový nástroj poráží mikrofon na každou aplikaci zvlášť |
+| Diktování do desktopu, prohlížeče, Slacku — kamkoli | Wispr Flow / Super Whisper | Jeden systémový nástroj je lepší než mikrofon do každé aplikace zvlášť |
 | Procházení diffů, ptaní se „proč" | Desktopová aplikace | Živý přepis, snadný přechod mezi hlasem a psaním |
 | Zachycení myšlenky při chůzi | Mobil | Ta myšlenka by se k notebooku nedostala |
-| Párování s někým, kdo se dívá | Desktopová aplikace + cast | Hlas + viditelný přepis se čte přirozeně |
-| Debugging UI / Figma / mockup | Desktopová aplikace + paste | Tady žije multimodální |
+| Párování s někým, kdo se dívá | Desktopová aplikace + cast | Hlas s viditelným přepisem se čte přirozeně |
+| Debugging UI / Figma / mockup | Desktopová aplikace + paste | Tady je multimodální doma |
 
 ## Praxe: cyklus jednoho promptu
 
-Zkus tohle jednou, na reálném úkolu, dnes.
+Zkus tohle jednou, dnes, na reálném úkolu.
 
-1. Otevři desktopovou aplikaci Claude. Vyber malou featuru z reálného projektu — něco, na co bys jinak naťukal prompt.
+1. Otevři desktopovou aplikaci Claude. Vyber malou fíčuru z reálného projektu — něco, na co bys jinak naťukal prompt.
 2. **Hlasem řekni cíl.** Klikni na mikrofon. Řekni, co chceš, tak jak bys to řekl kolegovi. Nesnaž se to formulovat jako prompt.
-3. **Vlož screenshot** relevantní stránky nebo souboru (Cmd+Shift+4 pro výřez, pak Cmd+V do Claude).
-4. **Před odesláním uprav přepis.** Rozděl do 2–3 vět. Doplň název souboru, který chceš.
+3. **Vlož screenshot** relevantní stránky nebo souboru (Cmd+Shift+4 na výřez, pak Cmd+V do Claude).
+4. **Před odesláním uprav přepis.** Rozděl do dvou nebo tří vět. Doplň název souboru, který chceš.
 5. Pošli. Přečti diff.
 
-Co si všimneš: vyslovená část trefí *cíl* tak, jak jsi ho doopravdy myslel. Vložená část ukotví *kontext*. Úprava chytí *nepřesnost*. Tři modality, jeden prompt, za méně času, než trvá psát ekvivalent.
+Co si všimneš: vyslovená část trefí *cíl* tak, jak jsi ho doopravdy myslel. Vložený screenshot ukotví *kontext*. Úprava chytí *nepřesnost*. Tři modality, jeden prompt, za míň času, než trvá napsat to samé textem.
 
-Další kapitola — Ekosystém — pokrývá širší stack: skilly, MCP servery, pluginy. Hlas a multimodální vstup jsou vstupní vrstva; ta kapitola je obklopující nástroje.
+Další kapitola — Ekosystém — pokrývá širší stack: skilly, MCP servery, pluginy. Hlas a multimodální vstup jsou vstupní vrstva; ta kapitola je o nástrojích kolem nich.
