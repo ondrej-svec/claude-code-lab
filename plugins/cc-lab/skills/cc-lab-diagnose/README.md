@@ -64,13 +64,35 @@ each grounded in a quoted line from your files.
 
 ## What it returns
 
-Each observation has five fields:
+Markdown structured as:
 
-- **Title** — names the pattern (5-9 words)
-- **What I see** — 2-3 sentences quoting your actual files
-- **Confidence** — `high` / `medium` / `I can't tell`
-- **Try this** — copy-paste artifact you can apply this session
-- **Read more** — one cc-lab chapter link for the longer version
+1. **Opening** — names the mode and date
+2. **Headline** — 2-4 sentences naming the load-bearing findings.
+   Reader's two-second answer to "if I only fix one thing, what is
+   it?"
+3. **Observations** (3-5 per mode section) — each with five fields:
+   - **Title** — names the pattern (5-9 words)
+   - **What I see** — 2-3 sentences quoting your actual files
+   - **Confidence** — `high` / `medium` / `I can't tell`
+   - **Try this** — copy-paste artifact you can apply this session
+   - **Read more** — one cc-lab chapter link
+4. **What to do next** — prioritized action list in three time
+   buckets (this session / this week / when you have time), each
+   action mapped to an observation
+5. **Closing** — short tail commentary on the read
+
+## Pairs well with (optional)
+
+- [`babel-fish:visualize`](https://github.com/ondrej-svec/heart-of-gold-toolkit) —
+  if installed, run it on the diagnosis output to render a richer
+  visual artifact (mindmap / structured doc) for review or sharing.
+- [`marvin:share-html`](https://github.com/ondrej-svec/heart-of-gold-toolkit) —
+  if installed, publish the diagnosis as a browser-shareable URL
+  via your local share server.
+
+Neither is required. The cc-lab plugin is self-contained — these
+are bonus pairings if you already have heart-of-gold-toolkit
+installed.
 
 ## Categories
 

@@ -113,9 +113,17 @@ mode, pick 3-5 per section.
 
 ### 5. Write the output
 
-Use `output-template.md` for opening, observation block, and closing.
-Pick the right opening for the mode. The user's cwd basename and
-today's date go in the header.
+Use `output-template.md`. The full output shape, in order:
+
+1. **Opening** — pick by mode (project / user / both)
+2. **Headline** — 2-4 sentences naming the most load-bearing
+   findings (see template's "Headline" section)
+3. **Section header** — only in `both` mode (project pass / user
+   pass)
+4. **Observations** — 3-5 per section, the per-observation block
+5. **What to do next** — three time buckets (this session / this
+   week / when you have time), referencing observations by number
+6. **Closing** — pick by signal (default / both / sparse / empty)
 
 For each observation:
 
@@ -131,11 +139,60 @@ For each observation:
 - **Read more** — single chapter link. When the chapter has a
   section anchor, deep-link: `#permission-modes`, `#hooks`, etc.
 
+#### Headline composition
+
+The headline is the reader's two-second answer to "if I only fix one
+thing, what is it?" Write it *after* picking the 3-5 observations,
+so you know which findings exist. Then:
+
+1. Sort the observations by severity (security > blocking > hygiene
+   > compounding).
+2. Write 1-3 sentences naming the top findings in that order.
+3. Don't summarize all six. Don't soften with "overall solid."
+4. Match the template's worked examples for register.
+
+#### "What to do next" composition
+
+Each line in this section must map to an observation you already
+wrote — never invent actions. Sort observations into three buckets
+using the template's bucket-assignment rules:
+
+- **This session** — security, hard blockers, wildcard permissions
+- **This week** — hygiene fixes, correctness gaps under 30 min each
+- **When you have time** — compounding work, low urgency
+
+Cap each bucket per the template (1-2 / 2-3 / 1-2). If your
+observation list doesn't fill the buckets, shrink the section
+honestly — better one bucket with two actions than three padded
+buckets.
+
 ### 6. Self-check
 
-Before returning, walk the checklist from `SKILL.md` Step 7. Drop
-any observation that fails. Better three sharp observations than
-five with one weak one.
+Before returning, walk this checklist. Drop or revise any item that
+fails:
+
+- [ ] Mode header matches the chosen mode
+- [ ] **Headline names ≤3 findings, no "overall solid" framing, no
+  hedging** *(if it summarizes all six observations, rewrite)*
+- [ ] 3-5 observations per section, each quoting ≥1 real file
+- [ ] Every observation has a runnable copy-paste artifact (no
+  "consider doing X")
+- [ ] No grading, scoring, ranking, or maturity ladders
+- [ ] No claim of "missing" that exists in user scope, plugins, or
+  built-ins
+- [ ] No personal-preference recommendations for the team repo, no
+  project facts in user scope
+- [ ] **"What to do next" maps every action to an existing
+  observation number** *(no orphan actions)*
+- [ ] **Action verbs are imperative** ("Rotate" / "Drop" / "Pair"
+  not "Consider rotating")
+- [ ] **Time buckets are honest** *(no padding to fill three
+  buckets if you only have two real fixes)*
+- [ ] Each chapter link uses a slug that exists in `rubric.md`
+  Appendix A
+
+If three or more items fail, the output isn't ready — redraft
+before returning.
 
 ## Voice rules — non-negotiable
 

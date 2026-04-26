@@ -48,6 +48,71 @@ use the empty-signal closing.
 
 ---
 
+## Headline (always second — right after the opening)
+
+A 2-4 sentence read of what matters most. Lead with the single most
+load-bearing finding, then add the second and (if relevant) third.
+Voice rules apply — no "your setup is overall solid" framing, no
+hedging, no "things to consider." Just name the load-bearing
+findings in declarative sentences.
+
+The headline is *not* a summary of every observation. It's the
+reader's two-second answer to "if I only fix one thing, what is it?"
+followed by one or two more if they have the bandwidth.
+
+### Shape
+
+```
+**Headline.** <Sentence naming the most load-bearing finding, with
+its severity if relevant.> <Second sentence, second finding.>
+<Optional third sentence — only if a third finding genuinely matters
+at the same severity tier.>
+```
+
+### Examples
+
+Single-mode (project):
+```
+**Headline.** Quellis has no project CLAUDE.md, so every teammate's
+agent inherits the parent `Bobo/CLAUDE.md` for the wrong project.
+The deny list is comprehensive but the allow list is empty —
+permission fatigue forms within a session.
+```
+
+Single-mode (user):
+```
+**Headline.** Sixteen entries in your user `permissions.allow` embed
+plaintext database passwords and AWS keys — security finding,
+rotate before anything else. After that, three retrieval agents
+silently inherit Opus despite your CLAUDE.md saying never to.
+```
+
+Both-mode (one headline covers both passes):
+```
+**Headline.** Highest severity: your user `permissions.allow` ships
+sixteen entries with plaintext credentials — rotate this session.
+Project-side, quellis has no CLAUDE.md and the project-scope plugin
+isn't declared, so teammates fail on first session. Both fixes
+have copy-paste artifacts below; the rest can wait a week.
+```
+
+### When the signal is sparse
+
+If the diagnosis only produces 1-2 observations, write a one-sentence
+headline that names what's actually there:
+
+```
+**Headline.** One finding worth your time: the project CLAUDE.md
+inherits from `Bobo/` and describes the wrong project. The rest of
+the harness is too sparse to read confidently — re-run after a few
+sessions of work.
+```
+
+If zero observations are evidence-grounded, skip the headline and
+go straight to the empty-signal closing.
+
+---
+
 ## Section headers (only used in `both` mode)
 
 ```
@@ -181,6 +246,131 @@ shape. If you don't, ignore this and re-run after another 50 commits.
 
 **Read more.** [Chapter 6: The ecosystem](https://cc-lab.ondrejsvec.com/en/ecosystem)
 ```
+
+---
+
+## What to do next (always second-to-last, before the closing)
+
+The reader has six observations. They need an order. This section is
+the prioritized close: which fixes belong in *this session*, which
+in *this week*, and which can compound over time.
+
+Three time buckets, in this exact order:
+
+```
+---
+
+## What to do next
+
+**This session (15-30 min):**
+
+1. **<Action>** (#<observation-number-or-tag>, <severity-or-reason>) — <one-line why-this-first.>
+2. **<Action>** (...) — ...
+
+**This week (1-2 hours total):**
+
+3. **<Action>** (...) — ...
+4. **<Action>** (...) — ...
+
+**When you have time (compounds over sessions):**
+
+5. **<Action>** (...) — ...
+```
+
+### Bucket assignment rules
+
+- **This session.** Security findings (committed secrets, plaintext
+  credentials in allow lists, public API keys in tracked files),
+  hard blockers for teammates (no project CLAUDE.md when teammates
+  are about to clone), wildcard permissions on dangerous tools.
+  Bucket cap: 1-2 actions. More than that and "this session" stops
+  being honest.
+- **This week.** Hygiene fixes that compound (allow list pairing
+  with deny list, gitignore drift, plugin declarations for
+  teammates), correctness gaps the user can fix in <30 min each.
+  Bucket cap: 2-3 actions.
+- **When you have time.** Things that compound but don't bite right
+  now (auto-memory priming, knowledge-capture grep references in
+  CLAUDE.md, agent model audit on agents you use rarely). Bucket
+  cap: 1-2 actions.
+
+### Cross-references
+
+Each action references the observation that contains its evidence
+and the copy-paste artifact. Use `(#1, security)` / `(#project-2)` /
+`(#user-3)` style — short, scannable, the reader can jump back.
+
+### Voice rules (specific to this section)
+
+- Each action starts with a verb in the imperative: "Rotate the
+  credentials," "Drop a project CLAUDE.md," "Pair the allow list."
+- Never write "consider doing X." Write "do X" — the artifact is
+  already in the observation.
+- Never invent new actions. Every line in this section maps to an
+  existing observation. If you find yourself adding action #6 with
+  no observation behind it, drop it.
+- Never use severity scores ("8/10") or maturity ladders. Use
+  "security finding," "blocking onboarding," "compounding,"
+  "personal preference."
+
+### Examples
+
+Single-mode (project, three observations):
+```
+---
+
+## What to do next
+
+**This session (10 min):**
+
+1. **Drop a project CLAUDE.md** (#1, blocking onboarding) — paste
+   the scaffold above, ~5 min. Without it the agent reads `Bobo`'s
+   contract for the wrong project every session.
+
+**This week (30 min):**
+
+2. **Pair the brake with the accelerator** (#2) — patch the
+   `.claude/settings.json` permissions block; the deny-only shape
+   trains every developer to mash `y`.
+
+**When you have time:**
+
+3. **Declare the plugin for teammates** (#3) — only matters when
+   you're onboarding a collaborator, but the patch is small.
+```
+
+Both-mode (six observations, with severity sort):
+```
+---
+
+## What to do next
+
+**This session (20 min):**
+
+1. **Rotate the credentials** (#user-1, security) — every value in
+   your user allow list is plaintext on disk. Run the `jq` strip,
+   then rotate.
+2. **Drop the project CLAUDE.md** (#project-1) — teammates can't
+   succeed without it; the scaffold above is ready to paste.
+
+**This week (45 min):**
+
+3. **Pair the brake with the accelerator** (#project-2) — patch the
+   project permissions block.
+4. **Patch the three agent files** (#user-2) — three `sed` commands,
+   30 seconds. Stops the silent Opus inheritance.
+
+**When you have time:**
+
+5. **Declare the plugin for teammates** (#project-3) — only matters
+   when you're onboarding a collaborator.
+6. **Prime your auto-memory for quellis** (#user-3) — the next
+   session is a fine place to start; one `/learn` pass.
+```
+
+When the diagnosis has only 1-2 observations, the section can shrink
+to a single bucket. Don't pad to fill three buckets — keep the
+shape honest.
 
 ---
 

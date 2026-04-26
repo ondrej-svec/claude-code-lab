@@ -231,8 +231,13 @@ read ${CLAUDE_PLUGIN_ROOT}/skills/cc-lab-diagnose/rubric.md (use Part
 A for project, Part B for user, both for both), then return the 
 diagnostic markdown using ${CLAUDE_PLUGIN_ROOT}/skills/cc-lab-diagnose/output-template.md.
 
-Return only the final markdown — opening + 3-5 observations + 
-closing. Don't include reasoning or summary.
+The full output shape, in order: opening → headline (2-4 sentences 
+naming the load-bearing findings) → section headers (in both mode) 
+→ 3-5 observations per section → "What to do next" with three time 
+buckets (this session / this week / when you have time) → closing.
+
+Return only the final markdown. Don't include reasoning or a 
+summary of what you did.
 ```
 
 ### 7. Print the judge's response
