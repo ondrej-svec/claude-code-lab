@@ -31,23 +31,39 @@ Claude listens differently on each surface. The shortcut, the latency, the trans
 
 The Claude desktop app has a built-in microphone button next to the prompt input. Click it, speak, click again. Transcript appears live in the prompt area. Edit it before sending if you want.
 
-<Screenshot
-  src="/screenshots/voice-desktop-mic.png"
-  alt="Claude desktop app with microphone activated mid-dictation, transcribed text 'Add a slash usage command' visible in the prompt area"
-  caption="Press mic. Speak. Watch the prompt fill."
-/>
+<Callout variant="note">
+**Screenshot pending capture.** Will show: Claude desktop app with the microphone button active mid-dictation, transcribed text *"Add a /usage command"* visible in the prompt area. Caption: *Press mic. Speak. Watch the prompt fill.*
+</Callout>
 
 This is the surface most builders use most. No setup, no third-party tools, transcription is already good. The one trick worth knowing: dictate the rough thought, then *edit the transcript before sending* — voice + light edit beats voice-and-send every time.
 
-### Terminal — Wispr Flow or Super Whisper
+### Terminal — `/voice` is built in
 
-The terminal `claude` doesn't have its own mic. You bring your own dictation tool that types into whichever app is foreground.
+Claude Code's terminal CLI has voice dictation built in. Run `/voice` once to enable it. After that:
 
-[Wispr Flow](https://wisprflow.ai) is the default among builders. Hold a hotkey (default `Fn`), speak, release — your transcript types into the terminal as if you typed it. Quiet, accurate, system-wide. Free tier handles most builder volume.
+- **Hold mode (default)** — hold `Space` to record, release to insert the transcript. Review, edit if you want, press `Enter` to send.
+- **Tap mode** — `/voice tap`. Tap `Space` to start, tap again to stop. Auto-submits when the transcript is at least three words.
 
-[Super Whisper](https://superwhisper.com) is the local-Whisper alternative. Same hotkey-driven flow. Choose this when privacy matters more than the slightly nicer Wispr UX.
+Two things make `/voice` better than a generic dictation tool:
 
-[macOS Dictation](https://support.apple.com/en-us/guide/mac-help/mh40583/mac) is the zero-install baseline (`Fn Fn` by default). Use it to confirm your hardware works before paying for anything; it's not the daily driver.
+- **Tuned for coding vocab.** `regex`, `OAuth`, `JSON`, `localhost` transcribe correctly. Your current project name and git branch are added as recognition hints automatically.
+- **Twenty languages including Czech.** Set in `/config` or your settings file. Defaults to English.
+
+Audio streams to Anthropic for transcription (not local). Free — doesn't consume tokens or count toward `/usage` limits. Requires a Claude.ai account (not API key / Bedrock / Vertex / Foundry). Doesn't work over SSH or remote sessions — needs local microphone access. Available since Claude Code v2.1.69; tap mode since v2.1.116.
+
+### Terminal — system-wide alternatives
+
+`/voice` is the right default for the terminal. Reasons to add a system-wide tool on top:
+
+- You also dictate into the desktop app, browser, Slack, your editor — one tool everywhere beats per-app mics
+- You're on an API key / Bedrock / Vertex setup where `/voice` doesn't work
+- You want local-only transcription for privacy reasons
+
+[Wispr Flow](https://wisprflow.ai) is the popular default — quiet, hold-a-hotkey, types the transcript into whichever app is foreground. Free tier handles most builder volume.
+
+[Super Whisper](https://superwhisper.com) runs Whisper locally. Same hotkey-driven flow. Choose this when privacy matters more than Wispr's UX.
+
+[macOS Dictation](https://support.apple.com/en-us/guide/mac-help/mh40583/mac) is the zero-install baseline (`Fn Fn` by default). Use it to confirm your hardware works before paying for anything; not the daily driver.
 
 ### Mobile — your phone is your terminal
 
@@ -69,11 +85,9 @@ A pasted screenshot is a prompt's missing context made visible. Three places it 
 
 Drag a Figma export or screenshot of the page into the prompt. Ask: "Wire this up against my existing components." Claude reads the visual, names the components it sees, asks about the ones it can't infer, and writes the JSX. You skipped the description-of-the-mockup paragraph entirely.
 
-<Screenshot
-  src="/screenshots/voice-multimodal-paste.png"
-  alt="Claude desktop app with a pasted error screenshot thumbnail in the prompt area and the question 'What's wrong here?' typed below"
-  caption="Drag a screenshot in. Claude sees what you see."
-/>
+<Callout variant="note">
+**Screenshot pending capture.** Will show: Claude desktop app with a pasted error-screenshot thumbnail in the prompt area and the question *"What's wrong here?"* typed below. Caption: *Drag a screenshot in. Claude sees what you see.*
+</Callout>
 
 ### Error debugging — show the error, skip the transcription
 
@@ -106,7 +120,8 @@ Different work, different surface:
 
 | Work | Surface | Why |
 |---|---|---|
-| Daily flow on a real codebase | Terminal + Wispr Flow | The agent runs there; voice rides into it cleanly |
+| Daily flow on a real codebase | Terminal + `/voice` | The agent runs there; built-in dictation is coding-aware |
+| Dictating into desktop, browser, Slack — anywhere | Wispr Flow / Super Whisper | One system-wide tool beats per-app mics |
 | Reviewing diffs, asking "why" | Desktop app | Live transcript, easy to pivot from voice to type |
 | Capturing a thought during a walk | Mobile | The thought wouldn't have survived to a laptop |
 | Pairing with someone else watching | Desktop app + cast | Voice + visible transcript reads as natural |
