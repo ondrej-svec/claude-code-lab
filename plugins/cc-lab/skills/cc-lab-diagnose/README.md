@@ -8,18 +8,31 @@ It's the diagnostic the lab wishes existed when it was being written.
 
 ## Install
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/ondrej-svec/claude-code-lab/main/skills/cc-lab-diagnose/install.sh | bash
+In any Claude Code session — macOS, Linux, or Windows:
+
+```
+/plugin marketplace add ondrej-svec/claude-code-lab
+/plugin install cc-lab@cc-lab
 ```
 
-Or, if you've cloned the repo:
+That's it. The skill auto-activates on phrasings like "diagnose my
+setup" once installed.
+
+To update: `/plugin update cc-lab`. To remove: `/plugin uninstall cc-lab`.
+
+### Shell-install fallback
+
+If you'd rather not use the plugin marketplace, the legacy installer
+still works:
 
 ```bash
-bash skills/cc-lab-diagnose/install.sh
+curl -fsSL https://raw.githubusercontent.com/ondrej-svec/claude-code-lab/main/plugins/cc-lab/skills/cc-lab-diagnose/install.sh | bash
 ```
 
-The installer drops the skill into `~/.claude/skills/cc-lab-diagnose`.
-Re-run to update. `rm -rf ~/.claude/skills/cc-lab-diagnose` to remove.
+It drops the skill into `~/.claude/skills/cc-lab-diagnose`. Re-run to
+update; `rm -rf ~/.claude/skills/cc-lab-diagnose` to remove. This path
+is macOS/Linux only — Windows users should use the plugin marketplace
+above.
 
 ## Use
 
@@ -72,7 +85,7 @@ sentences, active, concrete, no marketing language. If the output
 ever drifts into consultant-deck territory, it's a bug; file an issue.
 
 The skill is calibrated against
-[`docs/cc-lab-design-system.md`](../../docs/cc-lab-design-system.md)
+[`docs/cc-lab-design-system.md`](../../../../docs/cc-lab-design-system.md)
 in the lab repo. The rubric and output template are in this skill's
 sibling files (`rubric.md`, `output-template.md`).
 
@@ -87,4 +100,4 @@ this skill.
 ## License + source
 
 Source lives in the [claude-code-lab repo](https://github.com/ondrej-svec/claude-code-lab)
-under `skills/cc-lab-diagnose/`. Same license as the lab.
+under `plugins/cc-lab/skills/cc-lab-diagnose/`. Same MIT license as the lab.

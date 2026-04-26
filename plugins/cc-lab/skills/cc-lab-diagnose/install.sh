@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
-# Install the cc-lab-diagnose skill into ~/.claude/skills/cc-lab-diagnose
+# Legacy shell installer for cc-lab-diagnose.
+#
+# The preferred install path is the cc-lab plugin marketplace
+# (`/plugin marketplace add ondrej-svec/claude-code-lab` then
+# `/plugin install cc-lab@cc-lab` from any Claude Code session). This
+# script is a fallback for macOS / Linux users who'd rather not use
+# the marketplace. Windows users should use the plugin marketplace.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/ondrej-svec/claude-code-lab/main/skills/cc-lab-diagnose/install.sh | bash
-# or (from the repo):
-#   bash skills/cc-lab-diagnose/install.sh
+#   curl -fsSL https://raw.githubusercontent.com/ondrej-svec/claude-code-lab/main/plugins/cc-lab/skills/cc-lab-diagnose/install.sh | bash
+# or (from a clone):
+#   bash plugins/cc-lab/skills/cc-lab-diagnose/install.sh
 
 set -euo pipefail
 
@@ -27,8 +33,8 @@ if [ -f "$(dirname "$0")/SKILL.md" ]; then
 else
   echo "  cloning ${REPO_URL}"
   git clone --depth 1 --filter=blob:none --sparse "${REPO_URL}" "${TMPDIR}/repo" > /dev/null 2>&1
-  (cd "${TMPDIR}/repo" && git sparse-checkout set "skills/${SKILL_NAME}" > /dev/null 2>&1)
-  SRC="${TMPDIR}/repo/skills/${SKILL_NAME}"
+  (cd "${TMPDIR}/repo" && git sparse-checkout set "plugins/cc-lab/skills/${SKILL_NAME}" > /dev/null 2>&1)
+  SRC="${TMPDIR}/repo/plugins/cc-lab/skills/${SKILL_NAME}"
 fi
 
 rm -rf "${SKILL_DIR}"

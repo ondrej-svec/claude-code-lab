@@ -1,0 +1,15 @@
+{
+  "name": "cc-lab",
+  "owner": {
+    "name": "ondrej-svec",
+    "url": "https://github.com/ondrej-svec"
+  },
+  "plugins": [
+    {
+      "name": "cc-lab",
+      "source": "./plugins/cc-lab",
+      "description": "cc-lab companion skills — diagnostic and authoring tools that pair with the cc-lab.ondrejsvec.com guide",
+      "version": "0.1.0"
+    }
+  ]
+}
