@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChapterSidebar } from "@/app/components/chapter-sidebar";
 import { CHAPTERS } from "@/lib/chapters";
+import { getAllLibraryEntries } from "@/lib/library";
 import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
 
 export default async function LabIndex({
@@ -11,17 +12,30 @@ export default async function LabIndex({
 }) {
   const { locale } = await params;
   const validLocale = isLocale(locale) ? locale : DEFAULT_LOCALE;
+  const libraryEntries = await getAllLibraryEntries(validLocale);
 
   const headings = {
     en: {
       eyebrow: "The lab",
       title: "Ten chapters. One practice.",
       lede: "Go top to bottom, or pick what you need. Every chapter ends with something you can try immediately.",
+      libraryEyebrow: "The library",
+      libraryTitle: "Depth on demand.",
+      libraryLede:
+        "The spine teaches the path. The library goes further on the topics that won't fit a chapter without bloating it.",
+      libraryGoesDeeper: "Goes deeper from",
+      libraryAll: "Browse the library →",
     },
     cs: {
       eyebrow: "Lab",
       title: "Deset kapitol. Jedna praxe.",
       lede: "Projdi odshora dolů, nebo si vyber, co ti zrovna sedí. Každá kapitola končí něčím, co můžeš hned zkusit.",
+      libraryEyebrow: "Knihovna",
+      libraryTitle: "Hloubka, když ji potřebuješ.",
+      libraryLede:
+        "Páteř vede cestou. Knihovna jde dál v tématech, která by se do kapitoly nevešla, aniž by ji nafoukla.",
+      libraryGoesDeeper: "Navazuje na",
+      libraryAll: "Procházet knihovnu →",
     },
   };
 
@@ -136,6 +150,87 @@ export default async function LabIndex({
             );
           })}
         </ol>
+
+        {libraryEntries.length > 0 ? (
+          <section
+            className="mt-20 landing-rise"
+            style={{ ["--landing-rise-delay" as string]: "200ms" }}
+            aria-labelledby="lab-library-heading"
+          >
+            <div className="max-w-2xl">
+              <p
+                className="text-xs uppercase tracking-[0.2em] mb-3"
+                style={{ color: "var(--text-muted)" }}
+              >
+                {m.libraryEyebrow}
+              </p>
+              <h2
+                id="lab-library-heading"
+                className="text-2xl md:text-3xl font-semibold leading-[1.15] mb-4"
+                style={{ color: "var(--text-primary)" }}
+              >
+                {m.libraryTitle}
+              </h2>
+              <p
+                className="text-base leading-relaxed"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                {m.libraryLede}
+              </p>
+            </div>
+
+            <ul className="grid gap-3 mt-8">
+              {libraryEntries.map((entry) => (
+                <li key={entry.slug}>
+                  <Link
+                    href={`/${validLocale}/lab/library/${entry.slug}`}
+                    className="motion-card block p-4 rounded-lg border"
+                    style={{
+                      background: "var(--surface-elevated)",
+                      borderColor: "var(--border)",
+                    }}
+                  >
+                    {entry.affinity ? (
+                      <p
+                        className="text-[10px] uppercase tracking-[0.18em] mb-1.5"
+                        style={{ color: "var(--text-muted)" }}
+                      >
+                        {m.libraryGoesDeeper}{" "}
+                        <span style={{ color: "var(--text-secondary)" }}>
+                          {entry.affinity.titles[validLocale]}
+                        </span>
+                      </p>
+                    ) : null}
+                    <div className="flex items-baseline justify-between gap-4">
+                      <h3
+                        className="text-base font-semibold leading-snug"
+                        style={{ color: "var(--text-primary)" }}
+                      >
+                        {entry.title}
+                      </h3>
+                      <span
+                        className="text-xs whitespace-nowrap"
+                        style={{ color: "var(--text-muted)" }}
+                      >
+                        {entry.readTime}
+                      </span>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-6">
+              <Link
+                href={`/${validLocale}/lab/library`}
+                className="motion-link text-sm"
+                style={{ color: "var(--accent-surface)" }}
+              >
+                {m.libraryAll}
+              </Link>
+            </div>
+          </section>
+        ) : null}
       </main>
     </div>
   );
