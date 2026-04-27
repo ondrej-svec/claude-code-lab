@@ -1,12 +1,12 @@
 ---
 slug: autonomous-loops
-title: Autonomní smyčky — kdy ano a kdy ne
+title: Autonomní smyčky — kdy ano a kdy ne
 chapter: iteration-and-control
 tags: [practice, autonomy]
 readTime: 7 min
 ---
 
-# Autonomní smyčky — kdy ano a kdy ne
+# Autonomní smyčky — kdy ano a kdy ne
 
 Autonomie není feature, kterou zapneš. Je to postoj, který zaujmeš vůči agentovi — agent jede, ty se nedíváš na každý krok, práce se hýbe, zatímco děláš něco jiného.
 
@@ -18,14 +18,14 @@ Dovednost je vědět, ve které situaci jsi, *předtím* než odejdeš od kláve
 
 Můžeš agentovi pustit otěže dvojím způsobem.
 
-- **Smyčka.** Stejný úkol, spuštěný v intervalu nebo self-paced, dokud nesedne podmínka. `/loop 5m /check-deploy` znovu spouští každých pět minut. `/loop /fix-typecheck` nechá Claude jet vlastním tempem k podmínce „testy projdou“. Konverzace pokračuje; každé kolo ví, co dělalo to předchozí.
-- **Auto mode.** Postoj v oprávněních (popsaný v [kapitole 4](/cs/lab/iteration-and-control)), který Claudovi dovoluje udělat hodně malých akcí bez schvalování každé jedné. Jiný tvar než smyčka — stejná konverzace, žádný plánovaný re-entry, ale Claude má dovoleno se uvnitř agresivně rozjet.
+- **Smyčka.** Stejný úkol, spuštěný v intervalu nebo self-paced, dokud nesedne podmínka. `/loop 5m /check-deploy` znovu spouští každých pět minut. `/loop /fix-typecheck` nechá Claude jet vlastním tempem k podmínce „testy projdou“. Konverzace pokračuje; každé kolo ví, co dělalo to předchozí.
+- **Auto mode.** Postoj v oprávněních (popsaný v [kapitole 4](/cs/lab/iteration-and-control)), který Claudovi dovoluje udělat hodně malých akcí bez schvalování každé jedné. Jiný tvar než smyčka — stejná konverzace, žádný plánovaný re-entry, ale Claude se uvnitř může agresivně rozjet.
 
 Oba způsoby nechají agenta jet bez tebe. Selhávají jinak.
 
 <Screenshot
   src="/visuals/loop-vs-ralph.png"
-  alt="Diptych — levý panel ukazuje čistou cyklickou smyčku (úkol → vykonej → mechanická kontrola → zastav nebo opakuj) s teal akcentem a slovy „tests pass / typecheck / deploy ready“ jako exit podmínky. Pravý panel ukazuje tři navršené iterace Ralph Wiggum smyčky leštící špatnou věc, s počítadlem tokenů narůstajícím 87k → 142k → 218k a postavou ducha označenou „you, away from keyboard“. Oba panely ukazují, že typecheck prochází — ale jen levý prochází ze správného důvodu."
+  alt="Diptych — levý panel ukazuje čistou cyklickou smyčku (úkol → vykonej → mechanická kontrola → zastav nebo opakuj) s teal akcentem a slovy „tests pass / typecheck / deploy ready“ jako exit podmínky. Pravý panel ukazuje tři navršené iterace Ralph Wiggum smyčky leštící špatnou věc, s počítadlem tokenů narůstajícím 87k → 142k → 218k a postavou ducha označenou „you, away from keyboard“. Oba panely ukazují, že typecheck prochází — ale jen levý prochází ze správného důvodu."
   caption="Oba tvary projdou typecheckem. Jen jeden tvar prochází ze správného důvodu."
 />
 
@@ -37,32 +37,32 @@ Smyčka sedne, když je **úspěch mechanický** — když „je to hotové?“ 
 - Test suite zezelená.
 - Linter ohlásí nula porušení.
 - Deploy log řekne `Ready`.
-- Dlouhý fan-out: „projeď těchto 200 souborů a aplikuj stejnou transformaci; ověř, že každý buildí, než půjdeš dál.“
+- Dlouhý fan-out: „projeď těchto 200 souborů a aplikuj stejnou transformaci; ověř, že každý buildí, než půjdeš dál.“
 
 Konkrétně prompt vypadá takhle:
 
 <Prompt>/loop run pnpm typecheck; if it fails, fix the smallest failure and try again; stop when it passes or you've made 10 attempts</Prompt>
 
-To je smyčka s mechanickým kritériem úspěchu (`pnpm typecheck` exit kód), ohraničenou akcí („nejmenší selhání“) a stop podmínkou (úspěch, nebo 10 pokusů). Odejdi. Vrať se buď k zelené, nebo k tractable handoffu.
+To je smyčka s mechanickým kritériem úspěchu (`pnpm typecheck` exit kód), ohraničenou akcí („nejmenší selhání“) a stop podmínkou (úspěch, nebo 10 pokusů). Odejdi. Vrať se buď k zelené, nebo k handoffu, který půjde rozplést.
 
 ## Ralph Wiggum smyčka
 
-Geoff Huntley pojmenoval ten failure mode: agent se sebevědomě zasekne na špatné cestě a každá iterace tu špatnou věc jen víc leští. Pojmenováno po Ralphovi ze Simpsonových, který se taky upřímně oddává špatným nápadům.
+Geoff Huntley pojmenoval ten typ selhání: agent se sebevědomě zasekne na špatné cestě a každá iterace tu špatnou věc jen víc leští. Pojmenováno po Ralphovi ze Simpsonových, který se taky upřímně oddává špatným nápadům.
 
 Tři varianty:
 
 | Selhání | Jak to vypadá | Proč to smyčka zesiluje |
 |---|---|---|
 | Sebevědomě špatná amplifikace | Iterace 1 si špatně přečte cíl. Iterace 2–N „vylepšují“ tu špatně přečtenou verzi. | Každé kolo bere výstup předchozího jako pravdu. Špatná premisa, složený úrok. |
-| Drift hranic | „Oprav typecheck“ se promění v přepisování nesouvisejících modulů, jen aby se obešly typové chyby. | Bez tvrdého rozsahu agent bere každý sousední soubor jako fair game. |
+| Drift hranic | „Oprav typecheck“ se promění v přepisování nesouvisejících modulů, jen aby se obešly typové chyby. | Bez tvrdého rozsahu agent bere každý sousední soubor jako legitimní cíl. |
 | Skrytá nákladová spirála | Jsi pryč. Smyčka jede 30 iterací za problémem, který nedokáže vyřešit. | Žádný člověk ve smyčce znamená žádné „počkat, tohle nefunguje“. Tokeny narůstají. |
 
-Příznak, že jsi v Ralph smyčce: každá iterace vypadá uhlazeněji než ta předchozí, ale diff se vzdaluje od čehokoliv, co by lidský reviewer chtěl.
+Příznak, že jsi v Ralph smyčce: každá iterace vypadá uhlazeněji než ta předchozí, ale diff se vzdaluje od čehokoliv, co by lidský reviewer chtěl.
 
 <TerminalOutput
   src="/visuals/loop-ralph-failure.svg"
-  alt="Terminálový snímek tří iterací smyčky: iterace 1 si špatně přečte cíl, iterace 2 „opraví“ typecheck castem na any, iterace 3 vymyslí čtyři wrapper typy — typecheck po celou dobu zelený, ale původní validace se ve skutečnosti nikdy nestala"
-  caption="Tři iterace. Typecheck na konci zelený. Nic z toho, co měl typový systém ochránit, ochráněno nebylo."
+  alt="Terminálový snímek tří iterací smyčky: iterace 1 si špatně přečte cíl, iterace 2 „opraví“ typecheck přetypováním na `any`, iterace 3 vymyslí čtyři wrapper typy — typecheck po celou dobu zelený, ale původní validace se ve skutečnosti nikdy nestala"
+  caption="Tři iterace. Typecheck na konci zelený. Nic z toho, co měl typový systém ochránit, ochráněno nebylo."
 />
 
 ## Pre-flight checklist
@@ -71,14 +71,14 @@ Než od smyčky odejdeš, čtyři kontroly. Levné spustit, drahé přeskočit.
 
 1. **Je úspěch mechanický?** Umí Claude ověřit „done“ bez tvého úsudku? Pokud „done“ potřebuje, aby to ochutnal člověk, smyčka pojede do nekonečna.
 2. **Je rozsah ohraničený?** Glob souborů, větev, max počet iterací, časový limit. Vyber si aspoň dvě.
-3. **Je harness v provozu?** Testy, lint, typy běží automaticky na každé změně. Bez toho je autonomie jen naděje. Harness je to, co chytí Ralph smyčku v iteraci 2 místo v iteraci 30.
+3. **Je harness v provozu?** Testy, lint, typy běží automaticky na každé změně. Bez toho je autonomie jen naděje. Harness je to, co chytí Ralph smyčku v iteraci 2 místo v iteraci 30.
 4. **Můžeš zastavit, aniž bys ztratil stav?** Checkpoint commity, uložitelný progres, interrupt, který nezabije konverzaci. Pokud zastavit znamená všechno znovu odvodit, necháš smyčku jet moc dlouho ze zoufalství nad utopenými náklady.
 
 Pokud kterákoliv ze čtyř chybí, neběží ti smyčka — házíš kostkou.
 
 <Screenshot
   src="/visuals/loop-preflight.png"
-  alt="Pre-flight checklist jako inženýrský panel: čtyři očíslované položky se status indikátory — 01 mechanical success, 02 bounded scope, 03 harness on, 04 stoppable without loss. Každá položka má teal check a malou ikonu (terminál exit code, plot, ozubené kolo, ukládání). Rose patička: „if any of the four is missing, you are not running a loop — you are running a dice roll.“"
+  alt="Pre-flight checklist jako inženýrský panel: čtyři očíslované položky se status indikátory — 01 mechanical success, 02 bounded scope, 03 harness on, 04 stoppable without loss. Každá položka má teal check a malou ikonu (terminál exit code, plot, ozubené kolo, ukládání). Rose patička: „if any of the four is missing, you are not running a loop — you are running a dice roll.“"
   caption="Pre-flight panel. Všechny čtyři rozsvícené, než odejdeš."
   width={1024}
   height={1536}
@@ -86,34 +86,34 @@ Pokud kterákoliv ze čtyř chybí, neběží ti smyčka — házíš kostkou.
 
 ## Harness je předpoklad
 
-[Kapitola 8 — Další kroky](/cs/lab/next-steps) je kapitola o stavbě harnessu. Pro autonomní smyčky to není volitelné čtení; je to předpoklad.
+[Kapitola 8 — Další kroky](/cs/lab/next-steps) je kapitola o stavbě harnessu. Pro autonomní smyčky to není volitelné čtení; je to předpoklad.
 
 Harness bez autonomie je opatrná manuální praxe — fajn, pomalá, udržitelná. **Autonomie bez harnessu je nehlídaná naděje.** Agent jede rychle směrem, který nic nekontroluje. Kombinace — autonomie nad harnessem — je teprve místo, kde je opravdová páka. Testy chytí regresi před iterací 3. Lint chytí drift hranic. Harness je ta pravda, vůči které agent iteruje.
 
-Pokud tě láká `/loop` a na povrchu, kterého se dotýkáš, nemáš testy, napiš nejdřív test. Pak smyčku.
+Pokud tě láká `/loop` a na povrchu, kterého se dotýkáš, nemáš testy, napiš nejdřív test. Pak smyčku.
 
-## Co ve skutečnosti kupuje, když odejdeš
+## Co ti smyčka ve skutečnosti kupuje, když odejdeš
 
 Pointa není „dělat míň práce“. Je to **přesměrovat svou pozornost.**
 
-Mechanický fan-out — aplikovat stejný tvar napříč mnoha soubory, opravit každý výskyt deprecation warningu, znovu vygenerovat snapshoty — je práce, která nepřidává hodnotu, když ji děláš ty, ani když ji dělá agent. Smyčka ji prostě sundává z tvého času.
+Mechanický fan-out — aplikovat stejný tvar napříč mnoha soubory, opravit každý výskyt deprecation warningu, znovu vygenerovat snapshoty — je práce, která nepřidává hodnotu, když ji děláš ty, ani když ji dělá agent. Smyčka ji prostě sundává z tvého času.
 
-Kde tvoji pozornost ve skutečnosti chceš mít: záměr, design, úsudek, rozhodnutí, která může udělat jen člověk. Smyčka jede tu část práce, kde tvoje přítomnost nepomůže, abys mohl být přítomný u té části, kde pomůže.
+Kde tvoji pozornost ve skutečnosti chceš mít: záměr, design, úsudek, rozhodnutí, která může udělat jen člověk. Smyčka jede tu část práce, kde tvoje přítomnost nepomůže, abys mohl být přítomný u té části, kde pomůže.
 
 To je obchod. Vyplatí se jen tehdy, když ta část, od které jsi odešel, opravdu byla mechanická.
 
 ## Anti-vzor: junior, který nikdy nespí
 
-Zákeřný failure mode: smyčka „funguje“ — agent se hýbe, diff roste, věci se kompilují. Tak ji necháš jet.
+Zákeřný typ selhání: smyčka „funguje“ — agent se hýbe, diff roste, věci se kompilují. Tak ji necháš jet.
 
 Jenže „funguje“ a „dělá to správně“ nejsou totéž. Smyčka, která rychle pere špatné řešení, je horší než žádná smyčka, protože než to zkontroluješ, je diff moc velký na to, abys ho levně zahodil.
 
-Levnější tah: krátké smyčky s explicitními stop podmínkami, pak lidský review, pak další krátká smyčka. Ne „nastav a zapomeň“. Spíš „nastav, mrkni na to, koriguj, nastav znovu“. Autonomie po krocích, ne autonomie jako vibe.
+Levnější tah: krátké smyčky s explicitními stop podmínkami, pak lidský review, pak další krátká smyčka. Ne „nastav a zapomeň“. Spíš „nastav, mrkni na to, koriguj, nastav znovu“. Autonomie po krocích, ne autonomie jako vibe.
 
 ## Jak tohle navazuje na páteř
 
-[Kapitola 4 — Iterace a kontrola](/cs/lab/iteration-and-control) představuje auto mode a základní tvar nechání Claude jet bez schvalování každé akce. Tahle entry je další vrstva — kdy ten postoj rozšířit do plánované nebo self-paced smyčky a kdy ne.
+[Kapitola 4 — Iterace a kontrola](/cs/lab/iteration-and-control) představuje auto mode a základní tvar nechání Claude jet bez schvalování každé akce. Tahle stránka je další vrstva — kdy ten postoj rozšířit do plánované nebo self-paced smyčky a kdy ne.
 
-[Kapitola 6 — Ekosystém](/cs/lab/ecosystem) je místo, kde se skilly jako `/loop`, `/proactive` a `/work` instalují a konfigurují. Postav harness první; instaluj autonomii druhou.
+[Kapitola 6 — Ekosystém](/cs/lab/ecosystem) je místo, kde se skilly jako `/loop`, `/proactive` a `/work` instalují a konfigurují. Nejdřív postav harness; potom instaluj autonomii.
 
 [Kapitola 8 — Další kroky](/cs/lab/next-steps) je harness. Přečti si ji dřív, než kdykoliv odejdeš od běžící smyčky.
