@@ -65,9 +65,7 @@ export function App() {
     setEntries(null);
     setError(null);
     setTag(null);
-    fetch(locale ? `/api/entries?locale=${locale}` : "/api/entries", {
-      signal: ctrl.signal,
-    })
+    fetch(`/api/entries?locale=${locale}`, { signal: ctrl.signal })
       .then((r) => {
         if (!r.ok) throw new Error(`listEntries failed: ${r.status}`);
         return r.json() as Promise<Entry[]>;
