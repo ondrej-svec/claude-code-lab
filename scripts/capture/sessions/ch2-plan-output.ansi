@@ -1,19 +1,22 @@
-[38;5;75m>[0m Add a GET /health endpoint that returns { "ok": true, "uptime_seconds": n }.
+[38;5;75m>[0m Add a [1mDELETE /api/entries/{id}[0m endpoint to the Guide so I can
+  remove an entry by id.
 
-[1;36m●[0m I'll add a [1m/health[0m endpoint to [1mProgram.cs[0m.
+[1;36m●[0m I'll add it to [1mProgram.cs[0m, alongside the existing routes.
 
   [1mPlan[0m
 
-   1. Read [1mProgram.cs[0m to see the current minimal-API setup
-   2. Capture a process-start timestamp at startup
-   3. Register [1mMapGet("/health")[0m returning { ok, uptime_seconds }
-   4. Run the sample and hit the endpoint to verify
+   1. Read [1mProgram.cs[0m to see how the other endpoints are registered
+   2. Read [1mStores/EntryStore.cs[0m for the right removal primitive
+   3. Add [1mEntryStore.Remove(id)[0m returning bool
+   4. Register [1mMapDelete("/api/entries/{id:int}")[0m → 204 / 404
+   5. Run the sample and curl DELETE to verify
 
   [1mFiles to edit[0m
-   [38;5;245m→[0m Program.cs          [38;5;245m(add route + uptime field)[0m
+   [38;5;245m→[0m Stores/EntryStore.cs   [38;5;245m(add Remove method)[0m
+   [38;5;245m→[0m Program.cs             [38;5;245m(register MapDelete)[0m
 
   [1mChecks[0m
-   [38;5;245m→[0m dotnet test samples/dotnet-core/
+   [38;5;245m→[0m curl -X DELETE http://localhost:5100/api/entries/3 -i
 
 [1;33m◆[0m Ready to proceed? [2m[y / n / edit plan][0m
 [38;5;75m>[0m [2m_[0m

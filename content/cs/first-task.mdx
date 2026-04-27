@@ -2,47 +2,49 @@
 
 Otevři ukázkový projekt, nech Claude udělat jednu reálnou změnu, koukni, co se stane — na tvém stacku.
 
-Dole máš dvě paralelní varianty — vyber si tu, která sedí k tvému dennímu stacku, a druhou přeskoč. Obě nepotřebuješ.
+Dole máš dvě paralelní varianty — vyber si tu, která sedí k tvému dennímu stacku, a druhou přeskoč. Obě nepotřebuješ.
 
 - **Varianta A — .NET Core** · ASP.NET Core minimal API. Pro C# / .NET vývojáře.
 - **Varianta B — Python + React** · FastAPI backend, React frontend. Pro Python / JS vývojáře.
 
-Naklonuj repo jednou a pak skoč do své varianty:
+Naklonuj repo jednou a pak skoč do své varianty:
 
 ```bash
 git clone https://github.com/ondrej-svec/claude-code-lab.git
 cd claude-code-lab
 ```
 
+Obě ukázky jsou **The Guide** — malá znalostní báze ve stylu Stopařova průvodce po Galaxii. První spuštění tě přivítá Sub-Etha boot sekvencí (v terminálu na .NETu, na obrazovce u python-react). Prolistuj seedované záznamy a pak se vrať sem na svou první reálnou změnu.
+
 ## Varianta A — .NET Core
 
-Otevři `samples/dotnet-core/` v Claudu. Cíl: přidat `GET /health` endpoint do minimal API. Jedna konkrétní změna, celou smyčkou.
+Otevři `samples/dotnet-core/` v Claudu. Cíl: přidat `DELETE /api/entries/{id}`, aby Průvodce dokázal zapomenout záznamy, které neměl sbírat. Jedna konkrétní změna, celou smyčkou.
 
-### 1. Požádej o změnu
+### 1. Požádej o změnu
 
-V Claude okně:
+V Claude okně:
 
-<Prompt>Přečti si Program.cs, ať víš, co tam je, a pak přidej GET /health endpoint, který vrací \{ "ok": true, "uptime_seconds": n \}.</Prompt>
+<Prompt>Přečti si Program.cs a Stores/EntryStore.cs, ať víš, co tam je, a pak přidej DELETE /api/entries/&lcub;id&rcub; endpoint. Vrať 204 při úspěchu, 404 když záznam neexistuje.</Prompt>
 
 <Screenshot
   src="/screenshots/ch2-plan-output.png"
-  alt="Plán Claude Code pro .NET /health endpoint — soubor k editaci (Program.cs) a dotnet test kontrola"
+  alt="Plán Claude Code pro .NET DELETE endpoint — soubory k editaci (Stores/EntryStore.cs a Program.cs) a curl DELETE kontrola"
   caption="Claude plánuje první. Přečti si to, než zmáčkneš y."
 />
 
-**Co se právě stalo.** Claude zatím nic needitoval. Přečetl `Program.cs`, načrtl plán a pojmenoval přesně soubor i ověřovací krok. Žádný kód se nehnul. Tvar schvaluješ dřív, než přistane jediný znak.
+**Co se právě stalo.** Claude zatím nic needitoval. Přečetl oba soubory, načrtl plán, pojmenoval přesně, které soubory změní, a navrhl ověřovací krok. Žádný kód se nehnul. Tvar schvaluješ dřív, než přistane jediný znak.
 
-### 2. Potvrď a koukni na diff
+### 2. Potvrď a koukni na diff
 
-Řekni ano. Claude změnu zapíše a ukáže jako diff, než ji aplikuje.
+Řekni ano. Claude změnu zapíše a ukáže jako diff, než ji aplikuje.
 
 <Screenshot
   src="/screenshots/ch2a-diff.png"
-  alt="Diff Program.cs s přidaným using System.Diagnostics, Stopwatch startedAt a MapGet /health routou"
-  caption="Malý, soustředěný diff. Dvě přidání, žádné mazání."
+  alt="Diff s přidanou metodou Remove v EntryStore.cs a routou MapDelete v Program.cs"
+  caption="Dvě malá přidání, jedno na soubor. Žádné mazání."
 />
 
-Tři řádky reálného kódu (using, startedAt, MapGet) a dvě prázdné. Nic jiného se nehnulo. Takhle „malý diff“ vypadá v praxi — pokud první pokus rozlezl, zúžni prompt a zkus znova.
+Metoda `Remove` na storu, route `MapDelete` v `Program.cs`. Nic jiného se nehnulo. Takhle „malý diff“ vypadá v praxi — pokud první pokus rozlezl, zúžni prompt a zkus znova.
 
 **V desktop aplikaci** se ten samý diff otevře v bočním panelu vedle session, ne v inline výstupu:
 
@@ -56,85 +58,85 @@ Tři řádky reálného kódu (using, startedAt, MapGet) a dvě prázdné. Nic 
 
 Potvrď. Pak spusť sample:
 
-<Prompt>Spusť aplikaci a zavolej /health, ať ověříš, že to funguje.</Prompt>
+<Prompt>Spusť aplikaci a zavolej DELETE /api/entries/3, ať ověříš, že to funguje. Pak GET /api/entries, aby ses ujistil, že počet klesl.</Prompt>
 
 <Screenshot
   src="/screenshots/ch2a-run.png"
-  alt="Terminál s dotnet run a curl localhost:5055/health vrací 200 OK s ok true a uptime_seconds"
-  caption="200 OK. Endpoint žije. Smyčka uzavřená."
+  alt="Terminál s dotnet run, pak curl seznam šesti záznamů, DELETE vrací 204 No Content, a re-list ukazuje pět"
+  caption="204 No Content, počet klesl ze 6 na 5. Smyčka uzavřená."
 />
 
 Máš běžící feature, kterou můžeš commitnout.
 
 **Když se něco pokazí**
 
-- Build spadne? Vlož chybu zpátky: „build selhal: `[paste]` — oprav to.“ Claude vidí svoji vlastní změnu v kontextu a obvykle to opraví jedním krokem.
-- Curl vrací 500? Vlož server log. Nehádej; ukaž Claudovi, co rozbil.
+- Build spadne? Vlož chybu zpátky: „build selhal: `[paste]` — oprav to.“ Claude vidí svoji vlastní změnu v kontextu a obvykle to opraví jedním krokem.
+- DELETE vrací 500? Vlož server log. Nehádej; ukaž Claudovi, co rozbil.
 
 ## Varianta B — Python + React
 
-Otevři `samples/python-react/` v Claudu. Cíl: totéž — přidat `GET /health` endpoint do FastAPI backendu. Jedna konkrétní změna, celou smyčkou.
+Otevři `samples/python-react/` v Claudu. Cíl: totéž — přidat `DELETE /api/entries/{id}` do FastAPI backendu. Jedna konkrétní změna, celou smyčkou.
 
-### 1. Požádej o změnu
+### 1. Požádej o změnu
 
-V Claude okně:
+V Claude okně:
 
-<Prompt>Přečti si backend/main.py, ať víš, co tam je, a pak přidej GET /health endpoint, který vrací \{ "ok": true, "uptime_seconds": n \}.</Prompt>
+<Prompt>Přečti si backend/main.py, ať víš, co tam je, a pak přidej DELETE /api/entries/&lcub;id&rcub; endpoint. Vrať 204 při úspěchu, 404 když záznam neexistuje.</Prompt>
 
 <Screenshot
   src="/screenshots/ch2b-plan-output.png"
-  alt="Plán Claude Code pro FastAPI /health endpoint — soubor k editaci (backend/main.py) a curl kontrola"
+  alt="Plán Claude Code pro FastAPI DELETE endpoint — soubor backend/main.py a curl DELETE kontrola"
   caption="Claude plánuje první. Přečti si to, než zmáčkneš y."
 />
 
-**Co se právě stalo.** Claude se zatím žádného souboru nedotkl. Otevřel `backend/main.py`, načrtl plán a pojmenoval ověřovací krok, který chce spustit po úpravě. Plán je levný — můžeš ho odmítnout, přeformulovat, nebo potvrdit. Editace začíná až po `y`.
+**Co se právě stalo.** Claude se zatím žádného souboru nedotkl. Otevřel `backend/main.py`, načrtl plán a pojmenoval ověřovací krok, který chce spustit po úpravě. Plán je levný — můžeš ho odmítnout, přeformulovat, nebo potvrdit. Editace začíná až po `y`.
 
-### 2. Potvrď a koukni na diff
+### 2. Potvrď a koukni na diff
 
-Řekni ano. Claude změnu zapíše a ukáže jako diff.
+Řekni ano. Claude změnu zapíše a ukáže jako diff.
 
 <Screenshot
   src="/screenshots/ch2b-diff.png"
-  alt="Diff backend/main.py s přidaným importem time, _started_at časovačem a /health routou"
-  caption="Malý, soustředěný diff. Bez zásahů jinam."
+  alt="Diff backend/main.py s @app.delete handlerem, který vyhodí záznam z in-memory listu a vrátí 404 když chybí"
+  caption="Jeden handler. Bez zásahů jinam."
 />
 
-Jeden import, jeden modulový časovač, jeden route. Tečka. Existující middleware a routy jsou nedotčené — dobrá agentní práce se nerozlézá.
+Jeden handler. Existující routy a middleware jsou nedotčené — dobrá agentní práce se nerozlézá.
 
 ### 3. Spusť to
 
 Potvrď. Pak pusť backend:
 
-<Prompt>Spusť uvicorn a zavolej /health, ať ověříš, že to funguje.</Prompt>
+<Prompt>Spusť uvicorn a zavolej DELETE /api/entries/3, ať ověříš, že to funguje. Pak GET /api/entries, aby ses ujistil, že počet klesl.</Prompt>
 
 <Screenshot
   src="/screenshots/ch2b-run.png"
-  alt="Terminál s běžícím uvicornem na portu 8000 a curl, který vrací 200 OK s ok true a uptime_seconds"
-  caption="200 OK. Endpoint žije. Smyčka uzavřená."
+  alt="Terminál s uvicornem na portu 8000, pak curl seznam šesti záznamů, DELETE vrací 204, a re-list ukazuje pět"
+  caption="204 No Content, počet klesl ze 6 na 5. Smyčka uzavřená."
 />
 
 Máš běžící feature, kterou můžeš commitnout.
 
-**Bonus (když chceš frontend beat):** požádej Claude, ať ve React aplikaci udělá malou „Backend: OK“ indikaci, která při mountu volá `/health`. Jeden komponent, jedno fetch volání. Stejná smyčka, o patro výš.
+**Bonus (když chceš frontend beat):** požádej Claude, ať na každé kartě záznamu v React aplikaci přidá tlačítko smazat, které volá nový endpoint. Jedna změna komponenty, jedno fetch volání. Stejná smyčka, o patro výš.
 
 **Když se něco pokazí**
 
 - Uvicorn spadne? Vlož traceback: „uvicorn spadl: `[paste]` — oprav to.“
-- Curl vrací 500? Ukaž server log. Nehádej; ukaž Claudovi, co rozbil.
+- DELETE vrací 500? Ukaž server log. Nehádej; ukaž Claudovi, co rozbil.
 
 ## Co jsi právě procítil
 
-Obě varianty šly stejným tvarem: **popiš → naplánuj → diff → spusť**. Tenhle tvar je páteří každé agentní session. Zbytek labu si své místo zaslouží tím, že každý z těch čtyř kroků postupně dělá líp.
+Obě varianty šly stejným tvarem: **popiš → naplánuj → diff → spusť**. Tenhle tvar je páteří každé agentní session. Zbytek labu si své místo zaslouží tím, že každý z těch čtyř kroků postupně dělá líp.
 
 Pár signálů, které stojí za pojmenování teď, ať je později poznáš:
 
 - **Plán ti ušetřil jednu iteraci.** Přečíst si plán, než zmáčkneš `y`, je levnější než kontrolovat špatný diff. Pozdější kapitoly posouvají plány dál — zapsané na disk, řízené dalšími příkazy, zkontrolované dřív, než se kód hne. Smyčka Compound Engineeringu v [kapitole 7](/cs/lab/compound-engineering) je místo, kde to plně sedne.
-- **Diff šel zkontrolovat.** Tři až pět řádků, ne třicet. [Kapitola 4](/cs/lab/iteration-and-control) mluví o tom, jak držet diffy malé záměrně — plan mode, rewind, zúžený scope.
-- **Agentovi jsi nevěřil — ověřil jsi.** Spuštění endpointu bylo skutečné schválení, ne stisk `y` na diffu. [Kapitola 8](/cs/lab/next-steps) jde do hloubky na to, jak tohle ověřování dělat automatičtěji (testy, scany, CI review).
-- **Agent pracoval na tvém stacku, ne na hračce.** Tvoje vlastní projekty mají kontext, který agent bude potřebovat. [Kapitola 3](/cs/lab/teach-claude-your-project) je o tom, jak mu ten kontext předat čistě.
+- **Diff šel zkontrolovat.** Tři až pět řádků, ne třicet. [Kapitola 4](/cs/lab/iteration-and-control) mluví o tom, jak držet diffy malé záměrně — plan mode, rewind, zúžený scope.
+- **Agentovi jsi nevěřil — ověřil jsi.** Spuštění `curl` bylo skutečné schválení, ne stisk `y` na diffu. [Kapitola 8](/cs/lab/next-steps) jde do hloubky na to, jak tohle ověřování dělat automatičtěji (testy, scany, CI review).
+- **Agent pracoval na tvém stacku, ne na hračce.** Tvoje vlastní projekty mají kontext, který agent bude potřebovat. [Kapitola 3](/cs/lab/teach-claude-your-project) je o tom, jak mu ten kontext předat čistě.
 
 Čtyři momenty. Jedna malá feature. Udělej totéž na skutečném repu zítra — stejný tvar, stejný rytmus.
 
-Každá další kapitola končí blokem **Praxe: pokračuj se svou ukázkou** — tvoje ukázka roste s tebou, nebo vezmeš stejné pohyby rovnou na svoje vlastní repo.
+Každá další kapitola končí blokem **Praxe: pokračuj se svou ukázkou** — tvoje ukázka roste s tebou, nebo vezmeš stejné pohyby rovnou na svoje vlastní repo.
 
 Tahle smyčka — popiš, naplánuj, diff, zkontroluj, iteruj — je tvar, který Anthropic doporučuje na všechno. Jejich [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices) stojí za přečtení, až to procítíš.

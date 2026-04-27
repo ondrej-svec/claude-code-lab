@@ -14,23 +14,25 @@ git clone https://github.com/ondrej-svec/claude-code-lab.git
 cd claude-code-lab
 ```
 
+The samples are both **The Guide** — a small Hitchhiker's-styled knowledge base. First run greets you with a Sub-Etha boot sequence (in the terminal on .NET, on screen for python-react). Browse the seeded entries, then come back here for your first real change.
+
 ## Stream A — .NET Core
 
-Open `samples/dotnet-core/` in Claude. Goal: add a `GET /health` endpoint to the minimal API. One concrete change, end-to-end through the loop.
+Open `samples/dotnet-core/` in Claude. Goal: add `DELETE /api/entries/{id}` so the Guide can lose entries it shouldn't have collected. One concrete change, end-to-end through the loop.
 
 ### 1. Ask for the change
 
 In the Claude window:
 
-<Prompt>Read Program.cs so you know the shape, then add a GET /health endpoint that returns \{ "ok": true, "uptime_seconds": n \}.</Prompt>
+<Prompt>Read Program.cs and Stores/EntryStore.cs so you know the shape, then add a DELETE /api/entries/&lcub;id&rcub; endpoint. Return 204 on success, 404 if the entry doesn't exist.</Prompt>
 
 <Screenshot
   src="/screenshots/ch2-plan-output.png"
-  alt="Claude Code plan for the .NET /health endpoint, naming Program.cs as the file to edit and a dotnet test check to run"
+  alt="Claude Code plan for the .NET DELETE endpoint, naming Stores/EntryStore.cs and Program.cs as the files to edit and a curl DELETE check to run"
   caption="Claude plans first. Read it before pressing y."
 />
 
-**What just happened.** Claude didn't edit yet. It read `Program.cs`, drafted a plan, and named the exact file plus the verification step. No code moved. You get to approve the shape before a single character lands.
+**What just happened.** Claude didn't edit yet. It read both files, drafted a plan, named exactly which files would change, and proposed the verification step. No code moved. You get to approve the shape before a single character lands.
 
 ### 2. Approve and watch the diff
 
@@ -38,11 +40,11 @@ Say yes. Claude writes the change and shows it as a diff before applying.
 
 <Screenshot
   src="/screenshots/ch2a-diff.png"
-  alt="Diff of Program.cs showing a using System.Diagnostics, a Stopwatch startedAt, and a MapGet /health route added"
-  caption="Small, focused diff. Two additions, no deletes."
+  alt="Diff showing a Remove method added to EntryStore.cs and a MapDelete route added to Program.cs"
+  caption="Two small additions, one per file. No deletes."
 />
 
-Three lines of real code (using, startedAt, MapGet) plus two blanks. Nothing else touched. This is what "small diff" means in practice — if your first attempt sprawls, narrow the prompt and try again.
+A `Remove` method on the store, a `MapDelete` route in `Program.cs`. Nothing else touched. This is what "small diff" means in practice — if your first attempt sprawls, narrow the prompt and try again.
 
 **In the desktop app** the same diff opens in a side panel alongside the session, not inline:
 
@@ -56,12 +58,12 @@ Three lines of real code (using, startedAt, MapGet) plus two blanks. Nothing els
 
 Accept. Then run the sample:
 
-<Prompt>Start the app and hit /health to confirm it's wired up.</Prompt>
+<Prompt>Start the app and hit DELETE /api/entries/3 to confirm it's wired up. Then GET /api/entries to confirm the count dropped.</Prompt>
 
 <Screenshot
   src="/screenshots/ch2a-run.png"
-  alt="Terminal showing dotnet run followed by curl localhost:5055/health returning a 200 OK with ok true and uptime_seconds"
-  caption="200 OK. Endpoint live. Loop closed."
+  alt="Terminal showing dotnet run, then curl listing six entries, then DELETE returning 204 No Content, then a re-list showing five"
+  caption="204 No Content, count drops from 6 to 5. Loop closed."
 />
 
 You now have a running feature you can commit.
@@ -69,21 +71,21 @@ You now have a running feature you can commit.
 **If something goes wrong**
 
 - Build fails? Paste the error back: "build failed: `[paste]` — fix it." Claude sees its own change in context and usually fixes in one step.
-- Curl returns 500? Paste the server log. Don't guess; show Claude what it broke.
+- DELETE returns 500? Paste the server log. Don't guess; show Claude what it broke.
 
 ## Stream B — Python + React
 
-Open `samples/python-react/` in Claude. Goal: same — add a `GET /health` endpoint to the FastAPI backend. One concrete change, end-to-end through the loop.
+Open `samples/python-react/` in Claude. Goal: same — add `DELETE /api/entries/{id}` to the FastAPI backend. One concrete change, end-to-end through the loop.
 
 ### 1. Ask for the change
 
 In the Claude window:
 
-<Prompt>Read backend/main.py so you know the shape, then add a GET /health endpoint that returns \{ "ok": true, "uptime_seconds": n \}.</Prompt>
+<Prompt>Read backend/main.py so you know the shape, then add a DELETE /api/entries/&lcub;id&rcub; endpoint. Return 204 on success, 404 if the entry doesn't exist.</Prompt>
 
 <Screenshot
   src="/screenshots/ch2b-plan-output.png"
-  alt="Claude Code plan for the FastAPI /health endpoint, naming backend/main.py as the file to edit and a curl check to run"
+  alt="Claude Code plan for the FastAPI DELETE endpoint, naming backend/main.py and a curl DELETE check"
   caption="Claude plans first. Read it before pressing y."
 />
 
@@ -95,32 +97,32 @@ Say yes. Claude writes the change and shows it as a diff.
 
 <Screenshot
   src="/screenshots/ch2b-diff.png"
-  alt="Diff of backend/main.py showing an added time import, a _started_at monotonic timer, and a /health route"
-  caption="Small, focused diff. No side edits."
+  alt="Diff of backend/main.py showing an @app.delete handler that pops the entry from the in-memory list and raises 404 if missing"
+  caption="One handler. No side edits."
 />
 
-One import, one module-level timer, one route. That's it. Existing middleware and routes are untouched — good agent work doesn't spread.
+One handler. The existing routes and middleware are untouched — good agent work doesn't spread.
 
 ### 3. Run it
 
 Accept. Then run the backend:
 
-<Prompt>Start uvicorn and hit /health to confirm it's wired up.</Prompt>
+<Prompt>Start uvicorn and hit DELETE /api/entries/3 to confirm it's wired up. Then GET /api/entries to confirm the count dropped.</Prompt>
 
 <Screenshot
   src="/screenshots/ch2b-run.png"
-  alt="Terminal showing uvicorn running on port 8000 and curl returning a 200 OK with ok true and uptime_seconds"
-  caption="200 OK. Endpoint live. Loop closed."
+  alt="Terminal showing uvicorn running on port 8000, then curl listing six entries, then DELETE returning 204, then a re-list showing five"
+  caption="204 No Content, count drops from 6 to 5. Loop closed."
 />
 
 You now have a running feature you can commit.
 
-**Bonus (if you want a frontend beat):** ask Claude to wire a small "Backend: OK" indicator in the React app that fetches `/health` on mount. One component, one fetch. Same loop, one layer up.
+**Bonus (if you want a frontend beat):** ask Claude to wire a small delete button on each entry card in the React app that hits the new endpoint. One component change, one fetch. Same loop, one layer up.
 
 **If something goes wrong**
 
 - Uvicorn crashes? Paste the traceback: "uvicorn crashed: `[paste]` — fix it."
-- Curl returns 500? Show the server log. Don't guess; show Claude what it broke.
+- DELETE returns 500? Show the server log. Don't guess; show Claude what it broke.
 
 ## What you just felt
 
@@ -130,7 +132,7 @@ A few signals worth naming now, so you spot them later:
 
 - **The plan saved you a retry.** Reading the plan before pressing `y` is cheaper than reviewing a bad diff. Later chapters make plans much more powerful — written to disk, acted on by other commands, reviewed before any code moves. The Compound Engineering loop in [chapter 7](/en/lab/compound-engineering) is where that fully lands.
 - **The diff was reviewable.** Three to five lines, not thirty. [Chapter 4](/en/lab/iteration-and-control) covers how to keep diffs small on purpose — plan mode, rewind, narrowed scope.
-- **You didn't trust the agent — you verified.** Running the endpoint was the real approval, not pressing `y` on the diff. [Chapter 8](/en/lab/next-steps) is the depth source on making that verification more automatic (tests, scans, CI review).
+- **You didn't trust the agent — you verified.** Running `curl` was the real approval, not pressing `y` on the diff. [Chapter 8](/en/lab/next-steps) is the depth source on making that verification more automatic (tests, scans, CI review).
 - **The agent worked on your stack, not a toy.** Your own projects have context the agent will need. [Chapter 3](/en/lab/teach-claude-your-project) is about giving it that context cleanly.
 
 Four beats. One small feature. Do the same thing on a real repo of yours tomorrow — same shape, same rhythm.
