@@ -45,6 +45,11 @@ If you touch these areas, read these files first:
   - Terminal casts → `vhs` + `scripts/visuals/vhs.theme.json`
   - Web captures → `scripts/capture/capture-web.sh` (requires `pnpm dev` running)
 
+- **Debugging recurring problems** (`docs/solutions/`):
+  - [`docs/solutions/README.md`](docs/solutions/README.md) — capture format
+  - Grep `docs/solutions/` by symptom before starting a debug session
+  - After solving a non-obvious problem, run `/marvin:compound` to leave a doc here
+
 - **UI / site code** (`app/`):
   - `node_modules/next/dist/docs/` before any App Router or framework-sensitive change
   - [`docs/agent-ui-testing.md`](docs/agent-ui-testing.md) — layered browser verification workflow
