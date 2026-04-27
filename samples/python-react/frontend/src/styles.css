@@ -305,6 +305,53 @@ button {
   margin: 0 0 0.9rem;
 }
 
+.entry__body p {
+  margin: 0 0 0.7rem;
+}
+
+.entry__body p:last-child {
+  margin-bottom: 0;
+}
+
+.entry__body strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.entry__body em {
+  color: var(--text-primary);
+  font-style: italic;
+}
+
+.entry__body code {
+  background: rgba(196, 167, 231, 0.12);
+  border: 1px solid rgba(196, 167, 231, 0.22);
+  border-radius: 4px;
+  padding: 0.05rem 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--iris);
+}
+
+.entry__body a {
+  color: var(--foam);
+  border-bottom: 1px solid rgba(156, 207, 216, 0.4);
+  transition: border-color 160ms ease;
+}
+
+.entry__body a:hover {
+  border-bottom-color: var(--foam);
+}
+
+.entry__body ul {
+  margin: 0.4rem 0 0.7rem;
+  padding-left: 1.4rem;
+}
+
+.entry__body li {
+  margin: 0.2rem 0;
+}
+
 .entry__meta {
   display: flex;
   flex-wrap: wrap;
@@ -483,4 +530,185 @@ button {
 
 .error {
   color: var(--love);
+}
+
+/* ——— Boot sequence — one-shot, dismissible, narratively meaningful ——— */
+/* Codified as a Cinematic Moment in docs/cc-lab-design-system.md.       */
+.boot {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: #05060a;
+  color: #9ccfd8;
+  font-family: var(--font-mono);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 380ms ease-out;
+}
+
+.boot--exit {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.boot__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(86, 148, 159, 0.12) 0%,
+      rgba(5, 6, 10, 0.8) 60%,
+      rgba(5, 6, 10, 1) 100%
+    );
+  animation: boot-scrim-in 700ms ease-out;
+}
+
+.boot__scan {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(156, 207, 216, 0) 0px,
+    rgba(156, 207, 216, 0) 2px,
+    rgba(156, 207, 216, 0.04) 2px,
+    rgba(156, 207, 216, 0.04) 3px
+  );
+  mix-blend-mode: screen;
+  animation: boot-scan 4s linear infinite;
+}
+
+.boot__crt {
+  position: relative;
+  width: min(640px, 92vw);
+  padding: 2rem 2.5rem;
+  border-radius: 14px;
+  border: 1px solid rgba(156, 207, 216, 0.18);
+  background: rgba(11, 14, 22, 0.65);
+  box-shadow:
+    inset 0 0 60px rgba(86, 148, 159, 0.08),
+    0 0 80px rgba(86, 148, 159, 0.06);
+  backdrop-filter: blur(0.5px);
+}
+
+.boot__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  min-height: 9rem;
+}
+
+.boot__lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: #9ccfd8;
+  text-shadow: 0 0 6px rgba(156, 207, 216, 0.45);
+  min-height: 4rem;
+}
+
+.boot__line {
+  white-space: pre;
+  animation: boot-line-in 220ms ease-out both;
+}
+
+.boot__line::after {
+  content: "█";
+  margin-left: 0.25em;
+  animation: boot-cursor 700ms steps(2) infinite;
+  color: rgba(156, 207, 216, 0.85);
+}
+
+.boot__line:not(:last-child)::after {
+  display: none;
+}
+
+.boot__panic {
+  display: flex;
+  gap: 1.2rem;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 2.4rem;
+  letter-spacing: 0.18em;
+  color: #f6c177;
+  text-shadow:
+    0 0 14px rgba(246, 193, 119, 0.5),
+    0 0 28px rgba(246, 193, 119, 0.25);
+  animation: boot-panic-in 280ms ease-out, boot-panic-pulse 1.6s ease-in-out infinite 280ms;
+}
+
+.boot__hint {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(156, 207, 216, 0.45);
+  opacity: 0;
+  animation: boot-hint-in 380ms ease-out 1.2s both;
+}
+
+@keyframes boot-scrim-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes boot-scan {
+  from { transform: translateY(0); }
+  to   { transform: translateY(3px); }
+}
+
+@keyframes boot-line-in {
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes boot-cursor {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.15; }
+}
+
+@keyframes boot-panic-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes boot-panic-pulse {
+  0%, 100% { text-shadow: 0 0 14px rgba(246, 193, 119, 0.5), 0 0 28px rgba(246, 193, 119, 0.25); }
+  50%      { text-shadow: 0 0 22px rgba(246, 193, 119, 0.8), 0 0 44px rgba(246, 193, 119, 0.45); }
+}
+
+@keyframes boot-hint-in {
+  to { opacity: 1; }
+}
+
+/* Reduced motion: drop scan lines, drop animations, fast fade out. */
+.boot--reduced .boot__scrim,
+.boot--reduced .boot__line,
+.boot--reduced .boot__panic,
+.boot--reduced .boot__hint {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boot__scan { display: none; }
+  .boot__scrim,
+  .boot__line,
+  .boot__panic,
+  .boot__hint {
+    animation: none !important;
+  }
+  .boot__panic {
+    text-shadow: 0 0 6px rgba(246, 193, 119, 0.4);
+  }
 }

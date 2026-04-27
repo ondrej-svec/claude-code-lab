@@ -1,5 +1,6 @@
 import type { Entry, Locale } from "../types";
 import { Badge } from "./Badge";
+import { renderMarkdown } from "../markdown";
 
 function formatDate(iso: string, locale: Locale): string {
   const d = new Date(iso);
@@ -19,7 +20,10 @@ export function EntryCard({ entry, locale }: { entry: Entry; locale: Locale }) {
         <h2 className="entry__title">{entry.title}</h2>
         <Badge kind={entry.badge} locale={locale} />
       </header>
-      <p className="entry__body">{entry.body}</p>
+      <div
+        className="entry__body"
+        dangerouslySetInnerHTML={{ __html: renderMarkdown(entry.body) }}
+      />
       <footer className="entry__meta">
         <span>{entry.contributor}</span>
         <span className="entry__meta-divider" aria-hidden />
