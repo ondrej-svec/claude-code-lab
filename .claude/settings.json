@@ -30,7 +30,16 @@
       "Bash(rg *)",
       "Bash(find *)",
       "Bash(ls *)",
-      "Bash(./scripts/*)"
+      "Bash(./scripts/*)",
+      "Bash(dotnet run*)",
+      "Bash(dotnet build*)",
+      "Bash(dotnet test*)",
+      "Bash(dotnet restore*)",
+      "Bash(dotnet --version)",
+      "Bash(python3 *)",
+      "Bash(uvicorn *)",
+      "Bash(pip install *)",
+      "Bash(curl http://localhost:*)"
     ],
     "deny": [
       "Bash(rm -rf /*)",

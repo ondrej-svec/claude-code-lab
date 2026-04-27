@@ -8,4 +8,11 @@
     <AssemblyName>CCLab.Sample</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <!-- Spectre.Console powers the first-run boot sequence. The colored
+         panel + glow + DON'T PANIC banner would be 80 lines of fragile
+         escape-string formatting otherwise. -->
+    <PackageReference Include="Spectre.Console" Version="0.49.1" />
+  </ItemGroup>
+
 </Project>

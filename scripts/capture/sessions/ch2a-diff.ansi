@@ -1,21 +1,16 @@
-[1;36m●[0m Editing [1mProgram.cs[0m
+[1;36m●[0m Editing [1mStores/EntryStore.cs[0m and [1mProgram.cs[0m
 
-  [38;5;110m@@ -1,4 +1,6 @@[0m
-  [38;5;150m+using System.Diagnostics;[0m
+  [38;5;110m@@ Stores/EntryStore.cs +60,4 @@[0m
+   public Entry Add(EntryInput input) { ... }
   [38;5;150m+[0m
-   using Microsoft.AspNetCore.Builder;
-   using Microsoft.AspNetCore.Http;
-   using Microsoft.Extensions.DependencyInjection;
+  [38;5;150m+public bool Remove(int id)[0m
+  [38;5;150m+    => _entries.RemoveAll(e => e.Id == id) > 0;[0m
 
-  [38;5;110m@@ -6,6 +8,10 @@[0m
-   builder.Services.AddSingleton<ItemStore>();
-
-   var app = builder.Build();
-  [38;5;150m+var startedAt = Stopwatch.StartNew();[0m
+  [38;5;110m@@ Program.cs +44,5 @@[0m
+   app.MapPost("/api/entries", (EntryInput input, EntryStore store) => { ... });
   [38;5;150m+[0m
-  [38;5;150m+app.MapGet("/health", () => new { ok = true, uptime_seconds = startedAt.Elapsed.TotalSeconds });[0m
-  [38;5;150m+[0m
-   app.MapGet("/api/items", (ItemStore store) => store.All());
+  [38;5;150m+app.MapDelete("/api/entries/{id:int}", (int id, EntryStore store) =>[0m
+  [38;5;150m+    store.Remove(id) ? Results.NoContent() : Results.NotFound());[0m
 
 [1;33m◆[0m Apply? [2m[y / n / show more][0m
 [38;5;75m>[0m [2m_[0m

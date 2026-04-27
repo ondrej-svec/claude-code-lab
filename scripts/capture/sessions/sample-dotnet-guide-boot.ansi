@@ -1,0 +1,25 @@
+[38;5;75m>[0m dotnet run
+
+[2m──────[0m [38;5;73mThe Hitchhiker's Guide to the Galaxy[0m [2m─────────────────────────[0m
+
+  [1;38;5;73m>[0m [38;5;152minitializing sub-etha relay…[0m
+  [1;38;5;73m>[0m [38;5;152minfinite improbability drive: stable[0m
+  [1;38;5;73m>[0m [38;5;152mthe guide is now open[0m
+
+  [1;38;5;222mDON'T  PANIC[0m
+
+  [38;5;73m╭───────────────────────────────────────────────[0m  [1;38;5;152m● MOSTLY HARMLESS[0m  [38;5;73m──╮[0m
+  [38;5;73m│[0m  [1;38;5;189mOn the towel, and why you should always know where it is[0m            [38;5;73m│[0m
+  [38;5;73m│[0m                                                                      [38;5;73m│[0m
+  [38;5;73m│[0m  [38;5;146mA towel is about the most massively useful thing an[0m                 [38;5;73m│[0m
+  [38;5;73m│[0m  [38;5;146minterstellar hitchhiker can have. Partly it has great[0m               [38;5;73m│[0m
+  [38;5;73m│[0m  [38;5;146mpractical value: wrap it around you for warmth on the[0m               [38;5;73m│[0m
+  [38;5;73m│[0m  [38;5;146mcold moons of Jaglan Beta, sleep under it on the[0m                    [38;5;73m│[0m
+  [38;5;73m│[0m  [38;5;146mmarble-sanded beaches of Santraginus V.[0m                             [38;5;73m│[0m
+  [38;5;73m│[0m                                                                      [38;5;73m│[0m
+  [38;5;73m│[0m  [2mFord Prefect  ·  27 Apr 2026  ·  #preparedness #essentials[0m          [38;5;73m│[0m
+  [38;5;73m╰──────────────────────────────────────────────────────────────────────╯[0m
+
+  [38;5;245minfo: Microsoft.Hosting.Lifetime[14][0m
+  [38;5;245m      Now listening on:[0m [1mhttp://localhost:5100[0m
+  [38;5;245m      Application started. Press Ctrl+C to shut down.[0m

@@ -1,7 +1,7 @@
 {
-  "name": "cc-lab-frontend",
+  "name": "cc-lab-the-guide-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,6 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/jetbrains-mono": "^5.1.1",
+    "@fontsource/manrope": "^5.1.0",
+    "@fontsource/space-grotesk": "^5.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
