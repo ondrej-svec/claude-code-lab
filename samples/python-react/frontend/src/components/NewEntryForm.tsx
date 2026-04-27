@@ -8,6 +8,7 @@ const COPY: Record<Locale, {
   bodyPh: string;
   contributorPh: string;
   submit: string;
+  errorPrefix: string;
 }> = {
   en: {
     heading: "Add an entry",
@@ -15,6 +16,7 @@ const COPY: Record<Locale, {
     bodyPh: "What's the story?",
     contributorPh: "Your name (optional)",
     submit: "Submit to the Guide",
+    errorPrefix: "Could not save",
   },
   cs: {
     heading: "Přidat záznam",
@@ -22,6 +24,7 @@ const COPY: Record<Locale, {
     bodyPh: "O co jde?",
     contributorPh: "Tvé jméno (volitelné)",
     submit: "Odeslat do Průvodce",
+    errorPrefix: "Nepodařilo se uložit",
   },
 };
 
@@ -37,6 +40,7 @@ export function NewEntryForm({
   const [body, setBody] = useState("");
   const [contributor, setContributor] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const canSubmit = title.trim().length > 0 && body.trim().length > 0 && !submitting;
 
@@ -44,6 +48,7 @@ export function NewEntryForm({
     e.preventDefault();
     if (!canSubmit) return;
     setSubmitting(true);
+    setError(null);
     try {
       const created = await createEntry({
         title: title.trim(),
@@ -57,6 +62,8 @@ export function NewEntryForm({
       setTitle("");
       setBody("");
       setContributor("");
+    } catch (err) {
+      setError(`${c.errorPrefix}: ${String(err)}`);
     } finally {
       setSubmitting(false);
     }
@@ -95,6 +102,11 @@ export function NewEntryForm({
       <button type="submit" className="new-entry__submit" disabled={!canSubmit}>
         {c.submit}
       </button>
+      {error && (
+        <div className="new-entry__error" role="alert">
+          {error}
+        </div>
+      )}
     </form>
   );
 }

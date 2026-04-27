@@ -64,7 +64,7 @@ export function App() {
           <h1 className="app-title">The Guide</h1>
           <div className="app-tagline">{COPY[locale].tagline}</div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", alignItems: "flex-end" }}>
+        <div className="app-header__actions">
           <span className="app-don-t-panic">Don't Panic</span>
           <LocaleToggle locale={locale} onChange={setLocale} />
         </div>

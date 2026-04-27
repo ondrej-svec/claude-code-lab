@@ -38,7 +38,7 @@ class EntryInput(BaseModel):
     badge: Badge = "unknown"
     contributor: str = Field(default="Anonymous", min_length=1, max_length=80)
     locale: Locale = "en"
-    tags: list[str] = Field(default_factory=list)
+    tags: list[str] = Field(default_factory=list, max_length=10)
 
 
 def _seed() -> list[Entry]:
@@ -182,6 +182,7 @@ def get_entry(entry_id: int) -> dict:
 @app.post("/api/entries", status_code=201)
 def create_entry(payload: EntryInput) -> dict:
     global _next_id
+    cleaned_tags = [t.strip()[:20] for t in payload.tags if t.strip()]
     entry = Entry(
         id=_next_id,
         title=payload.title.strip(),
@@ -190,7 +191,7 @@ def create_entry(payload: EntryInput) -> dict:
         contributor=payload.contributor.strip(),
         created_at=datetime.now(timezone.utc).isoformat(),
         locale=payload.locale,
-        tags=[t.strip() for t in payload.tags if t.strip()],
+        tags=cleaned_tags,
     )
     _entries.append(entry)
     _next_id += 1
