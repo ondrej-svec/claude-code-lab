@@ -203,7 +203,194 @@ Dawn variant. Both are configured in `app/components/diagram.tsx` and
 Calm, deliberate, not demo-style flourishy. No excessive drop shadows
 beyond the components' built-in `--shadow-soft`. No gradient
 overlays. No animated backgrounds. Spaceship illustrations and the
-journey comic are the only "personality" elements; they earn it.
+chapter heroes are the only "personality" elements; they earn it.
+
+---
+
+## Chapter hero illustrations
+
+Each of the ten spine chapters has a 2:1 aspect-ratio hero image
+rendered at the top of its card on `/[locale]/lab`. Read in
+sequence, the ten images form one continuous illustrated journey —
+they replaced the older single 6-panel journey-comic.
+
+Generated via Codex GPT Image 2 through the `babel-fish:image`
+skill. The codex path does not accept reference images, so
+consistency is enforced by a locked prompt boilerplate that
+describes the canonical ship in full detail. Every chapter generation
+pastes the same boilerplate prefix; only the per-chapter scene
+differs.
+
+### Reference
+
+`public/hero.png` is the canonical ship — the long sleek angular
+cruiser shown on the landing page. Every chapter hero must render
+the same ship, recognizable as that one. If a generation produces
+a stubby, face-like, or "personable" silhouette, it is wrong and
+gets re-rolled.
+
+### Aesthetic posture (heroes)
+
+**Hi-tech sci-fi blueprint.** Hitchhiker's-Guide / Heart-of-Gold
+cruiser energy. Engineered, technical, calm. The ship is a vessel,
+not a personality.
+
+| Always | Never |
+|---|---|
+| Long, narrow, engineered silhouettes | Stubby, rounded, face-like proportions |
+| Hi-tech sci-fi context (docking rings, satellites, instrument arrays, sensor pods, beacons, thin antenna spires) | Domestic / cottage props (coffee mugs, kitchenware, plants, toys, plates) |
+| Thin clean linework, multiple structural panel lines | Smooth jelly-bean shapes with no detail |
+| The terminal as an *inset* panel set into the hull | The terminal as the body's overall shape |
+| Scattered pinprick stars | Connected-dot constellations |
+| At most one delicate hairline curve to suggest a path | Heavy dotted trajectory lines, dashed "highway" tracks |
+| Color reserved for the terminal, engine glow, and small chapter-specific accents | Color elsewhere on the hull, antenna, props, or background |
+| Calm, deliberate, blueprint mood | Cute, childish, anthropomorphic, demo-flourishy |
+
+### Canonical ship spec (locked)
+
+In horizontal profile, facing right. **Long and narrow** — total
+width roughly 4–5× the height. Four distinct hull sections, left
+to right:
+
+1. **Rear (~15%)** — small angular thruster cluster of three small
+   nozzles; vertical hull panel with three short horizontal vent
+   lines
+2. **Mid-left (~15%)** — hexagonal hatch/porthole; small circular
+   sensor or radar-dish detail; hull lines continue past these to
+   the next section
+3. **Central terminal section (~40%)** — an INSET rectangular panel
+   set INTO the side of the hull (the hull outline continues above
+   and below it). Inside the panel: three small mac-style dots in
+   red `#eb6f92`, yellow `#f6c177`, blue-teal `#9ccfd8` at the
+   upper-left; one short line of monospace text (chapter-specific);
+   two thin horizontal progress bars (upper rose `#eb6f92`, lower
+   teal `#9ccfd8`)
+4. **Nose (~25–30%)** — hull narrows and extends as a long sharp
+   triangular wedge; small circular sensor port near the very tip;
+   thin antenna line along the wedge
+
+Above the central section: a slim vertical antenna pole with a tiny
+ball at its tip. Clean — **no cloth, no flag, no banner, no towel.**
+
+Multiple thin parallel structural lines divide the four sections;
+small panel-line detail strokes throughout. The hull is engineered,
+not smooth.
+
+### Color rules
+
+- Background: deep navy `#232136`
+- Linework: thin off-white lavender `#e0def4` — confident, no wobble,
+  no fills, no shading, no chrome
+- **Color reserved** for: terminal screen elements (three dots, two
+  progress bars, terminal text), engine glow when present, and
+  small chapter-specific accent points (a checkmark, a beam, a
+  status light)
+- Hull, antenna, scene props, gantry, satellites, rings: pure
+  off-white-lavender. No color elsewhere.
+
+### Star field & paths
+
+- Scattered tiny pinprick stars only — **no constellation lines, no
+  connected dots, no joined-up patterns**
+- A faint distant planet curve along the bottom edge is acceptable
+  (single thin hairline; no surface detail)
+- Where a path is needed, **at most one delicate hairline curve** —
+  not a heavy dotted line, not a dashed track
+
+### Composition drift
+
+| Chapters | Ship position | Read as |
+|---|---|---|
+| 01–05 | Left third of the frame | Outbound — leaving the dock, building the harness |
+| 06 | Centered | The pivot — ecosystem fills around it |
+| 07–10 | Center-right of the frame | Expansion — compounding, looking outward, looking inward |
+
+Subtle, not dogmatic. The set should pull left-to-right when read
+as a sequence.
+
+### Per-chapter storyboard (locked)
+
+| # | Slug | Concept | Sci-fi scene | Terminal text |
+|---|---|---|---|---|
+| 01 | `before-we-start` | Pre-launch | Ship docked at a thin angular hi-tech docking ring; cold thrusters; small standby indicator; faint distant planet curve | `> claude` (cursor) |
+| 02 | `first-task` | First flight | Ship departing the ring; soft engine glow + short tapered exhaust; small distant waypoint marker — a thin ring with a pale-teal ✓ inside | `> /first-task ✓` |
+| 03 | `teach-claude-your-project` | Context absorption | Ship near a thin angular satellite labeled `CLAUDE.md`; thin beam of data flowing satellite → ship | `+ context loaded` |
+| 04 | `iteration-and-control` | Calibration | Ship inside a thin instrument ring of small sci-fi modules (shield, lock, lightning, check); a thin arrow loops the ring | `> verify ✓✓✓` |
+| 05 | `voice-and-interaction` | Senses expand | Ship surrounded by three thin dish/antenna arrays receiving different signal types (sound waves, optical pulse, comms) | `> /voice` |
+| 06 | `ecosystem` | Network | Ship at the center of a node-graph of four small angular modules connected by thin lines (plugins · mcp · subagents · web) | `+ plugin loaded` |
+| 07 | `compound-engineering` | Compounding | Ship trailing a clean spiral path; small data-marker artifacts (a thin doc, a check, a small star) along the spiral | `✓ compounding` |
+| 08 | `next-steps` | Onward | Ship at a quiet junction; two or three thin paths leading to distant horizons / star clusters | `> next` |
+| 09 | `reference` | Library | Ship docked beside a modular bookmark / data-core array — a stack of thin labeled tabs / cores | `> ref` |
+| 10 | `behind-the-scenes` | Meta | Ship rendered as a CUTAWAY / X-RAY view: internal compartments visible, a tiny figure at a console inside | `> meta` |
+
+### Locked prompt boilerplate
+
+Every chapter generation uses this exact prefix. Only the
+"CHAPTER N SCENE" block at the bottom changes per chapter.
+
+```
+Wide horizontal illustration, aspect 2:1, hand-drawn thin clean
+line-art on a dark navy field. Background: deep navy (#232136) with
+scattered tiny pinprick stars only. Linework: thin off-white lavender
+(#e0def4). Aesthetic reference: Hitchhiker-Guide-to-the-Galaxy /
+Heart-of-Gold sci-fi cruiser blueprint. Engineered, technical,
+hi-tech, NEVER cute, NEVER anthropomorphic, NEVER face-like.
+
+THE SHIP — drawn as a TECHNICAL BLUEPRINT, not a personality.
+Critical proportions: VERY LONG AND NARROW, total width roughly 4 to
+5 times the height. Horizontal profile, facing RIGHT.
+
+Four distinct hull sections, left to right:
+1. REAR (~15%): small angular thruster cluster of three nozzles,
+   plus a vertical hull panel with three short horizontal vent lines.
+2. MID-LEFT (~15%): hexagonal hatch/porthole and a small circular
+   sensor or radar dish detail; hull lines continue past these.
+3. CENTRAL TERMINAL SECTION (~40%): an INSET RECTANGULAR PANEL set
+   INTO the side of the hull (with the hull outline continuing above
+   and below it). INSIDE: three small mac-style dots in red (#eb6f92),
+   yellow (#f6c177), and blue-teal (#9ccfd8) at the upper-left, one
+   short line of monospace text [CHAPTER-SPECIFIC], two thin horizontal
+   progress bars (upper rose pink #eb6f92, lower pale teal #9ccfd8).
+   The terminal is a panel ON the hull, not the entire hull.
+4. NOSE (~25-30%): hull narrows and extends as a LONG SHARP
+   TRIANGULAR WEDGE pointing right, small circular sensor port near
+   the very tip, thin antenna line along the wedge.
+
+Above the central terminal section: a SLIM VERTICAL ANTENNA POLE
+with a tiny ball at its tip. Clean — NO cloth, NO flag, NO towel,
+NO banner.
+
+Multiple thin parallel structural lines divide the four sections;
+small panel-line detail strokes. Engineered cruiser, not a smooth
+jelly-bean. Color RESERVED for terminal screen elements ONLY (three
+dots and two progress bars), plus chapter-specific accent points
+when listed in the scene. Hull, antenna, all other linework: pure
+off-white-lavender.
+
+NEGATIVES (hard constraints, all chapters):
+NO cute, NO childish, NO anthropomorphic, NO face-like proportions.
+NO domestic props (coffee mug, plates, cushions, toys, plants,
+kitchenware). NO comic-strip panel borders. NO speech bubbles. NO
+heavy dotted trajectories. NO connecting-line constellations. NO
+neon, NO chrome reflections, NO gradients, NO fills, NO shading, NO
+wobble. NO watermark. NO text outside the terminal screen and small
+chapter-specific markers.
+
+CHAPTER N SCENE — [scene description per storyboard above].
+```
+
+### Generation workflow
+
+1. Render each chapter at 1600×800, quality high, via the codex
+   path documented in `babel-fish:image`
+2. Save under `public/chapters/<NN>-<slug>.png`
+3. Wire the path into `lib/chapters.ts` `heroImage` field
+4. Verify in browser at desktop (`/en/lab`) and mobile viewport
+5. **If the ship drifts** (face-like, stubby, anthropomorphic, wrong
+   proportions, color outside the terminal), regenerate with the
+   locked spec — do not paper over with CSS
+
+Style consistency across all ten is the bar. Re-roll any outlier.
 
 ---
 

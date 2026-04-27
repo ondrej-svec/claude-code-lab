@@ -1,6 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ChapterSidebar } from "@/app/components/chapter-sidebar";
-import { Screenshot } from "@/app/components/screenshot";
 import { CHAPTERS } from "@/lib/chapters";
 import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
 
@@ -17,19 +17,11 @@ export default async function LabIndex({
       eyebrow: "The lab",
       title: "Ten chapters. One practice.",
       lede: "Go top to bottom, or pick what you need. Every chapter ends with something you can try immediately.",
-      journey: {
-        alt: "Six-panel comic of a Heart-of-Gold-style spaceship traveling through the lab's learning arc: docking at first contact, a small first task, learning context (CLAUDE.md), the shift from control to a verification harness, gaining ecosystem extensions, and a final compounding journey trail with a tiny towel draped on the antenna.",
-        caption: "Six beats. Ten chapters. One practice.",
-      },
     },
     cs: {
       eyebrow: "Lab",
       title: "Deset kapitol. Jedna praxe.",
       lede: "Projdi odshora dolů, nebo si vyber, co ti zrovna sedí. Každá kapitola končí něčím, co můžeš hned zkusit.",
-      journey: {
-        alt: "Šestipanelový komiks vesmírné lodi ve stylu Heart of Gold, která prochází obloukem labu: zakotvení při prvním kontaktu, malý první úkol, učení kontextu (CLAUDE.md), posun od kontroly k ověřovacímu harnessu, získání ekosystémových rozšíření a závěrečná cesta se smyčkou compoundingu — s malým ručníkem přehozeným přes anténu.",
-        caption: "Šest zastavení. Deset kapitol. Jedna praxe.",
-      },
     },
   };
 
@@ -56,52 +48,94 @@ export default async function LabIndex({
             {m.title}
           </h1>
           <p
-            className="text-lg leading-relaxed mb-10"
+            className="text-lg leading-relaxed"
             style={{ color: "var(--text-secondary)" }}
           >
             {m.lede}
           </p>
+        </div>
 
-          <Screenshot
-            src="/journey-comic.png"
-            alt={m.journey.alt}
-            caption={m.journey.caption}
-          />
-
-          <ol className="space-y-4 mt-10">
-            {CHAPTERS.map((chapter) => (
-              <li key={chapter.slug}>
+        <ol
+          className="grid gap-4 mt-10 md:grid-cols-2 landing-rise"
+          style={{ ["--landing-rise-delay" as string]: "120ms" }}
+        >
+          {CHAPTERS.map((chapter, idx) => {
+            const isFirst = idx === 0;
+            const eyebrowParts = chapter.eyebrows[validLocale].split(" · ");
+            const sectionLabel = eyebrowParts[1] ?? chapter.eyebrows[validLocale];
+            return (
+              <li key={chapter.slug} className={isFirst ? "md:col-span-2" : ""}>
                 <Link
                   href={`/${validLocale}/lab/${chapter.slug}`}
-                  className="motion-card block p-5 rounded-xl border"
+                  className="motion-card group flex flex-col h-full overflow-hidden rounded-xl border"
                   style={{
                     background: "var(--surface-elevated)",
                     borderColor: "var(--border)",
                   }}
                 >
                   <div
-                    className="text-xs uppercase tracking-[0.16em] mb-1"
-                    style={{ color: "var(--text-muted)" }}
+                    className="relative w-full aspect-[2/1] overflow-hidden"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, var(--surface-sunken) 0%, var(--surface-elevated) 100%)",
+                      borderBottom: "1px solid var(--border)",
+                    }}
                   >
-                    {chapter.eyebrows[validLocale]}
+                    {chapter.heroImage ? (
+                      <Image
+                        src={chapter.heroImage}
+                        alt=""
+                        fill
+                        sizes={
+                          isFirst
+                            ? "(min-width: 768px) 800px, 100vw"
+                            : "(min-width: 768px) 400px, 100vw"
+                        }
+                        className="object-cover"
+                        priority={isFirst}
+                      />
+                    ) : (
+                      <div
+                        className="absolute inset-0 flex items-center justify-center font-mono text-xs"
+                        style={{ color: "var(--text-muted)" }}
+                      >
+                        {String(chapter.order).padStart(2, "0")}
+                      </div>
+                    )}
                   </div>
-                  <div
-                    className="text-xl font-semibold mb-1"
-                    style={{ color: "var(--text-primary)" }}
-                  >
-                    {chapter.titles[validLocale]}
-                  </div>
-                  <div
-                    className="text-sm"
-                    style={{ color: "var(--text-muted)" }}
-                  >
-                    {chapter.readTime[validLocale]}
+                  <div className="flex flex-col flex-1 p-4">
+                    <div className="flex items-baseline gap-2 mb-1.5">
+                      <span
+                        className="font-mono text-xs"
+                        style={{ color: "var(--accent-surface)" }}
+                      >
+                        {String(chapter.order).padStart(2, "0")}
+                      </span>
+                      <span
+                        className="text-[10px] uppercase tracking-[0.16em]"
+                        style={{ color: "var(--text-muted)" }}
+                      >
+                        {sectionLabel}
+                      </span>
+                    </div>
+                    <div
+                      className="text-lg font-semibold leading-snug mb-1"
+                      style={{ color: "var(--text-primary)" }}
+                    >
+                      {chapter.titles[validLocale]}
+                    </div>
+                    <div
+                      className="text-xs mt-auto"
+                      style={{ color: "var(--text-muted)" }}
+                    >
+                      {chapter.readTime[validLocale]}
+                    </div>
                   </div>
                 </Link>
               </li>
-            ))}
-          </ol>
-        </div>
+            );
+          })}
+        </ol>
       </main>
     </div>
   );

@@ -6,6 +6,7 @@ export type Chapter = {
   titles: Record<Locale, string>;
   eyebrows: Record<Locale, string>;
   readTime: Record<Locale, string>;
+  heroImage?: string;
 };
 
 export const CHAPTERS: readonly Chapter[] = [
@@ -15,6 +16,7 @@ export const CHAPTERS: readonly Chapter[] = [
     titles: { en: "Before we start", cs: "Než začneme" },
     eyebrows: { en: "Chapter 1 · Orientation", cs: "Kapitola 1 · Orientace" },
     readTime: { en: "5 min read", cs: "5 min čtení" },
+    heroImage: "/chapters/01-before-we-start.png",
   },
   {
     slug: "first-task",
@@ -22,6 +24,7 @@ export const CHAPTERS: readonly Chapter[] = [
     titles: { en: "Your first task", cs: "První úkol" },
     eyebrows: { en: "Chapter 2 · First contact", cs: "Kapitola 2 · První kontakt" },
     readTime: { en: "10 min read", cs: "10 min čtení" },
+    heroImage: "/chapters/02-first-task.png",
   },
   {
     slug: "teach-claude-your-project",
@@ -32,6 +35,7 @@ export const CHAPTERS: readonly Chapter[] = [
     },
     eyebrows: { en: "Chapter 3 · Context", cs: "Kapitola 3 · Kontext" },
     readTime: { en: "8 min read", cs: "8 min čtení" },
+    heroImage: "/chapters/03-teach-claude-your-project.png",
   },
   {
     slug: "iteration-and-control",
@@ -42,6 +46,7 @@ export const CHAPTERS: readonly Chapter[] = [
     },
     eyebrows: { en: "Chapter 4 · Craft", cs: "Kapitola 4 · Řemeslo" },
     readTime: { en: "7 min read", cs: "7 min čtení" },
+    heroImage: "/chapters/04-iteration-and-control.png",
   },
   {
     slug: "voice-and-interaction",
@@ -52,6 +57,7 @@ export const CHAPTERS: readonly Chapter[] = [
     },
     eyebrows: { en: "Chapter 5 · Modalities", cs: "Kapitola 5 · Modality" },
     readTime: { en: "8 min read", cs: "8 min čtení" },
+    heroImage: "/chapters/05-voice-and-interaction.png",
   },
   {
     slug: "ecosystem",
@@ -59,6 +65,7 @@ export const CHAPTERS: readonly Chapter[] = [
     titles: { en: "The ecosystem", cs: "Ekosystém" },
     eyebrows: { en: "Chapter 6 · Tour", cs: "Kapitola 6 · Rozhlídnutí" },
     readTime: { en: "12 min read", cs: "12 min čtení" },
+    heroImage: "/chapters/06-ecosystem.png",
   },
   {
     slug: "compound-engineering",
@@ -69,6 +76,7 @@ export const CHAPTERS: readonly Chapter[] = [
     },
     eyebrows: { en: "Chapter 7 · Reuse", cs: "Kapitola 7 · Znovupoužití" },
     readTime: { en: "10 min read", cs: "10 min čtení" },
+    heroImage: "/chapters/07-compound-engineering.png",
   },
   {
     slug: "next-steps",
@@ -76,6 +84,7 @@ export const CHAPTERS: readonly Chapter[] = [
     titles: { en: "Where to go next", cs: "Kam dál" },
     eyebrows: { en: "Chapter 8 · Beyond the lab", cs: "Kapitola 8 · Za hranicí labu" },
     readTime: { en: "6 min read", cs: "6 min čtení" },
+    heroImage: "/chapters/08-next-steps.png",
   },
   {
     slug: "reference",
@@ -83,6 +92,7 @@ export const CHAPTERS: readonly Chapter[] = [
     titles: { en: "Reference", cs: "Reference" },
     eyebrows: { en: "Chapter 9 · Bookmark this", cs: "Kapitola 9 · Ulož si to" },
     readTime: { en: "Lookup page", cs: "Pro rychlý přehled" },
+    heroImage: "/chapters/09-reference.png",
   },
   {
     slug: "behind-the-scenes",
@@ -93,6 +103,7 @@ export const CHAPTERS: readonly Chapter[] = [
       cs: "Kapitola 10 · Meta",
     },
     readTime: { en: "4 min read", cs: "4 min čtení" },
+    heroImage: "/chapters/10-behind-the-scenes.png",
   },
 ] as const;
 
