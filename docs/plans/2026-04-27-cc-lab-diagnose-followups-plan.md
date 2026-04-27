@@ -2,7 +2,7 @@
 title: "chore: act on cc-lab-diagnose project findings"
 type: plan
 date: 2026-04-27
-status: in_progress
+status: complete
 brainstorm: null
 confidence: high
 ---
@@ -83,17 +83,16 @@ The marketplace **name** (the object key) must match the name in `.claude-plugin
 
 Tasks are dependency-ordered. Each `[ ]` becomes a checkbox the executor ticks as it ships.
 
-### Phase 1 — settings.json (BLOCKED — needs human edit)
+### Phase 1 — settings.json — SHIPPED (commit `551ca06`)
 
-The `/marvin:work` agent attempted both Write and Edit against `.claude/settings.json` and was denied by the harness as a self-modification action. The plan authorizes the change but the harness guardrail sits above the plan. A human edit (or an explicit one-shot bypass) is required.
+The harness initially blocked Edit/Write to `.claude/settings.json` as Self-Modification. Resolved by explicit user authorization in conversation, after which the Edit went through.
 
-- [ ] **Human action**: paste the corrected JSON below into `.claude/settings.json`.
-- [ ] Add `permissions.defaultMode: "acceptEdits"` inside the existing `permissions` block.
-- [ ] Add `permissions.allow` block with the lab's actual workflow surface: `Read`, `Glob`, `Grep`, `Bash(git status*)`, `Bash(git log*)`, `Bash(git diff*)`, `Bash(git fetch*)`, `Bash(pnpm lint*)`, `Bash(pnpm test*)`, `Bash(pnpm test:e2e*)`, `Bash(pnpm build*)`, `Bash(pnpm dev*)`, `Bash(pnpm install*)`, `Bash(rg *)`, `Bash(find *)`, `Bash(ls *)`, `Bash(./scripts/*)`.
-- [ ] Add top-level `extraKnownMarketplaces` object map with `cc-lab` and `claude-plugins-official` keys, each with a `source` sub-object pointing at the GitHub repo. Use the corrected schema from the section above, not the judge's array shape.
-- [ ] Verify the JSON parses: `python3 -c 'import json; json.load(open(".claude/settings.json"))'`.
-- [ ] Restart Claude Code (or `/reload-plugins`) and confirm `git status` runs without prompting.
-- [ ] Commit: `chore(harness): pair allow list, set defaultMode, register marketplaces`.
+- [x] Add `permissions.defaultMode: "acceptEdits"` inside the existing `permissions` block.
+- [x] Add `permissions.allow` block (17 entries) covering the lab's read tools and safe Bash verbs.
+- [x] Add top-level `extraKnownMarketplaces` object map with `cc-lab` and `claude-plugins-official` keys, each with a `source` sub-object — corrected schema, not the judge's array shape.
+- [x] Verify the JSON parses (17 allow entries, `defaultMode=acceptEdits`, two marketplaces).
+- [ ] Restart Claude Code (or `/reload-plugins`) — pending in next session; current session keeps its old config in memory.
+- [x] Commit: `chore(harness): pair allow list, set defaultMode, register marketplaces`.
 
 ### Phase 2 — gitignore — SHIPPED (commit `1bce88b`)
 
