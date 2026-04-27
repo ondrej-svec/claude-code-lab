@@ -12,6 +12,12 @@ Lab učí vzory. Diagnostika se ptá, jak se *tvoje* nastavení vůči nim měř
 
 `/cc-lab-diagnose` přečte tvoje repo (nebo tvou osobní Claude Code konfiguraci, nebo obojí) a vrátí tři až pět evidence-grounded pozorování — každé navázané na konkrétní soubor, konkrétní citaci a konkrétní kapitolu, kterou si můžeš přečíst pro chybějící kontext. Nejblíž peer review, jak to jde bez plánování schůzky.
 
+<Screenshot
+  src="/visuals/diagnose-flow.png"
+  alt="Třísloupcový flow diagram. Sloupec READS (vlevo): CLAUDE.md, .claude/{skills,agents,hooks}/, git log --oneline, plus volitelný user scope. Sloupec JUDGES (uprostřed): cc-lab-judge subagent na Sonnetu, s rubrikou (15 kategorií), bundled kapitolami a evidence-grounded-only pravidlem. Sloupec RETURNS (vpravo): markdown odpověď, HTML artefakt (teal akcent) a action card „what to do next“. Patička: no telemetry · runs locally · read-only."
+  caption="Čte, soudí, vrací. HTML artefakt je to, co dělá diagnózu prozkoumatelnou."
+/>
+
 ## Instalace
 
 V libovolné Claude Code session:
@@ -48,7 +54,21 @@ Každý běh produkuje tři věci:
 2. **HTML artefakt** uložený do tvojí current directory — stejná diagnóza vykreslená jako self-contained stránka s vizualizací páteře kapitol, časovou osou akcí, kartami pozorování barvenými podle závažnosti, copy tlačítky na každém artefaktu a přepínačem témat. Otevři přímo v prohlížeči; nic externího není potřeba.
 3. **Cesta k HTML** vyvedená nahoře v markdownu i na začátku akčního plánu, takže se k vizualizaci dostaneš bez scrollování.
 
+<Screenshot
+  src="/screenshots/diagnose-html-artifact.png"
+  alt="Plný HTML artefakt pro /cc-lab-diagnose: hero s headlinem, páteř kapitol ukazující všech deset kapitol se status značkami verified/mixed/finding/no-signal, project-mode pass s body „Co funguje“ a třemi pozorováními barvenými podle závažnosti citujícími konkrétní soubory a řádky, pak třísloupcový akční plán (tento týden / příští týden / compound) s action cards obsahujícími explicitní „→ outcome“ řádky."
+  caption="HTML artefakt na celou výšku. Páteř kapitol nahoře, pozorování uprostřed, akční plán dole — vše s copy tlačítky a přepínačem témat."
+  width={1425}
+  height={3152}
+/>
+
 Každé pozorování cituje konkrétní soubor s konkrétní citací. Pokud diagnostika nedokáže pozorování ukotvit v důkazu, neudělá ho.
+
+<TerminalOutput
+  src="/visuals/diagnose-output-example.svg"
+  alt="Terminálový snímek výstupu /cc-lab-diagnose project: souhrn read scope, cesta k HTML artefaktu, body „Co funguje“, headline odstavec a jedno plně vykreslené pozorování s titulkem, citovanou evidencí a sekcemi why-it-matters a what-to-try"
+  caption="Jeden běh, zkrácený. HTML artefakt nese stejný obsah s páteří kapitol a časovou osou akcí."
+/>
 
 ## Jak číst pozorování
 

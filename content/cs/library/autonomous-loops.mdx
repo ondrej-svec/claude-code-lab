@@ -23,6 +23,12 @@ Můžeš agentovi pustit otěže dvojím způsobem.
 
 Oba způsoby nechají agenta jet bez tebe. Selhávají jinak.
 
+<Screenshot
+  src="/visuals/loop-vs-ralph.png"
+  alt="Diptych — levý panel ukazuje čistou cyklickou smyčku (úkol → vykonej → mechanická kontrola → zastav nebo opakuj) s teal akcentem a slovy „tests pass / typecheck / deploy ready“ jako exit podmínky. Pravý panel ukazuje tři navršené iterace Ralph Wiggum smyčky leštící špatnou věc, s počítadlem tokenů narůstajícím 87k → 142k → 218k a postavou ducha označenou „you, away from keyboard“. Oba panely ukazují, že typecheck prochází — ale jen levý prochází ze správného důvodu."
+  caption="Oba tvary projdou typecheckem. Jen jeden tvar prochází ze správného důvodu."
+/>
+
 ## Kdy si smyčka zaslouží své místo
 
 Smyčka sedne, když je **úspěch mechanický** — když „je to hotové?“ má odpověď, kterou si Claude sám ověří.
@@ -53,6 +59,12 @@ Tři varianty:
 
 Příznak, že jsi v Ralph smyčce: každá iterace vypadá uhlazeněji než ta předchozí, ale diff se vzdaluje od čehokoliv, co by lidský reviewer chtěl.
 
+<TerminalOutput
+  src="/visuals/loop-ralph-failure.svg"
+  alt="Terminálový snímek tří iterací smyčky: iterace 1 si špatně přečte cíl, iterace 2 „opraví“ typecheck castem na any, iterace 3 vymyslí čtyři wrapper typy — typecheck po celou dobu zelený, ale původní validace se ve skutečnosti nikdy nestala"
+  caption="Tři iterace. Typecheck na konci zelený. Nic z toho, co měl typový systém ochránit, ochráněno nebylo."
+/>
+
 ## Pre-flight checklist
 
 Než od smyčky odejdeš, čtyři kontroly. Levné spustit, drahé přeskočit.
@@ -63,6 +75,14 @@ Než od smyčky odejdeš, čtyři kontroly. Levné spustit, drahé přeskočit.
 4. **Můžeš zastavit, aniž bys ztratil stav?** Checkpoint commity, uložitelný progres, interrupt, který nezabije konverzaci. Pokud zastavit znamená všechno znovu odvodit, necháš smyčku jet moc dlouho ze zoufalství nad utopenými náklady.
 
 Pokud kterákoliv ze čtyř chybí, neběží ti smyčka — házíš kostkou.
+
+<Screenshot
+  src="/visuals/loop-preflight.png"
+  alt="Pre-flight checklist jako inženýrský panel: čtyři očíslované položky se status indikátory — 01 mechanical success, 02 bounded scope, 03 harness on, 04 stoppable without loss. Každá položka má teal check a malou ikonu (terminál exit code, plot, ozubené kolo, ukládání). Rose patička: „if any of the four is missing, you are not running a loop — you are running a dice roll.“"
+  caption="Pre-flight panel. Všechny čtyři rozsvícené, než odejdeš."
+  width={1024}
+  height={1536}
+/>
 
 ## Harness je předpoklad
 

@@ -23,6 +23,12 @@ You can hand the agent more rope two ways.
 
 Both let the agent move without you. They fail differently.
 
+<Screenshot
+  src="/visuals/loop-vs-ralph.png"
+  alt="Diptych — left panel shows a clean circular loop (task → execute → mechanical check → stop or repeat) with a teal accent and the words 'tests pass / typecheck / deploy ready' as exit conditions. Right panel shows three stacked iterations of a Ralph Wiggum loop polishing the wrong thing, with a token counter ticking up 87k → 142k → 218k and a sleeping figure labeled 'you, away from keyboard'. Both panels show typecheck passing — but only the left passes for the right reason."
+  caption="Both shapes pass typecheck. Only one shape passes for the right reason."
+/>
+
 ## When the loop earns its keep
 
 The loop is a fit when **success is mechanical** — when "is it done?" has an answer Claude can check on its own.
@@ -53,6 +59,12 @@ Three flavors:
 
 The tell that you're in a Ralph loop: each iteration looks more polished than the last, but the diff is moving away from anything a human reviewer would want.
 
+<TerminalOutput
+  src="/visuals/loop-ralph-failure.svg"
+  alt="Terminal still of three loop iterations: iteration 1 misreads the goal, iteration 2 'fixes' typecheck by casting to any, iteration 3 invents four wrapper types — typecheck passes throughout, but the original validation was never done"
+  caption="Three iterations. Typecheck green at the end. Nothing the type system was supposed to protect actually got protected."
+/>
+
 ## Pre-flight checklist
 
 Before you walk away from a loop, four checks. Cheap to run, expensive to skip.
@@ -63,6 +75,14 @@ Before you walk away from a loop, four checks. Cheap to run, expensive to skip.
 4. **Can you stop without losing state?** Checkpoint commits, persistable progress, an interrupt that doesn't kill the conversation. If stopping means re-deriving everything, you'll let the loop run too long out of sunk-cost.
 
 If any of the four is missing, you're not running a loop — you're running a dice roll.
+
+<Screenshot
+  src="/visuals/loop-preflight.png"
+  alt="Pre-flight checklist visual styled as an engineering panel: four numbered items with status indicators — 01 mechanical success, 02 bounded scope, 03 harness on, 04 stoppable without loss. Each item has a teal check indicator and a small icon (terminal exit code, fence, gear, save). Rose footer text reads 'if any of the four is missing, you are not running a loop — you are running a dice roll.'"
+  caption="Pre-flight panel. All four lit before you walk away."
+  width={1024}
+  height={1536}
+/>
 
 ## The harness is the precondition
 

@@ -12,6 +12,12 @@ The lab teaches patterns. The diagnostic asks how *your* setup measures against 
 
 `/cc-lab-diagnose` reads your repo (or your personal Claude Code config, or both) and returns three to five evidence-grounded observations — each tied to a specific file, a specific quote, and a specific chapter you can read for the missing context. It's the closest thing to a peer review you can get without scheduling one.
 
+<Screenshot
+  src="/visuals/diagnose-flow.png"
+  alt="Three-column flow diagram. READS column (left): CLAUDE.md, .claude/{skills,agents,hooks}/, git log --oneline, plus an optional user scope cluster. JUDGES column (middle): cc-lab-judge subagent on Sonnet, with rubric (15 categories), bundled cc-lab chapters, and evidence-grounded-only. RETURNS column (right): markdown response, HTML artifact (teal accent), and a 'what to do next' action card. Footer: no telemetry · runs locally · read-only."
+  caption="Reads, judges, returns. The HTML artifact is what makes the diagnosis explorable."
+/>
+
 ## Install
 
 In any Claude Code session:
@@ -48,7 +54,21 @@ Each run produces three things:
 2. **An HTML artifact** saved to your current directory — the same diagnosis rendered as a self-contained page with a chapter spine visualization, an action timeline, severity-coded observation cards, copy buttons on every artifact, and a theme switcher. Open it directly in a browser; nothing external is required.
 3. **A path to the HTML** surfaced both at the top of the markdown and at the start of the action plan, so you can jump to the visualization without scrolling.
 
+<Screenshot
+  src="/screenshots/diagnose-html-artifact.png"
+  alt="Full HTML artifact for /cc-lab-diagnose: hero with headline, chapter spine showing all ten chapters with verified/mixed/finding/no-signal status markers, project-mode pass with 'What's working' strengths and three severity-coded observations citing specific files and lines, then a three-lane action plan (this week / next week / compound) with action cards that include explicit '→ outcome' lines."
+  caption="The HTML artifact, full-length. Chapter spine on top, observations in the middle, action plan at the bottom — all with copy buttons and a theme switcher."
+  width={1425}
+  height={3152}
+/>
+
 Every observation cites a specific file with a specific quote. If the diagnostic can't ground an observation in evidence, it doesn't make it.
+
+<TerminalOutput
+  src="/visuals/diagnose-output-example.svg"
+  alt="Terminal still of /cc-lab-diagnose project output: read scope summary, HTML artifact path, 'What's working' bullets, a headline paragraph, and one fully-rendered observation with title, evidence quote, why-it-matters, and what-to-try sections"
+  caption="One run, abridged. The HTML artifact carries the same content with a chapter spine and action timeline."
+/>
 
 ## How to interpret an observation
 

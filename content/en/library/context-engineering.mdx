@@ -31,6 +31,12 @@ The cheap-but-overused move is `/compact`. The expensive-but-underused move is t
 
 Conversation context is one layer. There are two more, and they cost less.
 
+<Screenshot
+  src="/visuals/context-three-layers.png"
+  alt="Diagram of three memory layers flowing left to right: Active (token-heavy, fresh) → Summarized (compact output, lossy) → Externalized (CLAUDE.md, plan docs, durable). A token-cost tick line above the row decreases left to right. Active is rose-accented, externalized is teal-accented."
+  caption="Three layers of context. The skill is moving things down a layer before they cost you."
+/>
+
 **Active context** is what's in the current conversation. Token-heavy, expensive to keep, perfectly fresh. Every turn lives here.
 
 **Summarized context** is what `/compact` produces — a Claude-written précis of the turns so far. Cheaper than verbatim, lossy by design. Useful as long as the summary still describes the work accurately.
@@ -52,6 +58,12 @@ That move turns 40 turns of conversation into a file Claude can read in one. The
 <Prompt>/compact focus on the failing test and what we tried; drop the file-reading turns</Prompt>
 
 A good focus argument is **specific about what to keep**, not what to drop. "Keep X" gives Claude a target. "Drop Y" leaves the rest ambiguous.
+
+<TerminalOutput
+  src="/visuals/context-compact-before-after.svg"
+  alt="Terminal still showing /usage at 84% context (168k / 200k), then a focused /compact run, then /usage again at 29% (58k / 200k) with the summary as the heaviest contributor"
+  caption="Same conversation. Less context. Same shape."
+/>
 
 **Pro move:** before a handoff, run `/compact focus on what's left to do and why this approach`. The summary becomes a handoff note for free.
 
