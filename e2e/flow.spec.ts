@@ -21,7 +21,7 @@ test.describe("landing and language", () => {
 test.describe("chapter navigation", () => {
   test("lab index lists all chapters", async ({ page }) => {
     await page.goto("/en/lab");
-    const chapterCards = page.locator("main a[href*='/en/lab/']");
+    const chapterCards = page.locator("main > ol a");
     await expect(chapterCards).toHaveCount(10);
   });
 
