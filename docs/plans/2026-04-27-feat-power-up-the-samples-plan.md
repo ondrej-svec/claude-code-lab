@@ -2,10 +2,14 @@
 title: "feat: power up the samples — The Guide"
 type: plan
 date: 2026-04-27
-status: approved
+status: complete
 brainstorm: docs/brainstorms/2026-04-27-power-up-the-samples-brainstorm.md
 confidence: medium
+follow_up: docs/plans/2026-04-27-feat-guide-chapter-thread-plan.md
 ---
+
+> **Shipped on PR #10.** All five phases landed in one merge. Strategic review verdict: APPROVE. The chapter-thread expansion (chapters 4–9) is captured in the follow_up plan stub and remains blocked on the lab-improvements plan's chapter-rewrite ban. Runtime verification of the .NET sample requires `brew install --cask dotnet-sdk` post-merge — flagged in commit and PR.
+
 
 # feat: power up the samples — The Guide
 
