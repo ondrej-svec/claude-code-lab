@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { Manrope, Space_Grotesk } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "./components/theme-provider";
 import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n";
 import "./globals.css";
@@ -44,6 +45,7 @@ export default async function RootLayout({
     <html lang={lang} suppressHydrationWarning>
       <body className={`${bodyFont.variable} ${displayFont.variable}`}>
         <ThemeProvider>{children}</ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
