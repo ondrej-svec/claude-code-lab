@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Samples are standalone apps with their own conventions (see AGENTS.md
+    // "trust boundaries"). They aren't part of the cc-lab Next.js app.
+    "samples/**",
   ]),
 ]);
 

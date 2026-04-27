@@ -1,0 +1,467 @@
+/* Fonts. Loaded via fontsource — no network calls at runtime. */
+@import "@fontsource/manrope/400.css";
+@import "@fontsource/manrope/500.css";
+@import "@fontsource/manrope/600.css";
+@import "@fontsource/space-grotesk/500.css";
+@import "@fontsource/space-grotesk/600.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+
+/* ——— Rosé Pine Dawn (light) — used when html lacks .dark and prefers light ——— */
+:root {
+  --font-body: "Manrope", "Segoe UI", sans-serif;
+  --font-display: "Space Grotesk", "Avenir Next", sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+
+  --surface: #faf4ed;
+  --surface-elevated: #f2e9e1;
+  --surface-panel: rgba(255, 250, 243, 0.92);
+  --text-primary: #575279;
+  --text-secondary: #797593;
+  --text-muted: #9893a5;
+  --border: rgba(87, 82, 121, 0.12);
+  --border-strong: rgba(87, 82, 121, 0.20);
+  --shadow-soft: 0 18px 40px rgba(87, 82, 121, 0.10);
+
+  /* Rosé Pine palette — semantic uses */
+  --love: #b4637a;
+  --gold: #ea9d34;
+  --rose: #d7827e;
+  --pine: #286983;
+  --foam: #56949f;
+  --iris: #907aa9;
+
+  --badge-harmless-bg: rgba(86, 148, 159, 0.16);
+  --badge-harmless-text: #286983;
+  --badge-harmless-border: rgba(86, 148, 159, 0.36);
+  --badge-dangerous-bg: rgba(180, 99, 122, 0.14);
+  --badge-dangerous-text: #b4637a;
+  --badge-dangerous-border: rgba(180, 99, 122, 0.34);
+  --badge-unknown-bg: rgba(144, 122, 169, 0.12);
+  --badge-unknown-text: #907aa9;
+  --badge-unknown-border: rgba(144, 122, 169, 0.32);
+
+  --input-bg: #fffaf3;
+  --selection-bg: rgba(234, 157, 52, 0.25);
+  --selection-text: #575279;
+}
+
+/* ——— Rosé Pine Moon (dark) — default ——— */
+.dark {
+  --surface: #232136;
+  --surface-elevated: #2a273f;
+  --surface-panel: rgba(42, 39, 63, 0.92);
+  --text-primary: #e0def4;
+  --text-secondary: #908caa;
+  --text-muted: #6e6a86;
+  --border: rgba(224, 222, 244, 0.12);
+  --border-strong: rgba(224, 222, 244, 0.22);
+  --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.40);
+
+  --love: #eb6f92;
+  --gold: #f6c177;
+  --rose: #ea9a97;
+  --pine: #3e8fb0;
+  --foam: #9ccfd8;
+  --iris: #c4a7e7;
+
+  --badge-harmless-bg: rgba(156, 207, 216, 0.14);
+  --badge-harmless-text: #9ccfd8;
+  --badge-harmless-border: rgba(156, 207, 216, 0.30);
+  --badge-dangerous-bg: rgba(235, 111, 146, 0.14);
+  --badge-dangerous-text: #eb6f92;
+  --badge-dangerous-border: rgba(235, 111, 146, 0.32);
+  --badge-unknown-bg: rgba(196, 167, 231, 0.12);
+  --badge-unknown-text: #c4a7e7;
+  --badge-unknown-border: rgba(196, 167, 231, 0.28);
+
+  --input-bg: #2a273f;
+  --selection-bg: rgba(246, 193, 119, 0.30);
+  --selection-text: #e0def4;
+}
+
+/* ——— Reset ——— */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--surface);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+code,
+pre,
+kbd {
+  font-family: var(--font-mono);
+}
+
+button {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-text);
+}
+
+/* ——— Layout ——— */
+.app-shell {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 6rem;
+}
+
+.app-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-title {
+  font-size: 2rem;
+  line-height: 1.15;
+}
+
+.app-tagline {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 0.4rem;
+  letter-spacing: 0.01em;
+}
+
+.app-don-t-panic {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ——— Locale toggle (Babel Fish) ——— */
+.locale-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease;
+}
+
+.locale-toggle:hover {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+}
+
+.locale-toggle__fish {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* ——— Search + tag filter ——— */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.search-input {
+  width: 100%;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.95rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: border-color 160ms ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--text-secondary);
+}
+
+.tag-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  padding: 0.22rem 0.6rem;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+}
+
+.tag-chip:hover {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+}
+
+.tag-chip[data-active="true"] {
+  background: var(--surface-elevated);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+/* ——— Entry list ——— */
+.entry-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.entry {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem 1.4rem 1.35rem;
+  box-shadow: var(--shadow-soft);
+  transition: border-color 160ms ease;
+}
+
+.entry:hover {
+  border-color: var(--border-strong);
+}
+
+.entry__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.entry__title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.3;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.entry__body {
+  color: var(--text-secondary);
+  font-size: 0.96rem;
+  line-height: 1.65;
+  margin: 0 0 0.9rem;
+}
+
+.entry__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  align-items: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+.entry__meta-divider {
+  width: 3px;
+  height: 3px;
+  background: var(--text-muted);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.entry__tags {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.entry__tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.entry__tag::before {
+  content: "#";
+  opacity: 0.7;
+}
+
+/* ——— Badge ——— */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.badge--mostly-harmless {
+  background: var(--badge-harmless-bg);
+  color: var(--badge-harmless-text);
+  border-color: var(--badge-harmless-border);
+}
+
+.badge--mostly-dangerous {
+  background: var(--badge-dangerous-bg);
+  color: var(--badge-dangerous-text);
+  border-color: var(--badge-dangerous-border);
+}
+
+.badge--unknown {
+  background: var(--badge-unknown-bg);
+  color: var(--badge-unknown-text);
+  border-color: var(--badge-unknown-border);
+}
+
+.badge__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ——— Create form ——— */
+.new-entry {
+  margin-top: 2.5rem;
+  padding: 1.25rem 1.4rem 1.4rem;
+  background: var(--surface-panel);
+  border: 1px dashed var(--border-strong);
+  border-radius: 12px;
+}
+
+.new-entry__title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.85rem;
+}
+
+.new-entry__row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.new-entry__input,
+.new-entry__textarea {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.85rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  width: 100%;
+  resize: vertical;
+}
+
+.new-entry__textarea {
+  min-height: 5.5rem;
+  font-family: inherit;
+  line-height: 1.55;
+}
+
+.new-entry__input:focus,
+.new-entry__textarea:focus {
+  outline: none;
+  border-color: var(--text-secondary);
+}
+
+.new-entry__submit {
+  background: var(--text-primary);
+  color: var(--surface);
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.1rem;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: opacity 160ms ease;
+}
+
+.new-entry__submit:hover {
+  opacity: 0.88;
+}
+
+.new-entry__submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ——— Empty / error states ——— */
+.empty,
+.error {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+.error {
+  color: var(--love);
+}

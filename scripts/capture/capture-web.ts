@@ -23,6 +23,8 @@ type Shot = {
   theme: Theme;
   waitForSelector?: string;
   fullPage?: boolean;
+  /** Override the default base URL — used for sample apps on other ports. */
+  baseUrl?: string;
 };
 
 const REPO_ROOT = join(__dirname, "..", "..");
@@ -43,6 +45,22 @@ const shots: Shot[] = [
     viewport: { width: 1600, height: 1000 },
     theme: "dark",
     waitForSelector: "h1",
+  },
+  {
+    name: "sample-guide-calm-view",
+    url: "/",
+    viewport: { width: 1280, height: 980 },
+    theme: "dark",
+    waitForSelector: ".entry",
+    baseUrl: "http://localhost:5173",
+  },
+  {
+    name: "sample-guide-calm-view-dawn",
+    url: "/",
+    viewport: { width: 1280, height: 980 },
+    theme: "light",
+    waitForSelector: ".entry",
+    baseUrl: "http://localhost:5173",
   },
 ];
 
@@ -70,7 +88,8 @@ async function captureShot(browser: Browser, shot: Shot) {
   const page = await context.newPage();
   try {
     await setTheme(page, shot.theme);
-    await page.goto(`${BASE_URL}${shot.url}`, { waitUntil: "load" });
+    const base = shot.baseUrl ?? BASE_URL;
+    await page.goto(`${base}${shot.url}`, { waitUntil: "load" });
     if (shot.waitForSelector) {
       await page.waitForSelector(shot.waitForSelector, { timeout: 15_000 });
     }
