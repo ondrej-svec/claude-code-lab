@@ -359,28 +359,30 @@ The v3 compositions land what the v1 task descriptions sketched. The deltas wort
 
 ### Phase 3 — OBS scene collection + Stream Deck profile (artifact family C)
 
-- [ ] **Research obs-websocket connection** — confirm OBS 28+ ships `obs-websocket v5` bundled. In OBS: Tools → WebSocket Server Settings → enable, set port (default 4455), generate auth token. Save token securely (do not commit).
-- [ ] **Author `scripts/streaming/build-obs-config.ts`** — generates the OBS scene collection JSON. Reads `overlay-manifest.ts`. Outputs to `~/Library/Application Support/obs-studio/basic/scenes/cc-lab.json`. Scene structure:
-  - **"cc-lab Recording"** scene with sources (top z-order to bottom):
-    - Each overlay browser source pointing to the local HTML file (file:// URL), default-hidden except cockpit-frame
-    - Face cam Video Capture Device (positioned into the cockpit face panel slot)
-    - Display Capture / Window Capture for the canopy area (positioned to fill the canopy minus hull strips)
-  - **"cc-lab Streaming"** placeholder scene (V2)
-  - **"cc-lab Intro"** placeholder scene (V2)
-  - **"cc-lab Break"** placeholder scene (V2 — uses intermission browser source)
-  - **"cc-lab Outro"** placeholder scene (V2 — uses stream-ending-soon browser source)
-- [ ] **User: import OBS scene collection** — in OBS: Scene Collection → Import → select `cc-lab.json`. Set as active. Confirm all sources load without errors. Check that browser sources show the overlay HTML (cockpit hull lines should be visible immediately).
-- [ ] **User: position face cam source** — drag the Video Capture Device source into the cockpit face panel slot (~14% wide, bottom-right of frame). Lock the source position.
-- [ ] **User: position screen capture source** — drag the Display Capture / Window Capture into the canopy area (between the hull strips). Lock the source position.
-- [ ] **Author `scripts/streaming/build-streamdeck-profile.ts`** — generates Stream Deck profile JSON. Outputs to `~/Library/Application Support/Elgato/StreamDeck/ProfilesV2/cc-lab.streamDeckProfile`. Layout (15-key MK.2):
-  - Row 1: app focus buttons (5)
-  - Row 2: prompt insertion buttons (5)
-  - Row 3: overlay triggers + REC toggle (5)
-  - Each button has icon (placeholder PNG with text label), action (OBS websocket call OR text-expansion OR app-focus shortcut), and label
-- [ ] **Author Stream Deck profile button icons** — small 144×144 PNG icons for each button. Use simple text labels in the lab's type stack (Manrope/Space Grotesk) on Rosé Pine Moon background. Generated via a Playwright script `scripts/streaming/render-streamdeck-icons.ts` that takes a list of `{name, label}` objects and produces an icon per item.
-- [ ] **User: import Stream Deck profile** — in Stream Deck app: Profiles → Import → select `cc-lab.streamDeckProfile`. Set as active. Confirm icons load.
-- [ ] **Configure OBS WebSocket connection in Stream Deck** — in Stream Deck app: install OBS Studio plugin (Stream Deck Marketplace, official). Configure connection to obs-websocket using the saved token. Test by pressing one of the overlay-trigger buttons; confirm OBS toggles the source visibility.
-- [ ] **Author `docs/recording-setup.md`** — step-by-step user guide for the entire setup: OBS install + Stream Deck install + hardware plug-in + import scene collection + import profile + configure WebSocket + dry-run. Include screenshots and trouble-shooting common issues.
+#### Phase 3a — autonomous (Claude-side, shipped on Mac mini)
+
+- [x] **Research obs-websocket connection** — confirmed OBS 28+ ships `obs-websocket v5` bundled. Setup steps deferred to `docs/recording-setup.md`; user runs Tools → WebSocket Server Settings on the recording machine.
+- [x] **Author `scripts/streaming/build-obs-config.ts`** — reads `overlay-manifest.ts` (now extended with `zOrder` + `REGION_RECTS`) and writes the full scene collection to `scripts/streaming/dist/cc-lab-obs-scenes.json`. Five scenes (`cc-lab Recording`, `cc-lab Streaming`, `cc-lab Intro`, `cc-lab Break`, `cc-lab Outro`). Recording scene composes screen capture (deepest) → face cam (positioned into the 269×151px port) → 6 overlay browser sources sorted by zOrder. UUIDs generated via `crypto.randomUUID()`. Optional `--install` flag also writes to `~/Library/Application Support/obs-studio/basic/scenes/cc-lab.json`. Smoke-tested locally; `dist/cc-lab-obs-scenes.json` produces 16 sources, 5 scenes, expected z-order.
+- [x] **Author `scripts/streaming/streamdeck-spec.ts`** — typed declaration of all 15 buttons across the MK.2 grid. Each entry pins slot, label, icon accent, action kind (`obs-source-toggle` / `obs-scene-switch` / `obs-record-toggle` / `text-expansion` / `app-focus` / `hyper-key`) and target. `ICON_ACCENTS` token map (`default | teal | yellow | iris | pink`) drives icon styling. *Departure from plan:* the `.streamDeckProfile` bundle format is undocumented (flagged in the plan's risk register), so we ship the spec + icons + manual-bind walkthrough instead of generating the bundle. One-time ~15 min user setup; backup via Stream Deck app's built-in Export.
+- [x] **Author `scripts/streaming/streamdeck-icon-template.html` + `render-streamdeck-icons.ts`** — 144×144 PNG renderer using Playwright headless Chromium at deviceScaleFactor 2. Reads `BUTTONS` from the spec, renders each through the template HTML with query-param-driven label/accent. Writes to `scripts/streaming/dist/streamdeck-icons/slot00..14-*.png` plus a `manifest.json` with the slot-by-slot reference. Smoke-tested: 15 icons rendered, REC icon shows pink pulse, Claude Desktop shows iris balanced two-line, all crisp at 144×144.
+- [x] **Author `docs/recording-setup.md`** — full step-by-step user guide for the recording machine: install (brew), regenerate configs after pull, OBS scene collection import, device wiring (face cam + screen capture), OBS WebSocket enable + token, Stream Deck OBS plugin install, **15-button manual bind table** (slot · icon · action type · target), profile export for backup, 60s dry-run, troubleshooting section.
+- [x] **Gitignore `scripts/streaming/dist/`** — per-machine build outputs not committed.
+
+#### Phase 3b — hands-on (user-side, on the recording machine / Mac Air)
+
+- [ ] **User: install OBS Studio + Elgato Stream Deck app** per `docs/recording-setup.md` step 1.
+- [ ] **User: regenerate configs on the recording machine**:
+  ```
+  pnpm tsx scripts/streaming/render-overlays.ts
+  pnpm tsx scripts/streaming/build-obs-config.ts
+  pnpm tsx scripts/streaming/render-streamdeck-icons.ts
+  ```
+- [ ] **User: import OBS scene collection** — Scene Collection → Import → `scripts/streaming/dist/cc-lab-obs-scenes.json` → activate.
+- [ ] **User: wire face cam + screen capture** — Properties on each source picks the local device.
+- [ ] **User: enable OBS WebSocket** — Tools → WebSocket Server Settings → generate password.
+- [ ] **User: install Stream Deck OBS plugin + connect** — install via Stream Deck app's More Actions; configure `127.0.0.1:4455` + paste WebSocket password.
+- [ ] **User: bind 15 Stream Deck buttons** per the manifest table in `docs/recording-setup.md`. ~15 minutes one-time.
+- [ ] **User: export profile** to `~/Documents/cc-lab.streamDeckProfile` for backup.
 - [ ] **User: dry-run recording** — open OBS Recording scene. Press REC on the Stream Deck. Talk for 60 seconds, fire each overlay button at least once. Stop. Open the resulting MP4. Confirm:
   - Cockpit hull lines visible
   - Face cam in correct position

@@ -36,11 +36,32 @@ scripts/streaming/
 │
 ├── render-preview.ts           # Phase 1: Playwright → public/screenshots/series-*.png
 ├── render-overlays.ts          # Phase 2: Playwright + ffmpeg → public/visuals/overlays/
-├── overlay-manifest.ts         # Phase 2: per-overlay metadata
-├── build-obs-config.ts         # Phase 3: OBS scene-collection JSON generator
-├── build-streamdeck-profile.ts # Phase 3: Stream Deck profile JSON generator
-└── render-streamdeck-icons.ts  # Phase 3: button icons via Playwright
+├── overlay-manifest.ts         # Phase 2: per-overlay metadata + region rects + zOrder
+├── build-obs-config.ts         # Phase 3a: OBS scene-collection JSON generator
+├── streamdeck-spec.ts          # Phase 3a: typed Stream Deck button declaration
+├── streamdeck-icon-template.html # Phase 3a: Playwright source for icon rendering
+├── render-streamdeck-icons.ts  # Phase 3a: 144×144 icon PNGs via Playwright
+└── dist/                       # gitignored — per-machine build outputs
+    ├── cc-lab-obs-scenes.json
+    └── streamdeck-icons/
+        ├── manifest.json
+        └── slot00..14-*.png
 ```
+
+## Per-machine vs portable artifacts
+
+The OBS scene collection bakes absolute `file://` URLs to the overlay
+HTML, so `dist/cc-lab-obs-scenes.json` is per-machine — regenerate on
+each recording machine after `git pull`. Stream Deck icons are
+deterministic from `streamdeck-spec.ts`; reproduce locally rather than
+commit. Together that's why `dist/` is gitignored.
+
+The Stream Deck profile bundle (`.streamDeckProfile`) is **not** generated
+here — its format is undocumented and risky. Instead,
+[`docs/recording-setup.md`](../../docs/recording-setup.md) walks the user
+through a one-time manual button bind in the Stream Deck app, then
+suggests exporting the result to `~/Documents/cc-lab.streamDeckProfile`
+as a personal backup.
 
 ## V1 vs V2 path
 

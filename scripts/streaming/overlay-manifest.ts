@@ -49,8 +49,47 @@ export type OverlayManifestEntry = {
    * OBS rescales as needed.
    */
   viewport?: { width: number; height: number };
+  /**
+   * OBS z-order layer. Higher values render on top. Sources in the OBS
+   * scene-collection JSON are drawn back-to-front, so this number is what
+   * the build script sorts by — higher first becomes the topmost item.
+   *
+   * Layering convention (top to bottom of the visible stack):
+   *   100 — REC indicator / lower-thirds (rare; layered above hull)
+   *    80 — mode-badge, dictation-indicator (sit in hull strips)
+   *    70 — compound-step-indicator (canopy-top)
+   *    60 — cockpit-frame (the hull lines + face cam port outline)
+   *    40 — face cam capture (over screen capture, into face cam slot)
+   *    20 — screen capture (deepest visible layer)
+   */
+  zOrder: number;
   /** One-line description for docs and Stream Deck button hints. */
   blurb: string;
+};
+
+export type Rect = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+/**
+ * OBS positions every overlay browser source at (0,0) with size 1920×1080
+ * because each overlay is a 1920×1080 transparent canvas with content
+ * absolutely-positioned inside. These rects are informational metadata
+ * only — useful for docs, Stream Deck button hints, and verifying the
+ * overlay's content actually lands in its declared region.
+ */
+export const REGION_RECTS: Record<OverlayRegion, Rect> = {
+  "full-frame":         { x:    0, y:    0, width: 1920, height: 1080 },
+  "top-hull-left":      { x:    0, y:    0, width:  300, height:   54 },
+  "top-hull-center":    { x:  560, y:    0, width:  800, height:   54 },
+  "top-hull-right":     { x: 1620, y:    0, width:  300, height:   54 },
+  "bottom-hull-left":   { x:    0, y: 1026, width:  400, height:   54 },
+  "bottom-hull-right":  { x: 1251, y: 1026, width:  400, height:   54 },
+  "canopy-top":         { x:  460, y:   72, width: 1000, height:   80 },
+  "canopy-center":      { x:  560, y:  440, width:  800, height:  200 },
 };
 
 /** Default render viewport when an entry doesn't override it. */
@@ -62,6 +101,7 @@ export const OVERLAYS: OverlayManifestEntry[] = [
     kind: "static",
     region: "full-frame",
     defaultVisible: true,
+    zOrder: 60,
     blurb: "Hull strips, antenna, side ticks, face cam port outline.",
   },
   {
@@ -70,6 +110,7 @@ export const OVERLAYS: OverlayManifestEntry[] = [
     region: "bottom-hull-left",
     defaultVisible: false,
     durationMs: 2200,
+    zOrder: 80,
     blurb: "Pulsing /voice listening pip, fires while dictation active.",
   },
   {
@@ -77,6 +118,7 @@ export const OVERLAYS: OverlayManifestEntry[] = [
     kind: "static",
     region: "top-hull-left",
     defaultVisible: false,
+    zOrder: 80,
     blurb: "Permission mode pill — default · acceptEdits · plan · auto.",
   },
   {
@@ -84,6 +126,7 @@ export const OVERLAYS: OverlayManifestEntry[] = [
     kind: "static",
     region: "canopy-top",
     defaultVisible: false,
+    zOrder: 70,
     blurb: "Five-step pill row for Ep 6 compound walkthrough.",
   },
   {
@@ -91,6 +134,7 @@ export const OVERLAYS: OverlayManifestEntry[] = [
     kind: "static",
     region: "top-hull-center",
     defaultVisible: false,
+    zOrder: 100,
     blurb: "Tool name + brief, replaces episode label while active.",
   },
   {
@@ -98,6 +142,7 @@ export const OVERLAYS: OverlayManifestEntry[] = [
     kind: "static",
     region: "top-hull-center",
     defaultVisible: false,
+    zOrder: 100,
     blurb: "Chapter URL + name, replaces episode label while active.",
   },
   {
@@ -105,6 +150,7 @@ export const OVERLAYS: OverlayManifestEntry[] = [
     kind: "static",
     region: "full-frame",
     defaultVisible: false,
+    zOrder: 90, // V2 streaming scene only — covers everything when active
     blurb: "V2 streaming break card, hero ship + Back in 2 min.",
   },
   {
@@ -112,6 +158,7 @@ export const OVERLAYS: OverlayManifestEntry[] = [
     kind: "static",
     region: "full-frame",
     defaultVisible: false,
+    zOrder: 90,
     blurb: "V2 streaming wind-down card.",
   },
   {
@@ -120,6 +167,7 @@ export const OVERLAYS: OverlayManifestEntry[] = [
     region: "full-frame",
     defaultVisible: false,
     durationMs: 3000,
+    zOrder: 100, // sits over everything during the cold open
     blurb: "3s cold-open — scan wash, three typed lines, DON'T PANIC pulse.",
   },
 ];
