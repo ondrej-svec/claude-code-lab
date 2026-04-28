@@ -7,7 +7,7 @@ brainstorm: docs/brainstorms/2026-04-28-video-series-identity-brainstorm.md
 confidence: medium
 phase: 2
 last_shipped_at: 2026-04-28
-last_shipped_commit: phase-2-pending-commit
+last_shipped_commit: d9baa95
 ---
 
 # feat: video series identity + cockpit + OBS stack + pilot
