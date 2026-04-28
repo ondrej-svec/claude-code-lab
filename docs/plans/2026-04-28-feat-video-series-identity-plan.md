@@ -347,15 +347,15 @@ The v3 compositions land what the v1 task descriptions sketched. The deltas wort
   - Post-pass: `EPISODE_BOOTS` table re-renders boot-transition.html with per-episode query params and writes to `public/visuals/series-boot-epNN.mp4`. Initial entry: `series-boot-ep01.mp4`.
 - [x] **Run render-overlays** — generated the full asset set. PNG sizes 42–285 KB, MP4 sizes 22–557 KB at 1920×1080 / 25fps / yuv420p. Spot-check confirmed: cockpit-frame transparent alpha clean, boot-transition sequence lands (lines stagger correctly, panic glow visible, fade-out clean), all static overlays render at expected dimensions.
 - [x] **Author `scripts/streaming/preview/cockpit-full-with-content.html`** — variant of cockpit-full.html with a denser realistic session (full DELETE plan + diff). Confirms hull strips don't fight code legibility. Rendered to `public/screenshots/series-cockpit-with-content.png` via the same render-preview.ts pipeline (added `cockpit-full-with-content.html → series-cockpit-with-content` entry).
-- [ ] **Visual review gate** — ondrej reviews:
+- [x] **Visual review gate** — ondrej reviews:
   - All overlay PNGs at full resolution
   - Boot transition MP4 (open in QuickTime, watch full 3s)
   - Cockpit-with-content PNG (terminal legibility check)
   - Confirms no rejected patterns (neon, glow, etc.) leaked in
   
-  **HARD GATE: Phase 3 does not start until review passes.**
+  **Approved 2026-04-28.** Reviewed via the agent-authored gallery at `https://ondrejs-mac-mini.tailbc79e3.ts.net/s/cc-lab-phase-2-review--2026-04-28--381ad65c/` (Tailscale-published static site of `/tmp/cc-lab-phase-2-review/`). Phase 3 unblocked.
 
-**Phase 2 exit criteria:** All 9 overlay HTML files authored. Render pipeline working end-to-end. All fallback PNGs/MP4s in `public/visuals/overlays/`. Boot transition MP4 reviewed. Cockpit-with-content legibility confirmed.
+**Phase 2 exit criteria:** ✓ All 9 overlay HTML files authored. Render pipeline working end-to-end. All fallback PNGs/MP4s in `public/visuals/overlays/`. Boot transition MP4 reviewed. Cockpit-with-content legibility confirmed. Visual review gate approved 2026-04-28.
 
 ### Phase 3 — OBS scene collection + Stream Deck profile (artifact family C)
 
