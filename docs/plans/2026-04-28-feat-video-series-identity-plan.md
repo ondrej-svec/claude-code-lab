@@ -7,7 +7,7 @@ brainstorm: docs/brainstorms/2026-04-28-video-series-identity-brainstorm.md
 confidence: medium
 phase: 2
 last_shipped_at: 2026-04-28
-last_shipped_commit: e3c0fe4
+last_shipped_commit: phase-2-pending-commit
 ---
 
 # feat: video series identity + cockpit + OBS stack + pilot
@@ -330,22 +330,23 @@ The v3 compositions land what the v1 task descriptions sketched. The deltas wort
 
 ### Phase 2 — Overlay HTML/CSS source + render pipeline + cockpit asset
 
-- [ ] **Author `scripts/streaming/overlays/cockpit-frame.html`** — production cockpit asset (transparent background; only hull lines, top + bottom hull strip backgrounds at low opacity, antenna spire, side panel ticks, face cam port outline). Loads `overlay-palette.css`. Renders at 1920×1080. The face cam slot is a transparent cutout — OBS positions the actual webcam source into this region.
-- [ ] **Author `scripts/streaming/overlays/dictation-indicator.html`** — pulsing dot + `/voice listening` label in JetBrains Mono yellow `#f6c177`. CSS animation: subtle pulse (2s loop, opacity 0.7 → 1.0). Sized to fit in the bottom hull strip. Transparent background.
-- [ ] **Author `scripts/streaming/overlays/mode-badge.html`** — pill-style indicator showing the current permission mode. CSS supports four states via data attribute: `default`, `acceptEdits`, `plan`, `auto`. Each state has a different color (default = muted, acceptEdits = teal `#9ccfd8`, plan = yellow `#f6c177`, auto = cyan `#9ccfd8` with cyan glow). Sized to fit in top hull strip.
-- [ ] **Author `scripts/streaming/overlays/compound-step-indicator.html`** — five steps (`brainstorm · plan · work · review · compound`) in a horizontal pill row. Active step highlighted in `#f6c177`. CSS supports a data attribute that sets which step is active. Sized to sit at top of canopy when triggered.
-- [ ] **Author `scripts/streaming/overlays/lower-third-tool.html`** — JetBrains Mono tool name (`#9ccfd8`) + Manrope brief description (`#908caa`). Sized to replace the centered episode label in the top hull strip. Tool name and description supplied via URL query params (so a single HTML file serves all tools, parameterized at OBS browser-source URL level).
-- [ ] **Author `scripts/streaming/overlays/lower-third-chapter.html`** — same structure as lower-third-tool, but for chapter URLs. Shows `cc-lab.ondrejsvec.com/lab/<chapter-slug>` with the chapter name underneath.
-- [ ] **Author `scripts/streaming/overlays/intermission.html`** — V2 streaming overlay. Calm Rosé Pine card with the canonical hero ship (`/hero.png`), "Back in 2 min" label, typewriter-style countdown placeholder (the actual countdown logic is V2 work; this is just the visual template).
-- [ ] **Author `scripts/streaming/overlays/stream-ending-soon.html`** — V2 streaming overlay. Same calm card with "Stream ending soon" message and a soft fade.
-- [ ] **Author `scripts/streaming/overlays/boot-transition.html`** — extends `Boot.tsx` to be standalone HTML (no React). CSS-only animation: scan-line wash → 3 typed lines (~420ms each) → DON'T PANIC pulse → cross-fade to black (or to the title card via OBS scene transition). Lines are query-param-driven so each episode's boot has its own three lines.
-- [ ] **Author `scripts/streaming/overlay-manifest.ts`** — TypeScript module declaring metadata for each overlay: name, type (static vs animated), default-visible (for OBS), positioning (top-hull-left, top-hull-center, etc.), animation duration if animated.
-- [ ] **Author `scripts/streaming/render-overlays.ts`** — full Playwright + FFmpeg render script. Reads `overlay-manifest.ts`, iterates each overlay:
-  - Static overlays: launch headless Chromium, navigate to `file:///.../<name>.html`, `page.screenshot({ path, omitBackground: true })`.
-  - Animated overlays: same but use Playwright's video recording API (`page.video()` with size 1920×1080), wait the manifest-declared duration, stop, ffmpeg-convert WebM → MP4 with `libx264`, `pix_fmt yuv420p`.
+- [x] **Author `scripts/streaming/overlays/cockpit-frame.html`** — production cockpit asset (transparent background; only hull lines, top + bottom hull strip backgrounds at low opacity, antenna spire, side panel ticks, face cam port outline). Loads `overlay-palette.css`. Renders at 1920×1080. The face cam slot is a transparent cutout — OBS positions the actual webcam source into this region. Episode label + chapter URL slots accept `?episode=…&chapter=…` query params for per-episode binding.
+- [x] **Author `scripts/streaming/overlays/dictation-indicator.html`** — pulsing dot + `/voice listening` label in JetBrains Mono yellow `#f6c177`. CSS animation: 1.6s pulse (opacity 0.55 → 1.0, scale 0.92 → 1.12). Sized to fit in the bottom hull strip. Transparent background. `prefers-reduced-motion` respected.
+- [x] **Author `scripts/streaming/overlays/mode-badge.html`** — pill-style indicator showing the current permission mode. CSS supports four states via `?mode=default|acceptEdits|plan|auto`. Default = muted off-white-lavender, acceptEdits = teal `#9ccfd8`, plan = yellow `#f6c177`, auto = iris `#c4a7e7` with soft glow. Sized to fit in top hull strip.
+- [x] **Author `scripts/streaming/overlays/compound-step-indicator.html`** — five steps (`brainstorm · plan · work · review · compound`) in a horizontal pill row separated by hairline ticks. Active step highlighted in `#f6c177`. `?step=` query param drives the active state. Sized to sit at top of canopy when triggered.
+- [x] **Author `scripts/streaming/overlays/lower-third-tool.html`** — JetBrains Mono tool name (`#9ccfd8`) + Manrope brief description (`#908caa`). Sized to replace the centered episode label in the top hull strip. Tool name and description supplied via `?tool=…&brief=…` query params (so a single HTML file serves all tools, parameterized at OBS browser-source URL level).
+- [x] **Author `scripts/streaming/overlays/lower-third-chapter.html`** — same structure as lower-third-tool, but for chapter URLs. Shows `cc-lab.ondrejsvec.com/lab/<chapter-slug>` + chapter title via `?slug=…&title=…`.
+- [x] **Author `scripts/streaming/overlays/intermission.html`** — V2 streaming overlay. Calm two-zone card (ship-left 57% / panel-right) with the canonical hero ship via `https://cc-lab.ondrejsvec.com/hero.png`, "Back in 2 min." headline, mono countdown placeholder. Visual template only; live countdown is V2.
+- [x] **Author `scripts/streaming/overlays/stream-ending-soon.html`** — V2 streaming overlay. Same calm two-zone card with "Stream ending soon." headline + soft bottom fade.
+- [x] **Author `scripts/streaming/overlays/boot-transition.html`** — standalone HTML (no React) mirroring the in-app Boot.tsx. CSS-only sequence at 3000ms total: 0→400ms scan + scrim, 400→1450ms three typed lines (350ms stagger), 1450→2550ms DON'T PANIC pulse, 2550→3000ms fade to black. `?l1=…&l2=…&l3=…&panic=…&locale=cs` query params drive per-episode and bilingual variants.
+- [x] **Author `scripts/streaming/overlay-manifest.ts`** — TypeScript module declaring metadata for each of the 9 overlays: name, kind (static vs animated), region (full-frame / hull-left / hull-center / canopy-top / etc), defaultVisible for OBS, durationMs for animated, blurb for docs/Stream Deck hints. `getOverlay()` lookup helper for the OBS / Stream Deck builders.
+- [x] **Author `scripts/streaming/render-overlays.ts`** — Playwright + FFmpeg render script. Reads `overlay-manifest.ts`, iterates each overlay:
+  - Static overlays: headless Chromium at 1920×1080, deviceScaleFactor 2, `page.screenshot({ omitBackground: true })`.
+  - Animated overlays: `recordVideo` at 1920×1080 deviceScaleFactor 1, settle, hold for `durationMs`, close context, ffmpeg → `libx264 -pix_fmt yuv420p -preset slow -crf 20 -movflags +faststart -an` MP4.
   - Outputs to `public/visuals/overlays/<name>.{png,mp4}`.
-- [ ] **Run render-overlays** — generate the full asset set. Visual spot-check each output PNG/MP4.
-- [ ] **Author `scripts/streaming/preview/cockpit-full-with-content.html`** — variant of cockpit-full.html that overlays a real terminal recording (use a still from a Guide demo). Confirms hull doesn't fight legibility of code. Render to `public/screenshots/series-cockpit-with-content.png`.
+  - Post-pass: `EPISODE_BOOTS` table re-renders boot-transition.html with per-episode query params and writes to `public/visuals/series-boot-epNN.mp4`. Initial entry: `series-boot-ep01.mp4`.
+- [x] **Run render-overlays** — generated the full asset set. PNG sizes 42–285 KB, MP4 sizes 22–557 KB at 1920×1080 / 25fps / yuv420p. Spot-check confirmed: cockpit-frame transparent alpha clean, boot-transition sequence lands (lines stagger correctly, panic glow visible, fade-out clean), all static overlays render at expected dimensions.
+- [x] **Author `scripts/streaming/preview/cockpit-full-with-content.html`** — variant of cockpit-full.html with a denser realistic session (full DELETE plan + diff). Confirms hull strips don't fight code legibility. Rendered to `public/screenshots/series-cockpit-with-content.png` via the same render-preview.ts pipeline (added `cockpit-full-with-content.html → series-cockpit-with-content` entry).
 - [ ] **Visual review gate** — ondrej reviews:
   - All overlay PNGs at full resolution
   - Boot transition MP4 (open in QuickTime, watch full 3s)

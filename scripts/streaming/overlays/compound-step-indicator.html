@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cc-lab · compound step indicator</title>
+    <link rel="stylesheet" href="./overlay-palette.css" />
+    <style>
+      /* Five-step horizontal pill row for the Ep 6 compound walkthrough.
+       * Sits at the top of the canopy when triggered. Active step
+       * selected via ?step=brainstorm|plan|work|review|compound. */
+      html,
+      body {
+        background: transparent;
+      }
+
+      .strip {
+        position: absolute;
+        top: 88px; /* sit just below the top hull strip with breathing room */
+        left: 50%;
+        transform: translateX(-50%);
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 20px;
+        background: rgba(35, 33, 54, 0.78);
+        border: 1px solid var(--cc-hull-line);
+        border-radius: 999px;
+        font-family: var(--cc-font-mono);
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--cc-text-soft);
+        backdrop-filter: blur(4px);
+      }
+
+      .step {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 999px;
+        transition: none;
+      }
+
+      .step[data-active="true"] {
+        background: rgba(246, 193, 119, 0.14);
+        color: var(--cc-yellow);
+        box-shadow: inset 0 0 0 1px rgba(246, 193, 119, 0.45);
+      }
+
+      .sep {
+        width: 18px;
+        height: 1px;
+        background: var(--cc-hull-soft);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="strip" role="status">
+      <span class="step" data-step="brainstorm">brainstorm</span>
+      <span class="sep" aria-hidden="true"></span>
+      <span class="step" data-step="plan">plan</span>
+      <span class="sep" aria-hidden="true"></span>
+      <span class="step" data-step="work">work</span>
+      <span class="sep" aria-hidden="true"></span>
+      <span class="step" data-step="review">review</span>
+      <span class="sep" aria-hidden="true"></span>
+      <span class="step" data-step="compound">compound</span>
+    </div>
+    <script>
+      (() => {
+        const params = new URLSearchParams(window.location.search);
+        const active = params.get("step") ?? "plan";
+        const valid = ["brainstorm", "plan", "work", "review", "compound"];
+        const target = valid.includes(active) ? active : "plan";
+        document.querySelectorAll(".step").forEach((el) => {
+          el.dataset.active = el.dataset.step === target ? "true" : "false";
+        });
+      })();
+    </script>
+  </body>
+</html>

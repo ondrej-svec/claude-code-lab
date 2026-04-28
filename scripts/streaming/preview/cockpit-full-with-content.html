@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cc-lab · Cockpit with realistic content (legibility check)</title>
+    <link rel="stylesheet" href="../overlays/overlay-palette.css" />
+    <style>
+      /*
+       * Legibility check: same hull chrome as cockpit-full.html, but with
+       * a denser, more realistic terminal session in the canopy. Confirms
+       * the hairline hull lines + face cam panel + bottom URL don't fight
+       * code legibility at recording resolution.
+       *
+       * If something here reads as muddy, increase hull-line opacity in
+       * overlay-palette.css before Phase 3 begins.
+       */
+      body {
+        background: var(--cc-bg);
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* ---------- Canopy: dense terminal session ---------- */
+      .canopy {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 54px;
+        bottom: 54px;
+        padding: 56px 72px;
+        font-family: var(--cc-font-mono);
+        font-size: 22px;
+        line-height: 1.5;
+        color: var(--cc-text);
+      }
+
+      .canopy .prompt {
+        color: var(--cc-teal);
+      }
+
+      .canopy .agent {
+        color: var(--cc-yellow);
+      }
+
+      .canopy .dim {
+        color: var(--cc-text-muted);
+      }
+
+      .canopy .added {
+        color: #a3be8c;
+      }
+
+      .canopy .removed {
+        color: var(--cc-pink);
+      }
+
+      .canopy .row {
+        white-space: pre;
+      }
+
+      .canopy .header {
+        color: var(--cc-iris);
+      }
+
+      /* ---------- Hull strips ---------- */
+      .hull-top,
+      .hull-bottom {
+        position: absolute;
+        left: 0;
+        height: 54px;
+        background: var(--cc-bg-hull);
+        backdrop-filter: blur(2px);
+        display: flex;
+        align-items: center;
+        font-family: var(--cc-font-mono);
+        font-size: 18px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        color: var(--cc-text-soft);
+      }
+
+      .hull-top {
+        top: 0;
+        right: 0;
+        border-bottom: 1px solid var(--cc-hull-line);
+        padding: 0 32px;
+        justify-content: space-between;
+      }
+
+      .hull-bottom {
+        bottom: 0;
+        right: 269px;
+        border-top: 1px solid var(--cc-hull-line);
+        padding: 0 32px;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      /* Top hull contents */
+      .mode-pip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 12px;
+        background: rgba(156, 207, 216, 0.12);
+        border: 1px solid rgba(156, 207, 216, 0.4);
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--cc-teal);
+      }
+
+      .mode-pip::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--cc-teal);
+      }
+
+      .episode-label {
+        font-family: var(--cc-font-display);
+        font-size: 20px;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        color: var(--cc-text);
+      }
+
+      .rec-pip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 12px;
+        background: rgba(235, 111, 146, 0.12);
+        border: 1px solid rgba(235, 111, 146, 0.4);
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--cc-pink);
+      }
+
+      .rec-pip::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--cc-pink);
+        box-shadow: 0 0 8px rgba(235, 111, 146, 0.7);
+      }
+
+      /* Bottom hull contents */
+      .pill-dont-panic {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 14px;
+        background: rgba(35, 33, 54, 0.7);
+        border: 1px solid rgba(246, 193, 119, 0.34);
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--cc-yellow);
+      }
+
+      .pill-dont-panic::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--cc-yellow);
+      }
+
+      .chapter-url {
+        font-family: var(--cc-font-body);
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--cc-text-muted);
+        letter-spacing: 0.04em;
+      }
+
+      /* Antenna spire */
+      .antenna {
+        position: absolute;
+        top: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1.5px;
+        height: 28px;
+        background: var(--cc-hull-line);
+      }
+
+      .antenna::before {
+        content: "";
+        position: absolute;
+        top: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: rgba(224, 222, 244, 0.6);
+      }
+
+      /* Side hull ticks */
+      .tick {
+        position: absolute;
+        top: 540px;
+        width: 38px;
+        height: 1px;
+        background: var(--cc-hull-line);
+      }
+
+      .tick--left {
+        left: 0;
+      }
+      .tick--right {
+        right: 0;
+      }
+
+      /* Face cam panel */
+      .facecam {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 269px;
+        height: 151px;
+        border-radius: 12px 0 0 0;
+        border-top: 1px solid var(--cc-hull-line);
+        border-left: 1px solid var(--cc-hull-line);
+        background: linear-gradient(
+          135deg,
+          rgba(57, 53, 82, 0.85) 0%,
+          rgba(42, 39, 63, 0.92) 100%
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--cc-font-mono);
+        font-size: 22px;
+        font-weight: 500;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--cc-text-muted);
+        overflow: hidden;
+      }
+
+      .facecam .live-pip {
+        position: absolute;
+        top: 12px;
+        left: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.26em;
+        color: var(--cc-pink);
+      }
+
+      .facecam .live-pip::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--cc-pink);
+        box-shadow: 0 0 6px rgba(235, 111, 146, 0.7);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Canopy: a denser session showing the chapter-2 DELETE exercise mid-flight -->
+    <div class="canopy">
+      <div class="row"><span class="prompt">$</span> claude</div>
+      <div class="row"><span class="dim">  · context loaded · branch first-task · 2 staged files</span></div>
+      <div class="row">&nbsp;</div>
+      <div class="row"><span class="prompt">&gt;</span> Add DELETE /api/entries/{id} and a delete button on each entry card.</div>
+      <div class="row">&nbsp;</div>
+      <div class="row"><span class="agent">⏺</span> <span class="header">Plan</span></div>
+      <div class="row"><span class="dim">  1.</span> Add a DELETE handler in <span class="prompt">backend/main.py</span> that</div>
+      <div class="row"><span class="dim">     </span> looks up the entry by id, removes it from the in-memory store,</div>
+      <div class="row"><span class="dim">     </span> returns 404 if missing.</div>
+      <div class="row"><span class="dim">  2.</span> Add a delete button to <span class="prompt">EntryCard.tsx</span> that calls</div>
+      <div class="row"><span class="dim">     </span> the new endpoint and removes the card on success.</div>
+      <div class="row">&nbsp;</div>
+      <div class="row"><span class="agent">⏺</span> Editing <span class="prompt">backend/main.py</span></div>
+      <div class="row"><span class="added">+ @app.delete("/api/entries/{entry_id}")</span></div>
+      <div class="row"><span class="added">+ def delete_entry(entry_id: int) -&gt; Response:</span></div>
+      <div class="row"><span class="added">+     entry = STORE.pop(entry_id, None)</span></div>
+      <div class="row"><span class="added">+     if entry is None:</span></div>
+      <div class="row"><span class="added">+         raise HTTPException(status_code=404, detail="not found")</span></div>
+      <div class="row"><span class="added">+     return Response(status_code=204)</span></div>
+    </div>
+
+    <!-- Top hull strip: acceptEdits state, lower-third style centered episode label -->
+    <div class="hull-top">
+      <span class="mode-pip">acceptEdits</span>
+      <div class="episode-label">Ep 01 · First task</div>
+      <span class="rec-pip">REC</span>
+    </div>
+
+    <div class="antenna" aria-hidden="true"></div>
+
+    <div class="hull-bottom">
+      <span class="pill-dont-panic">Don't Panic</span>
+      <span class="chapter-url">cc-lab.ondrejsvec.com/lab/first-task</span>
+    </div>
+
+    <div class="tick tick--left" aria-hidden="true"></div>
+    <div class="tick tick--right" aria-hidden="true"></div>
+
+    <div class="facecam">
+      <span class="live-pip">live</span>
+      <span>cam</span>
+    </div>
+  </body>
+</html>

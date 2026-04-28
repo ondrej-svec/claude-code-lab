@@ -31,6 +31,10 @@ const previews: Preview[] = [
   { source: "thumbnail-ep01.html", outName: "series-thumbnail-ep01" },
   { source: "cockpit-full.html", outName: "series-cockpit-full" },
   { source: "end-card-ep01.html", outName: "series-endcard-ep01" },
+  {
+    source: "cockpit-full-with-content.html",
+    outName: "series-cockpit-with-content",
+  },
 ];
 
 const VIEWPORT = { width: 1920, height: 1080 } as const;

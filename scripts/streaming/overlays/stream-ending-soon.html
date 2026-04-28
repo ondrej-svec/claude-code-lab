@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cc-lab · stream ending soon</title>
+    <link rel="stylesheet" href="./overlay-palette.css" />
+    <style>
+      /* V2 streaming wind-down card. Same calm scaffolding as
+       * intermission, different copy + a soft fade hint. */
+      html,
+      body {
+        background: var(--cc-bg-ship-match);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .frame {
+        position: absolute;
+        inset: 88px;
+        border-top: 1px solid var(--cc-hull-line);
+        border-bottom: 1px solid var(--cc-hull-line);
+        display: grid;
+        grid-template-columns: 57% 1px 1fr;
+        align-items: center;
+      }
+
+      .ship {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        opacity: 0.85;
+      }
+
+      .ship img {
+        max-width: 100%;
+        max-height: 720px;
+        object-fit: contain;
+      }
+
+      .divider {
+        width: 1px;
+        height: 60%;
+        background: var(--cc-hull-line);
+        align-self: center;
+      }
+
+      .panel {
+        padding: 0 64px;
+        color: var(--cc-text);
+      }
+
+      .eyebrow {
+        font-family: var(--cc-font-mono);
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        color: var(--cc-yellow);
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 28px;
+        height: 1px;
+        background: var(--cc-yellow);
+      }
+
+      .title {
+        margin: 28px 0 24px;
+        font-family: var(--cc-font-display);
+        font-weight: 600;
+        font-size: 64px;
+        line-height: 1.08;
+        letter-spacing: -0.01em;
+      }
+
+      .meta {
+        font-family: var(--cc-font-mono);
+        font-size: 18px;
+        letter-spacing: 0.08em;
+        color: var(--cc-text-soft);
+      }
+
+      .meta .url {
+        color: var(--cc-teal);
+      }
+
+      .slate {
+        position: absolute;
+        top: 32px;
+        left: 32px;
+        font-family: var(--cc-font-mono);
+        font-size: 13px;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--cc-text-muted);
+      }
+
+      .locator {
+        position: absolute;
+        top: 32px;
+        right: 32px;
+        font-family: var(--cc-font-mono);
+        font-size: 13px;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--cc-text-muted);
+      }
+
+      /* Soft fade to suggest "wind-down" without an animation. */
+      .frame::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom,
+          transparent 0%,
+          transparent 70%,
+          rgba(26, 26, 49, 0.45) 100%
+        );
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <span class="slate">— wind down</span>
+    <span class="locator">stream → ending</span>
+    <div class="frame">
+      <div class="ship">
+        <img
+          class="ship-feather"
+          src="https://cc-lab.ondrejsvec.com/hero.png"
+          alt=""
+          aria-hidden="true"
+        />
+      </div>
+      <div class="divider" aria-hidden="true"></div>
+      <div class="panel">
+        <span class="eyebrow">thanks for watching</span>
+        <h1 class="title">Stream ending soon.</h1>
+        <p class="meta">
+          The lab continues at <span class="url">cc-lab.ondrejsvec.com</span>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
