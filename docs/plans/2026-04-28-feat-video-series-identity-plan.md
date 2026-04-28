@@ -2,9 +2,12 @@
 title: "feat: video series identity, cockpit, OBS production stack, pilot Ep 1"
 type: plan
 date: 2026-04-28
-status: approved
+status: in_progress
 brainstorm: docs/brainstorms/2026-04-28-video-series-identity-brainstorm.md
 confidence: medium
+phase: 2
+last_shipped_at: 2026-04-28
+last_shipped_commit: e3c0fe4
 ---
 
 # feat: video series identity + cockpit + OBS stack + pilot
@@ -271,10 +274,10 @@ These three artifacts are the cohesion test. If they read as lab-shaped, the res
 
 - [x] **Create `scripts/streaming/` directory structure** — `scripts/streaming/overlays/`, `scripts/streaming/preview/`, top-level placeholder for renderer. Add a `scripts/streaming/README.md` describing the directory layout and the V1 vs V2 path.
 - [x] **Author `scripts/streaming/overlays/overlay-palette.css`** — shared CSS variables mirroring `app/globals.css` Rosé Pine Moon tokens. Include `--cc-bg`, `--cc-text`, `--cc-text-strong`, `--cc-accent-pink`, `--cc-accent-yellow`, `--cc-accent-teal`, `--cc-accent-cyan`, `--cc-hull`, `--cc-hull-soft`, plus type stack variables.
-- [x] **Author `scripts/streaming/preview/title-card-ep01.html`** — HTML/CSS preview of the Episode 1 title card. Vertical split: chapter-2 ship (`https://cc-lab.ondrejsvec.com/chapters/02-first-task.png`) in upper 52%, title text in lower 48%. Title in Space Grotesk, eyebrow "Ep 01 · Claude Code Lab" in JetBrains Mono. Render at 1920×1080.
-- [x] **Author `scripts/streaming/preview/thumbnail-ep01.html`** — HTML/CSS thumbnail at 1920×1080. Text upper half (Ep 01 eyebrow + Space Grotesk title), chapter ship lower half. Ep pill bottom-left, Don't Panic pill bottom-right.
-- [x] **Author `scripts/streaming/preview/cockpit-full.html`** — full cockpit frame at 1920×1080 with placeholder content in the canopy. Top hull strip (5%) + bottom hull strip (5%) + face cam panel rounded-rect inset bottom-right ~14% wide. Hairline SVG hull lines + antenna spire. Includes mock terminal text in the canopy and a face cam placeholder showing "CAM" text.
-- [x] **Author `scripts/streaming/preview/end-card-ep01.html`** — end card at 1920×1080. Faded next-episode chapter ship (chapter-3 `/chapters/03-teach-claude-your-project.png`) at ~45% opacity, "Next · Ep 02" eyebrow, title, chapter URL, Babel Fish + subtitles meta.
+- [x] **Author `scripts/streaming/preview/title-card-ep01.html`** — Episode 1 title card at 1920×1080. **Shipped composition** (revised from v1 vertical-stacked stub): two-zone magazine cover. Ship in left ~57% (full opacity, contained); vertical hairline divider at ~x=1110; right ~38% holds eyebrow `—— CLAUDE CODE LAB`, two-line title `Open Claude. / Ship one thing.` at 88px Space Grotesk weight 600, URL `cc-lab.ondrejsvec.com / lab / first-task` in JetBrains Mono small caps. Top + bottom hairline frames inset 88px. Slate `001 — FIRST TASK` top-left, locator `EP 01 · 09` top-right. Don't Panic pill bottom-right.
+- [x] **Author `scripts/streaming/preview/thumbnail-ep01.html`** — Episode 1 thumbnail at 1920×1080. **Shipped composition** (revised from v1 horizontal-stacked stub): cinema letterbox bars top + bottom (72px each, hairline borders). Active stage 46/54 split — ship contained left, title right. Title `Open Claude. / Ship one thing.` at 124px Space Grotesk weight 700 in two lines. `—— FIRST TASK` annotation tag with leading hairline above title, 220px underline below. Top bar holds eyebrow + slate ticks `001 / 009`; bottom bar holds Ep 01 teal pill + Don't Panic yellow pill.
+- [x] **Author `scripts/streaming/preview/cockpit-full.html`** — full cockpit frame at 1920×1080 with placeholder content in the canopy. Top hull strip (54px) + bottom hull strip (54px, width minus the 269px face cam panel) + face cam panel rounded-rect inset bottom-right (~14% wide, 16:9 aspect) with subtle 135° gradient + LIVE pip. Antenna spire centered top, side panel ticks at midheight (y=540). Mock canopy: `claude --resume` session showing the chapter-2 DELETE prompt + agent reply. Hull lines at hairline `rgba(224, 222, 244, 0.4)`.
+- [x] **Author `scripts/streaming/preview/end-card-ep01.html`** — end card at 1920×1080. **Shipped composition** (revised from v1 stacked stub): two-zone with ship LEFT (chapter-3, 78% opacity) and title RIGHT. Hairline trajectory line connects ship to title zone. Title `Teach Claude / your project` at 72px Space Grotesk weight 600 in two lines, right-aligned. Eyebrow `—— NEXT · EP 02`, URL `cc-lab.ondrejsvec.com / lab / teach-claude-your-project`. Bottom 200px three-cell flight-log meta strip: SUBTITLES (🐟 EN · CS) · CADENCE (New episode every two weeks) · CONTINUE (cc-lab.ondrejsvec.com). Slate `002 — UP NEXT` top-left, locator `CONTINUE → EP 02` top-right.
 - [x] **Author `scripts/streaming/render-preview.ts`** — minimal Playwright script that loads each `preview/*.html` in headless Chromium at 1920×1080, takes a 2x retina screenshot, writes to `public/screenshots/series-<name>.png`. Uses a config object listing each preview file → output path.
 - [x] **Run preview renderer** — `pnpm tsx scripts/streaming/render-preview.ts`. Outputs:
   - `public/screenshots/series-titlecard-ep01.png`
@@ -283,7 +286,47 @@ These three artifacts are the cohesion test. If they read as lab-shaped, the res
   - `public/screenshots/series-endcard-ep01.png`
 - [x] **Visual review gate** — ondrej reviews all four PNGs at full resolution. If any reads as off-aesthetic (cockpit reads as costume, ship overlap, text legibility issues, rejected pattern leakage), iterate the HTML/CSS, re-render, re-review. **HARD GATE: Phase 2 does not start until all four pass review.** ✓ Approved 2026-04-28 after iteration: title-card / thumbnail / end-card recomposed for clarity (ship + title in distinct zones, no overlap), and `--cc-bg-ship-match: #1a1a31` token introduced so the chapter PNG bg merges seamlessly with the page bg.
 
-**Phase 1 exit criteria:** All four preview PNGs at 1920×1080 in `public/screenshots/`, reviewed by ondrej, approved. Overlay palette CSS authored. Preview renderer script working.
+**Phase 1 exit criteria:** ✓ All four preview PNGs at 1920×1080 in `public/screenshots/`, reviewed by ondrej, approved 2026-04-28. Overlay palette CSS authored. Preview renderer script working. Shipped in commit `e3c0fe4`.
+
+### Phase 1 → Phase 2 handoff (read this first when restarting)
+
+The v3 compositions land what the v1 task descriptions sketched. The deltas worth carrying forward — these are now the locked conventions for any video surface that combines a chapter PNG with text:
+
+**Token additions in `scripts/streaming/overlays/overlay-palette.css`:**
+
+- `--cc-bg-ship-match: #1a1a31` — the actual bg color of the AI-generated chapter PNGs (sampled from corner pixels). The Rosé Pine Moon spec calls for `#232136`, but the chapter ships drifted ~14% darker during AI generation. **Use `--cc-bg-ship-match` (not `--cc-bg`) as the page background of any video surface where a chapter PNG sits on the page**, so the ship's rectangle merges seamlessly. This is a deliberate, scoped deviation from the spec — kept narrow to video previews.
+- `.ship-feather` utility class — applies two crossed `linear-gradient` masks via `mask-composite: intersect`, fading the outer 6% of each PNG edge into transparency. Belt-and-suspenders for sub-pixel variation. Add `class="ship-feather"` to any chapter `<img>` over a contrasting bg.
+
+**Composition principles (locked, derived from the v3 redesign):**
+
+- **No overlap.** Ship and title each get their own zone with breathing room. Title text never sits over the ship's terminal panel or busy linework. Hairline dividers, slate markers, and trajectory lines are the connective tissue — meaningful, never cluttered.
+- **Asymmetric two-zone layout.** Ship-left ~50–57%, title-right ~43–50%. Vertical hairline divider between zones (1px, `var(--cc-hull-line)`). Top + bottom hairline frames inset ~80–88px from edges.
+- **Recurring framing chrome.** Slate marker top-left (`<num> — <label>` in JetBrains Mono small caps with a teal tick), locator top-right (episode position or continuation cue). Both at 13px, letter-spacing 0.32–0.34em.
+- **Type sizes that fit.** Title card `Open Claude. Ship one thing.` at 88px on 2 lines. Thumbnail at 124px on 2 lines for YouTube small-size readability. End card `Teach Claude your project` at 72px on 2 lines (longer string).
+- **Annotation pattern.** `—— LABEL` (leading hairline + JetBrains Mono small caps) for eyebrows / annotations, in `var(--cc-teal)`. Underlines below titles where it ties the block together.
+
+**Files Phase 2 inherits:**
+
+| File | Status |
+|---|---|
+| `scripts/streaming/overlays/overlay-palette.css` | shipped — Rosé Pine Moon tokens + ship-match bg + `.ship-feather` utility |
+| `scripts/streaming/preview/title-card-ep01.html` | shipped reference for magazine-cover composition |
+| `scripts/streaming/preview/thumbnail-ep01.html` | shipped reference for cinema-letterbox composition |
+| `scripts/streaming/preview/cockpit-full.html` | shipped reference for cockpit chrome layout — **inputs the Phase 2 cockpit-frame.html spec** |
+| `scripts/streaming/preview/end-card-ep01.html` | shipped reference for departure-card composition |
+| `scripts/streaming/render-preview.ts` | shipped renderer — Phase 2's `render-overlays.ts` follows the same pattern but adds animation video capture |
+| `public/screenshots/series-{titlecard,thumbnail,cockpit-full,endcard}-ep01.png` | shipped, approved, committed |
+
+**Cockpit dimensions to carry into Phase 2's `cockpit-frame.html`:**
+
+- Frame 1920×1080. Top hull strip y=0..54 (54px = ~5%). Bottom hull strip y=1026..1080. Canopy y=54..1026 (972px).
+- Face cam panel: bottom-right, 269px × 151px (16:9), border-radius 12px on top-left corner only, subtle 135° gradient bg, hairline border on top + left edges.
+- Antenna spire: centered, 1.5px wide × 28px tall, 5px ball at top, inside the top hull strip at y=6..34.
+- Side hull ticks: 38px wide × 1px hairline at y=540 each side.
+- Bottom hull strip width = 1920 − 269 = 1651px (truncated by face cam panel).
+- Hull color: `rgba(224, 222, 244, 0.4)` for lines; `rgba(42, 39, 63, 0.62)` for hull-strip backdrops.
+
+**Phase 2 starts here.** Read this section, then proceed.
 
 ### Phase 2 — Overlay HTML/CSS source + render pipeline + cockpit asset
 
