@@ -80,6 +80,8 @@ Skilly drž pod ~500 řádků. Delší obsah patří do přibalených souborů: 
 
 Zralý skill jako [`visualize` v Heart of Gold toolkitu](https://github.com/ondrej-svec/heart-of-gold-toolkit/tree/main/plugins/babel-fish/skills/visualize) ukazuje, jak to vypadá ve velkém — jeden `SKILL.md`, kolem něj pár helper skriptů, rozhodovací stromy pro to, kdy který skript použít. Nic z toho nevzniklo na jednom sezení. Každý kus přibyl, když týden používání odhalil mezeru.
 
+Skilly taky umí číst `${CLAUDE_EFFORT}` a větvit se podle aktuálního effortu session. Co s tím uděláš, záleží na skillu.
+
 ### Otevřený formát Agent Skills
 
 Formát je [otevřená specifikace](https://agentskills.io) — pole frontmatteru, chování loaderu, pravidla progresivního odkrývání. Kompletní reference od Anthropicu je v [`anthropics/skills/spec/agent-skills-spec.md`](https://github.com/anthropics/skills/blob/main/spec/agent-skills-spec.md). Skilly, které napíšeš, fungují v Claude Code dnes a budou fungovat v každém nástroji, který tu specifikaci převezme zítra.

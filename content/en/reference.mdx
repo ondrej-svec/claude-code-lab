@@ -74,6 +74,8 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/handoff` | Prepare a handoff doc for the next session or teammate. |
 | `/compound` | Document a solved problem for future reference. |
 
+`claude ultrareview [target]` is a CLI subcommand — not a slash command — that runs `/ultrareview` non-interactively from CI or scripts. Prints findings to stdout; `--json` for raw output. Exits 0 on completion, 1 on failure.
+
 → [Commands docs](https://code.claude.com/docs/en/commands)
 
 ## 8.2 Keyboard shortcuts
@@ -300,6 +302,8 @@ Shell commands, HTTP endpoints, or LLM prompts fired at specific lifecycle event
 
 - [Hooks docs](https://code.claude.com/docs/en/hooks)
 - Configure in `.claude/settings.json` under `"hooks"`, or in a plugin's `hooks/hooks.json`
+
+`PostToolUse` hooks can now replace tool output via `hookSpecificOutput.updatedToolOutput` — not just observe it. Previously MCP-only; now applies to all tools.
 
 ### MCPs
 

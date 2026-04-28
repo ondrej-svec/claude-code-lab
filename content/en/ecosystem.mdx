@@ -80,6 +80,8 @@ Skills stay under ~500 lines. Longer content goes into bundled files: `reference
 
 A mature skill like [`visualize` in the Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit/tree/main/plugins/babel-fish/skills/visualize) shows what that looks like at scale — one `SKILL.md`, half a dozen helper scripts beside it, decision trees for when each script applies. None of it was hand-written cold; each piece got added when a week of use revealed a gap.
 
+Skills can also read `${CLAUDE_EFFORT}` to branch on the session's current effort level. What you do with it is up to the skill.
+
 ### Agent Skills open format
 
 The format is [an open spec](https://agentskills.io) — frontmatter fields, loader behaviour, progressive-disclosure rules. Anthropic's full reference is in [`anthropics/skills/spec/agent-skills-spec.md`](https://github.com/anthropics/skills/blob/main/spec/agent-skills-spec.md). Skills you write work in Claude Code today and will work in any tool that adopts the spec tomorrow.
