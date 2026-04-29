@@ -1,0 +1,82 @@
+/*
+ * overlay-palette.css — shared tokens for every overlay HTML file.
+ *
+ * Mirrors `app/globals.css` Rosé Pine Moon tokens. Changes here affect
+ * both OBS browser sources (live) and Playwright-rendered fallbacks.
+ * Voice and visual rules: docs/cc-lab-design-system.md.
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+:root {
+  /* Surfaces — Rosé Pine Moon */
+  --cc-bg:           #232136;
+  --cc-bg-elevated:  #2a273f;
+  --cc-bg-soft:      #393552;
+  --cc-bg-hull:      rgba(42, 39, 63, 0.62);   /* hull-strip backdrop */
+  /* Ship-PNG match — the AI-generated chapter heroes rendered slightly
+   * darker than the Rosé Pine Moon spec. Use this for any video surface
+   * where a chapter PNG sits on the page bg, so the ship's rectangle
+   * vanishes seamlessly into the page. */
+  --cc-bg-ship-match: #1a1a31;
+
+  /* Text */
+  --cc-text:         #e0def4;   /* primary off-white-lavender */
+  --cc-text-soft:    #908caa;   /* secondary */
+  --cc-text-muted:   #6e6a86;   /* muted */
+
+  /* Accents (Rosé Pine) */
+  --cc-pink:         #eb6f92;
+  --cc-rose:         #ea9a97;
+  --cc-yellow:       #f6c177;
+  --cc-teal:         #9ccfd8;
+  --cc-iris:         #c4a7e7;
+  --cc-foam:         #3e8fb0;
+
+  /* Hull lines — locked at hairline + ~40% opacity */
+  --cc-hull-line:    rgba(224, 222, 244, 0.40);
+  --cc-hull-soft:    rgba(224, 222, 244, 0.18);
+  --cc-hull-faint:   rgba(224, 222, 244, 0.10);
+
+  /* Type stack — must match app/globals.css */
+  --cc-font-body:    "Manrope", "Segoe UI", sans-serif;
+  --cc-font-display: "Space Grotesk", "Avenir Next", sans-serif;
+  --cc-font-mono:    "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+
+  /* Shadow (only sanctioned use: face cam panel inner shadow) */
+  --cc-shadow-soft:  0 18px 40px rgba(0, 0, 0, 0.40);
+}
+
+/* Standalone-page reset for overlay HTML files. */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 1920px;
+  height: 1080px;
+  background: transparent;
+  color: var(--cc-text);
+  font-family: var(--cc-font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Chapter-ship edge feather. The exported PNGs have an internal
+ * navy background that doesn't match the page background pixel-perfect,
+ * leaving a visible rectangular boundary. This mask softly fades the
+ * outer ~6% of each edge into transparency so the ship integrates into
+ * whatever sits behind it. Apply via class="ship-feather" on the <img>. */
+.ship-feather {
+  -webkit-mask-image:
+    linear-gradient(to right,  transparent 0%, #000 6%, #000 94%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 6%, #000 94%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right,  transparent 0%, #000 6%, #000 94%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 6%, #000 94%, transparent 100%);
+  mask-composite: intersect;
+}

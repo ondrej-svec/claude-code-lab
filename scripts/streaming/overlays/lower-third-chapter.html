@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cc-lab · lower-third chapter</title>
+    <link rel="stylesheet" href="./overlay-palette.css" />
+    <style>
+      /* Chapter URL + title pair. Replaces the centered episode label in
+       * the top hull strip while pointing viewers at a chapter for more
+       * depth. Driven by ?slug=first-task&title=First+task. */
+      html,
+      body {
+        background: transparent;
+      }
+
+      .third {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 54px;
+        display: inline-flex;
+        align-items: baseline;
+        gap: 14px;
+        padding: 0 18px;
+        white-space: nowrap;
+      }
+
+      .url {
+        font-family: var(--cc-font-mono);
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        color: var(--cc-teal);
+      }
+
+      .title {
+        font-family: var(--cc-font-body);
+        font-size: 15px;
+        font-weight: 400;
+        letter-spacing: 0.02em;
+        color: var(--cc-text-soft);
+      }
+
+      .sep {
+        align-self: center;
+        width: 1px;
+        height: 18px;
+        background: var(--cc-hull-soft);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="third">
+      <span class="url" data-slot="url">cc-lab.ondrejsvec.com/lab/first-task</span>
+      <span class="sep" aria-hidden="true"></span>
+      <span class="title" data-slot="title">First task</span>
+    </div>
+    <script>
+      (() => {
+        const params = new URLSearchParams(window.location.search);
+        const slug = params.get("slug");
+        const title = params.get("title");
+        if (slug) {
+          const el = document.querySelector('[data-slot="url"]');
+          if (el) el.textContent = `cc-lab.ondrejsvec.com/lab/${slug}`;
+        }
+        if (title) {
+          const el = document.querySelector('[data-slot="title"]');
+          if (el) el.textContent = title;
+        }
+      })();
+    </script>
+  </body>
+</html>

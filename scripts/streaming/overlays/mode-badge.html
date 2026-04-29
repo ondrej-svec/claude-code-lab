@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cc-lab · mode badge</title>
+    <link rel="stylesheet" href="./overlay-palette.css" />
+    <style>
+      /* Permission-mode pill. Sits in the top hull strip's left zone.
+       * Four states selected via ?mode=default|acceptEdits|plan|auto.
+       * Each state gets a distinct accent. The pill itself is small
+       * so OBS scales the source naturally. */
+      html,
+      body {
+        background: transparent;
+      }
+
+      .badge {
+        position: absolute;
+        left: 32px;
+        top: 13px; /* vertical-centered inside 54px hull strip */
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 12px;
+        border-radius: 999px;
+        font-family: var(--cc-font-mono);
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        background: rgba(35, 33, 54, 0.7);
+        border: 1px solid var(--accent, var(--cc-text-muted));
+        color: var(--accent, var(--cc-text));
+      }
+
+      .badge::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent, var(--cc-text-muted));
+      }
+
+      /* State accents — dim default, teal acceptEdits, yellow plan,
+       * cyan auto with a soft glow that hints at higher autonomy. */
+      .badge[data-mode="default"] {
+        --accent: rgba(224, 222, 244, 0.55);
+      }
+      .badge[data-mode="acceptEdits"] {
+        --accent: var(--cc-teal);
+      }
+      .badge[data-mode="plan"] {
+        --accent: var(--cc-yellow);
+      }
+      .badge[data-mode="auto"] {
+        --accent: var(--cc-iris);
+        box-shadow: 0 0 12px rgba(196, 167, 231, 0.32);
+      }
+    </style>
+  </head>
+  <body>
+    <span class="badge" data-mode="plan" data-slot="badge">plan</span>
+    <script>
+      (() => {
+        const params = new URLSearchParams(window.location.search);
+        const mode = params.get("mode");
+        const valid = ["default", "acceptEdits", "plan", "auto"];
+        if (!mode || !valid.includes(mode)) return;
+        const el = document.querySelector('[data-slot="badge"]');
+        if (!el) return;
+        el.dataset.mode = mode;
+        el.textContent = mode;
+      })();
+    </script>
+  </body>
+</html>

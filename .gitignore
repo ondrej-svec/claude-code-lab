@@ -51,5 +51,14 @@ next-env.d.ts
 .claude/worktrees/
 **/.claude/worktrees/
 
+# Claude Code per-machine local settings (never commit)
+.claude/settings.local.json
+.claude/*.local.json
+
 # freshness skill — per-run delta outputs (snapshot/current.json IS committed)
 scripts/freshness/output/
+
+# streaming build outputs — per-machine, regenerated locally.
+# OBS scene collection bakes absolute file:// URLs; Stream Deck icons are
+# deterministic from streamdeck-spec.ts. Reproduce, don't commit.
+scripts/streaming/dist/

@@ -2,25 +2,28 @@
 
 [1;36m●[0m Scanning [1msamples/dotnet-core/[0m ...
 
-  [38;5;245m→[0m Program.cs              [38;5;245mASP.NET Core minimal API[0m
-  [38;5;245m→[0m samples.Tests/          [38;5;245mxunit project, 2 tests[0m
-  [38;5;245m→[0m README.md               [38;5;245msetup instructions[0m
-  [38;5;245m→[0m .editorconfig           [38;5;245mspaces, 4 wide[0m
+  [38;5;245m→[0m Program.cs              [38;5;245mminimal API + first-run boot[0m
+  [38;5;245m→[0m Models/Entry.cs         [38;5;245mEntry record + EntryInput[0m
+  [38;5;245m→[0m Stores/EntryStore.cs    [38;5;245min-memory, 6 seeded entries[0m
+  [38;5;245m→[0m Boot/BootSequence.cs    [38;5;245mSpectre.Console boot[0m
+  [38;5;245m→[0m README.md               [38;5;245msetup, API, chapter links[0m
 
 [1;36m●[0m Proposed [1mCLAUDE.md[0m
 
-  [2m# samples/dotnet-core — ASP.NET Core sample[0m
+  [2m# CLAUDE.md — The Guide (dotnet-core sample)[0m
 
-  [2m## Build[0m
-  [2mdotnet build[0m
+  [2m## Project[0m
+  [2mBilingual knowledge-base app, Hitchhiker's-Guide flavored.[0m
+  [2mASP.NET Core minimal API, in-memory store, no API keys.[0m
 
-  [2m## Test[0m
-  [2mdotnet test[0m
+  [2m## Domain[0m
+  [2mEntry: id, title, body, badge, contributor, locale, tags[0m
+  [2mBadge: mostly-harmless | mostly-dangerous | unknown[0m
 
-  [2m## Conventions[0m
-  [2m- Minimal APIs in Program.cs[0m
-  [2m- Controllers only when routes exceed ~6 endpoints[0m
-  [2m- Spaces, 4 wide[0m
+  [2m## Don't[0m
+  [2m- Don't add EF, auth, or AI in the seed[0m
+  [2m- Don't ship PUT/DELETE — chapter 2 adds DELETE[0m
+  [2m- Don't extend the boot — keep under 3 seconds[0m
 
 [1;33m◆[0m Write to [1mCLAUDE.md[0m? [2m[y / n][0m
 [38;5;75m>[0m [2m_[0m

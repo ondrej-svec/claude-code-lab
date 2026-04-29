@@ -77,22 +77,25 @@ def write(name: str, content: str) -> None:
 
 # --- ch2-plan-output — Ch 2 First task (shot #3) --------------------------
 ch2 = f"""\
-{USER}>{R} Add a GET /health endpoint that returns {{ "ok": true, "uptime_seconds": n }}.
+{USER}>{R} Add a {B}DELETE /api/entries/{{id}}{R} endpoint to the Guide so I can
+  remove an entry by id.
 
-{CYAN}●{R} I'll add a {B}/health{R} endpoint to {B}Program.cs{R}.
+{CYAN}●{R} I'll add it to {B}Program.cs{R}, alongside the existing routes.
 
   {B}Plan{R}
 
-   1. Read {B}Program.cs{R} to see the current minimal-API setup
-   2. Capture a process-start timestamp at startup
-   3. Register {B}MapGet("/health"){R} returning {{ ok, uptime_seconds }}
-   4. Run the sample and hit the endpoint to verify
+   1. Read {B}Program.cs{R} to see how the other endpoints are registered
+   2. Read {B}Stores/EntryStore.cs{R} for the right removal primitive
+   3. Add {B}EntryStore.Remove(id){R} returning bool
+   4. Register {B}MapDelete("/api/entries/{{id:int}}"){R} → 204 / 404
+   5. Run the sample and curl DELETE to verify
 
   {B}Files to edit{R}
-   {MUTED}→{R} Program.cs          {MUTED}(add route + uptime field){R}
+   {MUTED}→{R} Stores/EntryStore.cs   {MUTED}(add Remove method){R}
+   {MUTED}→{R} Program.cs             {MUTED}(register MapDelete){R}
 
   {B}Checks{R}
-   {MUTED}→{R} dotnet test samples/dotnet-core/
+   {MUTED}→{R} curl -X DELETE http://localhost:5100/api/entries/3 -i
 
 {YELLOW}◆{R} Ready to proceed? {D}[y / n / edit plan]{R}
 {USER}>{R} {D}_{R}
@@ -106,25 +109,28 @@ ch3 = f"""\
 
 {CYAN}●{R} Scanning {B}samples/dotnet-core/{R} ...
 
-  {MUTED}→{R} Program.cs              {MUTED}ASP.NET Core minimal API{R}
-  {MUTED}→{R} samples.Tests/          {MUTED}xunit project, 2 tests{R}
-  {MUTED}→{R} README.md               {MUTED}setup instructions{R}
-  {MUTED}→{R} .editorconfig           {MUTED}spaces, 4 wide{R}
+  {MUTED}→{R} Program.cs              {MUTED}minimal API + first-run boot{R}
+  {MUTED}→{R} Models/Entry.cs         {MUTED}Entry record + EntryInput{R}
+  {MUTED}→{R} Stores/EntryStore.cs    {MUTED}in-memory, 6 seeded entries{R}
+  {MUTED}→{R} Boot/BootSequence.cs    {MUTED}Spectre.Console boot{R}
+  {MUTED}→{R} README.md               {MUTED}setup, API, chapter links{R}
 
 {CYAN}●{R} Proposed {B}CLAUDE.md{R}
 
-  {D}# samples/dotnet-core — ASP.NET Core sample{R}
+  {D}# CLAUDE.md — The Guide (dotnet-core sample){R}
 
-  {D}## Build{R}
-  {D}dotnet build{R}
+  {D}## Project{R}
+  {D}Bilingual knowledge-base app, Hitchhiker's-Guide flavored.{R}
+  {D}ASP.NET Core minimal API, in-memory store, no API keys.{R}
 
-  {D}## Test{R}
-  {D}dotnet test{R}
+  {D}## Domain{R}
+  {D}Entry: id, title, body, badge, contributor, locale, tags{R}
+  {D}Badge: mostly-harmless | mostly-dangerous | unknown{R}
 
-  {D}## Conventions{R}
-  {D}- Minimal APIs in Program.cs{R}
-  {D}- Controllers only when routes exceed ~6 endpoints{R}
-  {D}- Spaces, 4 wide{R}
+  {D}## Don't{R}
+  {D}- Don't add EF, auth, or AI in the seed{R}
+  {D}- Don't ship PUT/DELETE — chapter 2 adds DELETE{R}
+  {D}- Don't extend the boot — keep under 3 seconds{R}
 
 {YELLOW}◆{R} Write to {B}CLAUDE.md{R}? {D}[y / n]{R}
 {USER}>{R} {D}_{R}
@@ -134,7 +140,7 @@ write("ch3-init-output", ch3)
 
 # --- ch4-rewind-menu — Ch 4 Iteration (shot #7) ---------------------------
 rewind_lines = [
-    f"{ACCENT}▶{R} {B}1.{R}  {MUTED}just now{R}      Add a GET /health endpoint that...",
+    f"{ACCENT}▶{R} {B}1.{R}  {MUTED}just now{R}      Add a DELETE /api/entries/{{id}} endpoint...",
     f"  {B}2.{R}  {MUTED}2m ago{R}        Read Program.cs and tell me what...",
     f"  {B}3.{R}  {MUTED}5m ago{R}        /init",
     f"  {B}4.{R}  {MUTED}8m ago{R}        explain the dependencies",
@@ -248,24 +254,19 @@ HUNK = "\x1b[38;5;110m"   # blue-grey for @@ hunk headers
 
 # --- ch2a-diff — Stream A (.NET) diff before apply ------------------------
 ch2a_diff = f"""\
-{CYAN}●{R} Editing {B}Program.cs{R}
+{CYAN}●{R} Editing {B}Stores/EntryStore.cs{R} and {B}Program.cs{R}
 
-  {HUNK}@@ -1,4 +1,6 @@{R}
-  {ADD}+using System.Diagnostics;{R}
+  {HUNK}@@ Stores/EntryStore.cs +60,4 @@{R}
+   public Entry Add(EntryInput input) {{ ... }}
   {ADD}+{R}
-   using Microsoft.AspNetCore.Builder;
-   using Microsoft.AspNetCore.Http;
-   using Microsoft.Extensions.DependencyInjection;
+  {ADD}+public bool Remove(int id){R}
+  {ADD}+    => _entries.RemoveAll(e => e.Id == id) > 0;{R}
 
-  {HUNK}@@ -6,6 +8,10 @@{R}
-   builder.Services.AddSingleton<ItemStore>();
-
-   var app = builder.Build();
-  {ADD}+var startedAt = Stopwatch.StartNew();{R}
+  {HUNK}@@ Program.cs +44,5 @@{R}
+   app.MapPost("/api/entries", (EntryInput input, EntryStore store) => {{ ... }});
   {ADD}+{R}
-  {ADD}+app.MapGet("/health", () => new {{ ok = true, uptime_seconds = startedAt.Elapsed.TotalSeconds }});{R}
-  {ADD}+{R}
-   app.MapGet("/api/items", (ItemStore store) => store.All());
+  {ADD}+app.MapDelete("/api/entries/{{id:int}}", (int id, EntryStore store) =>{R}
+  {ADD}+    store.Remove(id) ? Results.NoContent() : Results.NotFound());{R}
 
 {YELLOW}◆{R} Apply? {D}[y / n / show more]{R}
 {USER}>{R} {D}_{R}
@@ -277,41 +278,44 @@ write("ch2a-diff", ch2a_diff)
 ch2a_run = f"""\
 {USER}>{R} dotnet run --project samples/dotnet-core
 
-{CYAN}●{R} {MUTED}info: Microsoft.Hosting.Lifetime[14]{R}
-  {MUTED}      Now listening on:{R} {B}http://localhost:5055{R}
-  {MUTED}info: Microsoft.Hosting.Lifetime[0]{R}
-  {MUTED}      Application started. Press Ctrl+C to shut down.{R}
+{CYAN}●{R} {MUTED}Sub-Etha relay online · http://localhost:5100{R}
 
-{USER}>{R} curl -s localhost:5055/health | jq
+{USER}>{R} curl -s localhost:5100/api/entries | jq 'length'
 
-  {{
-    {ACCENT}"ok"{R}: {GREEN}true{R},
-    {ACCENT}"uptime_seconds"{R}: {GREEN}3.214{R}
-  }}
+  {GREEN}6{R}
 
-{GREEN}✓{R} 200 OK  {MUTED}·{R}  41 B  {MUTED}·{R}  4 ms
+{USER}>{R} curl -s -X DELETE localhost:5100/api/entries/3 -i | head -1
+
+  {GREEN}HTTP/1.1 204 No Content{R}
+
+{USER}>{R} curl -s localhost:5100/api/entries | jq 'length'
+
+  {GREEN}5{R}
+
+{GREEN}✓{R} entry 3 (Vogon poetry) gone  {MUTED}·{R}  204 No Content  {MUTED}·{R}  3 ms
 """
 write("ch2a-run", ch2a_run)
 
 
 # --- ch2b-plan-output — Stream B (Python+React) plan ---------------------
 ch2b_plan = f"""\
-{USER}>{R} Add a GET /health endpoint that returns {{ "ok": true, "uptime_seconds": n }}.
+{USER}>{R} Add a {B}DELETE /api/entries/{{id}}{R} endpoint to the Guide so I can
+  remove an entry by id.
 
-{CYAN}●{R} I'll add a {B}/health{R} endpoint to {B}backend/main.py{R}.
+{CYAN}●{R} I'll add it to {B}backend/main.py{R}, alongside the existing routes.
 
   {B}Plan{R}
 
-   1. Read {B}backend/main.py{R} to see the FastAPI wiring
-   2. Capture a process-start timestamp at module load
-   3. Register {B}@app.get("/health"){R} returning {{ ok, uptime_seconds }}
-   4. Run uvicorn and hit the endpoint to verify
+   1. Read {B}backend/main.py{R} to see how the other endpoints are wired
+   2. Add {B}@app.delete("/api/entries/{{id}}"){R} returning 204 / 404
+   3. Mutate the in-memory {B}_entries{R} list in place
+   4. Run uvicorn and curl DELETE to verify
 
   {B}Files to edit{R}
-   {MUTED}→{R} backend/main.py     {MUTED}(add route + monotonic timer){R}
+   {MUTED}→{R} backend/main.py     {MUTED}(add the delete handler){R}
 
   {B}Checks{R}
-   {MUTED}→{R} curl localhost:8000/health
+   {MUTED}→{R} curl -X DELETE http://localhost:8000/api/entries/3 -i
 
 {YELLOW}◆{R} Ready to proceed? {D}[y / n / edit plan]{R}
 {USER}>{R} {D}_{R}
@@ -323,24 +327,18 @@ write("ch2b-plan-output", ch2b_plan)
 ch2b_diff = f"""\
 {CYAN}●{R} Editing {B}backend/main.py{R}
 
-  {HUNK}@@ -1,3 +1,4 @@{R}
-  {ADD}+import time{R}
-   from dataclasses import dataclass, asdict
-   from fastapi import FastAPI, HTTPException
-   from fastapi.middleware.cors import CORSMiddleware
-
-  {HUNK}@@ -5,6 +6,12 @@{R}
-
-   app = FastAPI(title="cc-lab sample api")
-
-  {ADD}+_started_at = time.monotonic(){R}
+  {HUNK}@@ +175,8 @@{R}
+   @app.post("/api/entries", status_code=201)
+   def create_entry(payload: EntryInput) -> dict:
+       ...
   {ADD}+{R}
-  {ADD}+@app.get("/health"){R}
-  {ADD}+def health() -> dict:{R}
-  {ADD}+    return {{"ok": True, "uptime_seconds": time.monotonic() - _started_at}}{R}
-  {ADD}+{R}
-   app.add_middleware(
-       CORSMiddleware,
+  {ADD}+@app.delete("/api/entries/{{entry_id}}", status_code=204){R}
+  {ADD}+def delete_entry(entry_id: int) -> None:{R}
+  {ADD}+    for i, entry in enumerate(_entries):{R}
+  {ADD}+        if entry.id == entry_id:{R}
+  {ADD}+            _entries.pop(i){R}
+  {ADD}+            return{R}
+  {ADD}+    raise HTTPException(status_code=404, detail="entry not found"){R}
 
 {YELLOW}◆{R} Apply? {D}[y / n / show more]{R}
 {USER}>{R} {D}_{R}
@@ -350,19 +348,24 @@ write("ch2b-diff", ch2b_diff)
 
 # --- ch2b-run — Stream B (Python+React) run output with curl -------------
 ch2b_run = f"""\
-{USER}>{R} uvicorn backend.main:app --reload
+{USER}>{R} uvicorn main:app --reload
 
 {CYAN}●{R} {MUTED}INFO:     Uvicorn running on{R} {B}http://127.0.0.1:8000{R}
   {MUTED}INFO:     Application startup complete.{R}
 
-{USER}>{R} curl -s localhost:8000/health | jq
+{USER}>{R} curl -s localhost:8000/api/entries | jq 'length'
 
-  {{
-    {ACCENT}"ok"{R}: {GREEN}true{R},
-    {ACCENT}"uptime_seconds"{R}: {GREEN}2.871{R}
-  }}
+  {GREEN}6{R}
 
-{GREEN}✓{R} 200 OK  {MUTED}·{R}  39 B  {MUTED}·{R}  2 ms
+{USER}>{R} curl -s -X DELETE localhost:8000/api/entries/3 -i | head -1
+
+  {GREEN}HTTP/1.1 204 No Content{R}
+
+{USER}>{R} curl -s localhost:8000/api/entries | jq 'length'
+
+  {GREEN}5{R}
+
+{GREEN}✓{R} entry 3 (Vogon poetry) gone  {MUTED}·{R}  204 No Content  {MUTED}·{R}  2 ms
 """
 write("ch2b-run", ch2b_run)
 

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cc-lab · Ep 01 title card</title>
+    <link rel="stylesheet" href="../overlays/overlay-palette.css" />
+    <style>
+      body {
+        background: var(--cc-bg-ship-match);
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Frame — top + bottom hairlines, inset from edges. */
+      .frame-top,
+      .frame-bottom {
+        position: absolute;
+        left: 88px;
+        right: 88px;
+        height: 1px;
+        background: var(--cc-hull-line);
+      }
+
+      .frame-top { top: 88px; }
+      .frame-bottom { bottom: 88px; }
+
+      /* Vertical divider between the ship zone and the text zone. */
+      .divider {
+        position: absolute;
+        top: 88px;
+        bottom: 88px;
+        left: 1110px;
+        width: 1px;
+        background: var(--cc-hull-line);
+      }
+
+      /* Slate marker top-left. */
+      .slate {
+        position: absolute;
+        top: 44px;
+        left: 88px;
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        font-family: var(--cc-font-mono);
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        color: var(--cc-text-soft);
+      }
+
+      .slate-num { color: var(--cc-teal); }
+
+      .slate-tick {
+        width: 28px;
+        height: 1px;
+        background: var(--cc-teal);
+      }
+
+      /* Episode locator top-right. */
+      .locator {
+        position: absolute;
+        top: 44px;
+        right: 88px;
+        font-family: var(--cc-font-mono);
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--cc-text-muted);
+      }
+
+      .locator strong {
+        color: var(--cc-text-soft);
+        font-weight: 600;
+      }
+
+      /* Ship zone — left ~55%, full opacity, contained. */
+      .ship {
+        position: absolute;
+        top: 110px;
+        left: 88px;
+        width: 1000px;
+        bottom: 110px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .ship img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+      }
+
+      /* Text zone — right ~40%, breathing room around content. */
+      .text {
+        position: absolute;
+        top: 110px;
+        left: 1140px;
+        right: 88px;
+        bottom: 110px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 28px;
+      }
+
+      .eyebrow {
+        font-family: var(--cc-font-mono);
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: 0.42em;
+        color: var(--cc-teal);
+        text-transform: uppercase;
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 36px;
+        height: 1px;
+        background: var(--cc-teal);
+      }
+
+      .title {
+        font-family: var(--cc-font-display);
+        font-size: 88px;
+        font-weight: 600;
+        line-height: 0.96;
+        letter-spacing: -0.022em;
+        color: var(--cc-text);
+        margin: 0;
+      }
+
+      .title .second {
+        display: block;
+        color: var(--cc-text);
+      }
+
+      .url {
+        font-family: var(--cc-font-mono);
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--cc-text-muted);
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        margin-top: 8px;
+      }
+
+      .pill-dont-panic {
+        position: absolute;
+        right: 120px;
+        bottom: 120px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 16px;
+        background: rgba(35, 33, 54, 0.78);
+        border: 1px solid rgba(246, 193, 119, 0.32);
+        border-radius: 999px;
+        font-family: var(--cc-font-mono);
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--cc-yellow);
+      }
+
+      .pill-dont-panic::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--cc-yellow);
+        box-shadow: 0 0 10px rgba(246, 193, 119, 0.55);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame-top" aria-hidden="true"></div>
+    <div class="frame-bottom" aria-hidden="true"></div>
+    <div class="divider" aria-hidden="true"></div>
+
+    <div class="slate" aria-hidden="true">
+      <span class="slate-num">001</span>
+      <span class="slate-tick"></span>
+      <span>First task</span>
+    </div>
+
+    <div class="locator">Ep <strong>01</strong> · 09</div>
+
+    <div class="ship">
+      <img class="ship-feather" src="https://cc-lab.ondrejsvec.com/chapters/02-first-task.png" alt="" />
+    </div>
+
+    <div class="text">
+      <div class="eyebrow">Claude Code Lab</div>
+      <h1 class="title">
+        Open Claude.
+        <span class="second">Ship one thing.</span>
+      </h1>
+      <div class="url">cc-lab.ondrejsvec.com / lab / first-task</div>
+    </div>
+
+    <div class="pill-dont-panic">Don't Panic</div>
+  </body>
+</html>

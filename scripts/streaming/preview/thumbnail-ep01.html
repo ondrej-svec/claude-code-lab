@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cc-lab · Ep 01 thumbnail</title>
+    <link rel="stylesheet" href="../overlays/overlay-palette.css" />
+    <style>
+      body {
+        background: var(--cc-bg-ship-match);
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Top + bottom slim bars — give the frame cinema bookends without
+         covering the subject. Hairlines, not solid fills. */
+      .bar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 72px;
+        display: flex;
+        align-items: center;
+        font-family: var(--cc-font-mono);
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        color: var(--cc-text-soft);
+      }
+
+      .bar--top {
+        top: 0;
+        padding: 0 56px;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--cc-hull-line);
+      }
+
+      .bar--bottom {
+        bottom: 0;
+        padding: 0 32px;
+        justify-content: space-between;
+        border-top: 1px solid var(--cc-hull-line);
+      }
+
+      .bar .eyebrow { color: var(--cc-teal); }
+
+      .ticks {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--cc-text-muted);
+      }
+
+      .ticks .tick {
+        width: 14px;
+        height: 1px;
+        background: var(--cc-hull-line);
+      }
+
+      /* Active stage — between the two bars. Two clearly separated
+         columns: ship on the left, title block on the right. */
+      .stage {
+        position: absolute;
+        top: 72px;
+        left: 0;
+        right: 0;
+        bottom: 72px;
+        display: grid;
+        grid-template-columns: 46% 54%;
+        align-items: center;
+      }
+
+      .stage > .ship {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px 24px 16px 56px;
+        height: 100%;
+      }
+
+      .stage > .ship img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+      }
+
+      .stage > .title-block {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        padding: 0 88px 0 48px;
+      }
+
+      .annotation {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        font-family: var(--cc-font-mono);
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        color: var(--cc-teal);
+      }
+
+      .annotation::before {
+        content: "";
+        width: 56px;
+        height: 1px;
+        background: var(--cc-teal);
+      }
+
+      .title-block h1 {
+        font-family: var(--cc-font-display);
+        font-size: 124px;
+        font-weight: 700;
+        line-height: 0.94;
+        letter-spacing: -0.024em;
+        color: var(--cc-text);
+        margin: 0;
+      }
+
+      .title-block .underline {
+        margin-top: 8px;
+        width: 220px;
+        height: 1px;
+        background: rgba(224, 222, 244, 0.32);
+      }
+
+      /* Pills */
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 16px;
+        background: rgba(35, 33, 54, 0.7);
+        border-radius: 999px;
+        font-family: var(--cc-font-mono);
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+      }
+
+      .pill::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      .pill-ep {
+        border: 1px solid rgba(156, 207, 216, 0.36);
+        color: var(--cc-teal);
+      }
+
+      .pill-dp {
+        border: 1px solid rgba(246, 193, 119, 0.32);
+        color: var(--cc-yellow);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top bar -->
+    <div class="bar bar--top">
+      <span class="eyebrow">Ep 01 · Claude Code Lab</span>
+      <span class="ticks">
+        <span class="tick"></span>
+        <span class="tick"></span>
+        <span class="tick"></span>
+        <span>001 / 009</span>
+      </span>
+    </div>
+
+    <!-- Two-zone stage: ship left, title right -->
+    <div class="stage">
+      <div class="ship">
+        <img class="ship-feather" src="https://cc-lab.ondrejsvec.com/chapters/02-first-task.png" alt="" />
+      </div>
+      <div class="title-block">
+        <div class="annotation">First task</div>
+        <h1>Open Claude.<br />Ship one thing.</h1>
+        <div class="underline" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="bar bar--bottom">
+      <span class="pill pill-ep">Ep 01</span>
+      <span class="pill pill-dp">Don't Panic</span>
+    </div>
+  </body>
+</html>

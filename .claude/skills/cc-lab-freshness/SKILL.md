@@ -59,10 +59,12 @@ The data plane has run already and produces output you read. You don't reimpleme
 The data plane is the **only source of truth** for what's labworthy. Run it. Do not improvise.
 
 ```bash
-pnpm tsx scripts/freshness/run.ts --update-snapshot
+pnpm tsx scripts/freshness/run.ts
 ```
 
-This writes `scripts/freshness/output/<ISO-timestamp>.md` (the human-readable delta) and updates `scripts/freshness/snapshot/current.json`. Note the **absolute path** of the latest output file — every later step refers to it as the **delta file**.
+This writes `scripts/freshness/output/<ISO-timestamp>.md` (the human-readable delta) **but does NOT touch `scripts/freshness/snapshot/current.json`** — the snapshot baseline is left untouched until Step 8 confirms a real delta is worth committing. Note the **absolute path** of the latest output file — every later step refers to it as the **delta file**.
+
+**Why no `--update-snapshot` here:** writing the snapshot every run dirties the working tree on no-change weeks (the `fetchedAt` timestamp bumps even when URLs/hashes are identical). The agent then has to decide whether to commit a noise diff. Cleaner contract: the snapshot only advances when there's a real delta worth landing.
 
 **Hard rules — break any of these and the skill is broken:**
 
@@ -70,7 +72,7 @@ This writes `scripts/freshness/output/<ISO-timestamp>.md` (the human-readable de
 - **Never edit, augment, or paraphrase the delta file.** It is the ground truth. If a version number, URL, or feature name isn't in there verbatim, it doesn't exist for this run.
 - **If `run.ts` errors** (network failure, snapshot corruption, etc.) → exit with the error. Don't proceed without a fresh delta.
 
-If the output says **"No changes since last snapshot. Lab is current"** → exit. Print: "Nothing new to surface. The lab is already current with Anthropic's shipping surface as of <date>." Don't open a PR. Don't update memory.
+If the output says **"No changes since last snapshot. Lab is current"** → exit cleanly. Print: "Nothing new to surface. The lab is already current with Anthropic's shipping surface as of <date>." **Do not commit, push, or open a branch — the working tree is clean and should stay that way.** Don't update memory.
 
 If the output says **"Baseline snapshot"** → exit. Print: "First snapshot captured; future runs will diff against this. Re-run after new Anthropic releases land." Don't open a PR.
 
@@ -172,14 +174,23 @@ If the sub-agent returns:
 
 Apply approved patches via `Edit` (existing files) or `Write` (new files). Always Read the file before editing — never blind-write. Stage only the files you actually edited.
 
-### Step 5 — Branch, commit, push
+### Step 5 — Branch, advance the snapshot, commit, push
+
+This is the only step that mutates the snapshot baseline. Do it AFTER you've confirmed there's a real delta worth landing — never before.
 
 ```bash
 TIMESTAMP=$(date -u +%Y-%m-%d)
 BRANCH="freshness/${TIMESTAMP}"
 git checkout -b "${BRANCH}"
-# Stage only the files you edited
-git add <files-you-edited-or-wrote>
+
+# Now advance the snapshot baseline. This rewrites
+# scripts/freshness/snapshot/current.json with the URLs/hashes the
+# delta was computed against — so the next weekly run diffs against
+# this state, not the previous one.
+pnpm tsx scripts/freshness/run.ts --update-snapshot
+
+# Stage only the files you edited PLUS the snapshot
+git add <files-you-edited-or-wrote> scripts/freshness/snapshot/current.json
 # Commit message follows lab convention: scope + summary
 git commit -m "$(cat <<'EOF'
 freshness: <one-line summary of what changed>
@@ -190,7 +201,7 @@ EOF
 git push -u origin "${BRANCH}"
 ```
 
-Stage **only files you edited**. Never `git add .`. The freshness output files in `scripts/freshness/output/` are gitignored — don't try to add them.
+Stage **only files you edited** plus the snapshot. Never `git add .`. The freshness output files in `scripts/freshness/output/` are gitignored — don't try to add them.
 
 ### Step 6 — Open the PR
 
@@ -294,7 +305,7 @@ Print a short summary to the user:
 If invoked with `--dry-run`, do everything **except**:
 - The `git checkout -b`, `git commit`, `git push`, `gh pr create` steps
 
-Specifically, dry-run **still runs the data plane** (`run.ts --update-snapshot`) and **still writes the PR body** to `scripts/freshness/output/freshness-pr-body-<timestamp>.md`. The body file is the artifact under review. Print the absolute path of the body file in your final response so the human can read it directly.
+Specifically, dry-run **still runs the data plane** (`run.ts` — without `--update-snapshot`, same as Step 1) and **still writes the PR body** to `scripts/freshness/output/freshness-pr-body-<timestamp>.md`. The body file is the artifact under review. Print the absolute path of the body file in your final response so the human can read it directly.
 
 This is the testing path. Always offer a dry-run option when the user is iterating on the skill. Dry-run never relaxes provenance — every claim still must trace to the delta file.
 

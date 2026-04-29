@@ -205,6 +205,41 @@ beyond the components' built-in `--shadow-soft`. No gradient
 overlays. No animated backgrounds. Spaceship illustrations and the
 chapter heroes are the only "personality" elements; they earn it.
 
+### Cinematic moments (deliberate exception)
+
+The "no animated backgrounds" rule applies to the *steady-state* UI.
+A one-shot opening moment — like a film's title sequence — is a
+different category and is permitted under all of these constraints:
+
+- **One-shot per install.** Plays once, then a persistent marker
+  (localStorage on web, a gitignored file on disk for CLI) suppresses
+  it on every subsequent run. Clearing the marker re-enables it.
+- **Dismissible at any time.** Any keypress (web) or `Ctrl-C` (CLI)
+  exits to the steady-state UI immediately.
+- **`prefers-reduced-motion` respecting.** Drops to a sub-500ms fade
+  with no scan-line, no typewriter, no other motion.
+- **Narratively meaningful.** Communicates something specific about
+  the artifact — its identity, its lineage, its tone — not decoration
+  for decoration's sake.
+- **Short.** Under three seconds at the default rate. Anything longer
+  becomes annoying by run two.
+
+The current canonical use is the Guide sample's first-run boot
+(`samples/python-react/`, `samples/dotnet-core/`). New cinematic
+moments need an explicit reference here before they ship.
+
+**Video extension (recurring cold opens).** The exception extends
+to a video-context recurring use of the same boot pattern as the
+cold open of every recorded episode and live stream, provided each
+episode-context use is short (under three seconds), narratively
+meaningful (the three typed lines double as a per-episode tease),
+and uses the same typography and palette as the in-app boot. The
+recurrence is the point — viewers who run the Guide see the same
+shape they see in the videos. Variation between episodes is
+content-only (the three lines change); structure, timing, and
+typography are locked. The series's per-episode boot lines are
+authored in `docs/brainstorms/2026-04-28-video-series-identity-brainstorm.md`.
+
 ---
 
 ## Chapter hero illustrations

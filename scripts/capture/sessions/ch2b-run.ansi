@@ -1,13 +1,18 @@
-[38;5;75m>[0m uvicorn backend.main:app --reload
+[38;5;75m>[0m uvicorn main:app --reload
 
 [1;36m●[0m [38;5;245mINFO:     Uvicorn running on[0m [1mhttp://127.0.0.1:8000[0m
   [38;5;245mINFO:     Application startup complete.[0m
 
-[38;5;75m>[0m curl -s localhost:8000/health | jq
+[38;5;75m>[0m curl -s localhost:8000/api/entries | jq 'length'
 
-  {
-    [38;5;216m"ok"[0m: [1;32mtrue[0m,
-    [38;5;216m"uptime_seconds"[0m: [1;32m2.871[0m
-  }
+  [1;32m6[0m
 
-[1;32m✓[0m 200 OK  [38;5;245m·[0m  39 B  [38;5;245m·[0m  2 ms
+[38;5;75m>[0m curl -s -X DELETE localhost:8000/api/entries/3 -i | head -1
+
+  [1;32mHTTP/1.1 204 No Content[0m
+
+[38;5;75m>[0m curl -s localhost:8000/api/entries | jq 'length'
+
+  [1;32m5[0m
+
+[1;32m✓[0m entry 3 (Vogon poetry) gone  [38;5;245m·[0m  204 No Content  [38;5;245m·[0m  2 ms

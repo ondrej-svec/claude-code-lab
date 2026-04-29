@@ -1,19 +1,20 @@
-[38;5;75m>[0m Add a GET /health endpoint that returns { "ok": true, "uptime_seconds": n }.
+[38;5;75m>[0m Add a [1mDELETE /api/entries/{id}[0m endpoint to the Guide so I can
+  remove an entry by id.
 
-[1;36m●[0m I'll add a [1m/health[0m endpoint to [1mbackend/main.py[0m.
+[1;36m●[0m I'll add it to [1mbackend/main.py[0m, alongside the existing routes.
 
   [1mPlan[0m
 
-   1. Read [1mbackend/main.py[0m to see the FastAPI wiring
-   2. Capture a process-start timestamp at module load
-   3. Register [1m@app.get("/health")[0m returning { ok, uptime_seconds }
-   4. Run uvicorn and hit the endpoint to verify
+   1. Read [1mbackend/main.py[0m to see how the other endpoints are wired
+   2. Add [1m@app.delete("/api/entries/{id}")[0m returning 204 / 404
+   3. Mutate the in-memory [1m_entries[0m list in place
+   4. Run uvicorn and curl DELETE to verify
 
   [1mFiles to edit[0m
-   [38;5;245m→[0m backend/main.py     [38;5;245m(add route + monotonic timer)[0m
+   [38;5;245m→[0m backend/main.py     [38;5;245m(add the delete handler)[0m
 
   [1mChecks[0m
-   [38;5;245m→[0m curl localhost:8000/health
+   [38;5;245m→[0m curl -X DELETE http://localhost:8000/api/entries/3 -i
 
 [1;33m◆[0m Ready to proceed? [2m[y / n / edit plan][0m
 [38;5;75m>[0m [2m_[0m

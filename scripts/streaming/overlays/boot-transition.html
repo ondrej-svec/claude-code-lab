@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cc-lab · boot transition</title>
+    <link rel="stylesheet" href="./overlay-palette.css" />
+    <style>
+      /*
+       * 3-second cold-open transition. CSS-only animation sequence:
+       *
+       *   0    →  400ms   scan-line wash + scrim fade in
+       *   400  → 1450ms   three typed lines arrive (350ms each)
+       *  1450  → 2550ms   DON'T PANIC pulse
+       *  2550  → 3000ms   cross-fade to black
+       *
+       * Lines come from the query string:
+       *   boot-transition.html?l1=…&l2=…&l3=…&panic=DON'T+PANIC&locale=en
+       *
+       * Mirrors samples/python-react/frontend/src/components/Boot.tsx
+       * timing and palette but compressed and one-shot for video use.
+       */
+      :root {
+        --boot-bg: #05060a;
+      }
+
+      html,
+      body {
+        background: var(--boot-bg);
+        color: #9ccfd8;
+        font-family: var(--cc-font-mono);
+      }
+
+      .boot {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        animation: boot-fade-out 450ms ease-in 2550ms forwards;
+      }
+
+      /* Soft radial scrim, fades up across the first 400ms. */
+      .scrim {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at center,
+          rgba(86, 148, 159, 0.16) 0%,
+          rgba(5, 6, 10, 0.8) 60%,
+          rgba(5, 6, 10, 1) 100%
+        );
+        animation: boot-scrim-in 400ms ease-out both;
+      }
+
+      /* Repeating scan-line texture, drifts subtly across the duration. */
+      .scan {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+          to bottom,
+          rgba(156, 207, 216, 0) 0px,
+          rgba(156, 207, 216, 0) 2px,
+          rgba(156, 207, 216, 0.045) 2px,
+          rgba(156, 207, 216, 0.045) 3px
+        );
+        mix-blend-mode: screen;
+        opacity: 0;
+        animation:
+          boot-scan-fade 400ms ease-out both,
+          boot-scan-drift 4s linear infinite;
+      }
+
+      .crt {
+        position: relative;
+        width: min(820px, 80%);
+        padding: 40px 56px;
+        border-radius: 14px;
+        border: 1px solid rgba(156, 207, 216, 0.18);
+        background: rgba(11, 14, 22, 0.65);
+        box-shadow:
+          inset 0 0 60px rgba(86, 148, 159, 0.08),
+          0 0 80px rgba(86, 148, 159, 0.06);
+      }
+
+      .lines {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        font-size: 28px;
+        line-height: 1.4;
+        color: #9ccfd8;
+        text-shadow: 0 0 6px rgba(156, 207, 216, 0.45);
+        min-height: 142px;
+      }
+
+      .line {
+        white-space: pre;
+        opacity: 0;
+        transform: translateY(2px);
+        animation: boot-line-in 220ms ease-out forwards;
+      }
+
+      /* Stagger the three lines after the 400ms scan-in. */
+      .line:nth-child(1) {
+        animation-delay: 400ms;
+      }
+      .line:nth-child(2) {
+        animation-delay: 750ms;
+      }
+      .line:nth-child(3) {
+        animation-delay: 1100ms;
+      }
+
+      /* Cursor on the most-recent line — appears with that line and
+       * sticks until DON'T PANIC fires. */
+      .line:last-child::after {
+        content: "█";
+        margin-left: 0.25em;
+        color: rgba(156, 207, 216, 0.85);
+        animation: boot-cursor 700ms steps(2) infinite;
+      }
+
+      .panic {
+        display: flex;
+        gap: 22px;
+        justify-content: center;
+        margin-top: 28px;
+        font-family: var(--cc-font-display);
+        font-weight: 700;
+        font-size: 56px;
+        letter-spacing: 0.18em;
+        color: var(--cc-yellow);
+        text-shadow:
+          0 0 14px rgba(246, 193, 119, 0.5),
+          0 0 28px rgba(246, 193, 119, 0.25);
+        opacity: 0;
+        transform: scale(0.94);
+        animation:
+          boot-panic-in 320ms ease-out 1450ms forwards,
+          boot-panic-pulse 1100ms ease-in-out 1770ms 1 forwards;
+      }
+
+      @keyframes boot-scrim-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes boot-scan-fade {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes boot-scan-drift {
+        from {
+          transform: translateY(0);
+        }
+        to {
+          transform: translateY(3px);
+        }
+      }
+
+      @keyframes boot-line-in {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes boot-cursor {
+        0%,
+        49% {
+          opacity: 1;
+        }
+        50%,
+        100% {
+          opacity: 0.15;
+        }
+      }
+
+      @keyframes boot-panic-in {
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes boot-panic-pulse {
+        0%,
+        100% {
+          text-shadow:
+            0 0 14px rgba(246, 193, 119, 0.5),
+            0 0 28px rgba(246, 193, 119, 0.25);
+        }
+        50% {
+          text-shadow:
+            0 0 24px rgba(246, 193, 119, 0.85),
+            0 0 48px rgba(246, 193, 119, 0.5);
+        }
+      }
+
+      @keyframes boot-fade-out {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="boot">
+      <div class="scrim" aria-hidden="true"></div>
+      <div class="scan" aria-hidden="true"></div>
+      <div class="crt">
+        <div class="lines">
+          <div class="line" data-slot="l1">&gt; initializing sub-etha relay…</div>
+          <div class="line" data-slot="l2">&gt; infinite improbability drive: stable</div>
+          <div class="line" data-slot="l3">&gt; the lab is now open</div>
+        </div>
+        <div class="panic">
+          <span data-slot="panic-1">DON'T</span>
+          <span data-slot="panic-2">PANIC</span>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Lines and panic-text are query-param driven so each episode's
+      // boot has its own three lines without forking the HTML.
+      //   ?l1=…&l2=…&l3=…&panic=DON'T+PANIC
+      // Locale shorthand: ?locale=cs swaps in the Czech default lines.
+      (() => {
+        const params = new URLSearchParams(window.location.search);
+        const locale = params.get("locale");
+        if (locale === "cs") {
+          const cs = document.querySelector('[data-slot="l1"]');
+          if (cs) cs.textContent = "> ladím sub-etha vysílač…";
+          const cs2 = document.querySelector('[data-slot="l2"]');
+          if (cs2)
+            cs2.textContent = "> nekonečně nepravděpodobnostní pohon: stabilní";
+          const cs3 = document.querySelector('[data-slot="l3"]');
+          if (cs3) cs3.textContent = "> laboratoř je otevřena";
+        }
+        for (const k of ["l1", "l2", "l3"]) {
+          const v = params.get(k);
+          if (!v) continue;
+          const el = document.querySelector(`[data-slot="${k}"]`);
+          if (el) el.textContent = v;
+        }
+        const panic = params.get("panic");
+        if (panic) {
+          const halves = panic.split(" ");
+          const first = halves[0] ?? panic;
+          const second = halves.slice(1).join(" ") || "";
+          const a = document.querySelector('[data-slot="panic-1"]');
+          const b = document.querySelector('[data-slot="panic-2"]');
+          if (a) a.textContent = first;
+          if (b) b.textContent = second;
+        }
+      })();
+    </script>
+  </body>
+</html>

@@ -10,32 +10,32 @@ readTime: 6 min
 
 Lab učí vzory. Diagnostika se ptá, jak se *tvoje* nastavení vůči nim měří.
 
-`/cc-lab-diagnose` přečte tvoje repo (nebo tvou osobní Claude Code konfiguraci, nebo obojí) a vrátí tři až pět evidence-grounded pozorování — každé navázané na konkrétní soubor, konkrétní citaci a konkrétní kapitolu, kterou si můžeš přečíst pro chybějící kontext. Nejblíž peer review, jak to jde bez plánování schůzky.
+`/cc-lab-diagnose` přečte tvoje repo (nebo tvou osobní Claude Code konfiguraci, nebo obojí) a vrátí tři až pět pozorování opřených o důkazy — každé navázané na konkrétní soubor, konkrétní citaci a konkrétní kapitolu, kterou si můžeš přečíst pro chybějící kontext. Nejbližší věc peer review, kterou si dáš bez plánování schůzky.
 
 <Screenshot
   src="/visuals/diagnose-flow.png"
-  alt="Třísloupcový flow diagram. Sloupec READS (vlevo): CLAUDE.md, .claude/{skills,agents,hooks}/, git log --oneline, plus volitelný user scope. Sloupec JUDGES (uprostřed): cc-lab-judge subagent na Sonnetu, s rubrikou (15 kategorií), bundled kapitolami a evidence-grounded-only pravidlem. Sloupec RETURNS (vpravo): markdown odpověď, HTML artefakt (teal akcent) a action card „what to do next“. Patička: no telemetry · runs locally · read-only."
+  alt="Třísloupcový flow diagram. Sloupec READS (vlevo): CLAUDE.md, .claude/{skills,agents,hooks}/, git log --oneline, plus volitelný user scope. Sloupec JUDGES (uprostřed): cc-lab-judge subagent na Sonnetu, s rubrikou (15 kategorií), bundled kapitolami a evidence-grounded-only pravidlem. Sloupec RETURNS (vpravo): markdown odpověď, HTML artefakt (teal akcent) a action card „what to do next“. Patička: no telemetry · runs locally · read-only."
   caption="Čte, soudí, vrací. HTML artefakt je to, co dělá diagnózu prozkoumatelnou."
 />
 
 ## Instalace
 
-V libovolné Claude Code session:
+V libovolné Claude Code session:
 
 <Prompt>/plugin marketplace add ondrej-svec/claude-code-lab</Prompt>
 
 <Prompt>/plugin install cc-lab@cc-lab</Prompt>
 
-První řádek registruje toto repo labu jako plugin marketplace. Druhý nainstaluje plugin `cc-lab` z něj. Cross-platform — funguje stejně na macOS, Linuxu i Windows. Update přes `/plugin update cc-lab`; odebrání přes `/plugin uninstall cc-lab`.
+První řádek registruje toto repo labu jako plugin marketplace. Druhý nainstaluje plugin `cc-lab` z něj. Cross-platform — funguje stejně na macOS, Linuxu i Windows. Update přes `/plugin update cc-lab`; odebrání přes `/plugin uninstall cc-lab`.
 
 ## Co dělá
 
 Pusť ji jedním ze tří způsobů. Skill nejdřív vyřeší mód, ještě než přečte jakýkoliv soubor.
 
-| Mód | Otázka, na kterou odpovídá | Read scope |
+| Mód | Otázka, na kterou odpovídá | Co čte |
 |---|---|---|
 | **project** | Uspěl by kolega, který si dnes naklonuje tohle repo? | `./CLAUDE.md`, `./.claude/`, `./.mcp.json`, `git log` |
-| **user** | Tahá tvůj osobní harness za svou váhu? | `~/.claude/CLAUDE.md`, `~/.claude/{skills,agents,commands,hooks}/`, plugins, auto-memory |
+| **user** | Vyplácí se tvůj osobní harness? | `~/.claude/CLAUDE.md`, `~/.claude/{skills,agents,commands,hooks}/`, plugins, auto-memory |
 | **both** | Obě otázky, dvě výstupní sekce | Project + user scope |
 
 Vyvolat explicitně:
@@ -50,68 +50,68 @@ Diagnostika je read-only. Nic nemění. Taky neskóruje, neznámkuje, ani nehodn
 
 Každý běh produkuje tři věci:
 
-1. **Markdown odpověď** v konverzaci — úvodní orámování, „Co funguje“ (jeden až tři silné body), headline (dvě až čtyři věty pojmenovávající nejužitečnější další tahy), tři až pět pozorování s citovanou evidencí a odkazy na kapitoly a akční plán „Co dělat dál“.
-2. **HTML artefakt** uložený do tvojí current directory — stejná diagnóza vykreslená jako self-contained stránka s vizualizací páteře kapitol, časovou osou akcí, kartami pozorování barvenými podle závažnosti, copy tlačítky na každém artefaktu a přepínačem témat. Otevři přímo v prohlížeči; nic externího není potřeba.
-3. **Cesta k HTML** vyvedená nahoře v markdownu i na začátku akčního plánu, takže se k vizualizaci dostaneš bez scrollování.
+1. **Markdown odpověď** v konverzaci — úvodní orámování, „Co funguje“ (jeden až tři silné body), titulek (dvě až čtyři věty pojmenovávající nejužitečnější další tahy), tři až pět pozorování s citovanou evidencí a odkazy na kapitoly a akční plán „Co dělat dál“.
+2. **HTML artefakt** uložený do tvého pracovního adresáře — stejná diagnóza vykreslená jako samostatná stránka s vizualizací páteře kapitol, časovou osou akcí, kartami pozorování barvenými podle závažnosti, copy tlačítky na každém artefaktu a přepínačem témat. Otevři přímo v prohlížeči; nic externího není potřeba.
+3. **Cesta k HTML** vyvedená nahoře v markdownu i na začátku akčního plánu, takže se k vizualizaci dostaneš bez scrollování.
 
 <Screenshot
   src="/screenshots/diagnose-html-artifact.png"
-  alt="Plný HTML artefakt pro /cc-lab-diagnose: hero s headlinem, páteř kapitol ukazující všech deset kapitol se status značkami verified/mixed/finding/no-signal, project-mode pass s body „Co funguje“ a třemi pozorováními barvenými podle závažnosti citujícími konkrétní soubory a řádky, pak třísloupcový akční plán (tento týden / příští týden / compound) s action cards obsahujícími explicitní „→ outcome“ řádky."
-  caption="HTML artefakt na celou výšku. Páteř kapitol nahoře, pozorování uprostřed, akční plán dole — vše s copy tlačítky a přepínačem témat."
+  alt="Plný HTML artefakt pro /cc-lab-diagnose: hero s headlinem, páteř kapitol ukazující všech deset kapitol se status značkami verified/mixed/finding/no-signal, project-mode pass s body „Co funguje“ a třemi pozorováními barvenými podle závažnosti citujícími konkrétní soubory a řádky, pak třísloupcový akční plán (tento týden / příští týden / compound) s action cards obsahujícími explicitní „→ outcome“ řádky."
+  caption="HTML artefakt na celou výšku. Páteř kapitol nahoře, pozorování uprostřed, akční plán dole — vše s copy tlačítky a přepínačem témat."
   width={1425}
   height={3152}
 />
 
-Každé pozorování cituje konkrétní soubor s konkrétní citací. Pokud diagnostika nedokáže pozorování ukotvit v důkazu, neudělá ho.
+Každé pozorování cituje konkrétní soubor s konkrétní citací. Pokud diagnostika nedokáže pozorování ukotvit v důkazu, neudělá ho.
 
 <TerminalOutput
   src="/visuals/diagnose-output-example.svg"
-  alt="Terminálový snímek výstupu /cc-lab-diagnose project: souhrn read scope, cesta k HTML artefaktu, body „Co funguje“, headline odstavec a jedno plně vykreslené pozorování s titulkem, citovanou evidencí a sekcemi why-it-matters a what-to-try"
-  caption="Jeden běh, zkrácený. HTML artefakt nese stejný obsah s páteří kapitol a časovou osou akcí."
+  alt="Terminálový snímek výstupu /cc-lab-diagnose project: souhrn read scope, cesta k HTML artefaktu, body „Co funguje“, headline odstavec a jedno plně vykreslené pozorování s titulkem, citovanou evidencí a sekcemi why-it-matters a what-to-try"
+  caption="Jeden běh, zkrácený. HTML artefakt nese stejný obsah s páteří kapitol a časovou osou akcí."
 />
 
 ## Jak číst pozorování
 
 Typické pozorování má čtyři části:
 
-- **Title** — mezera, pojmenovaná v jasné řeči („CLAUDE.md je těžký na to, co dělat, lehký na to, čemu se vyhnout“).
-- **Evidence** — přímá citace ze souboru ve tvém scope. Ta citace je kotva; pokud s pozorováním nesouhlasíš, je citace to, vůči čemu argumentuješ.
-- **Why it matters** — praktický důsledek, postavený proti konkrétnímu vzoru z kapitoly.
-- **What to try** — copy-paste artefakt (úryvek `CLAUDE.md`, konfigurace oprávnění, hook script) a odkaz na kapitolu, která vzor vysvětluje.
+- **Titulek** — mezera, pojmenovaná v jasné řeči („CLAUDE.md je těžký na to, co dělat, lehký na to, čemu se vyhnout“).
+- **Důkaz** — přímá citace ze souboru, který diagnostika přečetla. Ta citace je kotva; pokud s pozorováním nesouhlasíš, je citace to, vůči čemu argumentuješ.
+- **Proč to platí** — praktický důsledek, postavený proti konkrétnímu vzoru z kapitoly.
+- **Co zkusit** — copy-paste artefakt (úryvek `CLAUDE.md`, konfigurace oprávnění, hook script) a odkaz na kapitolu, která vzor vysvětluje.
 
-Tvar je záměrně konkrétní. Diagnostika, která řekne „zvaž zlepšení svého context engineeringu“, je checklistový šum. Diagnostika, která řekne „tvůj `CLAUDE.md` na řádku 42 říká *prefer composition over inheritance*, ale neříká Claude, co dělat, když platí obojí — tady je věta, která tu mezeru zavře“, je něco, podle čeho můžeš jednat.
+Tvar je záměrně konkrétní. Diagnostika, která řekne „zvaž zlepšení svého context engineeringu“, je checklistový šum. Diagnostika, která řekne „tvůj `CLAUDE.md` na řádku 42 říká *prefer composition over inheritance*, ale neříká Claudovi, co dělat, když platí obojí — tady je věta, která tu mezeru zavře“, je něco, podle čeho můžeš jednat.
 
 ## Co diagnostika *není*
 
-Pár explicitních non-goalů, které stojí za pojmenování:
+Pár věcí, které diagnostika záměrně nedělá:
 
 - **Není to checklist.** Žádné „získal jsi 7/10“. Pozorování jsou jednotlivá; ty rozhoduješ, která jsou důležitá.
-- **Není to one-shot.** Smysl je vrátit se, když tvoje nastavení vyzraje. Diagnóza tři měsíce stará je zastaralá; vzor z labu, který přistál minulý týden, v ní není.
-- **Není to telemetrie.** Nic o tvém repu ani konfiguraci neopustí tvůj stroj. Skill běží lokálně, judge je tvůj vlastní Claude.
+- **Není to one-shot.** Smysl je vrátit se, když tvoje nastavení vyzraje. Diagnóza tři měsíce stará je zastaralá; vzor z labu, který přistál minulý týden, v ní není.
+- **Není to telemetrie.** Nic o tvém repu ani konfiguraci neopustí tvůj stroj. Skill běží lokálně, judge je tvůj vlastní Claude.
 - **Není to náhrada za čtení kapitol.** Pozorování odkazují na kapitoly; kapitoly jsou místo, kde žije praxe. Diagnostika ti nadhodí *kterou kapitolu si přečíst dál* — nesupluje ji.
 
 ## Kdy ji pouštět
 
 Tři vysoce hodnotné momenty:
 
-- **Při prvním nastavování repa pro Claude Code** — po napsání úvodního `CLAUDE.md` a pár skillů, než zapadneš do rutiny. Chytí mezery, dokud je editace ještě levná.
+- **Při prvním nastavování repa pro Claude Code** — po napsání úvodního `CLAUDE.md` a pár skillů, než zapadneš do rutiny. Chytí mezery, dokud je editace ještě levná.
 - **Po kapitole, kterou jsi nedotáhl do praxe** — přečetl jsi [kapitolu 4](/cs/lab/iteration-and-control), došlo ti, že tvůj harness je tenký, ale nic jsi nezměnil. Pusť diagnostiku; vyhodí konkrétní místa, kde kapitola sedne na *tvoje* repo.
 - **Když je něco vedle, ale nedokážeš to pojmenovat** — Claude produkuje slušnou práci, ale cítíš, že nastavení by mohlo být lepší. Diagnostika ti dá konkrétní slova pro to, co je vágní.
 
-Taky je v pořádku ji pustit jen proto, abys o své práci slyšel mluvit konkrétně. To je část toho, k čemu lab je.
+Taky je v pořádku ji pustit jen proto, abys o své práci slyšel mluvit konkrétně. To je část toho, k čemu lab je.
 
 ## Upřímné limity
 
-Věci, ve kterých se diagnostika plete, a jak s nimi:
+Věci, ve kterých se diagnostika plete, a jak s nimi:
 
-- **Předpokládá rámec labu.** Pokud má tvůj projekt dobrý důvod ignorovat vzor, který kapitoly učí, diagnostika tu absenci může označit jako mezeru. Přečti si pozorování, rozhodni, jestli vzor labu opravdu sedí, a nesouhlas, když to dává smysl.
+- **Předpokládá rámec labu.** Pokud má tvůj projekt dobrý důvod ignorovat vzor, který kapitoly učí, diagnostika tu absenci může označit jako mezeru. Přečti si pozorování, rozhodni, jestli vzor labu opravdu sedí, a nesouhlas, když to dává smysl.
 - **Nevidí soukromý záměr.** Tvůj `CLAUDE.md` může být záměrně stručný, protože tým nesnáší ukecané dokumenty; diagnostika to může číst jako „chybějící vedení“. Citace je kotva — pokud citovaný řádek dělá to, co chceš, je špatně pozorování, ne soubor.
-- **Není to security audit.** Stará se o vzory Claude Code, ne o OWASP. Nenasazuj do produkce na základě toho, co ti řekne o secrets — na to použij pořádný bezpečnostní nástroj.
+- **Není to security audit.** Stará se o vzory Claude Code, ne o OWASP. Nenasazuj do produkce na základě toho, co ti řekne o secrets — na to použij pořádný bezpečnostní nástroj.
 
 ## Jak tohle navazuje na páteř
 
 [Kapitola 3 — Předej Claudovi kontext projektu](/cs/lab/teach-claude-your-project) je kapitola nejvíc testovaná project-mode passem; pokud je tvůj `CLAUDE.md` tenký, právě tam diagnostika ukáže.
 
-[Kapitola 6 — Ekosystém](/cs/lab/ecosystem) pokrývá skilly a pluginy obecně, včetně toho, jak instalovat takové, jako je tenhle. Diagnostika je jeden příklad tvaru „nástroj instalovaný přes marketplace“.
+[Kapitola 6 — Ekosystém](/cs/lab/ecosystem) pokrývá skilly a pluginy obecně, včetně toho, jak instalovat takové, jako je tenhle. Diagnostika je jeden příklad tvaru „nástroj instalovaný přes marketplace“.
 
-[Kapitola 4 — Iterace a kontrola](/cs/lab/iteration-and-control) a [kapitola 8 — Kam dál](/cs/lab/next-steps) jsou kapitoly nejčastěji zmiňované v pozorováních — návyky iterace a stavba harnessu jsou místa, kde má většina nastavení největší nevyužitou páku.
+[Kapitola 4 — Iterace a kontrola](/cs/lab/iteration-and-control) a [kapitola 8 — Kam dál](/cs/lab/next-steps) jsou kapitoly nejčastěji zmiňované v pozorováních — návyky iterace a stavba harnessu jsou místa, kde má většina nastavení největší nevyužitou páku.

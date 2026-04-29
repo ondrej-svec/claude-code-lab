@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cc-lab · lower-third tool</title>
+    <link rel="stylesheet" href="./overlay-palette.css" />
+    <style>
+      /* Tool name + brief description. Replaces the centered episode
+       * label in the top hull strip while a tool is on screen. Driven
+       * by ?tool=Bash&brief=Run+a+shell+command. */
+      html,
+      body {
+        background: transparent;
+      }
+
+      .third {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 54px;
+        display: inline-flex;
+        align-items: baseline;
+        gap: 14px;
+        padding: 0 18px;
+        white-space: nowrap;
+      }
+
+      .tool {
+        font-family: var(--cc-font-mono);
+        font-size: 17px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: var(--cc-teal);
+      }
+
+      .brief {
+        font-family: var(--cc-font-body);
+        font-size: 15px;
+        font-weight: 400;
+        letter-spacing: 0.02em;
+        color: var(--cc-text-soft);
+      }
+
+      .sep {
+        align-self: center;
+        width: 1px;
+        height: 18px;
+        background: var(--cc-hull-soft);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="third">
+      <span class="tool" data-slot="tool">Bash</span>
+      <span class="sep" aria-hidden="true"></span>
+      <span class="brief" data-slot="brief">Run a shell command</span>
+    </div>
+    <script>
+      (() => {
+        const params = new URLSearchParams(window.location.search);
+        const tool = params.get("tool");
+        const brief = params.get("brief");
+        if (tool) {
+          const el = document.querySelector('[data-slot="tool"]');
+          if (el) el.textContent = tool;
+        }
+        if (brief) {
+          const el = document.querySelector('[data-slot="brief"]');
+          if (el) el.textContent = brief;
+        }
+      })();
+    </script>
+  </body>
+</html>
