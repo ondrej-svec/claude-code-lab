@@ -74,6 +74,8 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/handoff` | Připraví handoff dokument pro další session nebo kolegu. |
 | `/compound` | Zaznamená vyřešený problém pro budoucí referenci. |
 
+`claude ultrareview [target]` je CLI subpříkaz — ne slash příkaz — který spouští `/ultrareview` neinteraktivně z CI nebo skriptů. Výsledky tiskne na stdout; `--json` pro raw výstup. Skončí s 0 na úspěch, 1 na neúspěch.
+
 → [Commands docs](https://code.claude.com/docs/en/commands)
 
 ## 8.2 Klávesové zkratky
@@ -300,6 +302,8 @@ Shell příkazy, HTTP endpointy nebo LLM prompty spouštěné na konkrétních l
 
 - [Hooks docs](https://code.claude.com/docs/en/hooks)
 - Konfigurace v `.claude/settings.json` pod `"hooks"`, nebo v `hooks/hooks.json` pluginu
+
+Hooky `PostToolUse` teď umí nahradit výstup nástroje přes `hookSpecificOutput.updatedToolOutput` — nejen ho sledovat. Dřív jen pro MCP; teď pro všechny nástroje.
 
 ### MCPs
 
