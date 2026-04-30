@@ -118,6 +118,8 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 
 **Bezpečnostní poznámka.** MCPs, které načítají nedůvěryhodný obsah (webové stránky, issues, maily), do tvé session můžou injektovat instrukce. Varování od Anthropicu platí: třetí strany na vlastní riziko. Kapitola 9.5 má víc.
 
+**`alwaysLoad`.** Claude ve výchozím stavu odkládá načítání nástrojů z MCP serveru na dobu, kdy jsou výslovně potřeba. Nastav `alwaysLoad: true` v konfiguraci serveru a všechny jeho nástroje budou dostupné hned od startu session — bez odkladu, bez průběžného hledání.
+
 → [MCP docs](https://code.claude.com/docs/en/mcp)
 
 ## Subagenti — delegování, které drží kontext čistý
