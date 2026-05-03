@@ -74,6 +74,14 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/handoff` | Připraví handoff dokument pro další session nebo kolegu. |
 | `/compound` | Zaznamená vyřešený problém pro budoucí referenci. |
 
+### Správa projektů
+
+Spouštíš v terminálu jako `claude <subcommand>`, ne uvnitř session.
+
+| Příkaz | Co dělá |
+|---|---|
+| `claude project purge [path]` | Smaže veškerý Claude Code stav projektu: přepisy, úkoly, historii souborů, config záznam. Podporuje `--dry-run`, `-y/--yes`, `-i/--interactive`, `--all`. |
+
 → [Commands docs](https://code.claude.com/docs/en/commands)
 
 ## 8.2 Klávesové zkratky
@@ -330,6 +338,7 @@ Každý oficiální odkaz použitý v průvodci, všechno na jednom místě.
 - [GitHub Actions](https://code.claude.com/docs/en/github-actions)
 - [Settings (permissions)](https://code.claude.com/docs/en/settings)
 - [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices)
+- [Deep links](https://code.claude.com/docs/en/deep-links)
 
 ### Standardy + referenční repa
 
