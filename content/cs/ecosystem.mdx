@@ -28,6 +28,8 @@ Všechno, o čem bude řeč — skilly, pluginy, MCP, subagenti — běží uvni
 
 Níž v téhle kapitole ukážeme, jak si jeden takový necháš Claudem napsat.
 
+**Viditelnost skillů.** `skillOverrides` v `settings.json` určuje, kde se skill ukáže. `off` ho schová před modelem i před `/`. `user-invocable-only` ho schová před modelem, ale příkaz `/` nechá žít. `name-only` ořeže popis a ušetří kontext — příkaz funguje dál.
+
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Pluginy
@@ -37,6 +39,8 @@ Níž v téhle kapitole ukážeme, jak si jeden takový necháš Claudem napsat
 Sedmá kapitola provází instalací a používáním [Compound Engineering pluginu](https://github.com/EveryInc/compound-engineering-plugin) — Averyho smyčky brainstorm → plan → work → review → compound. Ten si zkus jako první. [Super Powers](https://github.com/iannuttall/claude-super-powers) je další, o kterém má smysl vědět — širší pick-and-choose toolkit.
 
 Jako reference: [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) je malá kolekce skillů, které jsem si zabalil pro svoji každodenní práci (`visualize` je jeden z nich). Ne něco, co bys teď potřeboval instalovat — příklad toho, co vznikne, jakmile napíšeš tři čtyři skilly, o které nechceš přijít. Jeden takový si postavíš sám.
+
+**Načítání pluginů pro session.** `--plugin-dir <cesta>` přijme adresář nebo `.zip` archiv; `--plugin-url <url>` stáhne `.zip` z URL. Obojí platí jen pro aktuální session.
 
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 
@@ -119,6 +123,8 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 **Bezpečnostní poznámka.** MCPs, které načítají nedůvěryhodný obsah (webové stránky, issues, maily), do tvé session můžou injektovat instrukce. Varování od Anthropicu platí: třetí strany na vlastní riziko. Kapitola 9.5 má víc.
 
 **`alwaysLoad`.** Claude ve výchozím stavu odkládá načítání nástrojů z MCP serveru na dobu, kdy jsou výslovně potřeba. Nastav `alwaysLoad: true` v konfiguraci serveru a všechny jeho nástroje budou dostupné hned od startu session — bez odkladu, bez průběžného hledání.
+
+**Kontrola připojení.** `/mcp` ukazuje počet nástrojů každého připojeného serveru a označí servery, které se připojily s 0 nástroji — nula nástrojů znamená, že server navázal spojení, ale nic se nenačetlo.
 
 → [MCP docs](https://code.claude.com/docs/en/mcp)
 
