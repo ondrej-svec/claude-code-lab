@@ -30,6 +30,10 @@ Chapter 7 shows how to have Claude build one of these for you.
 
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
+<Callout variant="tip">
+Once you have several skills installed, `skillOverrides` controls how each one surfaces. `"off"` hides it from both the model and `/` commands; `"user-invocable-only"` hides it from the model only; `"name-only"` collapses the description. Keeps the model's tool list clean when your collection grows.
+</Callout>
+
 ## Plugins
 
 A **plugin** bundles related skills, commands, and hooks into one installable unit. Install once, get the whole workflow.
