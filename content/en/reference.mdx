@@ -294,6 +294,8 @@ The Agent Skills open format — spec and reference implementations:
 
 Chapter 7 shows the agentic skill-authoring workflow (invoke `skill-creator` or `craft-skill`, answer discovery questions, review the draft).
 
+Control skill visibility per-skill with `skillOverrides` in your settings: `off` removes the skill from both the model and `/` autocomplete; `user-invocable-only` hides it from the model but keeps the slash command; `name-only` collapses the description.
+
 ### Plugins
 
 Plugin manifest format, marketplace submission, plugin-vs-skill distinction:
@@ -308,6 +310,8 @@ Shell commands, HTTP endpoints, or LLM prompts fired at specific lifecycle event
 
 - [Hooks docs](https://code.claude.com/docs/en/hooks)
 - Configure in `.claude/settings.json` under `"hooks"`, or in a plugin's `hooks/hooks.json`
+
+Hooks now get the active effort level two ways: `effort.level` in their JSON input, and `$CLAUDE_EFFORT` in the environment (also readable in Bash tool commands). Bash subprocesses additionally receive `$CLAUDE_CODE_SESSION_ID` — the same session ID hooks already see as `session_id`.
 
 ### MCPs
 

@@ -294,6 +294,8 @@ Agent Skills otevřený formát — specifikace a referenční implementace:
 
 Kapitola 7 ukazuje agentní workflow psaní skillů (vyvoláš `skill-creator` nebo `craft-skill`, odpovíš na otázky objevování, zkontroluješ draft).
 
+Viditelnost skillu řídíš per-skill přes `skillOverrides` v nastavení: `off` odebere skill modelu i z `/` autocomplete; `user-invocable-only` ho skryje modelu, ale nechá slash příkaz; `name-only` sbalí popis.
+
 ### Pluginy
 
 Formát plugin manifestu, submission marketplace, rozdíl plugin vs. skill:
@@ -308,6 +310,8 @@ Shell příkazy, HTTP endpointy nebo LLM prompty spouštěné na konkrétních l
 
 - [Hooks docs](https://code.claude.com/docs/en/hooks)
 - Konfigurace v `.claude/settings.json` pod `"hooks"`, nebo v `hooks/hooks.json` pluginu
+
+Hooky teď dostávají aktivní úroveň effortu dvěma způsoby: `effort.level` v JSON vstupu a `$CLAUDE_EFFORT` v prostředí (čitelné i v Bash příkazech). Bash subprocesy navíc dostávají `$CLAUDE_CODE_SESSION_ID` — stejné ID session, které hooky vidí jako `session_id`.
 
 ### MCPs
 
