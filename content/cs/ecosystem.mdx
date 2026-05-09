@@ -38,6 +38,8 @@ Sedmá kapitola provází instalací a používáním [Compound Engineering plu
 
 Jako reference: [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) je malá kolekce skillů, které jsem si zabalil pro svoji každodenní práci (`visualize` je jeden z nich). Ne něco, co bys teď potřeboval instalovat — příklad toho, co vznikne, jakmile napíšeš tři čtyři skilly, o které nechceš přijít. Jeden takový si postavíš sám.
 
+`--plugin-dir` teď přijímá i `.zip` archivy, nejen složky — praktické, jestli plugin distribuuješ jako jeden soubor.
+
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 
 ## Postav si vlastní skill — agentním způsobem
@@ -119,6 +121,8 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 **Bezpečnostní poznámka.** MCPs, které načítají nedůvěryhodný obsah (webové stránky, issues, maily), do tvé session můžou injektovat instrukce. Varování od Anthropicu platí: třetí strany na vlastní riziko. Kapitola 9.5 má víc.
 
 **`alwaysLoad`.** Claude ve výchozím stavu odkládá načítání nástrojů z MCP serveru na dobu, kdy jsou výslovně potřeba. Nastav `alwaysLoad: true` v konfiguraci serveru a všechny jeho nástroje budou dostupné hned od startu session — bez odkladu, bez průběžného hledání.
+
+Spusť `/mcp` a zkontroluj připojené servery — teď zobrazuje počet nástrojů u každého a upozorní na ty, co se připojily s nulou.
 
 → [MCP docs](https://code.claude.com/docs/en/mcp)
 
