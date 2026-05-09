@@ -28,7 +28,7 @@ A **skill** is a bundle of instructions + optional scripts that Claude loads on 
 
 Chapter 7 shows how to have Claude build one of these for you.
 
-**Skill visibility.** `skillOverrides` in `settings.json` controls how a skill appears. `off` hides it from the model and from `/`. `user-invocable-only` removes it from model awareness but keeps the slash command. `name-only` strips the description to save context — the command still works.
+Trim what Claude sees with `skillOverrides`. Set a skill to `off` and it vanishes from both the model and `/` autocomplete. `user-invocable-only` keeps the slash command but hides it from the model. `name-only` collapses the description to just the name — useful when a large collection starts generating noise.
 
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
@@ -40,7 +40,7 @@ Chapter 7 walks through installing and using the [Compound Engineering plugin](h
 
 As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) is a small collection of skills I bundled for my daily work (visualize is one of them). Not something to install now — an example of what emerges once you've written three or four skills you don't want to lose. You'll build one of your own.
 
-**Session plugin loading.** `--plugin-dir <path>` accepts a directory or a `.zip` archive; `--plugin-url <url>` fetches a `.zip` from a URL. Both load for the current session only.
+Need a plugin for one session without installing it? Pass `--plugin-url <url>` to `claude` and it loads the `.zip` archive from that URL for the current session only.
 
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 

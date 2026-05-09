@@ -308,6 +308,7 @@ Shell commands, HTTP endpoints, or LLM prompts fired at specific lifecycle event
 
 - [Hooks docs](https://code.claude.com/docs/en/hooks)
 - Configure in `.claude/settings.json` under `"hooks"`, or in a plugin's `hooks/hooks.json`
+- Hooks receive the session's active effort level as `effort.level` in the JSON input and as `$CLAUDE_EFFORT` in the environment — handy for hooks that should behave differently depending on current effort
 
 ### MCPs
 

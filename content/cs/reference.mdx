@@ -308,6 +308,7 @@ Shell příkazy, HTTP endpointy nebo LLM prompty spouštěné na konkrétních l
 
 - [Hooks docs](https://code.claude.com/docs/en/hooks)
 - Konfigurace v `.claude/settings.json` pod `"hooks"`, nebo v `hooks/hooks.json` pluginu
+- Hooky dostávají aktivní úroveň effortu session jako `effort.level` v JSON vstupu a jako `$CLAUDE_EFFORT` v prostředí — hodí se pro hooky, jejichž chování má záviset na aktuálním effortu
 
 ### MCPs
 
