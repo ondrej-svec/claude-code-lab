@@ -28,6 +28,8 @@ A **skill** is a bundle of instructions + optional scripts that Claude loads on 
 
 Chapter 7 shows how to have Claude build one of these for you.
 
+**Skill visibility.** `skillOverrides` in `settings.json` controls how a skill appears. `off` hides it from the model and from `/`. `user-invocable-only` removes it from model awareness but keeps the slash command. `name-only` strips the description to save context — the command still works.
+
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Plugins
@@ -38,7 +40,7 @@ Chapter 7 walks through installing and using the [Compound Engineering plugin](h
 
 As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) is a small collection of skills I bundled for my daily work (visualize is one of them). Not something to install now — an example of what emerges once you've written three or four skills you don't want to lose. You'll build one of your own.
 
-`--plugin-dir` now accepts `.zip` archives in addition to directories — useful if you're distributing a plugin as a single file.
+**Session plugin loading.** `--plugin-dir <path>` accepts a directory or a `.zip` archive; `--plugin-url <url>` fetches a `.zip` from a URL. Both load for the current session only.
 
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 
@@ -122,7 +124,7 @@ Claude opens the page, inspects, reports back. This is the moment MCPs stop bein
 
 **`alwaysLoad`.** By default, Claude may defer loading some tools from an MCP server until they're explicitly requested. Set `alwaysLoad: true` in a server's config entry and every tool from that server is available from session start — no deferral, no search step. Useful for servers whose tools you reach for in nearly every session.
 
-Run `/mcp` to check your connected servers — it now shows the tool count per server and flags any that connected with zero tools.
+**Checking connections.** `/mcp` shows the tool count for each connected server and flags any server that connected with 0 tools — zero tools means the server connected but nothing loaded.
 
 → [MCP docs](https://code.claude.com/docs/en/mcp)
 
