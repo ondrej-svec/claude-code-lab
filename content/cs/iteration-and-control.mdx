@@ -124,6 +124,14 @@ Kdy se nevyplatí:
 
 Ještě jedna dimenze, kterou stojí za to znát: **`/sandbox`**. Je to samostatný toggle, nezávislý na těchhle pěti režimech — obalí každý bash příkaz, který Claude pouští, sandboxem na úrovni OS (filesystem + síť). I v „accept edits" nebo „auto" pak Claude nemůže sáhnout mimo projekt ani na neschválené domény. [Kapitola 8](/cs/lab/next-steps#sandboxing) to rozebírá včetně flagů pro firemní nasazení.
 
+## Hooky: exec form a pokračování po zamítnutí
+
+Dvě přidané možnosti hookování, které stojí za zabudování do harnessu.
+
+**`args: string[]` (exec form)** přeskočí shell úplně. Pole jde přímo do procesu — path placeholdery nepotřebují uvozovky, žádná shell expanze, žádná překvapení. Přepni na exec form tehdy, když má příkaz dynamické argumenty, které by shell pobral špatně.
+
+**`continueOnBlock: true`** na `PostToolUse` hooku mění, co zamítnutí znamená. Standardně zamítnutí ukončí kolo. S `continueOnBlock` jde důvod zamítnutí zpět Claudovi a konverzace pokračuje. Claude vidí, co porušil, a může se přizpůsobit bez toho, aby ses musel znovu promptit. Hodí se pro výukové hooky — ty, co vynucují konvence místo přímého odmítání.
+
 ## Doporučený flow, až budeš připravený
 
 Tahle kapitola je o denních návycích. [Kapitola 7](/cs/lab/compound-engineering) je **praxe**, která je balí do opakovatelné smyčky: brainstorm → plan → work → review → compound. Compound Engineering plugin si nainstaluj, až budeš připravený — je to nejkratší cesta z *„iteruju po jednom promptu“* k *„mám praxi, která vyrábí spolehlivě dobrou práci.“*

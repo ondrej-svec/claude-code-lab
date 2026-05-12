@@ -18,6 +18,8 @@ Všechno, o čem bude řeč — skilly, pluginy, MCP, subagenti — běží uvni
   caption="Sidebar drží víc session najednou. Přepínej, aniž bys ztratil kontext."
 />
 
+Jakmile session rozseješ po repech i strojích, `claude agents` je jeden seznam — co běží, co čeká na tebe, co je hotové. Zatím v Research Preview — spusť a uvidíš, jestli to změní způsob, jak žongluješ s prací.
+
 ## Skilly
 
 **Skill** je balík instrukcí + volitelných skriptů, které si Claude načte podle potřeby. Doménový playbook — bydlí v `~/.claude/skills/`, aktivuje se sám, když situace sedí.
@@ -123,6 +125,8 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 **Bezpečnostní poznámka.** MCPs, které načítají nedůvěryhodný obsah (webové stránky, issues, maily), do tvé session můžou injektovat instrukce. Varování od Anthropicu platí: třetí strany na vlastní riziko. Kapitola 9.5 má víc.
 
 **`alwaysLoad`.** Claude ve výchozím stavu odkládá načítání nástrojů z MCP serveru na dobu, kdy jsou výslovně potřeba. Nastav `alwaysLoad: true` v konfiguraci serveru a všechny jeho nástroje budou dostupné hned od startu session — bez odkladu, bez průběžného hledání.
+
+**Přenositelné cesty.** MCP stdio servery teď dostávají `CLAUDE_PROJECT_DIR` v prostředí — stejnou proměnnou, kterou už mají hooky. Plugin konfigurace může v příkazech odkazovat na `${CLAUDE_PROJECT_DIR}`. Vazbu na cestu napíšeš jednou; hooky i MCP ji rozloží stejně.
 
 **Kontrola připojení.** `/mcp` ukazuje počet nástrojů každého připojeného serveru a označí servery, které se připojily s 0 nástroji — nula nástrojů znamená, že server navázal spojení, ale nic se nenačetlo.
 

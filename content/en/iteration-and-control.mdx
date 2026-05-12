@@ -124,6 +124,14 @@ When it's not:
 
 One more dimension worth knowing: **`/sandbox`**. It's a separate toggle from these five modes — it wraps every bash command Claude runs in an OS-level filesystem and network sandbox, so even "accept edits" or "auto" can't reach outside the project or hit unapproved domains. [Chapter 8](/en/lab/next-steps#sandboxing) covers the details and the corporate-deployment flags.
 
+## Hooks: exec form and continued turns
+
+Two hook additions worth building into your harness.
+
+**`args: string[]` (exec form)** skips the shell entirely. The array goes straight to the process — path placeholders don't need quoting, no shell expansion surprises. Switch to exec form when a hook command has dynamic arguments a shell would mangle.
+
+**`continueOnBlock: true`** on a `PostToolUse` hook changes what a rejection means. Normally blocking ends the turn. With `continueOnBlock`, the hook's rejection reason feeds back to Claude and the conversation keeps going. Claude sees what it violated and can adapt without you re-prompting. Useful for teaching hooks — ones that enforce conventions rather than just refuse.
+
 ## The recommended flow, when you're ready
 
 This chapter is the daily habits. [Chapter 7](/en/lab/compound-engineering) is the **practice** that bundles them into a repeatable loop: brainstorm → plan → work → review → compound. Install the Compound Engineering plugin when you're ready — it's the shortest path from *"I iterate one prompt at a time"* to *"I have a practice that produces reliably good work."*
