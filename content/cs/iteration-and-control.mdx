@@ -23,6 +23,8 @@ Tohle je nejužitečnější klávesová zkratka v celém nástroji. Používej
 
 Rewind je levný. Nový prompt od začátku je drahý.
 
+V menu přetáčení přibyla volba **Summarize up to here** — zkomprimuje starší historii a nechá nedávná kola nedotčená. Použij ji, když chceš uvolnit kontext v konkrétním místě konverzace bez toho, abys začínal od nuly.
+
 ## Zúžit scope
 
 Nejrychlejší cesta ke špatnému výstupu je prompt, který chce moc věcí naráz.
@@ -131,6 +133,8 @@ Dvě přidané možnosti hookování, které stojí za zabudování do harnessu.
 **`args: string[]` (exec form)** přeskočí shell úplně. Pole jde přímo do procesu — path placeholdery nepotřebují uvozovky, žádná shell expanze, žádná překvapení. Přepni na exec form tehdy, když má příkaz dynamické argumenty, které by shell pobral špatně.
 
 **`continueOnBlock: true`** na `PostToolUse` hooku mění, co zamítnutí znamená. Standardně zamítnutí ukončí kolo. S `continueOnBlock` jde důvod zamítnutí zpět Claudovi a konverzace pokračuje. Claude vidí, co porušil, a může se přizpůsobit bez toho, aby ses musel znovu promptit. Hodí se pro výukové hooky — ty, co vynucují konvence místo přímého odmítání.
+
+**`terminalSequence`** v JSON výstupu hooku: hook teď může posílat desktopové notifikace, měnit titulek okna nebo zazvonit zápisem do tohohle pole — bez kontrolního terminálu. Šikovné pro `PostToolUse` hooky, co tě upozorní, když se dokončí dlouhý build a ty jsi mezitím od klávesnice odešel.
 
 ## Doporučený flow, až budeš připravený
 

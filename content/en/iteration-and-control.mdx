@@ -23,6 +23,8 @@ This is the single most useful keyboard shortcut in the whole tool. Use it whene
 
 Rewind is cheap. Re-prompting from scratch is expensive.
 
+The rewind menu now has **Summarize up to here** — compresses earlier context while keeping recent turns intact. Reach for it when you want to free up context at a specific point in the conversation without starting over.
+
 ## Narrow the scope
 
 The fastest way to bad output is a prompt that asks for too much at once.
@@ -131,6 +133,8 @@ Two hook additions worth building into your harness.
 **`args: string[]` (exec form)** skips the shell entirely. The array goes straight to the process — path placeholders don't need quoting, no shell expansion surprises. Switch to exec form when a hook command has dynamic arguments a shell would mangle.
 
 **`continueOnBlock: true`** on a `PostToolUse` hook changes what a rejection means. Normally blocking ends the turn. With `continueOnBlock`, the hook's rejection reason feeds back to Claude and the conversation keeps going. Claude sees what it violated and can adapt without you re-prompting. Useful for teaching hooks — ones that enforce conventions rather than just refuse.
+
+**`terminalSequence`** in hook JSON output: hooks can emit desktop notifications, set the window title, or ring a bell by writing to this field — no controlling terminal required. Practical for `PostToolUse` hooks that notify you when a long build finishes and you've stepped away.
 
 ## The recommended flow, when you're ready
 
