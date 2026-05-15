@@ -18,7 +18,7 @@ Everything we're about to cover — skills, plugins, MCPs, subagents — runs in
   caption="Multiple sessions live in the sidebar. Switch without losing context."
 />
 
-Once sessions spread across repos and machines, `claude agents` is the one-stop list: running, blocked on you, done. On a monorepo, `claude agents --cwd <path>` scopes the list to sessions rooted at that directory. It's in Research Preview — run it and see if it changes how you juggle work.
+Once sessions spread across repos and machines, `claude agents` is the one-stop list: running, blocked on you, done. On a monorepo, `claude agents --cwd <path>` scopes the list to sessions rooted at that directory. Dispatch flags let you configure a background session before it starts: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir`, and `--dangerously-skip-permissions`. Set the model, the effort level, the permission posture, the MCPs it can reach — then walk away.
 
 ## Skills
 
@@ -43,6 +43,8 @@ Chapter 7 walks through installing and using the [Compound Engineering plugin](h
 As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) is a small collection of skills I bundled for my daily work (visualize is one of them). Not something to install now — an example of what emerges once you've written three or four skills you don't want to lose. You'll build one of your own.
 
 Need a plugin for one session without installing it? Pass `--plugin-url <url>` to `claude` and it loads the `.zip` archive from that URL for the current session only.
+
+If a plugin has a root-level `SKILL.md` and no `skills/` subdirectory, it's surfaced as a skill automatically — no directory scaffolding required. The minimal shape for a plugin that does one thing.
 
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 
