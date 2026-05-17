@@ -18,7 +18,7 @@ Everything we're about to cover — skills, plugins, MCPs, subagents — runs in
   caption="Multiple sessions live in the sidebar. Switch without losing context."
 />
 
-Once sessions spread across repos and machines, `claude agents` is the one-stop list: running, blocked on you, done. On a monorepo, `claude agents --cwd <path>` scopes the list to sessions rooted at that directory. It's in Research Preview — run it and see if it changes how you juggle work.
+Once sessions spread across repos and machines, `claude agents` is the one-stop list: running, blocked on you, done. On a monorepo, `claude agents --cwd <path>` scopes the list to sessions rooted at that directory. Dispatch flags let you configure a background session before it starts: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir`, and `--dangerously-skip-permissions`. Set the model, the effort level, the permission posture, the MCPs it can reach — then walk away.
 
 New flags now extend what you can configure from the dashboard. `--add-dir`, `--settings`, `--mcp-config`, and `--plugin-dir` apply to the dashboard itself and to background sessions it dispatches. `--permission-mode`, `--model`, `--effort`, and `--dangerously-skip-permissions` set defaults for sessions dispatched from the view.
 
