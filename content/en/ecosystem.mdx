@@ -20,6 +20,8 @@ Everything we're about to cover — skills, plugins, MCPs, subagents — runs in
 
 Once sessions spread across repos and machines, `claude agents` is the one-stop list: running, blocked on you, done. On a monorepo, `claude agents --cwd <path>` scopes the list to sessions rooted at that directory. It's in Research Preview — run it and see if it changes how you juggle work.
 
+Pass `--permission-mode`, `--model`, `--effort`, `--settings`, `--mcp-config`, and `--plugin-dir` to configure every background session dispatched from the view. Your tools and permission posture travel with the worker, not the shell you launched from.
+
 ## Skills
 
 A **skill** is a bundle of instructions + optional scripts that Claude loads on demand. A domain-specific playbook — lives in `~/.claude/skills/`, activates automatically when the situation matches.
@@ -36,7 +38,7 @@ Trim what Claude sees with `skillOverrides`. Set a skill to `off` and it vanishe
 
 ## Plugins
 
-A **plugin** bundles related skills, commands, and hooks into one installable unit. Install once, get the whole workflow.
+A **plugin** bundles related skills, commands, and hooks into one installable unit. Install once, get the whole workflow. Simplest form: a root-level `SKILL.md` with no `skills/` subdirectory — it surfaces as a skill automatically without extra wiring.
 
 Chapter 7 walks through installing and using the [Compound Engineering plugin](https://github.com/EveryInc/compound-engineering-plugin) — Avery's full brainstorm → plan → work → review → compound loop. That's the one to try first. [Super Powers](https://github.com/iannuttall/claude-super-powers) is another worth knowing about — a broader pick-and-choose toolkit.
 
