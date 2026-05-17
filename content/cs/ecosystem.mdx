@@ -22,6 +22,8 @@ Jakmile session rozseješ po repech i strojích, `claude agents` je jeden sezna
 
 Nové flagy teď rozšiřují, co se dá z dashboardu nastavit. `--add-dir`, `--settings`, `--mcp-config` a `--plugin-dir` platí pro samotný dashboard i pro session, které z něj spouštíš v pozadí. `--permission-mode`, `--model`, `--effort` a `--dangerously-skip-permissions` nastavují výchozí hodnoty pro session, které dashboard spouští.
 
+`claude agents` přijímá `--permission-mode`, `--model`, `--effort`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir` a `--dangerously-skip-permissions` k nastavení výchozích hodnot pro každou background session spuštěnou z pohledu. Nástroje a oprávnění jedou se session — ne s shellem, ze kterého jsi startoval.
+
 ## Skilly
 
 **Skill** je balík instrukcí + volitelných skriptů, které si Claude načte podle potřeby. Doménový playbook — bydlí v `~/.claude/skills/`, aktivuje se sám, když situace sedí.
@@ -38,7 +40,7 @@ Přes `skillOverrides` řídíš, co Claude vidí. Nastav skill na `off` a zmi
 
 ## Pluginy
 
-**Plugin** balí související skilly, příkazy a hooky do jednoho instalovatelného celku. Nainstaluj jednou, získáš celý workflow.
+**Plugin** balí související skilly, příkazy a hooky do jednoho instalovatelného celku. Nainstaluj jednou, získáš celý workflow. Nejjednodušší forma: root-level `SKILL.md` bez podadresáře `skills/` — plugin se automaticky zobrazí jako skill bez extra konfigurace.
 
 Sedmá kapitola provází instalací a používáním [Compound Engineering pluginu](https://github.com/EveryInc/compound-engineering-plugin) — Averyho smyčky brainstorm → plan → work → review → compound. Ten si zkus jako první. [Super Powers](https://github.com/iannuttall/claude-super-powers) je další, o kterém má smysl vědět — širší pick-and-choose toolkit.
 

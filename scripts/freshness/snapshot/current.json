@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-05-16T16:17:45.753Z",
+  "fetchedAt": "2026-05-17T16:16:45.042Z",
   "sources": {
     "claude-code-changelog": {
       "url": "https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md",
@@ -324,7 +324,7 @@
       "url": "https://code.claude.com/sitemap.xml",
       "label": "code.claude.com docs (EN)",
       "kind": "xml-sitemap",
-      "hash": "062b48e1e41319c1a96678760adfa61e42977c170c6a19e70257c2d82a2a495b",
+      "hash": "40b34780af44ee9852bf9a684defe6103d7c85514dca95114f757e781d07e80a",
       "length": 189072,
       "index": [
         "https://code.claude.com/docs/en/admin-setup",
