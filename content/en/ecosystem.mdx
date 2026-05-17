@@ -20,6 +20,8 @@ Everything we're about to cover — skills, plugins, MCPs, subagents — runs in
 
 Once sessions spread across repos and machines, `claude agents` is the one-stop list: running, blocked on you, done. On a monorepo, `claude agents --cwd <path>` scopes the list to sessions rooted at that directory. Dispatch flags let you configure a background session before it starts: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir`, and `--dangerously-skip-permissions`. Set the model, the effort level, the permission posture, the MCPs it can reach — then walk away.
 
+New flags now extend what you can configure from the dashboard. `--add-dir`, `--settings`, `--mcp-config`, and `--plugin-dir` apply to the dashboard itself and to background sessions it dispatches. `--permission-mode`, `--model`, `--effort`, and `--dangerously-skip-permissions` set defaults for sessions dispatched from the view.
+
 ## Skills
 
 A **skill** is a bundle of instructions + optional scripts that Claude loads on demand. A domain-specific playbook — lives in `~/.claude/skills/`, activates automatically when the situation matches.
@@ -44,7 +46,7 @@ As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec
 
 Need a plugin for one session without installing it? Pass `--plugin-url <url>` to `claude` and it loads the `.zip` archive from that URL for the current session only.
 
-If a plugin has a root-level `SKILL.md` and no `skills/` subdirectory, it's surfaced as a skill automatically — no directory scaffolding required. The minimal shape for a plugin that does one thing.
+Plugin dependencies are now enforced. `claude plugin disable` refuses if another enabled plugin depends on the target, and prints the chain you need to disable first. `claude plugin enable` goes the other direction: it force-enables any transitive dependencies automatically.
 
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 
@@ -95,6 +97,8 @@ The format is [an open spec](https://agentskills.io) — frontmatter fields, loa
 ### The endgame
 
 Do this three or four times — extract a skill whenever something repeats — and suddenly you have a small collection. Bundle them with a `.claude-plugin/plugin.json`, publish to GitHub, and that's **your plugin**. Same shape as the Compound Engineering plugin you installed earlier, just yours. Your team installs once and inherits everything you've learned to systematise.
+
+Shortcut for single-skill plugins: if your plugin has a `SKILL.md` at the root and no `skills/` subdirectory, Claude surfaces it as a skill automatically — no extra folder structure required.
 
 That's compound, all the way down.
 
