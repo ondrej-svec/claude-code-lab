@@ -12,7 +12,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 |---|---|
 | `/clear` | Nová konverzace. Stará se archivuje — obnovíš ji přes `/resume`. |
 | `/compact [focus]` | Konverzace zůstává, Claude shrne historii a uvolní kontext. Volitelný focus zúží, co zachovat. |
-| `/resume` | Navázat na předchozí konverzaci. |
+| `/resume` | Navázat na předchozí konverzaci. Session na pozadí (spuštěné přes `--bg`) se tu teď taky zobrazují, označené jako `bg`. |
 | `/rewind` | Checkpoint menu — obnoví kód, konverzaci nebo obojí do dřívějšího stavu. Stejné jako dvojité Esc. |
 | `/branch` | Větvení konverzace od zadaného bodu. |
 | `/exit` | Ukončí Claude Code (nebo `Ctrl+D`). |
@@ -24,7 +24,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/init` | Prohlédne repo a navrhne startovní `CLAUDE.md`. Nastav `CLAUDE_CODE_NEW_INIT=1` pro nový interaktivní multi-fázový flow. |
 | `/memory` | Prohlédni nebo uprav CLAUDE.md soubory a načtenou paměť. |
 | `/permissions` | Spravuj allow/deny pravidla pro nástroje. |
-| `/model` | Přepni model uprostřed konverzace (např. Opus → Sonnet). |
+| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). V pickeru stiskni `d`, jestli chceš nastavit výchozí pro nové session. |
 | `/fast` | Přepne fast mode. Výchozí model je Opus 4.7; pro zafixování na Opus 4.6 nastav `CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE=1`. |
 | `/effort` | Per-session override effortu. |
 | `/keybindings` | Otevře `~/.claude/keybindings.json`. |

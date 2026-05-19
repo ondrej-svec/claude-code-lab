@@ -12,7 +12,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 |---|---|
 | `/clear` | Start a new conversation. Previous one still archived — resume with `/resume`. |
 | `/compact [focus]` | Keep the conversation, summarise history, free context. Optional focus narrows what to keep. |
-| `/resume` | Pick up a previous conversation. |
+| `/resume` | Pick up a previous conversation. Background sessions (started with `--bg`) now appear here too, marked with `bg`. |
 | `/rewind` | Checkpoint menu — restore code, conversation, or both to an earlier state. Same as double-Esc. |
 | `/branch` | Fork the conversation from a given point. |
 | `/exit` | Quit Claude Code (or `Ctrl+D`). |
@@ -24,7 +24,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/init` | Scan the repo and propose a starting `CLAUDE.md`. Set `CLAUDE_CODE_NEW_INIT=1` for the new multi-phase interactive flow. |
 | `/memory` | View or edit CLAUDE.md files and loaded memory. |
 | `/permissions` | Manage tool allow/deny rules. |
-| `/model` | Switch model mid-conversation (e.g., Opus → Sonnet). |
+| `/model` | Switch model for the current session (e.g., Opus → Sonnet). Press `d` in the picker to set a default for new sessions. |
 | `/fast` | Toggle fast mode. Uses Opus 4.7 by default; set `CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE=1` to pin to Opus 4.6. |
 | `/effort` | Per-session effort override. |
 | `/keybindings` | Open `~/.claude/keybindings.json`. |
