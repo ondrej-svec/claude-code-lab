@@ -18,7 +18,7 @@ Všechno, o čem bude řeč — skilly, pluginy, MCP, subagenti — běží uvni
   caption="Sidebar drží víc session najednou. Přepínej, aniž bys ztratil kontext."
 />
 
-Jakmile session rozseješ po repech i strojích, `claude agents` je jeden seznam — co běží, co čeká na tebe, co je hotové. Na monorepu `claude agents --cwd <cesta>` omezí výpis jen na session zasazené do toho adresáře. Flagy pro dispatch ti dovolí nakonfigurovat session na pozadí ještě než startuje: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir` a `--dangerously-skip-permissions`. Nastav model, úroveň úsilí, oprávnění, MCP servery — a odejdi od klávesnice.
+Jakmile session rozseješ po repech i strojích, `claude agents` je jeden seznam — co běží, co čeká na tebe, co je hotové. Přidej `--json` a výstup je strojově čitelný: každá live session jako JSON pole — připravené pro tmux-resurrect, stavové lišty, session pickery nebo libovolný skript, který potřebuje vědět, co právě běží. Na monorepu `claude agents --cwd <cesta>` omezí výpis jen na session zasazené do toho adresáře. Flagy pro dispatch ti dovolí nakonfigurovat session na pozadí ještě než startuje: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir` a `--dangerously-skip-permissions`. Nastav model, úroveň úsilí, oprávnění, MCP servery — a odejdi od klávesnice.
 
 Nové flagy teď rozšiřují, co se dá z dashboardu nastavit. `--add-dir`, `--settings`, `--mcp-config` a `--plugin-dir` platí pro samotný dashboard i pro session, které z něj spouštíš v pozadí. `--permission-mode`, `--model`, `--effort` a `--dangerously-skip-permissions` nastavují výchozí hodnoty pro session, které dashboard spouští.
 
@@ -40,7 +40,7 @@ Přes `skillOverrides` řídíš, co Claude vidí. Nastav skill na `off` a zmi
 
 ## Pluginy
 
-**Plugin** balí související skilly, příkazy a hooky do jednoho instalovatelného celku. Nainstaluj jednou, získáš celý workflow. Nejjednodušší forma: root-level `SKILL.md` bez podadresáře `skills/` — plugin se automaticky zobrazí jako skill bez extra konfigurace.
+**Plugin** balí související skilly, příkazy a hooky do jednoho instalovatelného celku. Nainstaluj jednou, získáš celý workflow. Obrazovky Discover a Browse teď zobrazí příkazy, agenty, skilly, hooky a MCP/LSP servery pluginu — podívej se, než instaluješ. Nejjednodušší forma: root-level `SKILL.md` bez podadresáře `skills/` — plugin se automaticky zobrazí jako skill bez extra konfigurace.
 
 Sedmá kapitola provází instalací a používáním [Compound Engineering pluginu](https://github.com/EveryInc/compound-engineering-plugin) — Averyho smyčky brainstorm → plan → work → review → compound. Ten si zkus jako první. [Super Powers](https://github.com/iannuttall/claude-super-powers) je další, o kterém má smysl vědět — širší pick-and-choose toolkit.
 

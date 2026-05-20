@@ -18,7 +18,7 @@ Everything we're about to cover — skills, plugins, MCPs, subagents — runs in
   caption="Multiple sessions live in the sidebar. Switch without losing context."
 />
 
-Once sessions spread across repos and machines, `claude agents` is the one-stop list: running, blocked on you, done. On a monorepo, `claude agents --cwd <path>` scopes the list to sessions rooted at that directory. Dispatch flags let you configure a background session before it starts: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir`, and `--dangerously-skip-permissions`. Set the model, the effort level, the permission posture, the MCPs it can reach — then walk away.
+Once sessions spread across repos and machines, `claude agents` is the one-stop list: running, blocked on you, done. Add `--json` and the output is machine-readable: every live session as a JSON array, ready for tmux-resurrect, status bars, session pickers, or any script that needs to know what's running. On a monorepo, `claude agents --cwd <path>` scopes the list to sessions rooted at that directory. Dispatch flags let you configure a background session before it starts: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir`, and `--dangerously-skip-permissions`. Set the model, the effort level, the permission posture, the MCPs it can reach — then walk away.
 
 New flags now extend what you can configure from the dashboard. `--add-dir`, `--settings`, `--mcp-config`, and `--plugin-dir` apply to the dashboard itself and to background sessions it dispatches. `--permission-mode`, `--model`, `--effort`, and `--dangerously-skip-permissions` set defaults for sessions dispatched from the view.
 
@@ -40,7 +40,7 @@ Trim what Claude sees with `skillOverrides`. Set a skill to `off` and it vanishe
 
 ## Plugins
 
-A **plugin** bundles related skills, commands, and hooks into one installable unit. Install once, get the whole workflow. Simplest form: a root-level `SKILL.md` with no `skills/` subdirectory — it surfaces as a skill automatically without extra wiring.
+A **plugin** bundles related skills, commands, and hooks into one installable unit. Install once, get the whole workflow. The Discover and Browse screens now show a plugin's commands, agents, skills, hooks, and MCP/LSP servers — inspect before you install. Simplest form: a root-level `SKILL.md` with no `skills/` subdirectory — it surfaces as a skill automatically without extra wiring.
 
 Chapter 7 walks through installing and using the [Compound Engineering plugin](https://github.com/EveryInc/compound-engineering-plugin) — Avery's full brainstorm → plan → work → review → compound loop. That's the one to try first. [Super Powers](https://github.com/iannuttall/claude-super-powers) is another worth knowing about — a broader pick-and-choose toolkit.
 
