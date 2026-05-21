@@ -136,6 +136,8 @@ Dvě přidané možnosti hookování, které stojí za zabudování do harnessu.
 
 **`terminalSequence`** v JSON výstupu hooku: hook teď může posílat desktopové notifikace, měnit titulek okna nebo zazvonit zápisem do tohohle pole — bez kontrolního terminálu. Šikovné pro `PostToolUse` hooky, co tě upozorní, když se dokončí dlouhý build a ty jsi mezitím od klávesnice odešel.
 
+**`background_tasks` a `session_crons`** jsou teď součástí vstupu `Stop` a `SubagentStop` hookům — seznam aktivních background tasků a naplánovaných cronů v okamžiku, kdy session končí. Hodí se pro `Stop` hooky, které potřebují rozhodnout, jestli je potřeba úklid nebo předání kontextu, než session skončí.
+
 ## Doporučený flow, až budeš připravený
 
 Tahle kapitola je o denních návycích. [Kapitola 7](/cs/lab/compound-engineering) je **praxe**, která je balí do opakovatelné smyčky: brainstorm → plan → work → review → compound. Compound Engineering plugin si nainstaluj, až budeš připravený — je to nejkratší cesta z *„iteruju po jednom promptu“* k *„mám praxi, která vyrábí spolehlivě dobrou práci.“*

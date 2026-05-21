@@ -136,6 +136,8 @@ Two hook additions worth building into your harness.
 
 **`terminalSequence`** in hook JSON output: hooks can emit desktop notifications, set the window title, or ring a bell by writing to this field — no controlling terminal required. Practical for `PostToolUse` hooks that notify you when a long build finishes and you've stepped away.
 
+**`background_tasks` and `session_crons`** are now included in `Stop` and `SubagentStop` hook input — the active background tasks and scheduled crons at the moment the session stops. Useful for `Stop` hooks that need to decide whether to clean up or hand off before the session exits.
+
 ## The recommended flow, when you're ready
 
 This chapter is the daily habits. [Chapter 7](/en/lab/compound-engineering) is the **practice** that bundles them into a repeatable loop: brainstorm → plan → work → review → compound. Install the Compound Engineering plugin when you're ready — it's the shortest path from *"I iterate one prompt at a time"* to *"I have a practice that produces reliably good work."*
