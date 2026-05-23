@@ -40,7 +40,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/powerup` | Interaktivní onboarding — deset animovaných průchodů po funkcích, které většina lidí přehlédne. |
 | `/context` | Vizualizace využití kontextového okna s tipy na optimalizaci. |
 | `/cost` | Dosavadní cena session. |
-| `/usage`, `/stats` | Širší metriky využití. |
+| `/usage`, `/stats` | Metriky využití. `/usage` teď zobrazí rozpad podle kategorií — skills, subagenty, pluginy a náklady per MCP server. |
 | `/doctor` | Diagnostika — vypíše konflikty v konfiguraci, chybějící nastavení. |
 
 ### Workflow
@@ -54,6 +54,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/skills` | Seznam nainstalovaných skillů. |
 | `/review` | Vestavěný skill pro PR-style review. |
 | `/security-review` | Vestavěný skill pro security review. |
+| `/code-review [effort]` | Hlásí chyby v logice na zvoleném effort levelu (např. `/code-review high`). S `--comment` přidá nálezy jako inline komentáře do GitHub PR. Nahrazuje `/simplify`. |
 | `/diff` | Diff od posledního checkpointu. |
 
 ### Remote

@@ -40,7 +40,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/powerup` | Interactive onboarding — ten animated walkthroughs of features most people miss. |
 | `/context` | Visualise current context-window usage with optimisation hints. |
 | `/cost` | Session cost so far. |
-| `/usage`, `/stats` | Broader usage metrics. |
+| `/usage`, `/stats` | Usage metrics. `/usage` breaks down by category — skills, subagents, plugins, per-MCP-server cost. |
 | `/doctor` | Diagnostics — surfaces config conflicts, missing setup. |
 
 ### Workflow
@@ -54,6 +54,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/skills` | List installed skills. |
 | `/review` | Bundled PR-style review skill. |
 | `/security-review` | Bundled security review skill. |
+| `/code-review [effort]` | Report correctness bugs at a chosen effort level (e.g., `/code-review high`). Pass `--comment` to post findings as inline GitHub PR comments. Replaces `/simplify`. |
 | `/diff` | Show diff since last checkpoint. |
 
 ### Remote
