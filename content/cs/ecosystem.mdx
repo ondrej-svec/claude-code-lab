@@ -18,11 +18,13 @@ Všechno, o čem bude řeč — skilly, pluginy, MCP, subagenti — běží uvni
   caption="Sidebar drží víc session najednou. Přepínej, aniž bys ztratil kontext."
 />
 
-Jakmile session rozseješ po repech i strojích, `claude agents` je jeden seznam — co běží, co čeká na tebe, co je hotové. Přidej `--json` a výstup je strojově čitelný: každá live session jako JSON pole — připravené pro tmux-resurrect, stavové lišty, session pickery nebo libovolný skript, který potřebuje vědět, co právě běží. Na monorepu `claude agents --cwd <cesta>` omezí výpis jen na session zasazené do toho adresáře. Flagy pro dispatch ti dovolí nakonfigurovat session na pozadí ještě než startuje: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir` a `--dangerously-skip-permissions`. Nastav model, úroveň úsilí, oprávnění, MCP servery — a odejdi od klávesnice. Session zafixovaná přes `Ctrl+T` v `claude agents` zůstane naživu i při nečinnosti — při aktualizacích Claude Code se restartuje na místě a paměťový tlak ji shodí až po těch nezafixovaných.
+Jakmile session rozseješ po repech i strojích, `claude agents` je jeden seznam — co běží, co čeká na tebe, co je hotové. Přidej `--json` a výstup je strojově čitelný: každá live session jako JSON pole — připravené pro tmux-resurrect, stavové lišty, session pickery nebo libovolný skript, který potřebuje vědět, co právě běží. Na monorepu `claude agents --cwd <cesta>` omezí výpis jen na session zasazené do toho adresáře. Flagy pro dispatch ti dovolí nakonfigurovat session na pozadí ještě než startuje: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir` a `--dangerously-skip-permissions`. Nastav model, úroveň úsilí, oprávnění, MCP servery — a odejdi od klávesnice.
 
 Nové flagy teď rozšiřují, co se dá z dashboardu nastavit. `--add-dir`, `--settings`, `--mcp-config` a `--plugin-dir` platí pro samotný dashboard i pro session, které z něj spouštíš v pozadí. `--permission-mode`, `--model`, `--effort` a `--dangerously-skip-permissions` nastavují výchozí hodnoty pro session, které dashboard spouští.
 
 `claude agents` přijímá `--permission-mode`, `--model`, `--effort`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir` a `--dangerously-skip-permissions` k nastavení výchozích hodnot pro každou background session spuštěnou z pohledu. Nástroje a oprávnění jedou se session — ne s shellem, ze kterého jsi startoval.
+
+Připni session klávesou `Ctrl+T` v `claude agents` — připnuté session přežijí nečinnost, při aktualizaci Claude Code se restartují na místě a z paměti se uvolní až po těch nepřipnutých.
 
 ## Skilly
 
