@@ -24,6 +24,8 @@ New flags now extend what you can configure from the dashboard. `--add-dir`, `--
 
 `claude agents` accepts `--permission-mode`, `--model`, `--effort`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir`, and `--dangerously-skip-permissions` to configure every background session dispatched from the view. Your tools and permission posture travel with the worker, not the shell you launched from.
 
+Pin a session with `Ctrl+T` inside the `claude agents` view — pinned sessions stay alive when idle, restart automatically when Claude Code updates, and are only shed under memory pressure after non-pinned sessions.
+
 ## Skills
 
 A **skill** is a bundle of instructions + optional scripts that Claude loads on demand. A domain-specific playbook — lives in `~/.claude/skills/`, activates automatically when the situation matches.
