@@ -53,6 +53,12 @@ Stojí to za pozornost. Ne za to, abys na tom trval, dokud nemáš reálnou suit
 
 Agentům nevadí číst tvůj kód. Můžou ho procházet na každém PR, na každém commitu, před každým mergem. Pět, které stojí za to znát:
 
+### Claude Code `/code-review`
+
+Součást Claude Code. Spusť `/code-review` na libovolném diffu — vypíše chyby správnosti. Přidej úroveň úsilí (`/code-review high`) pro hlubší průchod. Přidej `--comment` a nálezy se přidají jako inline komentáře na GitHub PR. Přidej `--fix` a Claude nálezy rovnou zapíše do working tree — zjednodušení, znovupoužití, efektivita. `/simplify` je teď alias pro `/code-review --fix`.
+
+Jiný job než `/security-review`: code-review hledá chyby správnosti, security-review hledá zranitelnosti. Na PR, které na tom záleží, spusť oboje.
+
 ### Claude Code `/security-review`
 
 Součást Claude Code. Skenuje aktuální diff na SQL injection, XSS, auth díry, nebezpečnou práci s daty, problémy v závislostech — s hodnocením závažnosti a odfiltrováním falešných poplachů. Přizpůsobíš zkopírováním `security-review.md` do `.claude/commands/`. Zdroj: [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review).
