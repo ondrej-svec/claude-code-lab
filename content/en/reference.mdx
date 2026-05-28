@@ -24,7 +24,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/init` | Scan the repo and propose a starting `CLAUDE.md`. Set `CLAUDE_CODE_NEW_INIT=1` for the new multi-phase interactive flow. |
 | `/memory` | View or edit CLAUDE.md files and loaded memory. |
 | `/permissions` | Manage tool allow/deny rules. |
-| `/model` | Switch model for the current session (e.g., Opus → Sonnet). Press `d` in the picker to set a default for new sessions. |
+| `/model` | Switch model for the current session (e.g., Opus → Sonnet). Selecting a model now saves it as the default for new sessions. Press `s` in the picker to switch for the current session only. |
 | `/fast` | Toggle fast mode. Uses Opus 4.7 by default; set `CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE=1` to pin to Opus 4.6. |
 | `/effort` | Per-session effort override. |
 | `/keybindings` | Open `~/.claude/keybindings.json`. |
@@ -52,8 +52,9 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/plugin` | Install or manage plugins. |
 | `/mcp` | Install or manage MCP servers. |
 | `/skills` | List installed skills. |
+| `/reload-skills` | Re-scan skill directories without restarting the session. |
 | `/review` | Bundled PR-style review skill. |
-| `/code-review [effort]` | Correctness review at a chosen effort level (e.g. `/code-review high`). Pass `--comment` to post findings as inline GitHub PR comments. |
+| `/code-review [effort]` | Correctness review at a chosen effort level (e.g. `/code-review high`). Pass `--comment` to post findings as inline GitHub PR comments. Pass `--fix` to apply findings to the working tree. `/simplify` is an alias for `/code-review --fix`. |
 | `/security-review` | Bundled security review skill. |
 | `/diff` | Show diff since last checkpoint. Scroll the detail view with arrows, `j`/`k`, `PgUp`/`PgDn`, `Space`, `Home`/`End`. |
 
@@ -306,7 +307,7 @@ Plugin manifest format, marketplace submission, plugin-vs-skill distinction:
 
 ### Hooks
 
-Shell commands, HTTP endpoints, or LLM prompts fired at specific lifecycle events. Events include `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, and many more.
+Shell commands, HTTP endpoints, or LLM prompts fired at specific lifecycle events. Events include `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, `MessageDisplay` (transform or hide assistant message text as it is displayed), and many more.
 
 - [Hooks docs](https://code.claude.com/docs/en/hooks)
 - Configure in `.claude/settings.json` under `"hooks"`, or in a plugin's `hooks/hooks.json`
