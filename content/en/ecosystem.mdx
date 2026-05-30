@@ -26,6 +26,8 @@ New flags now extend what you can configure from the dashboard. `--add-dir`, `--
 
 Pin a session with `Ctrl+T` inside the `claude agents` view — pinned sessions stay alive when idle, restart automatically when Claude Code updates, and are only shed under memory pressure after non-pinned sessions. Type `! <command>` to run a shell command as a background session you can attach to and detach from; `claude --bg --exec '<command>'` does the same from the terminal.
 
+Inside the agents view, `! <command>` starts a shell command as a new background session — one you can attach to and detach from on your schedule. Same move from the terminal: `claude --bg --exec '<command>'`.
+
 ## Skills
 
 A **skill** is a bundle of instructions + optional scripts that Claude loads on demand. A domain-specific playbook — lives in `~/.claude/skills/`, activates automatically when the situation matches.

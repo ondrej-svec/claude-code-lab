@@ -26,6 +26,8 @@ Nové flagy teď rozšiřují, co se dá z dashboardu nastavit. `--add-dir`, `--
 
 Připni session klávesou `Ctrl+T` v `claude agents` — připnuté session přežijí nečinnost, při aktualizaci Claude Code se restartují na místě a z paměti se uvolní až po těch nepřipnutých. Zadej `! <příkaz>` a spustíš shellový příkaz jako background session, ke které se dá připojit i od ní odpojit; z terminálu jde totéž jako `claude --bg --exec '<příkaz>'`.
 
+V pohledu agentů spustí `! <příkaz>` shell příkaz jako novou background session — takovou, ke které se můžeš připojit a zase odpojit. Totéž z terminálu: `claude --bg --exec '<příkaz>'`.
+
 ## Skilly
 
 **Skill** je balík instrukcí + volitelných skriptů, které si Claude načte podle potřeby. Doménový playbook — bydlí v `~/.claude/skills/`, aktivuje se sám, když situace sedí.
