@@ -24,7 +24,7 @@ Nové flagy teď rozšiřují, co se dá z dashboardu nastavit. `--add-dir`, `--
 
 `claude agents` přijímá `--permission-mode`, `--model`, `--effort`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir` a `--dangerously-skip-permissions` k nastavení výchozích hodnot pro každou background session spuštěnou z pohledu. Nástroje a oprávnění jedou se session — ne s shellem, ze kterého jsi startoval.
 
-Připni session klávesou `Ctrl+T` v `claude agents` — připnuté session přežijí nečinnost, při aktualizaci Claude Code se restartují na místě a z paměti se uvolní až po těch nepřipnutých.
+Připni session klávesou `Ctrl+T` v `claude agents` — připnuté session přežijí nečinnost, při aktualizaci Claude Code se restartují na místě a z paměti se uvolní až po těch nepřipnutých. Zadej `! <příkaz>` a spustíš shellový příkaz jako background session, ke které se dá připojit i od ní odpojit; z terminálu jde totéž jako `claude --bg --exec '<příkaz>'`.
 
 V pohledu agentů spustí `! <příkaz>` shell příkaz jako novou background session — takovou, ke které se můžeš připojit a zase odpojit. Totéž z terminálu: `claude --bg --exec '<příkaz>'`.
 
@@ -54,7 +54,7 @@ Potřebuješ plugin jen na jednu session bez trvalé instalace? Dej `claude --p
 
 Závislosti mezi pluginy se teď hlídají. `claude plugin disable` odmítne zakázat plugin, na kterém závisí jiný aktivní plugin — a ukáže, co musíš nejdřív zakázat. `claude plugin enable` jde opačně: tranzitivní závislosti zapne sám automaticky.
 
-Pluginy teď můžou deklarovat `defaultEnabled: false` v `plugin.json` — zůstanou vypnuté, dokud je nezapneš přes `/plugin` nebo `claude plugin enable`. Záložka Discover označí pluginy, jejichž relevance odpovídá aktuálnímu adresáři, anotací „suggested for this directory" — správný nástroj se ukáže ve správném repu.
+Pluginy v adresářích `.claude/skills/` se teď načítají automaticky — bez marketplace. Rychlý start: `claude plugin init <jméno>` zapíše skelet pluginu přímo do `.claude/skills/<jméno>/`.
 
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 

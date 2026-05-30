@@ -24,7 +24,7 @@ New flags now extend what you can configure from the dashboard. `--add-dir`, `--
 
 `claude agents` accepts `--permission-mode`, `--model`, `--effort`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir`, and `--dangerously-skip-permissions` to configure every background session dispatched from the view. Your tools and permission posture travel with the worker, not the shell you launched from.
 
-Pin a session with `Ctrl+T` inside the `claude agents` view — pinned sessions stay alive when idle, restart automatically when Claude Code updates, and are only shed under memory pressure after non-pinned sessions.
+Pin a session with `Ctrl+T` inside the `claude agents` view — pinned sessions stay alive when idle, restart automatically when Claude Code updates, and are only shed under memory pressure after non-pinned sessions. Type `! <command>` to run a shell command as a background session you can attach to and detach from; `claude --bg --exec '<command>'` does the same from the terminal.
 
 Inside the agents view, `! <command>` starts a shell command as a new background session — one you can attach to and detach from on your schedule. Same move from the terminal: `claude --bg --exec '<command>'`.
 
@@ -54,7 +54,7 @@ Need a plugin for one session without installing it? Pass `--plugin-url <url>` t
 
 Plugin dependencies are now enforced. `claude plugin disable` refuses if another enabled plugin depends on the target, and prints the chain you need to disable first. `claude plugin enable` goes the other direction: it force-enables any transitive dependencies automatically.
 
-Plugins can declare `defaultEnabled: false` in `plugin.json` — they stay off until you enable them via `/plugin` or `claude plugin enable`. The Discover tab surfaces plugins whose relevance signals match the current directory with a "suggested for this directory" annotation — so the right tool appears when you're in the right repo.
+Plugins in `.claude/skills/` directories auto-load — no marketplace registration needed. Scaffold one with `claude plugin init <name>`, which writes the plugin skeleton into `.claude/skills/<name>/`.
 
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 
