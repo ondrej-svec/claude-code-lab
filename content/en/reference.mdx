@@ -26,7 +26,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/permissions` | Manage tool allow/deny rules. |
 | `/model` | Switch model for the current session (e.g., Opus → Sonnet). Selecting a model now saves it as the default for new sessions. Press `s` in the picker to switch for the current session only. |
 | `/fast` | Toggle fast mode. Uses Opus 4.7 by default; set `CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE=1` to pin to Opus 4.6. |
-| `/effort` | Per-session effort override. |
+| `/effort` | Per-session effort override. Use `/effort xhigh` for your hardest tasks — Opus 4.8 now defaults to high effort. |
 | `/keybindings` | Open `~/.claude/keybindings.json`. |
 | `/hooks` | Configure lifecycle hooks. |
 | `/config` | Open the settings UI. |
@@ -49,12 +49,13 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 |---|---|
 | `/agents` | Manage subagents (create, edit, delete). |
 | `/tasks` | Manage backgrounded tasks — kick off a long-running operation, pick up the result later. |
+| `/workflows` | View and manage dynamic workflow runs. Dynamic workflows orchestrate tens to hundreds of background agents for tasks too large for a single session. |
 | `/plugin` | Install or manage plugins. |
 | `/mcp` | Install or manage MCP servers. |
 | `/skills` | List installed skills. |
 | `/reload-skills` | Re-scan skill directories without restarting the session. |
 | `/review` | Bundled PR-style review skill. |
-| `/code-review [effort]` | Correctness review at a chosen effort level (e.g. `/code-review high`). Pass `--comment` to post findings as inline GitHub PR comments. Pass `--fix` to apply findings to the working tree. `/simplify` is an alias for `/code-review --fix`. |
+| `/code-review [effort]` | Correctness review at a chosen effort level (e.g. `/code-review high`). Pass `--comment` to post findings as inline GitHub PR comments. Pass `--fix` to apply findings to the working tree. `/simplify` is different: cleanup only — reuse, simplification, efficiency, altitude — not the full bug hunt. |
 | `/security-review` | Bundled security review skill. |
 | `/diff` | Show diff since last checkpoint. Scroll the detail view with arrows, `j`/`k`, `PgUp`/`PgDn`, `Space`, `Home`/`End`. |
 

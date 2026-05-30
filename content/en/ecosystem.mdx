@@ -26,6 +26,8 @@ New flags now extend what you can configure from the dashboard. `--add-dir`, `--
 
 Pin a session with `Ctrl+T` inside the `claude agents` view — pinned sessions stay alive when idle, restart automatically when Claude Code updates, and are only shed under memory pressure after non-pinned sessions.
 
+Inside the agents view, `! <command>` starts a shell command as a new background session — one you can attach to and detach from on your schedule. Same move from the terminal: `claude --bg --exec '<command>'`.
+
 ## Skills
 
 A **skill** is a bundle of instructions + optional scripts that Claude loads on demand. A domain-specific playbook — lives in `~/.claude/skills/`, activates automatically when the situation matches.
@@ -51,6 +53,8 @@ As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec
 Need a plugin for one session without installing it? Pass `--plugin-url <url>` to `claude` and it loads the `.zip` archive from that URL for the current session only.
 
 Plugin dependencies are now enforced. `claude plugin disable` refuses if another enabled plugin depends on the target, and prints the chain you need to disable first. `claude plugin enable` goes the other direction: it force-enables any transitive dependencies automatically.
+
+Plugins can declare `defaultEnabled: false` in `plugin.json` — they stay off until you enable them via `/plugin` or `claude plugin enable`. The Discover tab surfaces plugins whose relevance signals match the current directory with a "suggested for this directory" annotation — so the right tool appears when you're in the right repo.
 
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 
