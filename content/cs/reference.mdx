@@ -25,7 +25,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/memory` | Prohlédni nebo uprav CLAUDE.md soubory a načtenou paměť. |
 | `/permissions` | Spravuj allow/deny pravidla pro nástroje. |
 | `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. |
-| `/fast` | Přepne fast mode. Výchozí model je Opus 4.7; pro zafixování na Opus 4.6 nastav `CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE=1`. |
+| `/fast` | Přepne fast mode. Výchozí je teď Opus 4.8 — 2× standardní cena, 2,5× rychlost. |
 | `/effort` | Per-session override effortu. |
 | `/keybindings` | Otevře `~/.claude/keybindings.json`. |
 | `/hooks` | Konfigurace lifecycle hooků. |
@@ -49,12 +49,13 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 |---|---|
 | `/agents` | Správa subagentů (vytvořit, upravit, smazat). |
 | `/tasks` | Správa úkolů na pozadí — rozjet dlouhý běh, výsledek vyzvednout později. |
+| `/workflows` | Přehled tvých dynamických workflow. |
 | `/plugin` | Instalace a správa pluginů. |
 | `/mcp` | Instalace a správa MCP serverů. |
 | `/skills` | Seznam nainstalovaných skillů. |
 | `/reload-skills` | Znovu projde adresáře se skilly bez restartu session. |
 | `/review` | Vestavěný skill pro PR-style review. |
-| `/code-review [effort]` | Kontrola správnosti kódu na zvolené úrovni (např. `/code-review high`). Přidej `--comment` a nálezy se přidají jako inline komentáře na GitHub PR. Přidej `--fix` a nálezy se rovnou aplikují do working tree. `/simplify` je alias pro `/code-review --fix`. |
+| `/code-review [effort]` | Kontrola správnosti kódu na zvolené úrovni (např. `/code-review high`). Přidej `--comment` a nálezy se přidají jako inline komentáře na GitHub PR. Přidej `--fix` a nálezy se rovnou aplikují do working tree. `/simplify` jede jen úklidové kolo — znovupoužití, zjednodušení, efektivita, výška abstrakce — ne plný lov chyb. |
 | `/security-review` | Vestavěný skill pro security review. |
 | `/diff` | Diff od posledního checkpointu. Detail se dá rolovat klávesnicí — šipky, `j`/`k`, `PgUp`/`PgDn`, `Space`, `Home`/`End`. |
 
@@ -343,6 +344,7 @@ Každý oficiální odkaz použitý v průvodci, všechno na jednom místě.
 - [Settings (permissions)](https://code.claude.com/docs/en/settings)
 - [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices)
 - [Deep links](https://code.claude.com/docs/en/deep-links)
+- [Workflows](https://code.claude.com/docs/en/workflows)
 
 ### Standardy + referenční repa
 

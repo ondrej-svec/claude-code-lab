@@ -24,7 +24,7 @@ New flags now extend what you can configure from the dashboard. `--add-dir`, `--
 
 `claude agents` accepts `--permission-mode`, `--model`, `--effort`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir`, and `--dangerously-skip-permissions` to configure every background session dispatched from the view. Your tools and permission posture travel with the worker, not the shell you launched from.
 
-Pin a session with `Ctrl+T` inside the `claude agents` view — pinned sessions stay alive when idle, restart automatically when Claude Code updates, and are only shed under memory pressure after non-pinned sessions.
+Pin a session with `Ctrl+T` inside the `claude agents` view — pinned sessions stay alive when idle, restart automatically when Claude Code updates, and are only shed under memory pressure after non-pinned sessions. Type `! <command>` to run a shell command as a background session you can attach to and detach from; `claude --bg --exec '<command>'` does the same from the terminal.
 
 ## Skills
 
@@ -51,6 +51,8 @@ As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec
 Need a plugin for one session without installing it? Pass `--plugin-url <url>` to `claude` and it loads the `.zip` archive from that URL for the current session only.
 
 Plugin dependencies are now enforced. `claude plugin disable` refuses if another enabled plugin depends on the target, and prints the chain you need to disable first. `claude plugin enable` goes the other direction: it force-enables any transitive dependencies automatically.
+
+Plugins in `.claude/skills/` directories auto-load — no marketplace registration needed. Scaffold one with `claude plugin init <name>`, which writes the plugin skeleton into `.claude/skills/<name>/`.
 
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 
