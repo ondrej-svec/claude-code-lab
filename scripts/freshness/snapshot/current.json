@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-05-30T16:13:24.100Z",
+  "fetchedAt": "2026-05-31T16:11:15.043Z",
   "sources": {
     "claude-code-changelog": {
       "url": "https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md",
@@ -336,8 +336,8 @@
       "url": "https://code.claude.com/sitemap.xml",
       "label": "code.claude.com docs (EN)",
       "kind": "xml-sitemap",
-      "hash": "2a5852802613d905b84a09ea145db107038a947042bf1f2a02504f9261ee20e9",
-      "length": 207546,
+      "hash": "38a3759564cac3c07f2d38526ff7b8b697069ff8a8a508e4796abb1e98b6e0c3",
+      "length": 210726,
       "index": [
         "https://code.claude.com/docs/en/admin-setup",
         "https://code.claude.com/docs/en/agent-sdk/agent-loop",
@@ -478,6 +478,8 @@
         "https://code.claude.com/docs/en/whats-new/2026-w18",
         "https://code.claude.com/docs/en/whats-new/2026-w19",
         "https://code.claude.com/docs/en/whats-new/2026-w20",
+        "https://code.claude.com/docs/en/whats-new/2026-w21",
+        "https://code.claude.com/docs/en/whats-new/2026-w22",
         "https://code.claude.com/docs/en/workflows",
         "https://code.claude.com/docs/en/worktrees",
         "https://code.claude.com/docs/en/zero-data-retention"

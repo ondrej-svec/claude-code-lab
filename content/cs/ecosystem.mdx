@@ -56,6 +56,17 @@ Závislosti mezi pluginy se teď hlídají. `claude plugin disable` odmítne zak
 
 Pluginy v adresářích `.claude/skills/` se teď načítají automaticky — bez marketplace. Rychlý start: `claude plugin init <jméno>` zapíše skelet pluginu přímo do `.claude/skills/<jméno>/`.
 
+Jeden oficiální plugin od Anthropicu, který má smysl přidat brzo: **`security-guidance`**. Průběžně kontroluje změny kódu na zranitelnosti ve stejné session — rychlá kontrola vzorů při každé editaci, model review na konci každého kola, hlubší agentní review při commitu nebo pushi. Nainstaluj z oficiálního marketplace a obnov:
+
+```text
+/plugin install security-guidance@claude-plugins-official
+/reload-plugins
+```
+
+Vlastní pravidla pro projekt dej do `.claude/claude-security-guidance.md`.
+
+→ [Security guidance plugin](https://code.claude.com/docs/en/security-guidance)
+
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 
 ## Postav si vlastní skill — agentním způsobem

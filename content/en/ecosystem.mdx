@@ -56,6 +56,17 @@ Plugin dependencies are now enforced. `claude plugin disable` refuses if another
 
 Plugins in `.claude/skills/` directories auto-load — no marketplace registration needed. Scaffold one with `claude plugin init <name>`, which writes the plugin skeleton into `.claude/skills/<name>/`.
 
+One official Anthropic plugin worth adding early: **`security-guidance`**. It reviews code changes for vulnerabilities in the same session — fast pattern check on each edit, model review at each turn end, deeper agentic review on commit or push. Install from the official marketplace and reload:
+
+```text
+/plugin install security-guidance@claude-plugins-official
+/reload-plugins
+```
+
+Add project-specific rules in `.claude/claude-security-guidance.md`.
+
+→ [Security guidance plugin](https://code.claude.com/docs/en/security-guidance)
+
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 
 ## Build your first skill — the agentic way
