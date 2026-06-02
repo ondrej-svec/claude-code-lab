@@ -91,6 +91,10 @@ Claude Code má pět režimů oprávnění. Aktivní řídí, co může Claude d
 4. **Bypass permissions** — Claude edituje a spouští bez ptání. Stejný stav jako při spuštění s `--dangerously-skip-permissions`. V desktopové aplikaci ho nejdřív musíš povolit v nastavení, než se v menu objeví. Bypass se nově vztahuje i na zápisy do `.claude/`, `.git/`, `.vscode/` a konfiguračních souborů shellu — cesty, které dřív vyžadovaly potvrzení i v bypass módu. Destruktivní příkazy se pořád ptají jako záchranná síť. Používej jen v izolovaném prostředí.
 5. **Auto mode** — rychlý režim poháněný klasifikátorem, který se učí, co je bezpečné, a ptá se jen na hraniční případy. **Když chceš rychlost, dej přednost Auto před Bypass** — Auto drží zábrany, Bypass je odstraňuje. Přesné chování klasifikátoru uprav přes `settings.autoMode.hard_deny` — pravidla tam blokují bezpodmínečně, nevadí, co uživatel chce ani jestli máš v `allow` výjimky. Auto mode nepotlačuje `AskUserQuestion`, jestli na něm závisíš ty nebo skill.
 
+<Callout variant="note">
+Výjimka v accept edits režimu: konfigurační soubory shellu a konfigurace build nástrojů (`.npmrc`, `.bazelrc`, `.devcontainer/`) se pořád ptají — tyhle soubory můžou vést k nechtěnému spuštění příkazů.
+</Callout>
+
 **Jak přepínat:**
 
 - **Desktopová aplikace**: zmáčkni `M` a pak číslo `1`–`5`. Režimy, které potřebují povolit v nastavení, jsou do té doby zašedlé.

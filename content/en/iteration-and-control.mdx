@@ -91,6 +91,10 @@ Claude Code has five permission modes. The active one controls what Claude can d
 4. **Bypass permissions** — Claude edits and runs without asking. Same state as launching with `--dangerously-skip-permissions`. Must be enabled in the desktop app settings before it shows up in the menu. Bypass now extends to writes inside `.claude/`, `.git/`, `.vscode/`, and shell config files — paths that still prompted even in bypass mode. Catastrophic removal commands still prompt as a safety net. Use only in sandboxed environments.
 5. **Auto mode** — a classifier-driven "go fast" mode that learns safe operations and asks only on the ambiguous ones. **Prefer Auto over Bypass when you want speed** — Auto keeps guardrails, Bypass removes them. Fine-tune the classifier with `settings.autoMode.hard_deny` — rules there block unconditionally, regardless of user intent or any `allow` exceptions. Auto mode doesn't suppress `AskUserQuestion` when you or a skill explicitly relies on it.
 
+<Callout variant="note">
+One exception in accept edits mode: shell startup files and build-tool configs (`.npmrc`, `.bazelrc`, `.devcontainer/`) still prompt — these files can lead to unintended command execution.
+</Callout>
+
 **How to switch:**
 
 - **Desktop app**: press `M`, then a number `1`–`5`. Modes that need settings enablement appear dimmed until turned on.
