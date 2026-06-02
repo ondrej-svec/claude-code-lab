@@ -92,7 +92,7 @@ Claude Code has five permission modes. The active one controls what Claude can d
 5. **Auto mode** — a classifier-driven "go fast" mode that learns safe operations and asks only on the ambiguous ones. **Prefer Auto over Bypass when you want speed** — Auto keeps guardrails, Bypass removes them. Fine-tune the classifier with `settings.autoMode.hard_deny` — rules there block unconditionally, regardless of user intent or any `allow` exceptions. Auto mode doesn't suppress `AskUserQuestion` when you or a skill explicitly relies on it.
 
 <Callout variant="note">
-One exception in accept edits mode: shell startup files and build-tool configs (`.npmrc`, `.bazelrc`, `.devcontainer/`) still prompt — these files can lead to unintended command execution.
+One exception in accept edits mode: shell startup files (`.zshenv`, `.bash_login`) and build-tool configs (`.npmrc`, `.bazelrc`, `.devcontainer/`) still prompt — these files can lead to unintended command execution.
 </Callout>
 
 **How to switch:**

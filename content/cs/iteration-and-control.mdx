@@ -92,7 +92,7 @@ Claude Code má pět režimů oprávnění. Aktivní řídí, co může Claude d
 5. **Auto mode** — rychlý režim poháněný klasifikátorem, který se učí, co je bezpečné, a ptá se jen na hraniční případy. **Když chceš rychlost, dej přednost Auto před Bypass** — Auto drží zábrany, Bypass je odstraňuje. Přesné chování klasifikátoru uprav přes `settings.autoMode.hard_deny` — pravidla tam blokují bezpodmínečně, nevadí, co uživatel chce ani jestli máš v `allow` výjimky. Auto mode nepotlačuje `AskUserQuestion`, jestli na něm závisíš ty nebo skill.
 
 <Callout variant="note">
-Výjimka v accept edits režimu: konfigurační soubory shellu a konfigurace build nástrojů (`.npmrc`, `.bazelrc`, `.devcontainer/`) se pořád ptají — tyhle soubory můžou vést k nechtěnému spuštění příkazů.
+Výjimka v accept edits režimu: konfigurační soubory shellu (`.zshenv`, `.bash_login`) a konfigurace build nástrojů (`.npmrc`, `.bazelrc`, `.devcontainer/`) se pořád ptají — tyhle soubory můžou vést k nechtěnému spuštění příkazů.
 </Callout>
 
 **Jak přepínat:**
