@@ -22,7 +22,7 @@ Můžeš agentovi pustit otěže čtyřmi způsoby.
 - **Goal mode.** `/goal <podmínka>` nastaví cíl a Claude pracuje přes kola, dokud ho nesplní — funguje v interaktivním režimu, v `-p` i přes Remote Control. Živý overlay ukazuje, kolik času, kol a tokenů uteklo. Popisuješ výsledek; Claude sám pozná, kdy je hotovo. Hodí se, když je cílová čára jasná, ale počet kroků není.
 - **Auto mode.** Postoj v oprávněních (popsaný v [kapitole 4](/cs/lab/iteration-and-control)), který Claudovi dovoluje udělat hodně malých akcí bez schvalování každé jedné. Jiný tvar než smyčka — stejná konverzace, žádný plánovaný re-entry, ale Claude se uvnitř může agresivně rozjet.
 
-- **Dynamická workflow.** Požádej Clauda o vytvoření workflow a on orchestruje práci napříč desítkami až stovkami agentů na pozadí — fan-out, na který ostatní tři tvary nestačí. `/workflows` ukáže tvé běhy.
+- **Dynamická workflow.** Napiš do promptu `ultracode` (nebo popiš, co chceš, vlastními slovy — přirozená formulace funguje taky) a Claude orchestruje práci napříč desítkami až stovkami agentů na pozadí. Klíčové slovo se při psaní zvýrazní fialově. Fan-out, na který ostatní tři tvary nestačí. `/workflows` ukáže tvé běhy.
 
 Všechny čtyři způsoby nechají agenta jet bez tebe. Selhávají jinak.
 
