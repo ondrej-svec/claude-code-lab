@@ -18,7 +18,7 @@ Everything we're about to cover — skills, plugins, MCPs, subagents — runs in
   caption="Multiple sessions live in the sidebar. Switch without losing context."
 />
 
-Once sessions spread across repos and machines, `claude agents` is the one-stop list: running, blocked on you, done. Add `--json` and the output is machine-readable: every live session as a JSON array, ready for tmux-resurrect, status bars, session pickers, or any script that needs to know what's running. On a monorepo, `claude agents --cwd <path>` scopes the list to sessions rooted at that directory. Dispatch flags let you configure a background session before it starts: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir`, and `--dangerously-skip-permissions`. Set the model, the effort level, the permission posture, the MCPs it can reach — then walk away.
+Once sessions spread across repos and machines, `claude agents` is the one-stop list: running, blocked on you, done. Add `--json` and the output is machine-readable: every live session as a JSON array, ready for tmux-resurrect, status bars, session pickers, or any script that needs to know what's running. Blocked sessions now include a `waitingFor` field — shows what the session is stuck on (e.g. a pending permission prompt). On a monorepo, `claude agents --cwd <path>` scopes the list to sessions rooted at that directory. Dispatch flags let you configure a background session before it starts: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir`, and `--dangerously-skip-permissions`. Set the model, the effort level, the permission posture, the MCPs it can reach — then walk away.
 
 New flags now extend what you can configure from the dashboard. `--add-dir`, `--settings`, `--mcp-config`, and `--plugin-dir` apply to the dashboard itself and to background sessions it dispatches. `--permission-mode`, `--model`, `--effort`, and `--dangerously-skip-permissions` set defaults for sessions dispatched from the view.
 
@@ -144,7 +144,7 @@ Claude opens the page, inspects, reports back. This is the moment MCPs stop bein
 
 **Checking connections.** `/mcp` shows the tool count for each connected server and flags any server that connected with 0 tools — zero tools means the server connected but nothing loaded.
 
-→ [MCP docs](https://code.claude.com/docs/en/mcp)
+→ [MCP quickstart](https://code.claude.com/docs/en/mcp-quickstart) · [MCP docs](https://code.claude.com/docs/en/mcp)
 
 ## Subagents — delegate to keep your context clean
 

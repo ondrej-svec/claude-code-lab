@@ -86,7 +86,7 @@ Jestli teprve začínáš: čti diffy pečlivě a vybuduj si reflexy. Jak harne
 Claude Code má pět režimů oprávnění. Aktivní řídí, co může Claude dělat bez ptání.
 
 1. **Ask permissions** — Claude se ptá před každou editací nebo spuštěním nástroje. (Výchozí.)
-2. **Accept edits** — Claude edituje volně, diff si prohlédneš až po.
+2. **Accept edits** — Claude edituje volně, diff si prohlédneš až po. Výjimka: konfigurační soubory build nástrojů, které umožňují spouštění kódu (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/`), se ptají i tady.
 3. **Plan mode** — Claude může číst, přemýšlet a navrhovat, ale **nic nemůže editovat ani spouštět**, dokud plan mode neopustíš.
 4. **Bypass permissions** — Claude edituje a spouští bez ptání. Stejný stav jako při spuštění s `--dangerously-skip-permissions`. V desktopové aplikaci ho nejdřív musíš povolit v nastavení, než se v menu objeví. Bypass se nově vztahuje i na zápisy do `.claude/`, `.git/`, `.vscode/` a konfiguračních souborů shellu — cesty, které dřív vyžadovaly potvrzení i v bypass módu. Destruktivní příkazy se pořád ptají jako záchranná síť. Používej jen v izolovaném prostředí.
 5. **Auto mode** — rychlý režim poháněný klasifikátorem, který se učí, co je bezpečné, a ptá se jen na hraniční případy. **Když chceš rychlost, dej přednost Auto před Bypass** — Auto drží zábrany, Bypass je odstraňuje. Přesné chování klasifikátoru uprav přes `settings.autoMode.hard_deny` — pravidla tam blokují bezpodmínečně, nevadí, co uživatel chce ani jestli máš v `allow` výjimky. Auto mode nepotlačuje `AskUserQuestion`, jestli na něm závisíš ty nebo skill.
@@ -137,6 +137,8 @@ Dvě přidané možnosti hookování, které stojí za zabudování do harnessu.
 **`terminalSequence`** v JSON výstupu hooku: hook teď může posílat desktopové notifikace, měnit titulek okna nebo zazvonit zápisem do tohohle pole — bez kontrolního terminálu. Šikovné pro `PostToolUse` hooky, co tě upozorní, když se dokončí dlouhý build a ty jsi mezitím od klávesnice odešel.
 
 **`background_tasks` a `session_crons`** jsou teď součástí vstupu `Stop` a `SubagentStop` hookům — seznam aktivních background tasků a naplánovaných cronů v okamžiku, kdy session končí. Hodí se pro `Stop` hooky, které potřebují rozhodnout, jestli je potřeba úklid nebo předání kontextu, než session skončí.
+
+**`hookSpecificOutput.additionalContext`** v `Stop` a `SubagentStop` hooku umožňuje hooku předat Claudovi zprávu, aniž by odpověď byla označena jako chyba hooku. Kolo pokračuje. Použij to tehdy, když hook potřebuje něco nahlásit — aktivní tasky, poznámky pro handoff — místo toho, aby blokoval nebo skončil.
 
 ## Doporučený flow, až budeš připravený
 

@@ -20,9 +20,9 @@ Můžeš agentovi pustit otěže čtyřmi způsoby.
 
 - **Smyčka.** Stejný úkol, spuštěný v intervalu nebo self-paced, dokud nesedne podmínka. `/loop 5m /check-deploy` znovu spouští každých pět minut. `/loop /fix-typecheck` nechá Claude jet vlastním tempem k podmínce „testy projdou“. Konverzace pokračuje; každé kolo ví, co dělalo to předchozí.
 - **Goal mode.** `/goal <podmínka>` nastaví cíl a Claude pracuje přes kola, dokud ho nesplní — funguje v interaktivním režimu, v `-p` i přes Remote Control. Živý overlay ukazuje, kolik času, kol a tokenů uteklo. Popisuješ výsledek; Claude sám pozná, kdy je hotovo. Hodí se, když je cílová čára jasná, ale počet kroků není.
-- **Auto mode.** Postoj v oprávněních (popsaný v [kapitole 4](/cs/lab/iteration-and-control)), který Claudovi dovoluje udělat hodně malých akcí bez schvalování každé jedné. Jiný tvar než smyčka — stejná konverzace, žádný plánovaný re-entry, ale Claude se uvnitř může agresivně rozjet.
+- **Auto mode.** Postoj v oprávněních (popsaný v [kapitole 4](/cs/lab/iteration-and-control)), který Claudovi dovoluje udělat hodně malých akcí bez schvalování každé jedné. Jiný tvar než smyčka — stejná konverzace, žádný plánovaný re-entry, ale Claude se uvnitř může agresivně rozjet. Paralelní volání nástrojů jsou teď odolnější: selhání jednoho bash příkazu neruší ostatní volání ve stejné dávce — každé vrátí svůj výsledek samostatně.
 
-- **Dynamická workflow.** Požádej Clauda o vytvoření workflow a on orchestruje práci napříč desítkami až stovkami agentů na pozadí — fan-out, na který ostatní tři tvary nestačí. `/workflows` ukáže tvé běhy.
+- **Dynamická workflow.** Klíčové slovo je teď `ultracode` — samotné slovo „workflow" běh nespustí. Řekni třeba „ultracode the migration" nebo „ultracode this fan-out". Slovo se v promptu zvýrazní fialově. Claude orchestruje desítky až stovky agentů na pozadí. `/workflows` ukáže tvé běhy.
 
 Všechny čtyři způsoby nechají agenta jet bez tebe. Selhávají jinak.
 

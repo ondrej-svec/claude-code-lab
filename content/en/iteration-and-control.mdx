@@ -86,7 +86,7 @@ If you're just starting: read diffs carefully and build the reflexes. As the har
 Claude Code has five permission modes. The active one controls what Claude can do without asking.
 
 1. **Ask permissions** — Claude asks before each edit or tool run. (Default.)
-2. **Accept edits** — Claude edits freely, you review the diff afterward.
+2. **Accept edits** — Claude edits freely, you review the diff afterward. Exception: build-tool config files that can grant code execution (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/`) still prompt even here.
 3. **Plan mode** — Claude can read, think, and propose, but **cannot edit or run** until you leave plan mode.
 4. **Bypass permissions** — Claude edits and runs without asking. Same state as launching with `--dangerously-skip-permissions`. Must be enabled in the desktop app settings before it shows up in the menu. Bypass now extends to writes inside `.claude/`, `.git/`, `.vscode/`, and shell config files — paths that still prompted even in bypass mode. Catastrophic removal commands still prompt as a safety net. Use only in sandboxed environments.
 5. **Auto mode** — a classifier-driven "go fast" mode that learns safe operations and asks only on the ambiguous ones. **Prefer Auto over Bypass when you want speed** — Auto keeps guardrails, Bypass removes them. Fine-tune the classifier with `settings.autoMode.hard_deny` — rules there block unconditionally, regardless of user intent or any `allow` exceptions. Auto mode doesn't suppress `AskUserQuestion` when you or a skill explicitly relies on it.
@@ -137,6 +137,8 @@ Two hook additions worth building into your harness.
 **`terminalSequence`** in hook JSON output: hooks can emit desktop notifications, set the window title, or ring a bell by writing to this field — no controlling terminal required. Practical for `PostToolUse` hooks that notify you when a long build finishes and you've stepped away.
 
 **`background_tasks` and `session_crons`** are now included in `Stop` and `SubagentStop` hook input — the active background tasks and scheduled crons at the moment the session stops. Useful for `Stop` hooks that need to decide whether to clean up or hand off before the session exits.
+
+**`hookSpecificOutput.additionalContext`** on `Stop` and `SubagentStop` hooks lets the hook pass a message back to Claude without the response being labeled a hook error. The turn keeps going. Use it when the hook needs to report something — active tasks, handoff notes — rather than just block or exit.
 
 ## The recommended flow, when you're ready
 
