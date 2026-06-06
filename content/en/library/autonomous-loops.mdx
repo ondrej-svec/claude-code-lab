@@ -21,7 +21,7 @@ You can hand the agent more rope four ways.
 - **The loop.** Same task, run on an interval or self-paced until a condition is met. `/loop 5m /check-deploy` reruns every five minutes. `/loop /fix-typecheck` lets Claude self-pace toward a tests-pass condition. The conversation persists; each turn knows what the previous turn did.
 - **Goal mode.** `/goal <condition>` sets a completion condition and Claude keeps working across turns until it's met — in interactive, `-p`, and Remote Control. A live overlay tracks elapsed time, turn count, and token spend. You state the outcome; Claude decides when it's done. Useful when the finish line is clear but the path length isn't.
 - **Auto mode.** A permission posture (covered in [chapter 4](/en/lab/iteration-and-control)) that lets Claude take many small actions without per-action approval. Different shape from the loop — same conversation, no scheduled re-entry, but Claude is allowed to fan out aggressively inside it.
-- **Dynamic workflows.** Ask Claude to create a workflow and it orchestrates work across tens to hundreds of agents in the background — fan-out at a scale the other three shapes can't reach. Run `/workflows` to view your runs.
+- **Dynamic workflows.** Type `ultracode` — the trigger keyword, highlighted in violet — and Claude orchestrates work across tens to hundreds of agents in the background, fan-out at a scale the other three shapes can't reach. Plain-words requests also work; `ultracode` is the explicit shorthand. Run `/workflows` to view your runs.
 
 All four let the agent move without you. They fail differently.
 

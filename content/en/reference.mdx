@@ -32,6 +32,8 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/config` | Open the settings UI. |
 | `/theme` | Switch terminal theme. |
 
+<Callout variant="tip">`fallbackModel` in `settings.json` configures up to three fallback models tried in order when the primary model is overloaded or unavailable. `--fallback-model` sets one from the command line for interactive sessions too.</Callout>
+
 ### Info
 
 | Command | What it does |
@@ -50,7 +52,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/agents` | Manage subagents (create, edit, delete). |
 | `/tasks` | Manage backgrounded tasks — kick off a long-running operation, pick up the result later. |
 | `/workflows` | View your dynamic workflow runs. |
-| `/plugin` | Install or manage plugins. |
+| `/plugin` | Install or manage plugins. `/plugin list` lists installed plugins; `--enabled`/`--disabled` filters. |
 | `/mcp` | Install or manage MCP servers. |
 | `/skills` | List installed skills. |
 | `/reload-skills` | Re-scan skill directories without restarting the session. |

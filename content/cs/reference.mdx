@@ -32,6 +32,8 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/config` | Otevře nastavení. |
 | `/theme` | Přepni téma terminálu. |
 
+<Callout variant="tip">`fallbackModel` v `settings.json` nastaví až tři záložní modely, které se zkusí popořadě, když je primární přetížený nebo nedostupný. `--fallback-model` na příkazové řádce funguje stejně, i v interaktivní session.</Callout>
+
 ### Info
 
 | Příkaz | Co dělá |
@@ -50,7 +52,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/agents` | Správa subagentů (vytvořit, upravit, smazat). |
 | `/tasks` | Správa úkolů na pozadí — rozjet dlouhý běh, výsledek vyzvednout později. |
 | `/workflows` | Přehled tvých dynamických workflow. |
-| `/plugin` | Instalace a správa pluginů. |
+| `/plugin` | Instalace a správa pluginů. `/plugin list` vypíše nainstalované; `--enabled`/`--disabled` filtruje. |
 | `/mcp` | Instalace a správa MCP serverů. |
 | `/skills` | Seznam nainstalovaných skillů. |
 | `/reload-skills` | Znovu projde adresáře se skilly bez restartu session. |
