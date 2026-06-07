@@ -24,7 +24,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/init` | Prohlédne repo a navrhne startovní `CLAUDE.md`. Nastav `CLAUDE_CODE_NEW_INIT=1` pro nový interaktivní multi-fázový flow. |
 | `/memory` | Prohlédni nebo uprav CLAUDE.md soubory a načtenou paměť. |
 | `/permissions` | Spravuj allow/deny pravidla pro nástroje. |
-| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. |
+| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený. |
 | `/fast` | Přepne fast mode. Výchozí je teď Opus 4.8 — 2× standardní cena, 2,5× rychlost. |
 | `/effort` | Per-session override effortu. |
 | `/keybindings` | Otevře `~/.claude/keybindings.json`. |
