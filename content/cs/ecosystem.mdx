@@ -18,7 +18,7 @@ Všechno, o čem bude řeč — skilly, pluginy, MCP, subagenti — běží uvni
   caption="Sidebar drží víc session najednou. Přepínej, aniž bys ztratil kontext."
 />
 
-Jakmile session rozseješ po repech i strojích, `claude agents` je jeden seznam — co běží, co čeká na tebe, co je hotové. Přidej `--json` a výstup je strojově čitelný: každá live session jako JSON pole — připravené pro tmux-resurrect, stavové lišty, session pickery nebo libovolný skript, který potřebuje vědět, co právě běží. Na monorepu `claude agents --cwd <cesta>` omezí výpis jen na session zasazené do toho adresáře. Flagy pro dispatch ti dovolí nakonfigurovat session na pozadí ještě než startuje: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir` a `--dangerously-skip-permissions`. Nastav model, úroveň úsilí, oprávnění, MCP servery — a odejdi od klávesnice.
+Jakmile session rozseješ po repech i strojích, `claude agents` je jeden seznam — co běží, co čeká na tebe, co je hotové. Přidej `--json` a výstup je strojově čitelný: každá live session jako JSON pole — připravené pro tmux-resurrect, stavové lišty, session pickery nebo libovolný skript, který potřebuje vědět, co právě běží. Blokované session teď mají pole `waitingFor` — říká, na co session čeká (například na nevyřízené oprávnění). Na monorepu `claude agents --cwd <cesta>` omezí výpis jen na session zasazené do toho adresáře. Flagy pro dispatch ti dovolí nakonfigurovat session na pozadí ještě než startuje: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir` a `--dangerously-skip-permissions`. Nastav model, úroveň úsilí, oprávnění, MCP servery — a odejdi od klávesnice.
 
 Nové flagy teď rozšiřují, co se dá z dashboardu nastavit. `--add-dir`, `--settings`, `--mcp-config` a `--plugin-dir` platí pro samotný dashboard i pro session, které z něj spouštíš v pozadí. `--permission-mode`, `--model`, `--effort` a `--dangerously-skip-permissions` nastavují výchozí hodnoty pro session, které dashboard spouští.
 
@@ -55,6 +55,17 @@ Potřebuješ plugin jen na jednu session bez trvalé instalace? Dej `claude --p
 Závislosti mezi pluginy se teď hlídají. `claude plugin disable` odmítne zakázat plugin, na kterém závisí jiný aktivní plugin — a ukáže, co musíš nejdřív zakázat. `claude plugin enable` jde opačně: tranzitivní závislosti zapne sám automaticky.
 
 Pluginy v adresářích `.claude/skills/` se teď načítají automaticky — bez marketplace. Rychlý start: `claude plugin init <jméno>` zapíše skelet pluginu přímo do `.claude/skills/<jméno>/`.
+
+Jeden oficiální plugin od Anthropicu, který má smysl přidat brzo: **`security-guidance`**. Průběžně kontroluje změny kódu na zranitelnosti ve stejné session — rychlá kontrola vzorů při každé editaci, model review na konci každého kola, hlubší agentní review při commitu nebo pushi. Nainstaluj z oficiálního marketplace a obnov:
+
+```text
+/plugin install security-guidance@claude-plugins-official
+/reload-plugins
+```
+
+Vlastní pravidla pro projekt dej do `.claude/claude-security-guidance.md`.
+
+→ [Security guidance plugin](https://code.claude.com/docs/en/security-guidance)
 
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 
@@ -144,7 +155,7 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 
 **Kontrola připojení.** `/mcp` ukazuje počet nástrojů každého připojeného serveru a označí servery, které se připojily s 0 nástroji — nula nástrojů znamená, že server navázal spojení, ale nic se nenačetlo.
 
-→ [MCP docs](https://code.claude.com/docs/en/mcp)
+→ [MCP quickstart](https://code.claude.com/docs/en/mcp-quickstart) · [MCP docs](https://code.claude.com/docs/en/mcp)
 
 ## Subagenti — delegování, které drží kontext čistý
 
