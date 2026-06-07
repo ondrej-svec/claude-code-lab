@@ -43,8 +43,25 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Resolve Playwright version
+        id: pw
+        run: echo "version=$(node -e "console.log(require('@playwright/test/package.json').version)")" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+
       - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
+        run: |
+          for i in 1 2 3; do
+            timeout 300 pnpm exec playwright install --with-deps chromium && exit 0
+            echo "::warning::Playwright install attempt $i stalled or failed; retrying"
+          done
+          echo "::error::Playwright install failed after 3 attempts"
+          exit 1
 
       - name: E2E tests
         run: pnpm test:e2e
