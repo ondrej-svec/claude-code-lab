@@ -16,7 +16,7 @@ permissions:
 jobs:
   quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
 
     steps:
       - name: Checkout
@@ -43,10 +43,37 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
+  e2e:
+    needs: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    # Browsers are pre-baked into the official Playwright image, so CI never
+    # downloads them from cdn.playwright.dev (which stalled at 100% for the
+    # Chrome 147 build and timed the job out for ~10 days). The image tag MUST
+    # match the @playwright/test version pinned in pnpm-lock.yaml — bump both
+    # together when Playwright is upgraded.
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v5
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: E2E tests
+        # playwright.config.ts webServer runs `pnpm build && pnpm start`.
         run: pnpm test:e2e
 
       - name: Upload Playwright report on failure

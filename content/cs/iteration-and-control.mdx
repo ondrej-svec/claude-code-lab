@@ -23,6 +23,8 @@ Tohle je nejužitečnější klávesová zkratka v celém nástroji. Používej
 
 Rewind je levný. Nový prompt od začátku je drahý.
 
+V menu přetáčení přibyla volba **Summarize up to here** — zkomprimuje starší historii a nechá nedávná kola nedotčená. Použij ji, když chceš uvolnit kontext v konkrétním místě konverzace bez toho, abys začínal od nuly.
+
 ## Zúžit scope
 
 Nejrychlejší cesta ke špatnému výstupu je prompt, který chce moc věcí naráz.
@@ -84,10 +86,10 @@ Jestli teprve začínáš: čti diffy pečlivě a vybuduj si reflexy. Jak harne
 Claude Code má pět režimů oprávnění. Aktivní řídí, co může Claude dělat bez ptání.
 
 1. **Ask permissions** — Claude se ptá před každou editací nebo spuštěním nástroje. (Výchozí.)
-2. **Accept edits** — Claude edituje volně, diff si prohlédneš až po.
+2. **Accept edits** — Claude edituje volně, diff si prohlédneš až po. U konfiguračních souborů nástrojů pro build, které mohou udělit spouštění kódu (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/` apod.), se pořád zeptá.
 3. **Plan mode** — Claude může číst, přemýšlet a navrhovat, ale **nic nemůže editovat ani spouštět**, dokud plan mode neopustíš.
 4. **Bypass permissions** — Claude edituje a spouští bez ptání. Stejný stav jako při spuštění s `--dangerously-skip-permissions`. V desktopové aplikaci ho nejdřív musíš povolit v nastavení, než se v menu objeví. Bypass se nově vztahuje i na zápisy do `.claude/`, `.git/`, `.vscode/` a konfiguračních souborů shellu — cesty, které dřív vyžadovaly potvrzení i v bypass módu. Destruktivní příkazy se pořád ptají jako záchranná síť. Používej jen v izolovaném prostředí.
-5. **Auto mode** — rychlý režim poháněný klasifikátorem, který se učí, co je bezpečné, a ptá se jen na hraniční případy. V desktopové aplikaci ho musíš povolit v nastavení. **Když chceš rychlost, dej přednost Auto před Bypass** — Auto drží zábrany, Bypass je odstraňuje. Přesné chování klasifikátoru uprav přes `settings.autoMode.hard_deny` — pravidla tam blokují bezpodmínečně, nevadí, co uživatel chce ani jestli máš v `allow` výjimky.
+5. **Auto mode** — rychlý režim poháněný klasifikátorem, který se učí, co je bezpečné, a ptá se jen na hraniční případy. Teď dostupný i na **Pro plánu** — funguje se Sonnet 4.6 i s Opusem. **Když chceš rychlost, dej přednost Auto před Bypass** — Auto drží zábrany, Bypass je odstraňuje. Přesné chování klasifikátoru uprav přes `settings.autoMode.hard_deny` — pravidla tam blokují bezpodmínečně, nevadí, co uživatel chce ani jestli máš v `allow` výjimky. Auto mode nepotlačuje `AskUserQuestion`, jestli na něm závisíš ty nebo skill.
 
 **Jak přepínat:**
 
@@ -96,8 +98,8 @@ Claude Code má pět režimů oprávnění. Aktivní řídí, co může Claude d
 
 <Screenshot
   src="/screenshots/ch4-permission-modes.png"
-  alt="Menu výběru režimu v Claude Code — pět režimů, Bypass permissions a Auto mode jsou zašedlé jako volitelné v nastavení"
-  caption="Desktopové menu Mode. Bypass a Auto jsou zašedlé, dokud je nepovolíš v nastavení."
+  alt="Menu výběru režimu v Claude Code — pět režimů, Bypass permissions je zašedlé jako volitelné v nastavení"
+  caption="Desktopové menu Mode. Bypass je zašedlé, dokud ho nepovolíš v nastavení."
 />
 
 Plan mode je ten, který má smysl znát nejvíc v každodenní práci. Claude v něm může přemýšlet tak tvrdě, jak chce, aniž by udělal cokoliv destruktivního — ty vidíš jeho úvahy, potvrdíš nebo přesměruješ, a pak plan mode opustíš, ať to provede. Auto mode je ten, kterému má smysl se naučit věřit, až budeš mít v repu testy a harness, které chyby chytí. Bypass je pro izolované prostředí — nedělej z něj návyk.
@@ -123,6 +125,20 @@ Kdy se nevyplatí:
 - Rychlé dotazy
 
 Ještě jedna dimenze, kterou stojí za to znát: **`/sandbox`**. Je to samostatný toggle, nezávislý na těchhle pěti režimech — obalí každý bash příkaz, který Claude pouští, sandboxem na úrovni OS (filesystem + síť). I v „accept edits" nebo „auto" pak Claude nemůže sáhnout mimo projekt ani na neschválené domény. [Kapitola 8](/cs/lab/next-steps#sandboxing) to rozebírá včetně flagů pro firemní nasazení.
+
+## Hooky: exec form a pokračování po zamítnutí
+
+Dvě přidané možnosti hookování, které stojí za zabudování do harnessu.
+
+**`args: string[]` (exec form)** přeskočí shell úplně. Pole jde přímo do procesu — path placeholdery nepotřebují uvozovky, žádná shell expanze, žádná překvapení. Přepni na exec form tehdy, když má příkaz dynamické argumenty, které by shell pobral špatně.
+
+**`continueOnBlock: true`** na `PostToolUse` hooku mění, co zamítnutí znamená. Standardně zamítnutí ukončí kolo. S `continueOnBlock` jde důvod zamítnutí zpět Claudovi a konverzace pokračuje. Claude vidí, co porušil, a může se přizpůsobit bez toho, aby ses musel znovu promptit. Hodí se pro výukové hooky — ty, co vynucují konvence místo přímého odmítání.
+
+**`terminalSequence`** v JSON výstupu hooku: hook teď může posílat desktopové notifikace, měnit titulek okna nebo zazvonit zápisem do tohohle pole — bez kontrolního terminálu. Šikovné pro `PostToolUse` hooky, co tě upozorní, když se dokončí dlouhý build a ty jsi mezitím od klávesnice odešel.
+
+**`background_tasks` a `session_crons`** jsou teď součástí vstupu `Stop` a `SubagentStop` hookům — seznam aktivních background tasků a naplánovaných cronů v okamžiku, kdy session končí. Hodí se pro `Stop` hooky, které potřebují rozhodnout, jestli je potřeba úklid nebo předání kontextu, než session skončí.
+
+**`hookSpecificOutput.additionalContext`** v návratové hodnotě `Stop` nebo `SubagentStop` hooku předá Claudovi zpětnou vazbu a nechá kolo pokračovat — bez označení za chybu hooku. Hook řekne Claudovi, co se stalo; Claude se přizpůsobí a konverzace pokračuje místo zastavení.
 
 ## Doporučený flow, až budeš připravený
 
