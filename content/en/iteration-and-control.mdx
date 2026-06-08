@@ -23,6 +23,8 @@ This is the single most useful keyboard shortcut in the whole tool. Use it whene
 
 Rewind is cheap. Re-prompting from scratch is expensive.
 
+The rewind menu now has **Summarize up to here** — compresses earlier context while keeping recent turns intact. Reach for it when you want to free up context at a specific point in the conversation without starting over.
+
 ## Narrow the scope
 
 The fastest way to bad output is a prompt that asks for too much at once.
@@ -84,10 +86,10 @@ If you're just starting: read diffs carefully and build the reflexes. As the har
 Claude Code has five permission modes. The active one controls what Claude can do without asking.
 
 1. **Ask permissions** — Claude asks before each edit or tool run. (Default.)
-2. **Accept edits** — Claude edits freely, you review the diff afterward.
+2. **Accept edits** — Claude edits freely, you review the diff afterward. Still prompts before writing build-tool config files that grant code execution (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/`, etc.).
 3. **Plan mode** — Claude can read, think, and propose, but **cannot edit or run** until you leave plan mode.
-4. **Bypass permissions** — Claude edits and runs without asking. Same state as launching with `--dangerously-skip-permissions`. Must be enabled in the desktop app settings before it shows up in the menu. Use only in sandboxed environments.
-5. **Auto mode** — a classifier-driven "go fast" mode that learns safe operations and asks only on the ambiguous ones. Must be enabled in the desktop app settings. **Prefer Auto over Bypass when you want speed** — Auto keeps guardrails, Bypass removes them.
+4. **Bypass permissions** — Claude edits and runs without asking. Same state as launching with `--dangerously-skip-permissions`. Must be enabled in the desktop app settings before it shows up in the menu. Bypass now extends to writes inside `.claude/`, `.git/`, `.vscode/`, and shell config files — paths that still prompted even in bypass mode. Catastrophic removal commands still prompt as a safety net. Use only in sandboxed environments.
+5. **Auto mode** — a classifier-driven "go fast" mode that learns safe operations and asks only on the ambiguous ones. Now available on the **Pro plan** with Sonnet 4.6 as well as Opus. **Prefer Auto over Bypass when you want speed** — Auto keeps guardrails, Bypass removes them. Fine-tune the classifier with `settings.autoMode.hard_deny` — rules there block unconditionally, regardless of user intent or any `allow` exceptions. Auto mode doesn't suppress `AskUserQuestion` when you or a skill explicitly relies on it.
 
 **How to switch:**
 
@@ -96,8 +98,8 @@ Claude Code has five permission modes. The active one controls what Claude can d
 
 <Screenshot
   src="/screenshots/ch4-permission-modes.png"
-  alt="Claude Code mode selector menu showing five modes with Bypass permissions and Auto mode dimmed as settings-gated"
-  caption="The desktop Mode menu. Bypass and Auto appear dimmed until enabled in settings."
+  alt="Claude Code mode selector menu showing five modes with Bypass permissions dimmed as settings-gated"
+  caption="The desktop Mode menu. Bypass appears dimmed until enabled in settings."
 />
 
 Plan mode is the one most worth knowing day-to-day. It lets Claude think as hard as it wants without doing anything destructive — you see the reasoning, accept or redirect, then leave plan mode to let it execute. Auto mode is the one most worth learning to trust, once your repo has the tests and harnesses to catch mistakes. Bypass is for sandboxes — don't make it a habit.
@@ -123,6 +125,20 @@ When it's not:
 - Quick questions
 
 One more dimension worth knowing: **`/sandbox`**. It's a separate toggle from these five modes — it wraps every bash command Claude runs in an OS-level filesystem and network sandbox, so even "accept edits" or "auto" can't reach outside the project or hit unapproved domains. [Chapter 8](/en/lab/next-steps#sandboxing) covers the details and the corporate-deployment flags.
+
+## Hooks: exec form and continued turns
+
+Two hook additions worth building into your harness.
+
+**`args: string[]` (exec form)** skips the shell entirely. The array goes straight to the process — path placeholders don't need quoting, no shell expansion surprises. Switch to exec form when a hook command has dynamic arguments a shell would mangle.
+
+**`continueOnBlock: true`** on a `PostToolUse` hook changes what a rejection means. Normally blocking ends the turn. With `continueOnBlock`, the hook's rejection reason feeds back to Claude and the conversation keeps going. Claude sees what it violated and can adapt without you re-prompting. Useful for teaching hooks — ones that enforce conventions rather than just refuse.
+
+**`terminalSequence`** in hook JSON output: hooks can emit desktop notifications, set the window title, or ring a bell by writing to this field — no controlling terminal required. Practical for `PostToolUse` hooks that notify you when a long build finishes and you've stepped away.
+
+**`background_tasks` and `session_crons`** are now included in `Stop` and `SubagentStop` hook input — the active background tasks and scheduled crons at the moment the session stops. Useful for `Stop` hooks that need to decide whether to clean up or hand off before the session exits.
+
+**`hookSpecificOutput.additionalContext`** returned by a `Stop` or `SubagentStop` hook feeds Claude feedback and keeps the turn going — without being flagged as a hook error. The hook can tell Claude what happened; Claude adapts and the conversation continues rather than halting.
 
 ## The recommended flow, when you're ready
 

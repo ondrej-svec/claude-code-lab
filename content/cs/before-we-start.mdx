@@ -37,6 +37,8 @@ Potřebuješ Anthropic účet. [console.anthropic.com](https://console.anthropic
 
 Při prvním spuštění Claude otevře prohlížeč pro OAuth. To je normální. Tokeny se uloží do `~/.claude/` na macOS/Linux, do `%APPDATA%\Claude\` na Windows.
 
+V prostředích, kde se prohlížečový callback nedostane na localhost — WSL2, SSH sessions, kontejnery — spusť `claude auth login` a OAuth kód vlož přímo do terminálu, až tě o to Claude požádá.
+
 ## Oprávnění
 
 Claude se vždy zeptá, než něco provede. Výchozí chování:

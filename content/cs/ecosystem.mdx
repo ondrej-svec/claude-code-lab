@@ -18,6 +18,16 @@ Všechno, o čem bude řeč — skilly, pluginy, MCP, subagenti — běží uvni
   caption="Sidebar drží víc session najednou. Přepínej, aniž bys ztratil kontext."
 />
 
+Jakmile session rozseješ po repech i strojích, `claude agents` je jeden seznam — co běží, co čeká na tebe, co je hotové. Přidej `--json` a výstup je strojově čitelný: každá live session jako JSON pole — připravené pro tmux-resurrect, stavové lišty, session pickery nebo libovolný skript, který potřebuje vědět, co právě běží. Blokované session teď mají pole `waitingFor` — říká, na co session čeká (například na nevyřízené oprávnění). Na monorepu `claude agents --cwd <cesta>` omezí výpis jen na session zasazené do toho adresáře. Flagy pro dispatch ti dovolí nakonfigurovat session na pozadí ještě než startuje: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir` a `--dangerously-skip-permissions`. Nastav model, úroveň úsilí, oprávnění, MCP servery — a odejdi od klávesnice.
+
+Nové flagy teď rozšiřují, co se dá z dashboardu nastavit. `--add-dir`, `--settings`, `--mcp-config` a `--plugin-dir` platí pro samotný dashboard i pro session, které z něj spouštíš v pozadí. `--permission-mode`, `--model`, `--effort` a `--dangerously-skip-permissions` nastavují výchozí hodnoty pro session, které dashboard spouští.
+
+`claude agents` přijímá `--permission-mode`, `--model`, `--effort`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir` a `--dangerously-skip-permissions` k nastavení výchozích hodnot pro každou background session spuštěnou z pohledu. Nástroje a oprávnění jedou se session — ne s shellem, ze kterého jsi startoval.
+
+Připni session klávesou `Ctrl+T` v `claude agents` — připnuté session přežijí nečinnost, při aktualizaci Claude Code se restartují na místě a z paměti se uvolní až po těch nepřipnutých. Zadej `! <příkaz>` a spustíš shellový příkaz jako background session, ke které se dá připojit i od ní odpojit; z terminálu jde totéž jako `claude --bg --exec '<příkaz>'`.
+
+V pohledu agentů spustí `! <příkaz>` shell příkaz jako novou background session — takovou, ke které se můžeš připojit a zase odpojit. Totéž z terminálu: `claude --bg --exec '<příkaz>'`.
+
 ## Skilly
 
 **Skill** je balík instrukcí + volitelných skriptů, které si Claude načte podle potřeby. Doménový playbook — bydlí v `~/.claude/skills/`, aktivuje se sám, když situace sedí.
@@ -28,15 +38,34 @@ Všechno, o čem bude řeč — skilly, pluginy, MCP, subagenti — běží uvni
 
 Níž v téhle kapitole ukážeme, jak si jeden takový necháš Claudem napsat.
 
+Přes `skillOverrides` řídíš, co Claude vidí. Nastav skill na `off` a zmizí z modelu i z `/` autocompleteu. `user-invocable-only` schová skill před modelem, ale lomítkový příkaz zůstane. `name-only` zkolabuje popis na samotný název — hodí se, když ti velká sbírka skillů začne generovat šum.
+
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Pluginy
 
-**Plugin** balí související skilly, příkazy a hooky do jednoho instalovatelného celku. Nainstaluj jednou, získáš celý workflow.
+**Plugin** balí související skilly, příkazy a hooky do jednoho instalovatelného celku. Nainstaluj jednou, získáš celý workflow. Obrazovky Discover a Browse teď zobrazí příkazy, agenty, skilly, hooky a MCP/LSP servery pluginu — podívej se, než instaluješ. Nejjednodušší forma: root-level `SKILL.md` bez podadresáře `skills/` — plugin se automaticky zobrazí jako skill bez extra konfigurace.
 
 Sedmá kapitola provází instalací a používáním [Compound Engineering pluginu](https://github.com/EveryInc/compound-engineering-plugin) — Averyho smyčky brainstorm → plan → work → review → compound. Ten si zkus jako první. [Super Powers](https://github.com/iannuttall/claude-super-powers) je další, o kterém má smysl vědět — širší pick-and-choose toolkit.
 
 Jako reference: [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) je malá kolekce skillů, které jsem si zabalil pro svoji každodenní práci (`visualize` je jeden z nich). Ne něco, co bys teď potřeboval instalovat — příklad toho, co vznikne, jakmile napíšeš tři čtyři skilly, o které nechceš přijít. Jeden takový si postavíš sám.
+
+Potřebuješ plugin jen na jednu session bez trvalé instalace? Dej `claude --plugin-url <url>` a `.zip` archiv se načte jen pro tuhle session.
+
+Závislosti mezi pluginy se teď hlídají. `claude plugin disable` odmítne zakázat plugin, na kterém závisí jiný aktivní plugin — a ukáže, co musíš nejdřív zakázat. `claude plugin enable` jde opačně: tranzitivní závislosti zapne sám automaticky.
+
+Pluginy v adresářích `.claude/skills/` se teď načítají automaticky — bez marketplace. Rychlý start: `claude plugin init <jméno>` zapíše skelet pluginu přímo do `.claude/skills/<jméno>/`.
+
+Jeden oficiální plugin od Anthropicu, který má smysl přidat brzo: **`security-guidance`**. Průběžně kontroluje změny kódu na zranitelnosti ve stejné session — rychlá kontrola vzorů při každé editaci, model review na konci každého kola, hlubší agentní review při commitu nebo pushi. Nainstaluj z oficiálního marketplace a obnov:
+
+```text
+/plugin install security-guidance@claude-plugins-official
+/reload-plugins
+```
+
+Vlastní pravidla pro projekt dej do `.claude/claude-security-guidance.md`.
+
+→ [Security guidance plugin](https://code.claude.com/docs/en/security-guidance)
 
 → [Plugins docs](https://code.claude.com/docs/en/plugins)
 
@@ -88,6 +117,8 @@ Formát je [otevřená specifikace](https://agentskills.io) — pole frontmatter
 
 Udělej tohle třikrát, čtyřikrát — vytáhni skill pokaždé, když se něco opakuje — a najednou máš malou sbírku. Zabal ji s `.claude-plugin/plugin.json`, vydej na GitHubu, a je to **tvůj plugin**. Stejný tvar jako Compound Engineering plugin, který jsi instaloval dřív, jenom tvůj. Tým instaluje jednou a dědí všechno, co ses naučil systematizovat.
 
+Zkratka pro jednoskillové pluginy: jestli má plugin `SKILL.md` v kořeni a žádný `skills/` podadresář, Claude ho automaticky vystaví jako skill — adresářová struktura není potřeba.
+
 Compound, až úplně dolů.
 
 → [Skills docs](https://code.claude.com/docs/en/skills) · [Plugins docs](https://code.claude.com/docs/en/plugins)
@@ -118,7 +149,13 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 
 **Bezpečnostní poznámka.** MCPs, které načítají nedůvěryhodný obsah (webové stránky, issues, maily), do tvé session můžou injektovat instrukce. Varování od Anthropicu platí: třetí strany na vlastní riziko. Kapitola 9.5 má víc.
 
-→ [MCP docs](https://code.claude.com/docs/en/mcp)
+**`alwaysLoad`.** Claude ve výchozím stavu odkládá načítání nástrojů z MCP serveru na dobu, kdy jsou výslovně potřeba. Nastav `alwaysLoad: true` v konfiguraci serveru a všechny jeho nástroje budou dostupné hned od startu session — bez odkladu, bez průběžného hledání.
+
+**Přenositelné cesty.** MCP stdio servery teď dostávají `CLAUDE_PROJECT_DIR` v prostředí — stejnou proměnnou, kterou už mají hooky. Plugin konfigurace může v příkazech odkazovat na `${CLAUDE_PROJECT_DIR}`. Vazbu na cestu napíšeš jednou; hooky i MCP ji rozloží stejně.
+
+**Kontrola připojení.** `/mcp` ukazuje počet nástrojů každého připojeného serveru a označí servery, které se připojily s 0 nástroji — nula nástrojů znamená, že server navázal spojení, ale nic se nenačetlo.
+
+→ [MCP quickstart](https://code.claude.com/docs/en/mcp-quickstart) · [MCP docs](https://code.claude.com/docs/en/mcp)
 
 ## Subagenti — delegování, které drží kontext čistý
 

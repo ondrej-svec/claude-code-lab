@@ -12,7 +12,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 |---|---|
 | `/clear` | Start a new conversation. Previous one still archived — resume with `/resume`. |
 | `/compact [focus]` | Keep the conversation, summarise history, free context. Optional focus narrows what to keep. |
-| `/resume` | Pick up a previous conversation. |
+| `/resume` | Pick up a previous conversation. Background sessions (started with `--bg`) now appear here too, marked with `bg`. |
 | `/rewind` | Checkpoint menu — restore code, conversation, or both to an earlier state. Same as double-Esc. |
 | `/branch` | Fork the conversation from a given point. |
 | `/exit` | Quit Claude Code (or `Ctrl+D`). |
@@ -24,7 +24,8 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/init` | Scan the repo and propose a starting `CLAUDE.md`. Set `CLAUDE_CODE_NEW_INIT=1` for the new multi-phase interactive flow. |
 | `/memory` | View or edit CLAUDE.md files and loaded memory. |
 | `/permissions` | Manage tool allow/deny rules. |
-| `/model` | Switch model mid-conversation (e.g., Opus → Sonnet). |
+| `/model` | Switch model for the current session (e.g., Opus → Sonnet). Selecting a model now saves it as the default for new sessions. Press `s` in the picker to switch for the current session only. Set `fallbackModel` in `settings.json` to chain up to three fallback models tried in order when the primary is overloaded or unavailable. `--fallback-model` also applies to interactive sessions. |
+| `/fast` | Toggle fast mode. Default is now Opus 4.8 — 2× the standard rate for 2.5× the speed. |
 | `/effort` | Per-session effort override. |
 | `/keybindings` | Open `~/.claude/keybindings.json`. |
 | `/hooks` | Configure lifecycle hooks. |
@@ -39,7 +40,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/powerup` | Interactive onboarding — ten animated walkthroughs of features most people miss. |
 | `/context` | Visualise current context-window usage with optimisation hints. |
 | `/cost` | Session cost so far. |
-| `/usage`, `/stats` | Broader usage metrics. |
+| `/usage`, `/stats` | Usage metrics. `/usage` breaks down by category — skills, subagents, plugins, per-MCP-server cost. |
 | `/doctor` | Diagnostics — surfaces config conflicts, missing setup. |
 
 ### Workflow
@@ -48,12 +49,17 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 |---|---|
 | `/agents` | Manage subagents (create, edit, delete). |
 | `/tasks` | Manage backgrounded tasks — kick off a long-running operation, pick up the result later. |
-| `/plugin` | Install or manage plugins. |
+| `/workflows` | View your dynamic workflow runs. |
+| `/plugin` | Install or manage plugins. `/plugin list` lists installed plugins; `--enabled`/`--disabled` filters. |
 | `/mcp` | Install or manage MCP servers. |
 | `/skills` | List installed skills. |
+| `/reload-skills` | Re-scan skill directories without restarting the session. |
 | `/review` | Bundled PR-style review skill. |
+| `/code-review [effort]` | Correctness review at a chosen effort level (e.g. `/code-review high`). Pass `--comment` to post findings as inline GitHub PR comments. Pass `--fix` to apply findings to the working tree. `/simplify` runs a cleanup-only pass — reuse, simplification, efficiency, altitude — not the full bug-hunting review. |
 | `/security-review` | Bundled security review skill. |
-| `/diff` | Show diff since last checkpoint. |
+| `/diff` | Show diff since last checkpoint. Scroll the detail view with arrows, `j`/`k`, `PgUp`/`PgDn`, `Space`, `Home`/`End`. |
+
+Dynamic workflow runs now use `ultracode` as the trigger keyword — `workflow` no longer works, though asking for one in your own words still does. The keyword highlights in violet in the input line.
 
 ### Remote
 
@@ -74,6 +80,14 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/handoff` | Prepare a handoff doc for the next session or teammate. |
 | `/compound` | Document a solved problem for future reference. |
 
+### Project management
+
+Invoked in your terminal as `claude <subcommand>`, not inside a session.
+
+| Command | What it does |
+|---|---|
+| `claude project purge [path]` | Delete all Claude Code state for a project: transcripts, tasks, file history, config entry. Supports `--dry-run`, `-y/--yes`, `-i/--interactive`, `--all`. |
+
 → [Commands docs](https://code.claude.com/docs/en/commands)
 
 ## 8.2 Keyboard shortcuts
@@ -88,7 +102,7 @@ CLI shortcuts are context-specific. Full list at [code.claude.com/docs/en/keybin
 | `Ctrl+C` | Interrupt current input or response. **Does not exit.** Reserved. |
 | `Ctrl+D` | Exit Claude Code. Reserved. |
 | `Shift+Tab` | Cycle permission mode: default → acceptEdits → plan → auto. |
-| `Ctrl+R` | Reverse-search conversation history. |
+| `Ctrl+R` | Reverse-search history — searches all projects by default. `Ctrl+S` to narrow to the current project or session. |
 | `Ctrl+O` | Toggle verbose transcript (expands collapsed tool calls). |
 | `Ctrl+T` | Toggle task list. |
 | `Ctrl+B` | Background the current task. (Conflicts with tmux prefix — press twice.) |
@@ -296,10 +310,11 @@ Plugin manifest format, marketplace submission, plugin-vs-skill distinction:
 
 ### Hooks
 
-Shell commands, HTTP endpoints, or LLM prompts fired at specific lifecycle events. Events include `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, and many more.
+Shell commands, HTTP endpoints, or LLM prompts fired at specific lifecycle events. Events include `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, `MessageDisplay` (transform or hide assistant message text as it is displayed), and many more.
 
 - [Hooks docs](https://code.claude.com/docs/en/hooks)
 - Configure in `.claude/settings.json` under `"hooks"`, or in a plugin's `hooks/hooks.json`
+- Hooks receive the session's active effort level as `effort.level` in the JSON input and as `$CLAUDE_EFFORT` in the environment — handy for hooks that should behave differently depending on current effort
 
 ### MCPs
 
@@ -330,6 +345,8 @@ Every official link referenced across this guide, in one place.
 - [GitHub Actions](https://code.claude.com/docs/en/github-actions)
 - [Settings (permissions)](https://code.claude.com/docs/en/settings)
 - [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices)
+- [Deep links](https://code.claude.com/docs/en/deep-links)
+- [Workflows](https://code.claude.com/docs/en/workflows)
 
 ### Standards + reference repos
 

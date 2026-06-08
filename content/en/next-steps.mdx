@@ -53,6 +53,12 @@ Worth knowing about. Not worth insisting on until you have a real suite to mutat
 
 Agents don't mind reading your code. They can run it on every PR, on every commit, before every merge. Five worth knowing about:
 
+### Claude Code `/code-review`
+
+Ships with Claude Code. Run `/code-review` on any diff to surface correctness bugs — logic errors, edge cases, missing branches. Pass an effort level (`/code-review high`) to go deeper. Pass `--comment` and findings post as inline GitHub PR comments. Pass `--fix` and Claude applies the findings directly to your working tree — reuse, simplification, and efficiency improvements included. `/simplify` is now an alias for `/code-review --fix`.
+
+Different job from `/security-review`: code-review targets correctness; security-review targets vulnerabilities. Run both on a PR that matters.
+
 ### Claude Code `/security-review`
 
 Ships with Claude Code. Scans the pending diff for SQL injection, XSS, auth flaws, insecure data handling, dependency issues — with severity ratings and false-positive filtering. Customise by copying `security-review.md` into `.claude/commands/`. Source: [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review).

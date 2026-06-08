@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cc-lab · Ep 01 end card</title>
+    <link rel="stylesheet" href="../overlays/overlay-palette.css" />
+    <style>
+      body {
+        background: var(--cc-bg-ship-match);
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Top + bottom hairlines for the active zone. */
+      .frame-top {
+        position: absolute;
+        top: 80px;
+        left: 88px;
+        right: 88px;
+        height: 1px;
+        background: var(--cc-hull-line);
+      }
+
+      .slate {
+        position: absolute;
+        top: 36px;
+        left: 88px;
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        font-family: var(--cc-font-mono);
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        color: var(--cc-text-soft);
+      }
+
+      .slate-num { color: var(--cc-teal); }
+
+      .slate-tick {
+        width: 28px;
+        height: 1px;
+        background: var(--cc-teal);
+      }
+
+      .locator {
+        position: absolute;
+        top: 36px;
+        right: 88px;
+        font-family: var(--cc-font-mono);
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--cc-text-muted);
+      }
+
+      /* Stage — two clearly separated columns: faded ship on the left,
+         title on the right. They share a row but never overlap. */
+      .stage {
+        position: absolute;
+        top: 116px;
+        left: 0;
+        right: 0;
+        bottom: 220px;
+        display: grid;
+        grid-template-columns: 50% 50%;
+        align-items: center;
+      }
+
+      .ship-zone {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 32px 0 88px;
+        height: 100%;
+        position: relative;
+      }
+
+      .ship-zone img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        opacity: 0.78;
+      }
+
+      /* Trajectory hairline — sits in the space between ship and title,
+         confined to the gap. */
+      .trajectory {
+        position: absolute;
+        top: 50%;
+        right: -40px;
+        width: 80px;
+        height: 60px;
+        transform: translateY(-50%);
+        pointer-events: none;
+      }
+
+      .trajectory svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+
+      .title-zone {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 18px;
+        padding: 0 88px 0 48px;
+      }
+
+      .eyebrow {
+        font-family: var(--cc-font-mono);
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: 0.42em;
+        color: var(--cc-teal);
+        text-transform: uppercase;
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 36px;
+        height: 1px;
+        background: var(--cc-teal);
+      }
+
+      .title {
+        font-family: var(--cc-font-display);
+        font-size: 72px;
+        font-weight: 600;
+        line-height: 1.02;
+        letter-spacing: -0.018em;
+        color: var(--cc-text);
+        margin: 0;
+      }
+
+      .title .second {
+        display: block;
+      }
+
+      .url {
+        font-family: var(--cc-font-mono);
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--cc-text-muted);
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        margin-top: 6px;
+      }
+
+      /* Bottom meta strip — three cells. */
+      .meta {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 200px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1px;
+        background: var(--cc-hull-line);
+        border-top: 1px solid var(--cc-hull-line);
+      }
+
+      .meta-cell {
+        padding: 36px 56px;
+        background: var(--cc-bg);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 12px;
+      }
+
+      .meta-cell .label {
+        font-family: var(--cc-font-mono);
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--cc-text-soft);
+      }
+
+      .meta-cell .value {
+        font-family: var(--cc-font-body);
+        font-size: 22px;
+        font-weight: 500;
+        color: var(--cc-text);
+        letter-spacing: -0.005em;
+      }
+
+      .meta-cell .value .glyph {
+        margin-right: 10px;
+      }
+
+      .meta-cell.center { text-align: center; align-items: center; }
+      .meta-cell.right { text-align: right; align-items: flex-end; }
+    </style>
+  </head>
+  <body>
+    <div class="frame-top" aria-hidden="true"></div>
+
+    <div class="slate" aria-hidden="true">
+      <span class="slate-num">002</span>
+      <span class="slate-tick"></span>
+      <span>Up Next</span>
+    </div>
+
+    <div class="locator">Continue → Ep 02</div>
+
+    <div class="stage">
+      <div class="ship-zone">
+        <img
+          class="ship-feather"
+          src="https://cc-lab.ondrejsvec.com/chapters/03-teach-claude-your-project.png"
+          alt=""
+        />
+        <div class="trajectory" aria-hidden="true">
+          <svg viewBox="0 0 80 60" preserveAspectRatio="none">
+            <path
+              d="M 0 30 C 24 30, 56 12, 80 6"
+              fill="none"
+              stroke="rgba(224, 222, 244, 0.45)"
+              stroke-width="1"
+              stroke-dasharray="4 6"
+            />
+            <circle cx="80" cy="6" r="3" fill="rgba(156, 207, 216, 0.85)" />
+          </svg>
+        </div>
+      </div>
+      <div class="title-zone">
+        <div class="eyebrow">Next · Ep 02</div>
+        <h1 class="title">
+          Teach Claude
+          <span class="second">your project</span>
+        </h1>
+        <div class="url">cc-lab.ondrejsvec.com / lab / teach-claude-your-project</div>
+      </div>
+    </div>
+
+    <div class="meta">
+      <div class="meta-cell">
+        <div class="label">Subtitles</div>
+        <div class="value"><span class="glyph">🐟</span>EN · CS</div>
+      </div>
+      <div class="meta-cell center">
+        <div class="label">Cadence</div>
+        <div class="value">New episode every two weeks</div>
+      </div>
+      <div class="meta-cell right">
+        <div class="label">Continue</div>
+        <div class="value">cc-lab.ondrejsvec.com</div>
+      </div>
+    </div>
+  </body>
+</html>

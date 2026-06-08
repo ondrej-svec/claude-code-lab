@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cc-lab · cockpit frame</title>
+    <link rel="stylesheet" href="./overlay-palette.css" />
+    <style>
+      /* Production cockpit chrome — transparent background, hull strips +
+       * antenna + side ticks + face cam port outline only. OBS positions
+       * the actual webcam source into the face cam slot and the screen
+       * capture into the canopy area. Mirrors scripts/streaming/preview/
+       * cockpit-full.html composition without the mock canopy content.
+       *
+       * Frame: 1920×1080. Hull strips 54px each (~5%). Face cam slot
+       * 269×151px bottom-right with rounded top-left only.
+       */
+      html,
+      body {
+        background: transparent;
+      }
+
+      /* ---------- Hull strips ---------- */
+      .hull-top,
+      .hull-bottom {
+        position: absolute;
+        left: 0;
+        height: 54px;
+        background: var(--cc-bg-hull);
+        backdrop-filter: blur(2px);
+        display: flex;
+        align-items: center;
+        font-family: var(--cc-font-mono);
+        font-size: 18px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        color: var(--cc-text-soft);
+      }
+
+      .hull-top {
+        top: 0;
+        right: 0;
+        border-bottom: 1px solid var(--cc-hull-line);
+        padding: 0 32px;
+        justify-content: space-between;
+      }
+
+      .hull-bottom {
+        bottom: 0;
+        right: 269px; /* leave the face cam panel uncovered */
+        border-top: 1px solid var(--cc-hull-line);
+        padding: 0 32px;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      /* Top hull contents — episode label centered between two empty
+       * regions where mode-badge / lower-third / rec-pip overlays land
+       * via OBS positioning. */
+      .episode-label {
+        font-family: var(--cc-font-display);
+        font-size: 20px;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        color: var(--cc-text);
+      }
+
+      /* Bottom hull contents — Don't Panic pill + chapter URL anchored,
+       * dictation-indicator / lower-third overlays slot between via OBS. */
+      .pill-dont-panic {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 14px;
+        background: rgba(35, 33, 54, 0.7);
+        border: 1px solid rgba(246, 193, 119, 0.34);
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--cc-yellow);
+      }
+
+      .pill-dont-panic::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--cc-yellow);
+      }
+
+      .chapter-url {
+        font-family: var(--cc-font-body);
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--cc-text-muted);
+        letter-spacing: 0.04em;
+      }
+
+      /* ---------- Antenna spire ---------- */
+      .antenna {
+        position: absolute;
+        top: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1.5px;
+        height: 28px;
+        background: var(--cc-hull-line);
+      }
+
+      .antenna::before {
+        content: "";
+        position: absolute;
+        top: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: rgba(224, 222, 244, 0.6);
+      }
+
+      /* ---------- Side hull ticks ---------- */
+      .tick {
+        position: absolute;
+        top: 540px;
+        width: 38px;
+        height: 1px;
+        background: var(--cc-hull-line);
+      }
+
+      .tick--left {
+        left: 0;
+      }
+
+      .tick--right {
+        right: 0;
+      }
+
+      /* ---------- Face cam panel outline ---------- */
+      /* The slot is intentionally transparent — OBS positions the live
+       * webcam source into this region. Only the hairline border + corner
+       * rounding paint here. */
+      .facecam-port {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 269px;
+        height: 151px;
+        border-radius: 12px 0 0 0;
+        border-top: 1px solid var(--cc-hull-line);
+        border-left: 1px solid var(--cc-hull-line);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top hull strip — episode label slot is the centered region
+         lower-third overlays replace via OBS. Mode badge / REC pip
+         overlays anchor at the left and right ends. -->
+    <div class="hull-top">
+      <span aria-hidden="true"></span>
+      <span class="episode-label" data-slot="episode-label"></span>
+      <span aria-hidden="true"></span>
+    </div>
+
+    <!-- Antenna spire (centered, intrudes into top hull) -->
+    <div class="antenna" aria-hidden="true"></div>
+
+    <!-- Bottom hull strip (width minus face cam panel) -->
+    <div class="hull-bottom">
+      <span class="pill-dont-panic">Don't Panic</span>
+      <span class="chapter-url" data-slot="chapter-url"></span>
+    </div>
+
+    <!-- Side hull ticks at midheight -->
+    <div class="tick tick--left" aria-hidden="true"></div>
+    <div class="tick tick--right" aria-hidden="true"></div>
+
+    <!-- Face cam port outline (slot stays transparent for OBS) -->
+    <div class="facecam-port" aria-hidden="true"></div>
+
+    <script>
+      // Allow OBS / preview to set the centered episode label and chapter
+      // URL via query string, e.g.
+      //   cockpit-frame.html?episode=Ep%2001%20·%20First%20task&chapter=cc-lab.ondrejsvec.com/lab/first-task
+      (() => {
+        const params = new URLSearchParams(window.location.search);
+        const episode = params.get("episode");
+        const chapter = params.get("chapter");
+        const labelEl = document.querySelector('[data-slot="episode-label"]');
+        const urlEl = document.querySelector('[data-slot="chapter-url"]');
+        if (labelEl && episode) labelEl.textContent = episode;
+        if (urlEl && chapter) urlEl.textContent = chapter;
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cc-lab · dictation indicator</title>
+    <link rel="stylesheet" href="./overlay-palette.css" />
+    <style>
+      /* Sized to sit inside the bottom hull strip (54px tall).
+       * OBS positions the visible content at bottom-hull-left; the
+       * surrounding 1920×1080 frame is transparent. */
+      html,
+      body {
+        background: transparent;
+      }
+
+      .indicator {
+        position: absolute;
+        left: 32px;
+        bottom: 13px; /* vertical-centered inside 54px hull strip */
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 5px 14px;
+        background: rgba(35, 33, 54, 0.7);
+        border: 1px solid rgba(246, 193, 119, 0.34);
+        border-radius: 999px;
+        font-family: var(--cc-font-mono);
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--cc-yellow);
+      }
+
+      .pip {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--cc-yellow);
+        box-shadow: 0 0 6px rgba(246, 193, 119, 0.55);
+        animation: pulse 1.6s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.55;
+          transform: scale(0.92);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.12);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .pip {
+          animation: none;
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="indicator" role="status" aria-live="polite">
+      <span class="pip" aria-hidden="true"></span>
+      <span>/voice listening</span>
+    </div>
+  </body>
+</html>

@@ -12,7 +12,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 |---|---|
 | `/clear` | Nová konverzace. Stará se archivuje — obnovíš ji přes `/resume`. |
 | `/compact [focus]` | Konverzace zůstává, Claude shrne historii a uvolní kontext. Volitelný focus zúží, co zachovat. |
-| `/resume` | Navázat na předchozí konverzaci. |
+| `/resume` | Navázat na předchozí konverzaci. Session na pozadí (spuštěné přes `--bg`) se tu teď taky zobrazují, označené jako `bg`. |
 | `/rewind` | Checkpoint menu — obnoví kód, konverzaci nebo obojí do dřívějšího stavu. Stejné jako dvojité Esc. |
 | `/branch` | Větvení konverzace od zadaného bodu. |
 | `/exit` | Ukončí Claude Code (nebo `Ctrl+D`). |
@@ -24,7 +24,8 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/init` | Prohlédne repo a navrhne startovní `CLAUDE.md`. Nastav `CLAUDE_CODE_NEW_INIT=1` pro nový interaktivní multi-fázový flow. |
 | `/memory` | Prohlédni nebo uprav CLAUDE.md soubory a načtenou paměť. |
 | `/permissions` | Spravuj allow/deny pravidla pro nástroje. |
-| `/model` | Přepni model uprostřed konverzace (např. Opus → Sonnet). |
+| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený nebo nedostupný. `--fallback-model` platí i pro interaktivní session. |
+| `/fast` | Přepne fast mode. Výchozí je teď Opus 4.8 — 2× standardní cena, 2,5× rychlost. |
 | `/effort` | Per-session override effortu. |
 | `/keybindings` | Otevře `~/.claude/keybindings.json`. |
 | `/hooks` | Konfigurace lifecycle hooků. |
@@ -39,7 +40,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/powerup` | Interaktivní onboarding — deset animovaných průchodů po funkcích, které většina lidí přehlédne. |
 | `/context` | Vizualizace využití kontextového okna s tipy na optimalizaci. |
 | `/cost` | Dosavadní cena session. |
-| `/usage`, `/stats` | Širší metriky využití. |
+| `/usage`, `/stats` | Metriky využití. `/usage` teď zobrazí rozpad podle kategorií — skills, subagenty, pluginy a náklady per MCP server. |
 | `/doctor` | Diagnostika — vypíše konflikty v konfiguraci, chybějící nastavení. |
 
 ### Workflow
@@ -48,12 +49,17 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 |---|---|
 | `/agents` | Správa subagentů (vytvořit, upravit, smazat). |
 | `/tasks` | Správa úkolů na pozadí — rozjet dlouhý běh, výsledek vyzvednout později. |
-| `/plugin` | Instalace a správa pluginů. |
+| `/workflows` | Přehled tvých dynamických workflow. |
+| `/plugin` | Instalace a správa pluginů. `/plugin list` vypíše nainstalované; `--enabled`/`--disabled` filtruje. |
 | `/mcp` | Instalace a správa MCP serverů. |
 | `/skills` | Seznam nainstalovaných skillů. |
+| `/reload-skills` | Znovu projde adresáře se skilly bez restartu session. |
 | `/review` | Vestavěný skill pro PR-style review. |
+| `/code-review [effort]` | Kontrola správnosti kódu na zvolené úrovni (např. `/code-review high`). Přidej `--comment` a nálezy se přidají jako inline komentáře na GitHub PR. Přidej `--fix` a nálezy se rovnou aplikují do working tree. `/simplify` jede jen úklidové kolo — znovupoužití, zjednodušení, efektivita, výška abstrakce — ne plný lov chyb. |
 | `/security-review` | Vestavěný skill pro security review. |
-| `/diff` | Diff od posledního checkpointu. |
+| `/diff` | Diff od posledního checkpointu. Detail se dá rolovat klávesnicí — šipky, `j`/`k`, `PgUp`/`PgDn`, `Space`, `Home`/`End`. |
+
+Dynamická workflow se teď spouštějí klíčovým slovem `ultracode` — `workflow` dál nefunguje, vlastní formulací to ale pořád jde. Ve vstupním řádku se klíčové slovo zvýrazní fialově.
 
 ### Remote
 
@@ -74,6 +80,14 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/handoff` | Připraví handoff dokument pro další session nebo kolegu. |
 | `/compound` | Zaznamená vyřešený problém pro budoucí referenci. |
 
+### Správa projektů
+
+Spouštíš v terminálu jako `claude <subcommand>`, ne uvnitř session.
+
+| Příkaz | Co dělá |
+|---|---|
+| `claude project purge [path]` | Smaže veškerý Claude Code stav projektu: přepisy, úkoly, historii souborů, config záznam. Podporuje `--dry-run`, `-y/--yes`, `-i/--interactive`, `--all`. |
+
 → [Commands docs](https://code.claude.com/docs/en/commands)
 
 ## 8.2 Klávesové zkratky
@@ -88,7 +102,7 @@ Zkratky v CLI jsou kontextové. Kompletní seznam je na [code.claude.com/docs/e
 | `Ctrl+C` | Přeruší aktuální vstup nebo odpověď. **Neukončuje Claude.** Rezervované. |
 | `Ctrl+D` | Ukončí Claude Code. Rezervované. |
 | `Shift+Tab` | Cyklí režim oprávnění: default → acceptEdits → plan → auto. |
-| `Ctrl+R` | Reverse-search v historii konverzace. |
+| `Ctrl+R` | Reverse-search v historii — standardně prohledává všechny projekty. `Ctrl+S` zúží hledání na aktuální projekt nebo session. |
 | `Ctrl+O` | Přepíná podrobný transkript (rozbalí zkrácené tool volání). |
 | `Ctrl+T` | Přepíná seznam úkolů. |
 | `Ctrl+B` | Úkol na pozadí. (Konfliktuje s tmux prefixem — zmáčkni dvakrát.) |
@@ -296,10 +310,11 @@ Formát plugin manifestu, submission marketplace, rozdíl plugin vs. skill:
 
 ### Hooky
 
-Shell příkazy, HTTP endpointy nebo LLM prompty spouštěné na konkrétních lifecycle událostech. Události zahrnují `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact` a řadu dalších.
+Shell příkazy, HTTP endpointy nebo LLM prompty spouštěné na konkrétních lifecycle událostech. Události zahrnují `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, `MessageDisplay` (transformuje nebo schová text asistenta při zobrazení) a řadu dalších.
 
 - [Hooks docs](https://code.claude.com/docs/en/hooks)
 - Konfigurace v `.claude/settings.json` pod `"hooks"`, nebo v `hooks/hooks.json` pluginu
+- Hooky dostávají aktivní úroveň effortu session jako `effort.level` v JSON vstupu a jako `$CLAUDE_EFFORT` v prostředí — hodí se pro hooky, jejichž chování má záviset na aktuálním effortu
 
 ### MCPs
 
@@ -330,6 +345,8 @@ Každý oficiální odkaz použitý v průvodci, všechno na jednom místě.
 - [GitHub Actions](https://code.claude.com/docs/en/github-actions)
 - [Settings (permissions)](https://code.claude.com/docs/en/settings)
 - [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices)
+- [Deep links](https://code.claude.com/docs/en/deep-links)
+- [Workflows](https://code.claude.com/docs/en/workflows)
 
 ### Standardy + referenční repa
 
