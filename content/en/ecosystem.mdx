@@ -40,6 +40,8 @@ Chapter 7 shows how to have Claude build one of these for you.
 
 Trim what Claude sees with `skillOverrides`. Set a skill to `off` and it vanishes from both the model and `/` autocomplete. `user-invocable-only` keeps the slash command but hides it from the model. `name-only` collapses the description to just the name — useful when a large collection starts generating noise.
 
+Set `disableBundledSkills: true` in `settings.json` (or `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS=1`) to hide all bundled skills, built-in workflows, and default slash commands from the model entirely — only what you've installed remains visible.
+
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Plugins
