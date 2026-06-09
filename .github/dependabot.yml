@@ -6,6 +6,13 @@ updates:
       interval: weekly
       day: monday
     open-pull-requests-limit: 5
+    ignore:
+      # eslint 10 removed context.getFilename(); eslint-config-next still pulls
+      # eslint-plugin-react@^7.37.x (peer-capped at eslint ^9.7), which has no
+      # ESLint 10-compatible release. Lint fails hard on the major bump. Remove
+      # this rule once eslint-plugin-react ships ESLint 10 support.
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
     groups:
       next-ecosystem:
         patterns:
