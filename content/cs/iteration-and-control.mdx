@@ -126,6 +126,8 @@ Kdy se nevyplatí:
 
 Ještě jedna dimenze, kterou stojí za to znát: **`/sandbox`**. Je to samostatný toggle, nezávislý na těchhle pěti režimech — obalí každý bash příkaz, který Claude pouští, sandboxem na úrovni OS (filesystem + síť). I v „accept edits" nebo „auto" pak Claude nemůže sáhnout mimo projekt ani na neschválené domény. [Kapitola 8](/cs/lab/next-steps#sandboxing) to rozebírá včetně flagů pro firemní nasazení.
 
+**Troubleshooting přes `--safe-mode`.** Chová se Claude jinak, než bys čekal — hook se zasekl, MCP server zasahuje do session, skill přepisuje něco, co nechceš? Spusť session s `--safe-mode` nebo nastav `CLAUDE_CODE_SAFE_MODE=1`. Zakáže všechna přizpůsobení: soubory CLAUDE.md, pluginy, skilly, hooky i MCP servery. Pokud problém zmizí, bylo to v konfiguraci. Přidávej věci zpátky jednu po druhé, dokud ho nenajdeš.
+
 ## Hooky: exec form a pokračování po zamítnutí
 
 Dvě přidané možnosti hookování, které stojí za zabudování do harnessu.

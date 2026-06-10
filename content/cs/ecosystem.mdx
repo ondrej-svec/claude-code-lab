@@ -40,6 +40,8 @@ Níž v téhle kapitole ukážeme, jak si jeden takový necháš Claudem napsat
 
 Přes `skillOverrides` řídíš, co Claude vidí. Nastav skill na `off` a zmizí z modelu i z `/` autocompleteu. `user-invocable-only` schová skill před modelem, ale lomítkový příkaz zůstane. `name-only` zkolabuje popis na samotný název — hodí se, když ti velká sbírka skillů začne generovat šum.
 
+Nastav `disableBundledSkills: true` v `settings.json` (nebo `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS=1`), jestli chceš před modelem úplně schovat všechny vestavěné skilly, workflows a výchozí lomítkové příkazy — model pak vidí jen to, co sis sám nainstaloval.
+
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Pluginy
