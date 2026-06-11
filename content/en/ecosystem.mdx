@@ -197,7 +197,7 @@ Choose Library → Create new agent → let Claude generate the definition. Scop
 
 **Note.** In Claude Code v2.1.63+, the internal `Task` tool was renamed to `Agent`. Older tutorials calling it Task still work — same thing.
 
-**Limit.** Subagents cannot spawn other subagents. For nested delegation, use skills with `context: fork` or chain from the main conversation.
+**Nesting.** Sub-agents can spawn their own sub-agents, up to 5 levels deep. A coordinator agent can delegate to workers without routing everything through the main conversation.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 

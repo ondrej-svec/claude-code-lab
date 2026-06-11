@@ -197,7 +197,7 @@ Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu 
 
 **Poznámka.** V Claude Code v2.1.63+ byl interní nástroj `Task` přejmenovaný na `Agent`. Starší tutoriály, které mu říkají Task, pořád fungují — je to totéž.
 
-**Limit.** Subagenti nemůžou spouštět další subagenty. Pro vnořené delegování použij skilly s `context: fork` nebo řetěz z hlavní konverzace.
+**Vnořování.** Subagenti teď můžou spouštět vlastní subagenty — až 5 úrovní hluboko. Koordinační agent může delegovat na pracovníky, aniž by všechno šlo přes hlavní konverzaci.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 
