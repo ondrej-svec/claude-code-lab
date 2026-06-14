@@ -34,6 +34,8 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/config` | Open the settings UI. |
 | `/theme` | Switch terminal theme. |
 
+**Session language.** Set the `language` setting in `settings.json` to pin the language used for session-title generation. Default auto-detects from your conversation.
+
 ### Info
 
 | Command | What it does |
@@ -247,6 +249,8 @@ It does **not** send: your full filesystem, files outside the project, anything 
 | **API direct** | Developers, some features blocked | Retention policy set by you in API console; Remote Control, mobile app, and team features typically locked out. |
 
 If your company has a Team or Enterprise seat, **use it**. The retention and admin-policy differences matter for corporate use.
+
+**Model enforcement.** Managed settings add a second layer. Set `enforceAvailableModels: true` in your managed config and the `availableModels` allowlist also constrains the Default model — a Default that would resolve to a disallowed model falls back to the first allowed model, and users can't widen the list via their own project or user settings.
 
 ### `.claudeignore`
 
