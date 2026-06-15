@@ -34,6 +34,8 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/config` | Otevře nastavení. |
 | `/theme` | Přepni téma terminálu. |
 
+**Jazyk session.** V `settings.json` nastav `language` a session tituly se budou generovat v tom jazyce. Bez nastavení se jazyk detekuje z konverzace automaticky.
+
 ### Info
 
 | Příkaz | Co dělá |
@@ -247,6 +249,8 @@ Každý prompt posílá: tvoji zprávu, soubory, které jsi explicitně sdílel 
 | **API přímo** | Vývojáři, některé funkce blokované | Retenci si nastavuješ sám v API konzoli; Remote Control, mobilní aplikace a týmové funkce jsou obvykle mimo hru. |
 
 Pokud má tvoje firma Team nebo Enterprise seat, **použij ho**. Rozdíly v retenci a admin politice jsou pro firemní použití důležité.
+
+**Vynucení modelu.** Managed settings přidávají druhou vrstvu. Nastav `enforceAvailableModels: true` v managed konfiguraci a `availableModels` allowlist začne platit i pro výchozí model — výchozí model, který by se přeložil na zakázaný, se přepne na první povolený, a uživatelé ho nemůžou rozšiřovat přes vlastní projekt nebo user settings.
 
 ### `.claudeignore`
 
