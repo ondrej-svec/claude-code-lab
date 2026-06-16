@@ -42,6 +42,8 @@ Trim what Claude sees with `skillOverrides`. Set a skill to `off` and it vanishe
 
 Set `disableBundledSkills: true` in `settings.json` (or `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS=1`) to hide all bundled skills, built-in workflows, and default slash commands from the model entirely — only what you've installed remains visible.
 
+**Nested project skills.** Skills in `.claude/skills/` subdirectories inside a project load automatically when Claude works on files in that subtree. On a name clash, the nested skill appears as `<dir>:<name>` so both stay available.
+
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Plugins
