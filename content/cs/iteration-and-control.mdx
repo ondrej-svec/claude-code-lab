@@ -93,6 +93,8 @@ Claude Code má pět režimů oprávnění. Aktivní řídí, co může Claude d
 
 **Jemná pravidla oprávnění.** Záznamy `allow` a `deny` v `settings.json` přijímají syntaxi `Tool(param:value)` — porovnávají se skutečné parametry, se kterými byl nástroj zavolán, ne jen jeho název. Wildcard `*` funguje. Příklad: `Agent(model:opus)` v pravidle `deny` zablokuje spouštění Opus subagentů a nechá ostatní volání `Agent` projít. Hodí se na setup s auto módem — rychle, ale Opus ne na každého subagenta.
 
+**Syntaxe pravidel oprávnění.** Systém oprávnění zná pravidla ve formátu `Tool(param:value)`, která odpovídají parametrům vstupu nástroje — s `*` jako wildcard. `Agent(model:opus)` v `disallowedTools` třeba zablokuje jakéhokoliv subagenta spouštěného s Opusem.
+
 **Jak přepínat:**
 
 - **Desktopová aplikace**: zmáčkni `M` a pak číslo `1`–`5`. Režimy, které potřebují povolit v nastavení, jsou do té doby zašedlé.

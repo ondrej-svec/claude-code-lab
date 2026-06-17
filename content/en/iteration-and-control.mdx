@@ -93,6 +93,8 @@ Claude Code has five permission modes. The active one controls what Claude can d
 
 **Fine-grained permission rules.** `settings.json` allow/deny entries accept `Tool(param:value)` syntax — matches on a tool's actual input parameters (wildcard `*` works). Example: `Agent(model:opus)` in a `deny` rule blocks Opus subagent spawns while leaving other `Agent` calls through. Right for auto mode setups where you want speed but not Opus on every subagent.
 
+**Permission rule syntax.** The permission system accepts `Tool(param:value)` rules that match on a tool's input parameters — with `*` as wildcard. `Agent(model:opus)` in `disallowedTools`, for example, blocks any subagent from launching with Opus.
+
 **How to switch:**
 
 - **Desktop app**: press `M`, then a number `1`–`5`. Modes that need settings enablement appear dimmed until turned on.
