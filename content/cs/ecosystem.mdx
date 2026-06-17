@@ -42,7 +42,7 @@ Přes `skillOverrides` řídíš, co Claude vidí. Nastav skill na `off` a zmi
 
 Nastav `disableBundledSkills: true` v `settings.json` (nebo `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS=1`), jestli chceš před modelem úplně schovat všechny vestavěné skilly, workflows a výchozí lomítkové příkazy — model pak vidí jen to, co sis sám nainstaloval.
 
-**Vnořené projektové skilly.** Skilly v podadresářích `.claude/skills/` se načítají automaticky, jakmile Claude pracuje se soubory v té části projektu. Při konfliktu jmen se vnořený skill zobrazí jako `<dir>:<name>`, takže oba zůstanou dostupné.
+**Vnořené adresáře se skilly.** Skilly ve vnořených podadresářích `.claude/skills/` se načítají automaticky, když Claude pracuje se soubory v tom adresáři — žádná extra konfigurace. Při kolizi jmen se vnořený skill zobrazí jako `<dir>:<name>`, takže zůstanou dostupné oba. Hodí se na monorepa, kde různé balíčky potřebují vlastní sady skillů.
 
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
