@@ -31,7 +31,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/advisor [model]` | Přiřadí session poradní model — silnější model, který Claude volá v klíčových momentech (před volbou přístupu, při opakující se chybě, než ohlásí hotovo). Zkratky: `opus`, `sonnet`, `fable`. Vyžaduje v2.1.98+. Fable 5 jako poradce vyžaduje v2.1.170+. `/advisor off` odstraní. |
 | `/keybindings` | Otevře `~/.claude/keybindings.json`. |
 | `/hooks` | Konfigurace lifecycle hooků. |
-| `/config` | Otevře nastavení. |
+| `/config` | Otevře nastavení. `/config key=value` nastaví libovolnou volbu z promptu (např. `/config thinking=false`) — funguje v interaktivním režimu, `-p` i Remote Control. `/config --help` vypíše dostupné zkratky. |
 | `/theme` | Přepni téma terminálu. |
 
 **Jazyk session.** V `settings.json` nastav `language` a session tituly se budou generovat v tom jazyce. Bez nastavení se jazyk detekuje z konverzace automaticky.
