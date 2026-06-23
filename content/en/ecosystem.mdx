@@ -159,6 +159,8 @@ Claude opens the page, inspects, reports back. This is the moment MCPs stop bein
 
 **Checking connections.** `/mcp` shows the tool count for each connected server and flags any server that connected with 0 tools — zero tools means the server connected but nothing loaded.
 
+**CLI authentication.** `claude mcp login <name>` and `claude mcp logout <name>` authenticate MCP servers without opening the interactive `/mcp` menu. Add `--no-browser` to redirect the auth flow over stdin — useful when connecting over SSH.
+
 → [MCP quickstart](https://code.claude.com/docs/en/mcp-quickstart) · [MCP docs](https://code.claude.com/docs/en/mcp)
 
 ## Subagents — delegate to keep your context clean
