@@ -54,7 +54,7 @@ jobs:
     # match the @playwright/test version pinned in pnpm-lock.yaml — bump both
     # together when Playwright is upgraded.
     container:
-      image: mcr.microsoft.com/playwright:v1.60.0-noble
+      image: mcr.microsoft.com/playwright:v1.61.1-noble
 
     steps:
       - name: Checkout
