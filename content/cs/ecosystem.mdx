@@ -159,6 +159,8 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 
 **Kontrola připojení.** `/mcp` ukazuje počet nástrojů každého připojeného serveru a označí servery, které se připojily s 0 nástroji — nula nástrojů znamená, že server navázal spojení, ale nic se nenačetlo.
 
+**Autentizace z CLI.** `claude mcp login <název>` a `claude mcp logout <název>` autentizují MCP server bez nutnosti otevírat interaktivní `/mcp` menu. S `--no-browser` se auth flow přesměruje přes stdin — hodí se při připojení přes SSH.
+
 → [MCP quickstart](https://code.claude.com/docs/en/mcp-quickstart) · [MCP docs](https://code.claude.com/docs/en/mcp)
 
 ## Subagenti — delegování, které drží kontext čistý
