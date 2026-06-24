@@ -161,6 +161,8 @@ Claude opens the page, inspects, reports back. This is the moment MCPs stop bein
 
 **CLI authentication.** `claude mcp login <name>` and `claude mcp logout <name>` authenticate MCP servers without opening the interactive `/mcp` menu. Add `--no-browser` to redirect the auth flow over stdin — useful when connecting over SSH.
 
+**Tool timeout.** MCP tool calls that hang with no response now abort after 5 minutes instead of blocking indefinitely. Override with `CLAUDE_CODE_MCP_TOOL_IDLE_TIMEOUT`.
+
 → [MCP quickstart](https://code.claude.com/docs/en/mcp-quickstart) · [MCP docs](https://code.claude.com/docs/en/mcp)
 
 ## Subagents — delegate to keep your context clean

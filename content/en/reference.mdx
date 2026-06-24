@@ -276,6 +276,7 @@ Use it for secrets, customer data, internal docs — whatever your compliance po
 | `allowUnsandboxedCommands: false` | Disables the escape hatch that re-runs commands outside the sandbox. |
 | `sandbox.network.allowManagedDomainsOnly: true` | Only admin-approved domains reach the network. |
 | `sandbox.filesystem.allowWrite` | Paths outside CWD where subprocesses may write. Merges across settings scopes. |
+| `sandbox.credentials: false` | Block sandboxed commands from reading credential files and secret environment variables. |
 
 → [Sandboxing docs](https://code.claude.com/docs/en/sandboxing)
 
