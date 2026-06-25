@@ -161,6 +161,8 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 
 **Autentizace z CLI.** `claude mcp login <název>` a `claude mcp logout <název>` autentizují MCP server bez nutnosti otevírat interaktivní `/mcp` menu. S `--no-browser` se auth flow přesměruje přes stdin — hodí se při připojení přes SSH.
 
+**Timeout nástroje.** Volání MCP nástroje, která neodpoví, se po pěti minutách přeruší s chybou — místo aby blokovalo donekonečna. Přepiš timeout pomocí `CLAUDE_CODE_MCP_TOOL_IDLE_TIMEOUT`.
+
 → [MCP quickstart](https://code.claude.com/docs/en/mcp-quickstart) · [MCP docs](https://code.claude.com/docs/en/mcp)
 
 ## Subagenti — delegování, které drží kontext čistý
