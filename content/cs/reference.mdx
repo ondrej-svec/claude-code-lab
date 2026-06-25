@@ -14,7 +14,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/cd` | Přesune session do jiného pracovního adresáře, aniž by přerušil prompt cache uprostřed session. |
 | `/compact [focus]` | Konverzace zůstává, Claude shrne historii a uvolní kontext. Volitelný focus zúží, co zachovat. |
 | `/resume` | Navázat na předchozí konverzaci. Session na pozadí (spuštěné přes `--bg`) se tu teď taky zobrazují, označené jako `bg`. |
-| `/rewind` | Checkpoint menu — obnoví kód, konverzaci nebo obojí do dřívějšího stavu. Stejné jako dvojité Esc. |
+| `/rewind` | Checkpoint menu — obnoví kód, konverzaci nebo obojí do dřívějšího stavu, **i před `/clear`**. Stejné jako dvojité Esc. |
 | `/branch` | Větvení konverzace od zadaného bodu. |
 | `/exit` | Ukončí Claude Code (nebo `Ctrl+D`). |
 
@@ -354,6 +354,7 @@ Každý oficiální odkaz použitý v průvodci, všechno na jednom místě.
 - [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices)
 - [Deep links](https://code.claude.com/docs/en/deep-links)
 - [Workflows](https://code.claude.com/docs/en/workflows)
+- [LLM gateway](https://code.claude.com/docs/en/llm-gateway-connect)
 
 ### Standardy + referenční repa
 

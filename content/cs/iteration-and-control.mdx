@@ -25,6 +25,8 @@ Rewind je levný. Nový prompt od začátku je drahý.
 
 V menu přetáčení přibyla volba **Summarize up to here** — zkomprimuje starší historii a nechá nedávná kola nedotčená. Použij ji, když chceš uvolnit kontext v konkrétním místě konverzace bez toho, abys začínal od nuly.
 
+`/rewind` teď přechází i&nbsp;přes **hranice `/clear`** — checkpoint menu ukazuje i&nbsp;session, které jsi clearnul. Větvit se před clearem je stejný pohyb jako větvit se od posledního promptu.
+
 ## Zúžit scope
 
 Nejrychlejší cesta ke špatnému výstupu je prompt, který chce moc věcí naráz.
@@ -55,7 +57,7 @@ Claude ji přesune. Struktura drží. Nemusel jsi vysvětlovat celý úkol znovu
 Kontextová okna jsou velká, ale nejsou nekonečná. Dva příkazy, dva nástroje:
 
 - **`/compact [focus]`** — stejná konverzace, Claude si shrne dosavadní historii a zahodí surové zprávy. Použij, když jsi uprostřed úkolu a potřebuješ si odlehčit.
-- **`/clear`** — nová konverzace, ta stará se zaarchivuje (dá se obnovit přes `/resume`). Použij, když přehodíš do jiné části codebase nebo konverzace má 30+ kol a drifftuje.
+- **`/clear`** — nová konverzace, ta stará se zaarchivuje (dá se obnovit přes `/resume` nebo `/rewind`). Použij, když přehodíš do jiné části codebase nebo konverzace má 30+ kol a drifftuje.
 
 Čistá konverzace s dobrým `CLAUDE.md` je skoro vždycky rychlejší než dlouhá.
 
