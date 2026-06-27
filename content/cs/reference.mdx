@@ -14,7 +14,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/cd` | Přesune session do jiného pracovního adresáře, aniž by přerušil prompt cache uprostřed session. |
 | `/compact [focus]` | Konverzace zůstává, Claude shrne historii a uvolní kontext. Volitelný focus zúží, co zachovat. |
 | `/resume` | Navázat na předchozí konverzaci. Session na pozadí (spuštěné přes `--bg`) se tu teď taky zobrazují, označené jako `bg`. |
-| `/rewind` | Checkpoint menu — obnoví kód, konverzaci nebo obojí do dřívějšího stavu. Stejné jako dvojité Esc. |
+| `/rewind` | Checkpoint menu — obnoví kód, konverzaci nebo obojí do dřívějšího stavu. Stejné jako dvojité Esc. Teď sáhne i před `/clear` — checkpoint menu zobrazí i stavy ze smazáné konverzace. |
 | `/branch` | Větvení konverzace od zadaného bodu. |
 | `/exit` | Ukončí Claude Code (nebo `Ctrl+D`). |
 
@@ -136,7 +136,7 @@ Claude Code čte první znak řádku jako signál režimu:
 | První znak | Režim |
 |---|---|
 | `/` | Slash příkaz — spustí příkaz, ne prompt. |
-| `!` | Bash passthrough — pustí shell, výsledek se dostane do tvého kontextu; `!` příkazy teď automaticky spouštějí Claude k odpovědi na výstup. Nastav `"respondToBashCommands": false` v `settings.json`, jestli chceš zůstat u původního chování — jen kontext, bez automatické odpovědi. |
+| `!` | Bash passthrough — pustí shell, výsledek se dostane do tvého kontextu; `!` příkazy teď automaticky spouštějí Claude k odpovědi na výstup. Nastav `"respondToBashCommands": false` v `settings.json`, jestli chceš zůstat u původního chování — jen kontext, bez automatické odpovědi. Cesty k souborům se doplují, jak píšeš. |
 | `@` | Zmínka souboru — `@path/to/file` připojí soubor; `@Explore` zmíní subagenta. |
 | `#` | Memory add — text za `#` se připojí do správného `CLAUDE.md`. Claude vybere rozsah (projekt / uživatel / lokální). |
 | Cokoliv jiného | Normální prompt. |

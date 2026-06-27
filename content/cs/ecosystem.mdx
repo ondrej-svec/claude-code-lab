@@ -58,6 +58,8 @@ Potřebuješ plugin jen na jednu session bez trvalé instalace? Dej `claude --p
 
 Závislosti mezi pluginy se teď hlídají. `claude plugin disable` odmítne zakázat plugin, na kterém závisí jiný aktivní plugin — a ukáže, co musíš nejdřív zakázat. `claude plugin enable` jde opačně: tranzitivní závislosti zapne sám automaticky.
 
+Přejmenování pluginů se teď řeší samo: jakmile se marketplace záznam přejmenuje, Claude Code sleduje `renames` mapu a aktualizuje `settings.json` na nový název při dalším načtení — ruční sledování přejmenování není potřeba.
+
 Pluginy v adresářích `.claude/skills/` se teď načítají automaticky — bez marketplace. Rychlý start: `claude plugin init <jméno>` zapíše skelet pluginu přímo do `.claude/skills/<jméno>/`.
 
 Jeden oficiální plugin od Anthropicu, který má smysl přidat brzo: **`security-guidance`**. Průběžně kontroluje změny kódu na zranitelnosti ve stejné session — rychlá kontrola vzorů při každé editaci, model review na konci každého kola, hlubší agentní review při commitu nebo pushi. Nainstaluj z oficiálního marketplace a obnov:
@@ -158,6 +160,8 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 **Přenositelné cesty.** MCP stdio servery teď dostávají `CLAUDE_PROJECT_DIR` v prostředí — stejnou proměnnou, kterou už mají hooky. Plugin konfigurace může v příkazech odkazovat na `${CLAUDE_PROJECT_DIR}`. Vazbu na cestu napíšeš jednou; hooky i MCP ji rozloží stejně.
 
 **Kontrola připojení.** `/mcp` ukazuje počet nástrojů každého připojeného serveru a označí servery, které se připojily s 0 nástroji — nula nástrojů znamená, že server navázal spojení, ale nic se nenačetlo.
+
+**Upozornění na auth při startu.** Potřebuje-li MCP server ověření, Claude zobrazí oznámení při startu session s odkazem na `/mcp` — auth mezera se ukáže hned, ne uprostřed práce.
 
 **Autentizace z CLI.** `claude mcp login <název>` a `claude mcp logout <název>` autentizují MCP server bez nutnosti otevírat interaktivní `/mcp` menu. S `--no-browser` se auth flow přesměruje přes stdin — hodí se při připojení přes SSH.
 
