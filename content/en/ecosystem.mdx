@@ -58,6 +58,8 @@ Need a plugin for one session without installing it? Pass `--plugin-url <url>` t
 
 Plugin dependencies are now enforced. `claude plugin disable` refuses if another enabled plugin depends on the target, and prints the chain you need to disable first. `claude plugin enable` goes the other direction: it force-enables any transitive dependencies automatically.
 
+Plugin auto-rename is now automatic: when a marketplace entry is renamed, Claude Code follows the `renames` map and updates your `settings.json` to the new name on next load — you don't have to track renames manually.
+
 Plugins in `.claude/skills/` directories auto-load — no marketplace registration needed. Scaffold one with `claude plugin init <name>`, which writes the plugin skeleton into `.claude/skills/<name>/`.
 
 One official Anthropic plugin worth adding early: **`security-guidance`**. It reviews code changes for vulnerabilities in the same session — fast pattern check on each edit, model review at each turn end, deeper agentic review on commit or push. Install from the official marketplace and reload:
@@ -158,6 +160,8 @@ Claude opens the page, inspects, reports back. This is the moment MCPs stop bein
 **Portable paths.** MCP stdio servers now receive `CLAUDE_PROJECT_DIR` in their environment — the same variable hooks already use. Plugin configs can reference `${CLAUDE_PROJECT_DIR}` in commands. Write the path binding once; both hooks and MCPs resolve the project root the same way.
 
 **Checking connections.** `/mcp` shows the tool count for each connected server and flags any server that connected with 0 tools — zero tools means the server connected but nothing loaded.
+
+**Startup auth notice.** When an MCP server needs authentication, Claude shows a notice at session startup pointing at `/mcp` — auth gaps surface before you're mid-task.
 
 **CLI authentication.** `claude mcp login <name>` and `claude mcp logout <name>` authenticate MCP servers without opening the interactive `/mcp` menu. Add `--no-browser` to redirect the auth flow over stdin — useful when connecting over SSH.
 

@@ -85,7 +85,7 @@ Conversations don't disappear. `/resume` lists recent ones; pick one, you're bac
 
 This matters more than it sounds. Two patterns:
 
-- **The "I cleared too eagerly" recovery.** Cleared, started fresh, hit a wall, realized the answer was already in the previous conversation. `/resume`, copy the relevant turn, `/clear` again, paste it as context. Cheaper than rebuilding from scratch.
+- **The "I cleared too eagerly" recovery.** Cleared, started fresh, hit a wall, realized the answer was already in the previous conversation. Shortest path: `/rewind` — it now reaches back before a `/clear` and restores the conversation directly. Longer path: `/resume`, copy the relevant turn, `/clear` again, paste it as context.
 - **The "yesterday's session" recall.** You explored an approach yesterday, hit a wall, slept on it. Today you have a new angle. `/resume` the old conversation rather than starting cold — yesterday's understanding is still loaded.
 
 `/resume` is also how you split a long-running thread across days without losing the thread.

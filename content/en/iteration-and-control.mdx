@@ -25,6 +25,8 @@ Rewind is cheap. Re-prompting from scratch is expensive.
 
 The rewind menu now has **Summarize up to here** — compresses earlier context while keeping recent turns intact. Reach for it when you want to free up context at a specific point in the conversation without starting over.
 
+`/rewind` also spans **`/clear` boundaries** — the checkpoint menu shows sessions you've cleared too. Branch from before a clear the same way you branch from the last prompt.
+
 ## Narrow the scope
 
 The fastest way to bad output is a prompt that asks for too much at once.
@@ -55,7 +57,7 @@ Claude will move it. The structure holds. You didn't have to re-explain the whol
 Context windows are large but not infinite. Two commands, different tools:
 
 - **`/compact [focus]`** — same conversation, Claude summarises the history so far and throws the raw turns away. Use when you're mid-task and need breathing room.
-- **`/clear`** — new conversation, old one archived (resumable via `/resume`). Use when you've pivoted to a different area of the codebase, or the conversation has 30+ turns and is drifting.
+- **`/clear`** — new conversation, old one archived (resumable via `/resume` or `/rewind`). Use when you've pivoted to a different area of the codebase, or the conversation has 30+ turns and is drifting.
 
 A clean conversation with good `CLAUDE.md` is almost always faster than a long one.
 
@@ -89,7 +91,7 @@ Claude Code has five permission modes. The active one controls what Claude can d
 2. **Accept edits** — Claude edits freely, you review the diff afterward. Still prompts before writing build-tool config files that grant code execution (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/`, etc.).
 3. **Plan mode** — Claude can read, think, and propose, but **cannot edit or run** until you leave plan mode.
 4. **Bypass permissions** — Claude edits and runs without asking. Same state as launching with `--dangerously-skip-permissions`. Must be enabled in the desktop app settings before it shows up in the menu. Bypass now extends to writes inside `.claude/`, `.git/`, `.vscode/`, and shell config files — paths that still prompted even in bypass mode. Catastrophic removal commands still prompt as a safety net. Use only in sandboxed environments.
-5. **Auto mode** — a classifier-driven "go fast" mode that learns safe operations and asks only on the ambiguous ones. Now available on the **Pro plan** with Sonnet 4.6 as well as Opus. **Prefer Auto over Bypass when you want speed** — Auto keeps guardrails, Bypass removes them. Fine-tune the classifier with `settings.autoMode.hard_deny` — rules there block unconditionally, regardless of user intent or any `allow` exceptions. Subagent spawns are now evaluated by the classifier before launch — a subagent can no longer request a blocked action without review. Auto mode doesn't suppress `AskUserQuestion` when you or a skill explicitly relies on it. Destructive git commands (`git reset --hard`, `git checkout -- .`, `git clean -fd`, `git stash drop`) are now blocked when you didn't ask to discard local work. `git commit --amend` is blocked when the commit wasn't made by the agent this session. `terraform destroy`, `pulumi destroy`, and `cdk destroy` are blocked unless you asked for the specific stack.
+5. **Auto mode** — a classifier-driven "go fast" mode that learns safe operations and asks only on the ambiguous ones. Now available on the **Pro plan** with Sonnet 4.6 as well as Opus. **Prefer Auto over Bypass when you want speed** — Auto keeps guardrails, Bypass removes them. Fine-tune the classifier with `settings.autoMode.hard_deny` — rules there block unconditionally, regardless of user intent or any `allow` exceptions. `autoMode.classifyAllShell: true` routes all Bash and PowerShell commands through the classifier — not just patterns flagged as arbitrary code execution. Denial reasons now appear in the transcript, the denial toast, and `/permissions` → Recent denials, so you can see exactly what triggered each block and tune from there. Subagent spawns are now evaluated by the classifier before launch — a subagent can no longer request a blocked action without review. Auto mode doesn't suppress `AskUserQuestion` when you or a skill explicitly relies on it. Destructive git commands (`git reset --hard`, `git checkout -- .`, `git clean -fd`, `git stash drop`) are now blocked when you didn't ask to discard local work. `git commit --amend` is blocked when the commit wasn't made by the agent this session. `terraform destroy`, `pulumi destroy`, and `cdk destroy` are blocked unless you asked for the specific stack.
 
 **Fine-grained permission rules.** `settings.json` allow/deny entries accept `Tool(param:value)` syntax — matches on a tool's actual input parameters (wildcard `*` works). Example: `Agent(model:opus)` in a `deny` rule blocks Opus subagent spawns while leaving other `Agent` calls through. Right for auto mode setups where you want speed but not Opus on every subagent.
 
@@ -145,6 +147,8 @@ Two hook additions worth building into your harness.
 **`background_tasks` and `session_crons`** are now included in `Stop` and `SubagentStop` hook input — the active background tasks and scheduled crons at the moment the session stops. Useful for `Stop` hooks that need to decide whether to clean up or hand off before the session exits.
 
 **`hookSpecificOutput.additionalContext`** returned by a `Stop` or `SubagentStop` hook feeds Claude feedback and keeps the turn going — without being flagged as a hook error. The hook can tell Claude what happened; Claude adapts and the conversation continues rather than halting.
+
+**Hyphenated hook matchers.** Matchers for tools with hyphens in the identifier — e.g. `code-reviewer` or `mcp__brave-search` — now exact-match the tool name. Previously they substring-matched, so a matcher could accidentally fire on unrelated tools. If you want to catch all tools from a hyphenated MCP server, update the matcher to `mcp__brave-search__.*`.
 
 ## The recommended flow, when you're ready
 

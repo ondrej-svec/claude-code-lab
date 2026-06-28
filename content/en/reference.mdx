@@ -14,7 +14,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/cd` | Move the session to a new working directory without breaking the prompt cache mid-session. |
 | `/compact [focus]` | Keep the conversation, summarise history, free context. Optional focus narrows what to keep. |
 | `/resume` | Pick up a previous conversation. Background sessions (started with `--bg`) now appear here too, marked with `bg`. |
-| `/rewind` | Checkpoint menu — restore code, conversation, or both to an earlier state. Same as double-Esc. |
+| `/rewind` | Checkpoint menu — restore code, conversation, or both to an earlier state, **including before a `/clear`**. Same as double-Esc. |
 | `/branch` | Fork the conversation from a given point. |
 | `/exit` | Quit Claude Code (or `Ctrl+D`). |
 
@@ -136,7 +136,7 @@ Claude Code's input line reads the first character as a mode signal:
 | First char | Mode |
 |---|---|
 | `/` | Slash command — runs a command, not a prompt. |
-| `!` | Bash passthrough — runs shell, result enters your context; `!` commands now trigger Claude to respond to the output automatically. Set `"respondToBashCommands": false` in `settings.json` to keep the previous context-only behavior. |
+| `!` | Bash passthrough — runs shell, result enters your context; `!` commands now trigger Claude to respond to the output automatically. Set `"respondToBashCommands": false` in `settings.json` to keep the previous context-only behavior. File paths autocomplete as you type. |
 | `@` | File mention — `@path/to/file` attaches a file; `@Explore` mentions a subagent. |
 | `#` | Memory add — the text after `#` gets appended to the right `CLAUDE.md`. Claude picks the scope (project / user / local). |
 | Anything else | Normal prompt. |
@@ -354,6 +354,7 @@ Every official link referenced across this guide, in one place.
 - [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices)
 - [Deep links](https://code.claude.com/docs/en/deep-links)
 - [Workflows](https://code.claude.com/docs/en/workflows)
+- [LLM gateway](https://code.claude.com/docs/en/llm-gateway-connect)
 
 ### Standards + reference repos
 
