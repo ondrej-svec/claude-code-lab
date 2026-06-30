@@ -25,7 +25,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/init` | Prohlédne repo a navrhne startovní `CLAUDE.md`. Nastav `CLAUDE_CODE_NEW_INIT=1` pro nový interaktivní multi-fázový flow. |
 | `/memory` | Prohlédni nebo uprav CLAUDE.md soubory a načtenou paměť. |
 | `/permissions` | Spravuj allow/deny pravidla pro nástroje. |
-| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený nebo nedostupný. `--fallback-model` platí i pro interaktivní session. Pokud admin vaší organizace nastavil výchozí model, picker ho zobrazí jako „Org default" nebo „Role default". |
+| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený nebo nedostupný. `--fallback-model` platí i pro interaktivní session. Pokud admin vaší organizace nastavil výchozí model, picker ho zobrazí jako „Org default“ nebo „Role default“. |
 | `/fast` | Přepne fast mode. Výchozí je teď Opus 4.8 — 2× standardní cena, 2,5× rychlost. |
 | `/effort` | Per-session override effortu. |
 | `/advisor [model]` | Přiřadí session poradní model — silnější model, který Claude volá v klíčových momentech (před volbou přístupu, při opakující se chybě, než ohlásí hotovo). Zkratky: `opus`, `sonnet`, `fable`. Vyžaduje v2.1.98+. Fable 5 jako poradce vyžaduje v2.1.170+. `/advisor off` odstraní. |
@@ -199,7 +199,7 @@ Interní onboarding nástroj. Postgres + Node, deploy na Vercel.
 
 Preferuju přímé odpovědi. Žádné rozehřívání.
 V editoru používám vim keybindings.
-Když řeknu „ship it", nejdřív pusť testy, pak commit.
+Když řeknu „ship it“, nejdřív pusť testy, pak commit.
 ```
 
 **Lokální (`./CLAUDE.local.md`, gitignorované):**
@@ -213,7 +213,7 @@ WIP branch: `wip/2026-04-refactor-auth`
 
 ### Importy
 
-`@path/to/file.md` se rozbalí inline — užitečné, ale **importovaný soubor pořád čerpá z kontextu**, načítá se při startu session. Max hloubka 5 skoků. Nepoužívej importy na „úsporu kontextu" — neušetří.
+`@path/to/file.md` se rozbalí inline — užitečné, ale **importovaný soubor pořád čerpá z kontextu**, načítá se při startu session. Max hloubka 5 skoků. Nepoužívej importy na „úsporu kontextu“ — neušetří.
 
 ### Co jde špatně
 
