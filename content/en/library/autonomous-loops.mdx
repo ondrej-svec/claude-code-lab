@@ -80,6 +80,8 @@ If any of the four is missing, you're not running a loop — you're running a di
 
 **Pinned sessions and check 4.** In `claude agents`, `Ctrl+T` on a background session pins it. Pinned sessions stay alive when idle, restart in place when Claude Code updates, and are shed under memory pressure only after non-pinned ones. Pin the session your loop is running in.
 
+Background sessions now have harder guarantees for check 4: long-running commands and workflows survive the process being stopped, restarted, or updated. On Windows, background shells hand off instead of being killed. Workers interrupted by a daemon restart resume automatically the next time you open the agents view.
+
 <Screenshot
   src="/visuals/loop-preflight.png"
   alt="Pre-flight checklist visual styled as an engineering panel: four numbered items with status indicators — 01 mechanical success, 02 bounded scope, 03 harness on, 04 stoppable without loss. Each item has a teal check indicator and a small icon (terminal exit code, fence, gear, save). Rose footer text reads 'if any of the four is missing, you are not running a loop — you are running a dice roll.'"

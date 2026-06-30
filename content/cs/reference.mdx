@@ -25,7 +25,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/init` | Prohlédne repo a navrhne startovní `CLAUDE.md`. Nastav `CLAUDE_CODE_NEW_INIT=1` pro nový interaktivní multi-fázový flow. |
 | `/memory` | Prohlédni nebo uprav CLAUDE.md soubory a načtenou paměť. |
 | `/permissions` | Spravuj allow/deny pravidla pro nástroje. |
-| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený nebo nedostupný. `--fallback-model` platí i pro interaktivní session. |
+| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený nebo nedostupný. `--fallback-model` platí i pro interaktivní session. Pokud admin vaší organizace nastavil výchozí model, picker ho zobrazí jako „Org default" nebo „Role default". |
 | `/fast` | Přepne fast mode. Výchozí je teď Opus 4.8 — 2× standardní cena, 2,5× rychlost. |
 | `/effort` | Per-session override effortu. |
 | `/advisor [model]` | Přiřadí session poradní model — silnější model, který Claude volá v klíčových momentech (před volbou přístupu, při opakující se chybě, než ohlásí hotovo). Zkratky: `opus`, `sonnet`, `fable`. Vyžaduje v2.1.98+. Fable 5 jako poradce vyžaduje v2.1.170+. `/advisor off` odstraní. |
@@ -252,6 +252,8 @@ Pokud má tvoje firma Team nebo Enterprise seat, **použij ho**. Rozdíly v ret
 
 **Vynucení modelu.** Managed settings přidávají druhou vrstvu. Nastav `enforceAvailableModels: true` v managed konfiguraci a `availableModels` allowlist začne platit i pro výchozí model — výchozí model, který by se přeložil na zakázaný, se přepne na první povolený, a uživatelé ho nemůžou rozšiřovat přes vlastní projekt nebo user settings.
 
+**Watchdog streamu.** Idle watchdog — který přeruší a znovu vyzkouší stream, co 5 minut nevydal žádnou událost — je teď zapnutý ve výchozím stavu pro všechny providery. Nastav `CLAUDE_ENABLE_STREAM_WATCHDOG=0` pro vypnutí.
+
 ### `.claudeignore`
 
 Nejjednodušší obrana bez ohledu na plán. Vedle `.gitignore`, vypisuje soubory nebo cesty, které Claude nikdy nevidí:
@@ -355,6 +357,7 @@ Každý oficiální odkaz použitý v průvodci, všechno na jednom místě.
 - [Deep links](https://code.claude.com/docs/en/deep-links)
 - [Workflows](https://code.claude.com/docs/en/workflows)
 - [LLM gateway](https://code.claude.com/docs/en/llm-gateway-connect)
+- [Gateways](https://code.claude.com/docs/en/gateways)
 
 ### Standardy + referenční repa
 

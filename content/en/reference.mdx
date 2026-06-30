@@ -25,7 +25,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/init` | Scan the repo and propose a starting `CLAUDE.md`. Set `CLAUDE_CODE_NEW_INIT=1` for the new multi-phase interactive flow. |
 | `/memory` | View or edit CLAUDE.md files and loaded memory. |
 | `/permissions` | Manage tool allow/deny rules. |
-| `/model` | Switch model for the current session (e.g., Opus → Sonnet). Selecting a model now saves it as the default for new sessions. Press `s` in the picker to switch for the current session only. Set `fallbackModel` in `settings.json` to chain up to three fallback models tried in order when the primary is overloaded or unavailable. `--fallback-model` also applies to interactive sessions. |
+| `/model` | Switch model for the current session (e.g., Opus → Sonnet). Selecting a model now saves it as the default for new sessions. Press `s` in the picker to switch for the current session only. Set `fallbackModel` in `settings.json` to chain up to three fallback models tried in order when the primary is overloaded or unavailable. `--fallback-model` also applies to interactive sessions. If your org admin has set a default, the picker shows it as "Org default" or "Role default". |
 | `/fast` | Toggle fast mode. Default is now Opus 4.8 — 2× the standard rate for 2.5× the speed. |
 | `/effort` | Per-session effort override. |
 | `/advisor [model]` | Pair the session with an advisor — a stronger model Claude calls at decision points (before committing to an approach, when stuck on a recurring error, before declaring done). Shorthand: `opus`, `sonnet`, `fable`. Requires v2.1.98+. Fable 5 as advisor requires v2.1.170+. `/advisor off` to clear. |
@@ -252,6 +252,8 @@ If your company has a Team or Enterprise seat, **use it**. The retention and adm
 
 **Model enforcement.** Managed settings add a second layer. Set `enforceAvailableModels: true` in your managed config and the `availableModels` allowlist also constrains the Default model — a Default that would resolve to a disallowed model falls back to the first allowed model, and users can't widen the list via their own project or user settings.
 
+**Streaming watchdog.** The idle watchdog — which aborts and retries when a response stream produces no events for 5 minutes — is now on by default for all providers. Set `CLAUDE_ENABLE_STREAM_WATCHDOG=0` to disable it.
+
 ### `.claudeignore`
 
 The simplest defence regardless of plan. Next to `.gitignore`, lists files or paths Claude never sees:
@@ -355,6 +357,7 @@ Every official link referenced across this guide, in one place.
 - [Deep links](https://code.claude.com/docs/en/deep-links)
 - [Workflows](https://code.claude.com/docs/en/workflows)
 - [LLM gateway](https://code.claude.com/docs/en/llm-gateway-connect)
+- [Gateways](https://code.claude.com/docs/en/gateways)
 
 ### Standards + reference repos
 
