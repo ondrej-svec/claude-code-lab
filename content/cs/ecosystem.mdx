@@ -155,6 +155,8 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 
 **Bezpečnostní poznámka.** MCPs, které načítají nedůvěryhodný obsah (webové stránky, issues, maily), do tvé session můžou injektovat instrukce. Varování od Anthropicu platí: třetí strany na vlastní riziko. Kapitola 9.5 má víc.
 
+**Nedůvěryhodné workspaces (v2.1.196+).** Naklonuješ-li repo s commitnutým `.claude/settings.json`, který si self-approvuje vlastní `.mcp.json` servery, tyhle servery se teď nespustí automaticky. `claude mcp list` je zobrazí jako `⏸ Pending approval` — než se připojí, musíš je výslovně schválit.
+
 **`alwaysLoad`.** Claude ve výchozím stavu odkládá načítání nástrojů z MCP serveru na dobu, kdy jsou výslovně potřeba. Nastav `alwaysLoad: true` v konfiguraci serveru a všechny jeho nástroje budou dostupné hned od startu session — bez odkladu, bez průběžného hledání.
 
 **Přenositelné cesty.** MCP stdio servery teď dostávají `CLAUDE_PROJECT_DIR` v prostředí — stejnou proměnnou, kterou už mají hooky. Plugin konfigurace může v příkazech odkazovat na `${CLAUDE_PROJECT_DIR}`. Vazbu na cestu napíšeš jednou; hooky i MCP ji rozloží stejně.

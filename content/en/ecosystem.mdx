@@ -155,6 +155,8 @@ Claude opens the page, inspects, reports back. This is the moment MCPs stop bein
 
 **Security note.** MCPs that fetch untrusted content (web pages, issues, emails) can inject instructions into your session. Anthropic's warning stands: third-party MCPs at your own risk. Chapter 9.5 has more.
 
+**Untrusted workspaces (v2.1.196+).** When you clone a repo with a committed `.claude/settings.json` that self-approves `.mcp.json` servers, those servers no longer auto-start. `claude mcp list` shows them as `⏸ Pending approval` — explicit approval required before they connect.
+
 **`alwaysLoad`.** By default, Claude may defer loading some tools from an MCP server until they're explicitly requested. Set `alwaysLoad: true` in a server's config entry and every tool from that server is available from session start — no deferral, no search step. Useful for servers whose tools you reach for in nearly every session.
 
 **Portable paths.** MCP stdio servers now receive `CLAUDE_PROJECT_DIR` in their environment — the same variable hooks already use. Plugin configs can reference `${CLAUDE_PROJECT_DIR}` in commands. Write the path binding once; both hooks and MCPs resolve the project root the same way.

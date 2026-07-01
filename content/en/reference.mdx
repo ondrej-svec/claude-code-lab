@@ -25,7 +25,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/init` | Scan the repo and propose a starting `CLAUDE.md`. Set `CLAUDE_CODE_NEW_INIT=1` for the new multi-phase interactive flow. |
 | `/memory` | View or edit CLAUDE.md files and loaded memory. |
 | `/permissions` | Manage tool allow/deny rules. |
-| `/model` | Switch model for the current session (e.g., Opus → Sonnet). Selecting a model now saves it as the default for new sessions. Press `s` in the picker to switch for the current session only. Set `fallbackModel` in `settings.json` to chain up to three fallback models tried in order when the primary is overloaded or unavailable. `--fallback-model` also applies to interactive sessions. |
+| `/model` | Switch model for the current session. From v2.1.197, Claude Sonnet 5 is the default — 1M-token context. Selecting a model now saves it as the default for new sessions. Press `s` in the picker to switch for the current session only. Set `fallbackModel` in `settings.json` to chain up to three fallback models tried in order when the primary is overloaded or unavailable. `--fallback-model` also applies to interactive sessions. |
 | `/fast` | Toggle fast mode. Default is now Opus 4.8 — 2× the standard rate for 2.5× the speed. |
 | `/effort` | Per-session effort override. |
 | `/advisor [model]` | Pair the session with an advisor — a stronger model Claude calls at decision points (before committing to an approach, when stuck on a recurring error, before declaring done). Shorthand: `opus`, `sonnet`, `fable`. Requires v2.1.98+. Fable 5 as advisor requires v2.1.170+. `/advisor off` to clear. |
