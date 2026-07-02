@@ -150,6 +150,8 @@ Dvě přidané možnosti hookování, které stojí za zabudování do harnessu.
 
 **Pomlčky v matcherách hooků.** Matchery pro nástroje s pomlčkami v názvu — třeba `code-reviewer` nebo `mcp__brave-search` — teď odpovídají přesnému názvu nástroje. Dřív šlo o substring matching, takže se mohl matcher spustit i na nesouvisejícím nástroji. Chceš-li chytit všechny nástroje z pomlčkového MCP serveru, uprav matcher na `mcp__brave-search__.*`.
 
+**Události background agentů.** Background session v `claude agents` teď volají `Notification` hook při dvou nových událostech: `agent_needs_input` (session čeká na&nbsp;tebe) a `agent_completed` (session skončila). Připoj na libovolný kanál — Slack webhook, terminálový zvonek, systémové upozornění.
+
 ## Doporučený flow, až budeš připravený
 
 Tahle kapitola je o denních návycích. [Kapitola 7](/cs/lab/compound-engineering) je **praxe**, která je balí do opakovatelné smyčky: brainstorm → plan → work → review → compound. Compound Engineering plugin si nainstaluj, až budeš připravený — je to nejkratší cesta z *„iteruju po jednom promptu“* k *„mám praxi, která vyrábí spolehlivě dobrou práci.“*
