@@ -148,6 +148,8 @@ Two hook additions worth building into your harness.
 
 **`hookSpecificOutput.additionalContext`** returned by a `Stop` or `SubagentStop` hook feeds Claude feedback and keeps the turn going — without being flagged as a hook error. The hook can tell Claude what happened; Claude adapts and the conversation continues rather than halting.
 
+**Background agent notifications.** Two new events fire on the `Notification` hook: `agent_needs_input` (a background session is waiting on your response) and `agent_completed` (it finished). Wire these to a desktop notification script and you don't have to poll `claude agents` manually.
+
 **Hyphenated hook matchers.** Matchers for tools with hyphens in the identifier — e.g. `code-reviewer` or `mcp__brave-search` — now exact-match the tool name. Previously they substring-matched, so a matcher could accidentally fire on unrelated tools. If you want to catch all tools from a hyphenated MCP server, update the matcher to `mcp__brave-search__.*`.
 
 ## The recommended flow, when you're ready

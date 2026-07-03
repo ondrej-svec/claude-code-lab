@@ -148,6 +148,8 @@ Dvě přidané možnosti hookování, které stojí za zabudování do harnessu.
 
 **`hookSpecificOutput.additionalContext`** v návratové hodnotě `Stop` nebo `SubagentStop` hooku předá Claudovi zpětnou vazbu a nechá kolo pokračovat — bez označení za chybu hooku. Hook řekne Claudovi, co se stalo; Claude se přizpůsobí a konverzace pokračuje místo zastavení.
 
+**Notifikace background agentů.** Na `Notification` hooku se spouštějí dvě nové události: `agent_needs_input` (background session čeká na tvoji odpověď) a `agent_completed` (skončila). Nadrátuj je na desktopový notifikační skript a nemusíš ručně hlídat `claude agents`.
+
 **Pomlčky v matcherách hooků.** Matchery pro nástroje s pomlčkami v názvu — třeba `code-reviewer` nebo `mcp__brave-search` — teď odpovídají přesnému názvu nástroje. Dřív šlo o substring matching, takže se mohl matcher spustit i na nesouvisejícím nástroji. Chceš-li chytit všechny nástroje z pomlčkového MCP serveru, uprav matcher na `mcp__brave-search__.*`.
 
 ## Doporučený flow, až budeš připravený

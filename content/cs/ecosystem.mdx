@@ -30,13 +30,15 @@ V pohledu agentů spustí `! <příkaz>` shell příkaz jako novou background se
 
 ## Skilly
 
-**Skill** je balík instrukcí + volitelných skriptů, které si Claude načte podle potřeby. Doménový playbook — bydlí v `~/.claude/skills/`, aktivuje se sám, když situace sedí.
+**Skill** je balík instrukcí + volitelných skriptů, které si Claude načte podle potřeby. Doménový playbook — bydlí v `~/.claude/skills/`, aktivuje se sám, když situace sedí. Skilly se dají stohovat v jednom promptu: `/skill-a /skill-b udělej XYZ` načte všechny vedoucí skilly, až pět.
 
 **Příklad, který stojí za prozkoumání:** [`visualize`](https://github.com/ondrej-svec/heart-of-gold-toolkit). Vezme libovolný markdown — plán, brainstorm, architekturu — a udělá z něj uhlazený, sdílitelný HTML artefakt. Jedna dobře ohraničená úloha, dobře napsané instrukce, pár pomocných skriptů. Tvar dobrého skillu.
 
 **Otevřený standard.** Skilly jedou podle [Agent Skills otevřeného formátu](https://agentskills.io) — specifikace je veřejná, skilly jsou přenositelné mezi Claude Code a dalšími nástroji, které standard přijímají. Anthropic udržuje [referenční repo](https://github.com/anthropics/skills) se 17 produkčními skilly, ze kterých se dá číst jako z exempláře.
 
 Níž v téhle kapitole ukážeme, jak si jeden takový necháš Claudem napsat.
+
+Jeden vestavěný skill, který stojí za to znát: `/dataviz` — design grafů a dashboardů s validátorem barevné palety, který rovnou spustíš. Spusť ho ještě před tím, než začneš psát kód grafů.
 
 Přes `skillOverrides` řídíš, co Claude vidí. Nastav skill na `off` a zmizí z modelu i z `/` autocompleteu. `user-invocable-only` schová skill před modelem, ale lomítkový příkaz zůstane. `name-only` zkolabuje popis na samotný název — hodí se, když ti velká sbírka skillů začne generovat šum.
 
@@ -155,6 +157,8 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 
 **Bezpečnostní poznámka.** MCPs, které načítají nedůvěryhodný obsah (webové stránky, issues, maily), do tvé session můžou injektovat instrukce. Varování od Anthropicu platí: třetí strany na vlastní riziko. Kapitola 9.5 má víc.
 
+**Důvěra v workspace.** `claude mcp list` a `claude mcp get` teď nespouštějí `.mcp.json` servery, které si repo samo schválilo commitem do `.claude/settings.json`. V nedůvěryhodném workspace se takové servery zobrazí jako `⏸ Pending approval` — explicitně je schválíš, než se připojí.
+
 **`alwaysLoad`.** Claude ve výchozím stavu odkládá načítání nástrojů z MCP serveru na dobu, kdy jsou výslovně potřeba. Nastav `alwaysLoad: true` v konfiguraci serveru a všechny jeho nástroje budou dostupné hned od startu session — bez odkladu, bez průběžného hledání.
 
 **Přenositelné cesty.** MCP stdio servery teď dostávají `CLAUDE_PROJECT_DIR` v prostředí — stejnou proměnnou, kterou už mají hooky. Plugin konfigurace může v příkazech odkazovat na `${CLAUDE_PROJECT_DIR}`. Vazbu na cestu napíšeš jednou; hooky i MCP ji rozloží stejně.
@@ -173,11 +177,11 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 
 **Subagent** je specializovaný pracovník, kterého Claude spustí ve vlastním kontextovém okně, s vlastními nástroji a oprávněními. Když Claude potřebuje něco těžkého — prozkoumat velký codebase, pustit review, shrnout dlouhý soubor — může to delegovat na subagenta místo toho, aby spálil tvůj hlavní kontext.
 
-Můžeš je volat přímo, nebo to nech Claude rozhodnout.
+Můžeš je volat přímo, nebo to nech Claude rozhodnout. Od verze 2.1.198 subagenti běží v pozadí ve výchozím nastavení — Claude v hlavní session pracuje dál, zatímco subagenti běží, a dostane oznámení, až doběhnou.
 
 ### Zkus jednoho: vestavěný Explore agent
 
-Vestavěný. Read-only, rychlý (Haiku), ideální na otázky „kde je X?" ve velkém codebase.
+Vestavěný. Read-only, rychlý — dědí model tvé session, maximálně Opus — ideální na otázky „kde je X?" ve velkém codebase.
 
 V libovolném repu se zeptej:
 
@@ -191,23 +195,17 @@ Tvoje hlavní konverzace dostane dvou-odstavcové shrnutí. Samotné čtení sou
 
 ### Postav si vlastního
 
-Pro opakující se delegování — třeba reviewera, co vždycky aplikuje vaše týmové standardy — spusť:
+Pro opakující se delegování — třeba reviewera, co vždycky aplikuje vaše týmové standardy — řekni Claudovi přímo:
 
-```
-/agents
-```
+<Prompt>Vytvoř subagenta pro code review, rozsah projekt. Jen čtení — žádné editace, žádný shell.</Prompt>
 
-<Screenshot
-  src="/screenshots/ch5-agents-ui.png"
-  alt="UI /agents — projektoví, osobní a library subagenti s popisy"
-  caption="`/agents` ukáže, co je k dispozici. Vyber, nastav scope, ulož — agenti žijí jako `.md` soubory."
-/>
-
-Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu rozsah (Personal nebo Project), omez nástroje, ulož. Tvůj agent je teď v `.claude/agents/my-agent.md` a dostupný přes `@my-agent` nebo přirozeným jazykem.
+Claude vygeneruje definici a zapíše ji do `.claude/agents/`. Soubory v `.claude/agents/` si taky můžeš editovat ručně.
 
 **Poznámka.** V Claude Code v2.1.63+ byl interní nástroj `Task` přejmenovaný na `Agent`. Starší tutoriály, které mu říkají Task, pořád fungují — je to totéž.
 
 **Vnoření.** Subagenti teď můžou spouštět vlastní subagenty — až 5 úrovní do hloubky. Fan-out, který se dřív musel řetězit z hlavní konverzace, se dá teď celý delegovat prvnímu subagentovi.
+
+**Extended thinking.** Subagenti a context compaction dědí konfiguraci extended thinking pro session, což zlepšuje kvalitu výstupu delegovaných úkolů.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 
