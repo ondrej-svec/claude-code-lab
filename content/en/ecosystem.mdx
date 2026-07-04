@@ -44,6 +44,8 @@ Set `disableBundledSkills: true` in `settings.json` (or `CLAUDE_CODE_DISABLE_BUN
 
 **Nested skill directories.** Skills inside nested `.claude/skills/` subdirectories load automatically when Claude works on files in that directory — no extra setup. On a name collision, the nested skill surfaces as `<dir>:<name>` so both versions stay available. Useful for monorepos where different packages need separate skill sets.
 
+**Stacking skills.** `/skill-a /skill-b do XYZ` loads all leading skills before Claude sees the prompt — up to five at once. Useful when a task crosses two skill domains without switching between them.
+
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Plugins
@@ -173,11 +175,11 @@ Claude opens the page, inspects, reports back. This is the moment MCPs stop bein
 
 A **subagent** is a specialised worker Claude spawns with its own context window, tools, and permissions. When Claude needs to do something heavy — explore a big codebase, run a review, summarise a long file — it can delegate to a subagent instead of burning your main context.
 
-You can invoke them directly, or let Claude choose.
+You can invoke them directly, or let Claude choose. Subagents run in the background by default — Claude keeps working on your main task while a subagent runs in parallel, then picks up its result when it finishes.
 
 ### Try one: the built-in Explore agent
 
-Ship-built. Read-only, fast (Haiku), ideal for "where is X?" questions in a large codebase.
+Ship-built. Read-only. Inherits the main session's model, capped at Opus — no longer hard-wired to Haiku. Ideal for "where is X?" questions in a large codebase.
 
 In any repo, ask:
 
@@ -191,19 +193,11 @@ Your main conversation gets a two-paragraph summary. The actual file-reading hap
 
 ### Create your own
 
-For recurring delegation — say, a reviewer that always applies your team's standards — run:
+For recurring delegation — say, a reviewer that always applies your team's standards — ask Claude:
 
-```
-/agents
-```
+> Create a project agent that reviews code for our TypeScript conventions.
 
-<Screenshot
-  src="/screenshots/ch5-agents-ui.png"
-  alt="/agents UI listing project, personal, and library subagents with descriptions"
-  caption="`/agents` lists what's available. Pick one, scope it, save — agents live as `.md` files."
-/>
-
-Choose Library → Create new agent → let Claude generate the definition. Scope it (Personal or Project), restrict its tools, save. Your agent is now `.claude/agents/my-agent.md` and available via `@my-agent` or natural language.
+Claude writes the definition to `.claude/agents/my-agent.md`. Edit the file to restrict tools, adjust the system prompt, or change the description. The agent is available via `@my-agent` or natural language immediately.
 
 **Note.** In Claude Code v2.1.63+, the internal `Task` tool was renamed to `Agent`. Older tutorials calling it Task still work — same thing.
 
