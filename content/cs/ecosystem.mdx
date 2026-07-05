@@ -171,13 +171,15 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 
 ## Subagenti — delegování, které drží kontext čistý
 
-**Subagent** je specializovaný pracovník, kterého Claude spustí ve vlastním kontextovém okně, s vlastními nástroji a oprávněními. Když Claude potřebuje něco těžkého — prozkoumat velký codebase, pustit review, shrnout dlouhý soubor — může to delegovat na subagenta místo toho, aby spálil tvůj hlavní kontext.
+**Subagent** je specializovaný pracovník, kterého Claude spustí ve vlastním kontextovém okně, s vlastními nástroji a oprávněními. Když Claude potřebuje něco těžkého — prozkoumat velký codebase, pustit review, shrnout dlouhý soubor — deleguje to na subagenta místo toho, aby spálil tvůj hlavní kontext. Subagenti teď ve výchozím nastavení běží na pozadí: Claude pracuje dál, zatímco běží, a dostane upozornění, až skončí.
+
+Background agenti spuštění z `claude agents` teď commitnou, pushnou a otevřou draft PR, jakmile skončí s prací na kódu ve worktree — místo toho, aby se zastavili a ptali.
 
 Můžeš je volat přímo, nebo to nech Claude rozhodnout.
 
 ### Zkus jednoho: vestavěný Explore agent
 
-Vestavěný. Read-only, rychlý (Haiku), ideální na otázky „kde je X?" ve velkém codebase.
+Vestavěný. Read-only, ideální na otázky „kde je X?" ve velkém codebase. Dědí model tvé session, zastropovaný na Opusu — už ne napevno Haiku.
 
 V libovolném repu se zeptej:
 

@@ -171,13 +171,15 @@ Claude opens the page, inspects, reports back. This is the moment MCPs stop bein
 
 ## Subagents — delegate to keep your context clean
 
-A **subagent** is a specialised worker Claude spawns with its own context window, tools, and permissions. When Claude needs to do something heavy — explore a big codebase, run a review, summarise a long file — it can delegate to a subagent instead of burning your main context.
+A **subagent** is a specialised worker Claude spawns with its own context window, tools, and permissions. When Claude needs to do something heavy — explore a big codebase, run a review, summarise a long file — it delegates to a subagent instead of burning your main context. Subagents run in the background by default: Claude keeps working while they run and is notified when they finish.
+
+Background agents launched from `claude agents` now commit, push, and open a draft PR when they finish code work in a worktree — instead of stopping to ask.
 
 You can invoke them directly, or let Claude choose.
 
 ### Try one: the built-in Explore agent
 
-Ship-built. Read-only, fast (Haiku), ideal for "where is X?" questions in a large codebase.
+Ship-built. Read-only, ideal for "where is X?" questions in a large codebase. Inherits your session model, capped at Opus — no longer pinned to Haiku.
 
 In any repo, ask:
 
