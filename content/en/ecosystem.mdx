@@ -44,6 +44,8 @@ Set `disableBundledSkills: true` in `settings.json` (or `CLAUDE_CODE_DISABLE_BUN
 
 **Nested skill directories.** Skills inside nested `.claude/skills/` subdirectories load automatically when Claude works on files in that directory — no extra setup. On a name collision, the nested skill surfaces as `<dir>:<name>` so both versions stay available. Useful for monorepos where different packages need separate skill sets.
 
+**Skill stacking.** Multiple skills load from a single prompt: `/skill-a /skill-b do XYZ` activates both (up to five leading skills). Useful for composing a specialized skill on top of a general one without editing either.
+
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Plugins
@@ -177,7 +179,7 @@ You can invoke them directly, or let Claude choose.
 
 ### Try one: the built-in Explore agent
 
-Ship-built. Read-only, fast (Haiku), ideal for "where is X?" questions in a large codebase.
+Ship-built. Read-only, ideal for "where is X?" questions in a large codebase. Inherits your session's model (capped at Opus).
 
 In any repo, ask:
 
@@ -191,23 +193,17 @@ Your main conversation gets a two-paragraph summary. The actual file-reading hap
 
 ### Create your own
 
-For recurring delegation — say, a reviewer that always applies your team's standards — run:
+For recurring delegation — say, a reviewer that always applies your team's standards — ask Claude or edit `.claude/agents/` directly. The `/agents` creation wizard was removed in v2.1.198; natural-language creation and direct file editing are the two paths now.
 
-```
-/agents
-```
+<Prompt>Create a project subagent called code-reviewer that checks our team's conventions from CLAUDE.md before any code review.</Prompt>
 
-<Screenshot
-  src="/screenshots/ch5-agents-ui.png"
-  alt="/agents UI listing project, personal, and library subagents with descriptions"
-  caption="`/agents` lists what's available. Pick one, scope it, save — agents live as `.md` files."
-/>
-
-Choose Library → Create new agent → let Claude generate the definition. Scope it (Personal or Project), restrict its tools, save. Your agent is now `.claude/agents/my-agent.md` and available via `@my-agent` or natural language.
+Claude generates the agent definition and saves it. Your agent is available via `@code-reviewer` or natural language.
 
 **Note.** In Claude Code v2.1.63+, the internal `Task` tool was renamed to `Agent`. Older tutorials calling it Task still work — same thing.
 
 **Nesting.** Sub-agents can now spawn their own sub-agents — up to 5 levels deep. Fan-out that once had to chain from the main conversation can now be delegated entirely to the first sub-agent.
+
+**Background by default.** Subagents now run in the background — Claude keeps working while they run and is notified when they finish. Background agents launched from the agents view (`claude agents`) when working in a worktree also auto-commit, push, and open a draft PR when they finish code work, instead of stopping to ask.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 

@@ -34,6 +34,8 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/config` | Otevře nastavení. `/config key=value` nastaví libovolné nastavení přímo z promptu — třeba `/config thinking=false`. `/config --help` vypíše dostupné zkratky. |
 | `/theme` | Přepni téma terminálu. |
 
+**Výchozí model.** Od v2.1.197 je výchozím modelem session Claude Sonnet 5 — nativní kontextové okno 1M tokenů, propagační cena $2/$10 za Mtok do 31. srpna. Přepni přes `/model`.
+
 **Jazyk session.** V `settings.json` nastav `language` a session tituly se budou generovat v tom jazyce. Bez nastavení se jazyk detekuje z konverzace automaticky.
 
 ### Info
@@ -105,7 +107,7 @@ Zkratky v CLI jsou kontextové. Kompletní seznam je na [code.claude.com/docs/e
 | `Esc Esc` | **Rewind** — obnoví se předchozí zpráva (stejné jako `/rewind`). |
 | `Ctrl+C` | Přeruší aktuální vstup nebo odpověď. **Neukončuje Claude.** Rezervované. |
 | `Ctrl+D` | Ukončí Claude Code. Rezervované. |
-| `Shift+Tab` | Cyklí režim oprávnění: default → acceptEdits → plan → auto. |
+| `Shift+Tab` | Cyklí režim oprávnění: manual → acceptEdits → plan → auto. |
 | `Ctrl+R` | Reverse-search v historii — standardně prohledává všechny projekty. `Ctrl+S` zúží hledání na aktuální projekt nebo session. |
 | `Ctrl+O` | Přepíná podrobný transkript (rozbalí zkrácené tool volání). |
 | `Ctrl+T` | Přepíná seznam úkolů. |
@@ -317,7 +319,7 @@ Formát plugin manifestu, submission marketplace, rozdíl plugin vs. skill:
 
 ### Hooky
 
-Shell příkazy, HTTP endpointy nebo LLM prompty spouštěné na konkrétních lifecycle událostech. Události zahrnují `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, `MessageDisplay` (transformuje nebo schová text asistenta při zobrazení) a řadu dalších.
+Shell příkazy, HTTP endpointy nebo LLM prompty spouštěné na konkrétních lifecycle událostech. Události zahrnují `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, `MessageDisplay` (transformuje nebo schová text asistenta při zobrazení), `Notification` (`agent_needs_input` / `agent_completed` — spustí se, když background agent session čeká na vstup nebo skončí) a řadu dalších.
 
 - [Hooks docs](https://code.claude.com/docs/en/hooks)
 - Konfigurace v `.claude/settings.json` pod `"hooks"`, nebo v `hooks/hooks.json` pluginu
