@@ -87,7 +87,7 @@ Jestli teprve začínáš: čti diffy pečlivě a vybuduj si reflexy. Jak harne
 
 Claude Code má pět režimů oprávnění. Aktivní řídí, co může Claude dělat bez ptání.
 
-1. **Manual** — Claude se ptá před každou editací nebo spuštěním nástroje. (Dřívější název byl „default", stále funguje. V patičce se zobrazí šedý odznak ⏸, když je tenhle mód aktivní.)
+1. **Manual** — Claude se ptá před každou editací nebo spuštěním nástroje. (Dřívější název byl `default`, stále funguje; `--permission-mode manual` a `"defaultMode": "manual"` jsou přijímány. V patičce se zobrazí šedý odznak ⏸, když je tenhle mód aktivní.)
 2. **Accept edits** — Claude edituje volně, diff si prohlédneš až po. U konfiguračních souborů nástrojů pro build, které mohou udělit spouštění kódu (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/` apod.), se pořád zeptá.
 3. **Plan mode** — Claude může číst, přemýšlet a navrhovat, ale **nic nemůže editovat ani spouštět**, dokud plan mode neopustíš.
 4. **Bypass permissions** — Claude edituje a spouští bez ptání. Stejný stav jako při spuštění s `--dangerously-skip-permissions`. V desktopové aplikaci ho nejdřív musíš povolit v nastavení, než se v menu objeví. Bypass se nově vztahuje i na zápisy do `.claude/`, `.git/`, `.vscode/` a konfiguračních souborů shellu — cesty, které dřív vyžadovaly potvrzení i v bypass módu. Destruktivní příkazy se pořád ptají jako záchranná síť. Používej jen v izolovaném prostředí.
