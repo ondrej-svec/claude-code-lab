@@ -44,6 +44,8 @@ Nastav `disableBundledSkills: true` v `settings.json` (nebo `CLAUDE_CODE_DISABLE
 
 **Vnořené adresáře se skilly.** Skilly ve vnořených podadresářích `.claude/skills/` se načítají automaticky, když Claude pracuje se soubory v tom adresáři — žádná extra konfigurace. Při kolizi jmen se vnořený skill zobrazí jako `<dir>:<name>`, takže zůstanou dostupné oba. Hodí se na monorepa, kde různé balíčky potřebují vlastní sady skillů.
 
+**Vrstvená volání skillů.** Před prompt lze řetězit až pět skillů: `/skill-a /skill-b udělej XYZ` načte oba, než Claude dostane zadání. Hodí se na úkoly přes víc oblastí — `/security-review /code-review refaktor auth modulu` zapojí obě perspektivy najednou.
+
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Pluginy
@@ -175,9 +177,11 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 
 Můžeš je volat přímo, nebo to nech Claude rozhodnout.
 
+Od verze 2.1.198 **subagenti běží na pozadí ve výchozím stavu** — Claude mezitím pokračuje v práci a výsledky dostane, až skončí.
+
 ### Zkus jednoho: vestavěný Explore agent
 
-Vestavěný. Read-only, rychlý (Haiku), ideální na otázky „kde je X?" ve velkém codebase.
+Vestavěný. Read-only, přebírá model session (maximálně Opus) — ideální na otázky „kde je X?" ve velkém codebase.
 
 V libovolném repu se zeptej:
 
@@ -191,19 +195,11 @@ Tvoje hlavní konverzace dostane dvou-odstavcové shrnutí. Samotné čtení sou
 
 ### Postav si vlastního
 
-Pro opakující se delegování — třeba reviewera, co vždycky aplikuje vaše týmové standardy — spusť:
+Pro opakující se delegování — třeba reviewera, co vždycky aplikuje vaše týmové standardy — popros Claude přímo:
 
-```
-/agents
-```
+<Prompt>Vytvoř subagenta code-reviewer pro tento projekt. Ať aplikuje naše týmové standardy při review.</Prompt>
 
-<Screenshot
-  src="/screenshots/ch5-agents-ui.png"
-  alt="UI /agents — projektoví, osobní a library subagenti s popisy"
-  caption="`/agents` ukáže, co je k dispozici. Vyber, nastav scope, ulož — agenti žijí jako `.md` soubory."
-/>
-
-Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu rozsah (Personal nebo Project), omez nástroje, ulož. Tvůj agent je teď v `.claude/agents/my-agent.md` a dostupný přes `@my-agent` nebo přirozeným jazykem.
+Claude napíše definici do `.claude/agents/my-agent.md`. Agent je pak dostupný přes `@my-agent` nebo přirozeným jazykem. Soubor uprav přímo — je to jen markdown — jestli chceš doladit nástroje, scope nebo instrukce.
 
 **Poznámka.** V Claude Code v2.1.63+ byl interní nástroj `Task` přejmenovaný na `Agent`. Starší tutoriály, které mu říkají Task, pořád fungují — je to totéž.
 
