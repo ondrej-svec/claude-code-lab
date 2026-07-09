@@ -173,7 +173,7 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 
 **Subagent** je specializovaný pracovník, kterého Claude spustí ve vlastním kontextovém okně, s vlastními nástroji a oprávněními. Když Claude potřebuje něco těžkého — prozkoumat velký codebase, pustit review, shrnout dlouhý soubor — může to delegovat na subagenta místo toho, aby spálil tvůj hlavní kontext.
 
-Můžeš je volat přímo, nebo to nech Claude rozhodnout.
+Můžeš je volat přímo, nebo to nech Claude rozhodnout. Subagenti teď běží na pozadí ve výchozím nastavení. Claude pokračuje v práci na hlavním úkolu, zatímco oni běží, a dostane notifikaci, až skončí.
 
 ### Zkus jednoho: vestavěný Explore agent
 
@@ -191,21 +191,13 @@ Tvoje hlavní konverzace dostane dvou-odstavcové shrnutí. Samotné čtení sou
 
 ### Postav si vlastního
 
-Pro opakující se delegování — třeba reviewera, co vždycky aplikuje vaše týmové standardy — spusť:
+Pro opakující se delegování — třeba reviewera, co vždycky aplikuje vaše týmové standardy — jednoduše řekni Claudovi:
 
-```
-/agents
-```
+<Prompt>Vytvoř subagenta jménem code-reviewer, který čte codebase a kontroluje změny podle týmových konvencí. Omez ho jen na read-only nástroje.</Prompt>
 
-<Screenshot
-  src="/screenshots/ch5-agents-ui.png"
-  alt="UI /agents — projektoví, osobní a library subagenti s popisy"
-  caption="`/agents` ukáže, co je k dispozici. Vyber, nastav scope, ulož — agenti žijí jako `.md` soubory."
-/>
+Claude vygeneruje definici a zapíše ji do `.claude/agents/code-reviewer.md`. Nastavíš scope (Personal nebo Project), omezíš nástroje přímo v souboru — a agent je dostupný přes `@code-reviewer` nebo přirozeným jazykem.
 
-Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu rozsah (Personal nebo Project), omez nástroje, ulož. Tvůj agent je teď v `.claude/agents/my-agent.md` a dostupný přes `@my-agent` nebo přirozeným jazykem.
-
-**Poznámka.** V Claude Code v2.1.63+ byl interní nástroj `Task` přejmenovaný na `Agent`. Starší tutoriály, které mu říkají Task, pořád fungují — je to totéž.
+**Poznámka.** V Claude Code v2.1.63+ byl interní nástroj `Task` přejmenovaný na `Agent`. Starší tutoriály, které mu říkají Task, pořád fungují — je to totéž.
 
 **Vnoření.** Subagenti teď můžou spouštět vlastní subagenty — až 5 úrovní do hloubky. Fan-out, který se dřív musel řetězit z hlavní konverzace, se dá teď celý delegovat prvnímu subagentovi.
 
