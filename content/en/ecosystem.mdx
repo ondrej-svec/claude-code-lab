@@ -177,7 +177,7 @@ You can invoke them directly, or let Claude choose.
 
 ### Try one: the built-in Explore agent
 
-Ship-built. Read-only, fast (Haiku), ideal for "where is X?" questions in a large codebase.
+Ship-built. Read-only, runs on the session's model (capped at Opus). Ideal for "where is X?" questions in a large codebase.
 
 In any repo, ask:
 
@@ -191,19 +191,17 @@ Your main conversation gets a two-paragraph summary. The actual file-reading hap
 
 ### Create your own
 
-For recurring delegation — say, a reviewer that always applies your team's standards — run:
+For recurring delegation — say, a reviewer that always applies your team's standards — ask Claude in your session or edit `.claude/agents/` directly.
 
-```
-/agents
-```
+<Prompt>Create an agent called "my-reviewer" that applies our team's security standards to every diff. Scope it to this project.</Prompt>
+
+Claude writes the definition to `.claude/agents/my-reviewer.md`. Your agent is available via `@my-reviewer` or natural language.
 
 <Screenshot
   src="/screenshots/ch5-agents-ui.png"
   alt="/agents UI listing project, personal, and library subagents with descriptions"
-  caption="`/agents` lists what's available. Pick one, scope it, save — agents live as `.md` files."
+  caption="`/agents` lists all configured agents — agents live as `.md` files in `.claude/agents/`."
 />
-
-Choose Library → Create new agent → let Claude generate the definition. Scope it (Personal or Project), restrict its tools, save. Your agent is now `.claude/agents/my-agent.md` and available via `@my-agent` or natural language.
 
 **Note.** In Claude Code v2.1.63+, the internal `Task` tool was renamed to `Agent`. Older tutorials calling it Task still work — same thing.
 
