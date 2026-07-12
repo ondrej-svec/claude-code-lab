@@ -23,6 +23,8 @@ You can hand the agent more rope four ways.
 - **Auto mode.** A permission posture (covered in [chapter 4](/en/lab/iteration-and-control)) that lets Claude take many small actions without per-action approval. Different shape from the loop — same conversation, no scheduled re-entry, but Claude is allowed to fan out aggressively inside it. Parallel tool calls are now more resilient here: a failed Bash command no longer cancels other calls in the same batch — each returns its result independently.
 - **Dynamic workflows.** Use an explicit phrase like `workflow:` or "run a workflow" — highlighted in purple shimmer — and Claude orchestrates work across tens to hundreds of agents in the background, fan-out at a scale the other three shapes can't reach. A bare mention of the word alone won't trigger it; explicit phrasing is required. Run `/workflows` to view your runs.
 
+**Subagents now run in the background by default**, so Claude keeps working while they run and gets notified when they finish. Agents launched from `claude agents` that complete code work in an isolated worktree commit, push, and open a draft PR automatically — no ask.
+
 All four let the agent move without you. They fail differently.
 
 <Screenshot

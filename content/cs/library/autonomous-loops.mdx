@@ -24,6 +24,8 @@ Můžeš agentovi pustit otěže čtyřmi způsoby.
 
 - **Dynamická workflow.** Použij explicitní frázi — `workflow:` nebo třeba „run a workflow" — zvýrazněnou fialovým zábleskem — a Claude orchestruje práci napříč desítkami až stovkami agentů na pozadí, fan-out, na který ostatní tři tvary nestačí. Samotná zmínka slova nestačí; explicitní fráze je nutná. `/workflows` ukáže tvé běhy.
 
+**Subagenty teď jedou na pozadí od začátku** — Claude pracuje dál, dokud doběhnou, a dozvídá se o každém výsledku. Agenti spuštění z `claude agents`, kteří dokončí práci s kódem v izolovaném worktree, sami commitnou, pushnou a otevřou draft PR — bez dotazování.
+
 Všechny čtyři způsoby nechají agenta jet bez tebe. Selhávají jinak.
 
 <Screenshot
