@@ -44,6 +44,8 @@ Nastav `disableBundledSkills: true` v `settings.json` (nebo `CLAUDE_CODE_DISABLE
 
 **Vnořené adresáře se skilly.** Skilly ve vnořených podadresářích `.claude/skills/` se načítají automaticky, když Claude pracuje se soubory v tom adresáři — žádná extra konfigurace. Při kolizi jmen se vnořený skill zobrazí jako `<dir>:<name>`, takže zůstanou dostupné oba. Hodí se na monorepa, kde různé balíčky potřebují vlastní sady skillů.
 
+**Skládání.** `/skill-a /skill-b do XYZ` načte všechny úvodní skilly (až 5). Kombinuj playbooks v jednom volání, když úkol zasahuje víc domén naráz.
+
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Pluginy
@@ -174,6 +176,8 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 **Subagent** je specializovaný pracovník, kterého Claude spustí ve vlastním kontextovém okně, s vlastními nástroji a oprávněními. Když Claude potřebuje něco těžkého — prozkoumat velký codebase, pustit review, shrnout dlouhý soubor — může to delegovat na subagenta místo toho, aby spálil tvůj hlavní kontext.
 
 Můžeš je volat přímo, nebo to nech Claude rozhodnout.
+
+Subagenti teď ve výchozím stavu jedou na pozadí — Claude pracuje dál, zatímco jedou, a dostane oznámení, až jsou hotovi. Background agenti spuštění z `claude agents` do worktree jdou ještě dál: jakmile je kódová práce hotová, sami commitnou, pushnou a otevřou draft PR. Žádné dotazování.
 
 ### Zkus jednoho: vestavěný Explore agent
 
