@@ -44,6 +44,8 @@ Set `disableBundledSkills: true` in `settings.json` (or `CLAUDE_CODE_DISABLE_BUN
 
 **Nested skill directories.** Skills inside nested `.claude/skills/` subdirectories load automatically when Claude works on files in that directory — no extra setup. On a name collision, the nested skill surfaces as `<dir>:<name>` so both versions stay available. Useful for monorepos where different packages need separate skill sets.
 
+Stack up to five skills in a single invocation — `/skill-a /skill-b do XYZ` loads all leading skills before running the command.
+
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Plugins
@@ -175,9 +177,11 @@ A **subagent** is a specialised worker Claude spawns with its own context window
 
 You can invoke them directly, or let Claude choose.
 
+Subagents now run in the background by default — Claude keeps working on your main task while they run and is notified when they complete. Background agents in `claude agents` that finish code work in a worktree will commit, push, and open a draft PR automatically rather than stopping to ask.
+
 ### Try one: the built-in Explore agent
 
-Ship-built. Read-only, fast (Haiku), ideal for "where is X?" questions in a large codebase.
+Ship-built. Read-only, ideal for "where is X?" questions in a large codebase. Inherits the main session's model (capped at Opus) — no longer pinned to Haiku.
 
 In any repo, ask:
 

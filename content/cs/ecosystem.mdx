@@ -44,6 +44,8 @@ Nastav `disableBundledSkills: true` v `settings.json` (nebo `CLAUDE_CODE_DISABLE
 
 **Vnořené adresáře se skilly.** Skilly ve vnořených podadresářích `.claude/skills/` se načítají automaticky, když Claude pracuje se soubory v tom adresáři — žádná extra konfigurace. Při kolizi jmen se vnořený skill zobrazí jako `<dir>:<name>`, takže zůstanou dostupné oba. Hodí se na monorepa, kde různé balíčky potřebují vlastní sady skillů.
 
+V&nbsp;jedné invokaci nakupíš až pět skillů — `/skill-a /skill-b udělej XYZ` načte všechny skilly uvedené na začátku, ještě před spuštěním příkazu.
+
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Pluginy
@@ -175,9 +177,11 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 
 Můžeš je volat přímo, nebo to nech Claude rozhodnout.
 
+Subagenti teď standardně běží na pozadí — Claude pokračuje v hlavním úkolu a dostane zprávu, až jsou hotovi. Agenti v `claude agents`, kteří dokončí kód ve worktree, commitnou, pushnou a otevřou draft PR sami od sebe — bez ptání.
+
 ### Zkus jednoho: vestavěný Explore agent
 
-Vestavěný. Read-only, rychlý (Haiku), ideální na otázky „kde je X?" ve velkém codebase.
+Vestavěný. Read-only, ideální na otázky „kde je X?" ve velkém codebase. Přebírá model hlavní session (maximálně Opus) — pevné Haiku je pryč.
 
 V libovolném repu se zeptej:
 
