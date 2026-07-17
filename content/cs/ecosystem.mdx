@@ -42,6 +42,8 @@ Přes `skillOverrides` řídíš, co Claude vidí. Nastav skill na `off` a zmi
 
 Nastav `disableBundledSkills: true` v `settings.json` (nebo `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS=1`), jestli chceš před modelem úplně schovat všechny vestavěné skilly, workflows a výchozí lomítkové příkazy — model pak vidí jen to, co sis sám nainstaloval.
 
+**Skládání invokací.** `/skill-a /skill-b udělej XYZ` načte všechny skilly na začátku příkazu (až 5), pak spustí úkol se všemi aktivními. Hodí se, jestli dva skilly přirozeně spolupracují — třeba research skill a formátovací skill v jediném příkazu.
+
 **Vnořené adresáře se skilly.** Skilly ve vnořených podadresářích `.claude/skills/` se načítají automaticky, když Claude pracuje se soubory v tom adresáři — žádná extra konfigurace. Při kolizi jmen se vnořený skill zobrazí jako `<dir>:<name>`, takže zůstanou dostupné oba. Hodí se na monorepa, kde různé balíčky potřebují vlastní sady skillů.
 
 → [Skills docs](https://code.claude.com/docs/en/skills)
@@ -167,6 +169,8 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 
 **Timeout nástroje.** Volání MCP nástroje, která neodpoví, se po pěti minutách přeruší s chybou — místo aby blokovalo donekonečna. Přepiš timeout pomocí `CLAUDE_CODE_MCP_TOOL_IDLE_TIMEOUT`.
 
+**Automatické přesunutí na pozadí.** Volání MCP nástrojů, která jedou déle než 2 minuty, se přesunou na pozadí automaticky — session zůstane použitelná. Práh nastav nebo zakáž přes `CLAUDE_CODE_MCP_AUTO_BACKGROUND_MS`.
+
 → [MCP quickstart](https://code.claude.com/docs/en/mcp-quickstart) · [MCP docs](https://code.claude.com/docs/en/mcp)
 
 ## Subagenti — delegování, které drží kontext čistý
@@ -177,7 +181,7 @@ Můžeš je volat přímo, nebo to nech Claude rozhodnout.
 
 ### Zkus jednoho: vestavěný Explore agent
 
-Vestavěný. Read-only, rychlý (Haiku), ideální na otázky „kde je X?" ve velkém codebase.
+Vestavěný. Read-only. Přebírá model tvé session, zastropovaný na Opusu — Haiku je pryč. Ideální na otázky „kde je X?" ve velkém codebase.
 
 V libovolném repu se zeptej:
 
@@ -191,23 +195,15 @@ Tvoje hlavní konverzace dostane dvou-odstavcové shrnutí. Samotné čtení sou
 
 ### Postav si vlastního
 
-Pro opakující se delegování — třeba reviewera, co vždycky aplikuje vaše týmové standardy — spusť:
-
-```
-/agents
-```
-
-<Screenshot
-  src="/screenshots/ch5-agents-ui.png"
-  alt="UI /agents — projektoví, osobní a library subagenti s popisy"
-  caption="`/agents` ukáže, co je k dispozici. Vyber, nastav scope, ulož — agenti žijí jako `.md` soubory."
-/>
-
-Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu rozsah (Personal nebo Project), omez nástroje, ulož. Tvůj agent je teď v `.claude/agents/my-agent.md` a dostupný přes `@my-agent` nebo přirozeným jazykem.
+Pro opakujícího se specialistu — třeba reviewera, co vždycky aplikuje vaše týmové standardy — požádej Claude, ať ti definici subagenta sepíše, nebo upravuj `.claude/agents/my-agent.md` přímo. Nastav rozsah na Personal nebo Project, omez nástroje, ulož. Agent pak funguje přes `@my-agent` nebo přirozeným jazykem.
 
 **Poznámka.** V Claude Code v2.1.63+ byl interní nástroj `Task` přejmenovaný na `Agent`. Starší tutoriály, které mu říkají Task, pořád fungují — je to totéž.
 
 **Vnoření.** Subagenti teď můžou spouštět vlastní subagenty — až 5 úrovní do hloubky. Fan-out, který se dřív musel řetězit z hlavní konverzace, se dá teď celý delegovat prvnímu subagentovi.
+
+**Běh na pozadí jako výchozí.** Subagenti teď jedou na pozadí — Claude pracuje dál, zatímco jedou, a dostane oznámení, až skončí. Subagent dělající kód v izolovaném worktree commitne, pushne a otevře draft PR místo toho, aby se zeptal.
+
+**`/fork` a `/subtask`.** `/fork` zkopíruje aktuální konverzaci do nové background session (vlastní řádek v `claude agents`) — v originálu pracuješ dál. `/subtask` je nové jméno pro dřívějšího in-session subagenta, kterého `/fork` spouštěl.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 

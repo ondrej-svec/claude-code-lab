@@ -21,7 +21,7 @@ You can hand the agent more rope four ways.
 - **The loop.** Same task, run on an interval or self-paced until a condition is met. `/loop 5m /check-deploy` reruns every five minutes. `/loop /fix-typecheck` lets Claude self-pace toward a tests-pass condition. The conversation persists; each turn knows what the previous turn did.
 - **Goal mode.** `/goal <condition>` sets a completion condition and Claude keeps working across turns until it's met — in interactive, `-p`, and Remote Control. A live overlay tracks elapsed time, turn count, and token spend. You state the outcome; Claude decides when it's done. Useful when the finish line is clear but the path length isn't.
 - **Auto mode.** A permission posture (covered in [chapter 4](/en/lab/iteration-and-control)) that lets Claude take many small actions without per-action approval. Different shape from the loop — same conversation, no scheduled re-entry, but Claude is allowed to fan out aggressively inside it. Parallel tool calls are now more resilient here: a failed Bash command no longer cancels other calls in the same batch — each returns its result independently.
-- **Dynamic workflows.** Use an explicit phrase like `workflow:` or "run a workflow" — highlighted in purple shimmer — and Claude orchestrates work across tens to hundreds of agents in the background, fan-out at a scale the other three shapes can't reach. A bare mention of the word alone won't trigger it; explicit phrasing is required. Run `/workflows` to view your runs.
+- **Dynamic workflows.** Use an explicit phrase like `workflow:` or "run a workflow" — highlighted in purple shimmer — and Claude orchestrates work across tens to hundreds of agents in the background, fan-out at a scale the other three shapes can't reach. A bare mention of the word alone won't trigger it; explicit phrasing is required. Run `/workflows` to view your runs. Scale the fleet with "Dynamic workflow size" in `/config` — small, medium, or large agent count; an advisory guideline, not an enforced cap.
 
 All four let the agent move without you. They fail differently.
 
@@ -80,6 +80,8 @@ If any of the four is missing, you're not running a loop — you're running a di
 
 **Pinned sessions and check 4.** In `claude agents`, `Ctrl+T` on a background session pins it. Pinned sessions stay alive when idle, restart in place when Claude Code updates, and are shed under memory pressure only after non-pinned ones. Pin the session your loop is running in.
 
+**Session subagent budget.** Claude tracks how many subagents it spawns per session (default cap: 200; override with `CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION`). `/clear` resets the budget. A well-scoped loop won't hit this — if you do, it's a signal the scope needs bounding.
+
 <Screenshot
   src="/visuals/loop-preflight.png"
   alt="Pre-flight checklist visual styled as an engineering panel: four numbered items with status indicators — 01 mechanical success, 02 bounded scope, 03 harness on, 04 stoppable without loss. Each item has a teal check indicator and a small icon (terminal exit code, fence, gear, save). Rose footer text reads 'if any of the four is missing, you are not running a loop — you are running a dice roll.'"
@@ -99,6 +101,8 @@ If you find yourself reaching for `/loop` and you don't have tests on the surfac
 ## What walking away actually buys
 
 The point isn't "do less work." It's **redirect your attention.**
+
+When a background agent finishes code work in its own worktree, it now commits, pushes, and opens a draft PR instead of stopping to ask. You come back to a ready-to-review diff, not a blocked session waiting for permission.
 
 Mechanical fan-out — applying the same shape across many files, fixing every instance of a deprecation warning, regenerating snapshots — is work that adds no value when you do it and no value when the agent does it either. The loop just moves it off your time.
 
