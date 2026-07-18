@@ -16,6 +16,8 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/resume` | Navázat na předchozí konverzaci. Session na pozadí (spuštěné přes `--bg`) se tu teď taky zobrazují, označené jako `bg`. |
 | `/rewind` | Checkpoint menu — obnoví kód, konverzaci nebo obojí do dřívějšího stavu, **i před `/clear`**. Stejné jako dvojité Esc. |
 | `/branch` | Větvení konverzace od zadaného bodu. |
+| `/fork` | Zkopíruje aktuální konverzaci do nové background session v `claude agents`. Původní session běží dál. |
+| `/subtask` | Spustí subagenta uvnitř session (původní chování `/fork`). |
 | `/exit` | Ukončí Claude Code (nebo `Ctrl+D`). |
 
 ### Konfigurace
@@ -25,7 +27,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/init` | Prohlédne repo a navrhne startovní `CLAUDE.md`. Nastav `CLAUDE_CODE_NEW_INIT=1` pro nový interaktivní multi-fázový flow. |
 | `/memory` | Prohlédni nebo uprav CLAUDE.md soubory a načtenou paměť. |
 | `/permissions` | Spravuj allow/deny pravidla pro nástroje. |
-| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený nebo nedostupný. `--fallback-model` platí i pro interaktivní session. |
+| `/model` | Výchozí je **Sonnet 5** (kontextové okno 1 M tokenů). Přepne model pro aktuální session (např. Opus → Sonnet). Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený nebo nedostupný. `--fallback-model` platí i pro interaktivní session. |
 | `/fast` | Přepne fast mode. Výchozí je teď Opus 4.8 — 2× standardní cena, 2,5× rychlost. |
 | `/effort` | Per-session override effortu. |
 | `/advisor [model]` | Přiřadí session poradní model — silnější model, který Claude volá v klíčových momentech (před volbou přístupu, při opakující se chybě, než ohlásí hotovo). Zkratky: `opus`, `sonnet`, `fable`. Vyžaduje v2.1.98+. Fable 5 jako poradce vyžaduje v2.1.170+. `/advisor off` odstraní. |
@@ -45,7 +47,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/context` | Vizualizace využití kontextového okna s tipy na optimalizaci. |
 | `/cost` | Dosavadní cena session. |
 | `/usage`, `/stats` | Metriky využití. `/usage` teď zobrazí rozpad podle kategorií — skills, subagenty, pluginy a náklady per MCP server. |
-| `/doctor` | Diagnostika — vypíše konflikty v konfiguraci, chybějící nastavení. |
+| `/doctor` | Kompletní setup checkup — diagnostikuje a opravuje konflikty v konfiguraci, chybějící nastavení. Alias: `/checkup`. |
 
 ### Workflow
 
@@ -105,7 +107,7 @@ Zkratky v CLI jsou kontextové. Kompletní seznam je na [code.claude.com/docs/e
 | `Esc Esc` | **Rewind** — obnoví se předchozí zpráva (stejné jako `/rewind`). |
 | `Ctrl+C` | Přeruší aktuální vstup nebo odpověď. **Neukončuje Claude.** Rezervované. |
 | `Ctrl+D` | Ukončí Claude Code. Rezervované. |
-| `Shift+Tab` | Cyklí režim oprávnění: default → acceptEdits → plan → auto. |
+| `Shift+Tab` | Cyklí režim oprávnění: manual → acceptEdits → plan → auto. |
 | `Ctrl+R` | Reverse-search v historii — standardně prohledává všechny projekty. `Ctrl+S` zúží hledání na aktuální projekt nebo session. |
 | `Ctrl+O` | Přepíná podrobný transkript (rozbalí zkrácené tool volání). |
 | `Ctrl+T` | Přepíná seznam úkolů. |
