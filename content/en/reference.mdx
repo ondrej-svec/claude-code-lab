@@ -16,6 +16,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/resume` | Pick up a previous conversation. Background sessions (started with `--bg`) now appear here too, marked with `bg`. |
 | `/rewind` | Checkpoint menu — restore code, conversation, or both to an earlier state, **including before a `/clear`**. Same as double-Esc. |
 | `/branch` | Fork the conversation from a given point. |
+| `/fork` | Copy the current conversation into a new background session (visible in `claude agents`) while you keep working. In-session equivalent: `/subtask`. |
 | `/exit` | Quit Claude Code (or `Ctrl+D`). |
 
 ### Configuration
@@ -45,7 +46,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/context` | Visualise current context-window usage with optimisation hints. |
 | `/cost` | Session cost so far. |
 | `/usage`, `/stats` | Usage metrics. `/usage` breaks down by category — skills, subagents, plugins, per-MCP-server cost. |
-| `/doctor` | Diagnostics — surfaces config conflicts, missing setup. |
+| `/doctor` | Full setup checkup — diagnoses *and fixes* issues. Alias: `/checkup`. |
 
 ### Workflow
 

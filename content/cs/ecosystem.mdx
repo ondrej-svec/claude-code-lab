@@ -191,23 +191,19 @@ Tvoje hlavní konverzace dostane dvou-odstavcové shrnutí. Samotné čtení sou
 
 ### Postav si vlastního
 
-Pro opakující se delegování — třeba reviewera, co vždycky aplikuje vaše týmové standardy — spusť:
+Pro opakující se delegování — třeba reviewera, co vždycky aplikuje vaše týmové standardy — požádej Clauda, ať jednoho napíše, nebo vytvoř definici přímo:
 
 ```
-/agents
+claude "Vytvořit code-reviewer subagenta, který hlídá naše týmové konvence"
 ```
 
-<Screenshot
-  src="/screenshots/ch5-agents-ui.png"
-  alt="UI /agents — projektoví, osobní a library subagenti s popisy"
-  caption="`/agents` ukáže, co je k dispozici. Vyber, nastav scope, ulož — agenti žijí jako `.md` soubory."
-/>
-
-Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu rozsah (Personal nebo Project), omez nástroje, ulož. Tvůj agent je teď v `.claude/agents/my-agent.md` a dostupný přes `@my-agent` nebo přirozeným jazykem.
+Claude zapíše definici do `.claude/agents/<jméno>.md`. Nastav scope (Personal nebo Project), omez nástroje. Agent pak je dostupný přes `@<jméno>` nebo přirozeným jazykem. Wizard pro vytváření agentů v `/agents` byl odstraněn ve v2.1.198 — požádej Clauda o vytvoření nebo správu subagentů, nebo edituj soubory v `.claude/agents/` přímo.
 
 **Poznámka.** V Claude Code v2.1.63+ byl interní nástroj `Task` přejmenovaný na `Agent`. Starší tutoriály, které mu říkají Task, pořád fungují — je to totéž.
 
 **Vnoření.** Subagenti teď můžou spouštět vlastní subagenty — až 5 úrovní do hloubky. Fan-out, který se dřív musel řetězit z hlavní konverzace, se dá teď celý delegovat prvnímu subagentovi.
+
+**Pozadí jako výchozí.** Od v2.1.198 subagenti jedou na pozadí — Claude pokračuje v práci v hlavní konverzaci, zatímco subagent plní svůj úkol, a dozvídá se, až je hotovo.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 

@@ -16,6 +16,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/resume` | Navázat na předchozí konverzaci. Session na pozadí (spuštěné přes `--bg`) se tu teď taky zobrazují, označené jako `bg`. |
 | `/rewind` | Checkpoint menu — obnoví kód, konverzaci nebo obojí do dřívějšího stavu, **i před `/clear`**. Stejné jako dvojité Esc. |
 | `/branch` | Větvení konverzace od zadaného bodu. |
+| `/fork` | Zkopíruje aktuální konverzaci do nové background session (viditelné v `claude agents`), zatímco ty pokračuješ. Ekvivalent v rámci session: `/subtask`. |
 | `/exit` | Ukončí Claude Code (nebo `Ctrl+D`). |
 
 ### Konfigurace
@@ -45,7 +46,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/context` | Vizualizace využití kontextového okna s tipy na optimalizaci. |
 | `/cost` | Dosavadní cena session. |
 | `/usage`, `/stats` | Metriky využití. `/usage` teď zobrazí rozpad podle kategorií — skills, subagenty, pluginy a náklady per MCP server. |
-| `/doctor` | Diagnostika — vypíše konflikty v konfiguraci, chybějící nastavení. |
+| `/doctor` | Kompletní checkup nastavení — diagnostika *i opravy* jakýchkoliv problémů. Alias: `/checkup`. |
 
 ### Workflow
 
