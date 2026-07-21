@@ -171,7 +171,7 @@ Claude opens the page, inspects, reports back. This is the moment MCPs stop bein
 
 ## Subagents — delegate to keep your context clean
 
-A **subagent** is a specialised worker Claude spawns with its own context window, tools, and permissions. When Claude needs to do something heavy — explore a big codebase, run a review, summarise a long file — it can delegate to a subagent instead of burning your main context.
+A **subagent** is a specialised worker Claude spawns with its own context window, tools, and permissions. When Claude needs to do something heavy — explore a big codebase, run a review, summarise a long file — it can delegate to a subagent instead of burning your main context. **Subagents now run in the background by default**: Claude keeps working while they run and is notified when they finish.
 
 You can invoke them directly, or let Claude choose.
 

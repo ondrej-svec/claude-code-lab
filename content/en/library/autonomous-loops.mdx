@@ -78,6 +78,8 @@ Before you walk away from a loop, four checks. Cheap to run, expensive to skip.
 
 If any of the four is missing, you're not running a loop — you're running a dice roll.
 
+**Built-in backstops.** Claude Code caps subagent spawns at 200 per session (override with `CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION`) and web searches at 200 (`CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION`). The subagent budget resets on `/clear`. They're a last-resort backstop — your checklist is the real protection.
+
 **Pinned sessions and check 4.** In `claude agents`, `Ctrl+T` on a background session pins it. Pinned sessions stay alive when idle, restart in place when Claude Code updates, and are shed under memory pressure only after non-pinned ones. Pin the session your loop is running in.
 
 <Screenshot

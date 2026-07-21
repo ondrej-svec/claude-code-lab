@@ -62,6 +62,8 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/code-review [effort]` | Correctness review at a chosen effort level (e.g. `/code-review high`). Pass `--comment` to post findings as inline GitHub PR comments. Pass `--fix` to apply findings to the working tree. `/simplify` runs a cleanup-only pass — reuse, simplification, efficiency, altitude — not the full bug-hunting review. |
 | `/security-review` | Bundled security review skill. |
 | `/diff` | Show diff since last checkpoint. Scroll the detail view with arrows, `j`/`k`, `PgUp`/`PgDn`, `Space`, `Home`/`End`. |
+| `/fork` | Copy the current conversation into a new background session (its own row in `claude agents`) while you keep working. |
+| `/subtask` | Launch a subagent in-session. |
 
 Dynamic workflow runs trigger on explicit phrases like `workflow:` or `run a workflow` — not on any mention of the word. The keyword highlights with a purple shimmer in the input line.
 
@@ -277,6 +279,7 @@ Use it for secrets, customer data, internal docs — whatever your compliance po
 | `sandbox.network.allowManagedDomainsOnly: true` | Only admin-approved domains reach the network. |
 | `sandbox.filesystem.allowWrite` | Paths outside CWD where subprocesses may write. Merges across settings scopes. |
 | `sandbox.credentials: false` | Block sandboxed commands from reading credential files and secret environment variables. |
+| `sandbox.filesystem.disabled: true` | Skip filesystem isolation while keeping network egress control. |
 
 → [Sandboxing docs](https://code.claude.com/docs/en/sandboxing)
 
