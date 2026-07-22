@@ -36,6 +36,8 @@ A **skill** is a bundle of instructions + optional scripts that Claude loads on 
 
 **Open standard.** Skills follow the [Agent Skills open format](https://agentskills.io) — spec is public, skills are portable across Claude Code and other tools that adopt the standard. Anthropic maintains a [reference repo](https://github.com/anthropics/skills) with 17 production skills you can read as exemplars.
 
+**Another one worth trying:** `/dataviz` — chart and dashboard design guidance with a runnable color-palette validator, for the next time you build a chart or dashboard with Claude.
+
 Chapter 7 shows how to have Claude build one of these for you.
 
 Trim what Claude sees with `skillOverrides`. Set a skill to `off` and it vanishes from both the model and `/` autocomplete. `user-invocable-only` keeps the slash command but hides it from the model. `name-only` collapses the description to just the name — useful when a large collection starts generating noise.
@@ -207,7 +209,9 @@ Choose Library → Create new agent → let Claude generate the definition. Scop
 
 **Note.** In Claude Code v2.1.63+, the internal `Task` tool was renamed to `Agent`. Older tutorials calling it Task still work — same thing.
 
-**Nesting.** Sub-agents can now spawn their own sub-agents — up to 5 levels deep. Fan-out that once had to chain from the main conversation can now be delegated entirely to the first sub-agent.
+**Background by default.** Subagents now run in the background by default — Claude keeps working while they run and gets notified when they finish, instead of blocking on each one.
+
+**Nesting.** Sub-agents no longer spawn their own sub-agents by default — set `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to allow deeper nesting. Fan-out that used to chain automatically from the first sub-agent now needs that opt-in.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 

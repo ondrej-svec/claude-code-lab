@@ -36,6 +36,8 @@ V pohledu agentů spustí `! <příkaz>` shell příkaz jako novou background se
 
 **Otevřený standard.** Skilly jedou podle [Agent Skills otevřeného formátu](https://agentskills.io) — specifikace je veřejná, skilly jsou přenositelné mezi Claude Code a dalšími nástroji, které standard přijímají. Anthropic udržuje [referenční repo](https://github.com/anthropics/skills) se 17 produkčními skilly, ze kterých se dá číst jako z exempláře.
 
+**Další, který stojí za vyzkoušení:** `/dataviz` — návod na design grafů a dashboardů s runnable validátorem barevné palety, hodí se pokaždé, když s Claudem stavíš graf nebo dashboard.
+
 Níž v téhle kapitole ukážeme, jak si jeden takový necháš Claudem napsat.
 
 Přes `skillOverrides` řídíš, co Claude vidí. Nastav skill na `off` a zmizí z modelu i z `/` autocompleteu. `user-invocable-only` schová skill před modelem, ale lomítkový příkaz zůstane. `name-only` zkolabuje popis na samotný název — hodí se, když ti velká sbírka skillů začne generovat šum.
@@ -207,7 +209,9 @@ Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu 
 
 **Poznámka.** V Claude Code v2.1.63+ byl interní nástroj `Task` přejmenovaný na `Agent`. Starší tutoriály, které mu říkají Task, pořád fungují — je to totéž.
 
-**Vnoření.** Subagenti teď můžou spouštět vlastní subagenty — až 5 úrovní do hloubky. Fan-out, který se dřív musel řetězit z hlavní konverzace, se dá teď celý delegovat prvnímu subagentovi.
+**Na pozadí ve výchozím stavu.** Subagenti teď automaticky běží na pozadí — Claude pokračuje v práci, zatímco jedou, a dostane upozornění, až skončí, místo aby na každého čekal.
+
+**Vnoření.** Subagenti si ve výchozím stavu už nespouští vlastní subagenty — nastav `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH`, jestli chceš povolit hlubší vnoření. Fan-out, který se dřív řetězil sám od prvního subagenta, teď potřebuje tenhle opt-in.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 

@@ -16,6 +16,8 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/resume` | Navázat na předchozí konverzaci. Session na pozadí (spuštěné přes `--bg`) se tu teď taky zobrazují, označené jako `bg`. |
 | `/rewind` | Checkpoint menu — obnoví kód, konverzaci nebo obojí do dřívějšího stavu, **i před `/clear`**. Stejné jako dvojité Esc. |
 | `/branch` | Větvení konverzace od zadaného bodu. |
+| `/fork` | Zkopíruje konverzaci do nové session na pozadí — dostane vlastní řádek v `claude agents` — zatímco ty pokračuješ v týhle. |
+| `/subtask` | Spustí in-session subagenta, kterého dřív spouštěl `/fork`. |
 | `/exit` | Ukončí Claude Code (nebo `Ctrl+D`). |
 
 ### Konfigurace
@@ -25,7 +27,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/init` | Prohlédne repo a navrhne startovní `CLAUDE.md`. Nastav `CLAUDE_CODE_NEW_INIT=1` pro nový interaktivní multi-fázový flow. |
 | `/memory` | Prohlédni nebo uprav CLAUDE.md soubory a načtenou paměť. |
 | `/permissions` | Spravuj allow/deny pravidla pro nástroje. |
-| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený nebo nedostupný. `--fallback-model` platí i pro interaktivní session. |
+| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). **Výchozím modelem je teď Sonnet 5** — nativní 1M-tokenové kontextové okno, promo cena $2/$10 za Mtok do 31. srpna. Vyžaduje v2.1.197+. Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený nebo nedostupný. `--fallback-model` platí i pro interaktivní session. |
 | `/fast` | Přepne fast mode. Výchozí je teď Opus 4.8 — 2× standardní cena, 2,5× rychlost. |
 | `/effort` | Per-session override effortu. |
 | `/advisor [model]` | Přiřadí session poradní model — silnější model, který Claude volá v klíčových momentech (před volbou přístupu, při opakující se chybě, než ohlásí hotovo). Zkratky: `opus`, `sonnet`, `fable`. Vyžaduje v2.1.98+. Fable 5 jako poradce vyžaduje v2.1.170+. `/advisor off` odstraní. |
@@ -51,7 +53,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 
 | Příkaz | Co dělá |
 |---|---|
-| `/agents` | Správa subagentů (vytvořit, upravit, smazat). |
+| `/agents` | Interaktivní průvodce zmizel — subagenty si nech vytvořit a spravovat od Clauda, nebo uprav `.claude/agents/` přímo. |
 | `/tasks` | Správa úkolů na pozadí — rozjet dlouhý běh, výsledek vyzvednout později. |
 | `/workflows` | Přehled tvých dynamických workflow. |
 | `/plugin` | Instalace a správa pluginů. `/plugin list` vypíše nainstalované; `--enabled`/`--disabled` filtruje. |
@@ -59,7 +61,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/skills` | Seznam nainstalovaných skillů. |
 | `/reload-skills` | Znovu projde adresáře se skilly bez restartu session. |
 | `/review` | Vestavěný skill pro PR-style review. |
-| `/code-review [effort]` | Kontrola správnosti kódu na zvolené úrovni (např. `/code-review high`). Přidej `--comment` a nálezy se přidají jako inline komentáře na GitHub PR. Přidej `--fix` a nálezy se rovnou aplikují do working tree. `/simplify` jede jen úklidové kolo — znovupoužití, zjednodušení, efektivita, výška abstrakce — ne plný lov chyb. |
+| `/code-review [effort]` | Kontrola správnosti kódu na zvolené úrovni (např. `/code-review high`). Přidej `--comment` a nálezy se přidají jako inline komentáře na GitHub PR. Přidej `--fix` a nálezy se rovnou aplikují do working tree. Claude `/verify` ani `/code-review` už nespouští sám od sebe — zavolej si je, když je chceš. `/simplify` jede jen úklidové kolo — znovupoužití, zjednodušení, efektivita, výška abstrakce — ne plný lov chyb. |
 | `/security-review` | Vestavěný skill pro security review. |
 | `/diff` | Diff od posledního checkpointu. Detail se dá rolovat klávesnicí — šipky, `j`/`k`, `PgUp`/`PgDn`, `Space`, `Home`/`End`. |
 
@@ -105,7 +107,7 @@ Zkratky v CLI jsou kontextové. Kompletní seznam je na [code.claude.com/docs/e
 | `Esc Esc` | **Rewind** — obnoví se předchozí zpráva (stejné jako `/rewind`). |
 | `Ctrl+C` | Přeruší aktuální vstup nebo odpověď. **Neukončuje Claude.** Rezervované. |
 | `Ctrl+D` | Ukončí Claude Code. Rezervované. |
-| `Shift+Tab` | Cyklí režim oprávnění: default → acceptEdits → plan → auto. |
+| `Shift+Tab` | Cyklí režim oprávnění: manual (dřív default) → acceptEdits → plan → auto. |
 | `Ctrl+R` | Reverse-search v historii — standardně prohledává všechny projekty. `Ctrl+S` zúží hledání na aktuální projekt nebo session. |
 | `Ctrl+O` | Přepíná podrobný transkript (rozbalí zkrácené tool volání). |
 | `Ctrl+T` | Přepíná seznam úkolů. |
