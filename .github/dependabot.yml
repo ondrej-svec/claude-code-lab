@@ -13,6 +13,12 @@ updates:
       # this rule once eslint-plugin-react ships ESLint 10 support.
       - dependency-name: "eslint"
         update-types: ["version-update:semver-major"]
+      # typescript-eslint does not support TS 7.0 yet (throws at load: "does
+      # not support TS 7.0"), so the major bump fails `pnpm lint` hard. Tracking:
+      # https://github.com/typescript-eslint/typescript-eslint/issues/10940
+      # Remove this rule once typescript-eslint ships TS >=7 support.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
     groups:
       next-ecosystem:
         patterns:
