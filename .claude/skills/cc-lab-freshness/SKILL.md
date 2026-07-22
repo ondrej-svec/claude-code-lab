@@ -174,19 +174,39 @@ If the sub-agent returns:
 
 Apply approved patches via `Edit` (existing files) or `Write` (new files). Always Read the file before editing — never blind-write. Stage only the files you actually edited.
 
-### Step 5 — Branch, advance the snapshot, commit, push
+### Step 5 — Roll the standing branch, advance the snapshot, commit, push
 
-This is the only step that mutates the snapshot baseline. Do it AFTER you've confirmed there's a real delta worth landing — never before.
+**One standing freshness PR — never a new one per run.** This skill runs on a
+schedule and never merges (Ondrej's review is the only gate). If each run opened
+a fresh dated branch, the PRs would stack up unmerged and partially overlap —
+20+ open PRs a month, each nibbling a different subset of the same accumulating
+delta, none draining. That pileup is the failure this design prevents.
+
+Instead, reuse **one** branch — `freshness/current` — and keep its single PR
+current. Each run **resets that branch onto the latest `main` and recomposes the
+full accumulated delta fresh**, so the standing PR always reflects "everything
+labworthy since the last merge," composed coherently — not an ever-growing stack
+of daily partials. When Ondrej merges, the snapshot advances and the next run
+starts from a clean baseline.
+
+This is also the only step that mutates the snapshot baseline. Do it AFTER
+you've confirmed there's a real delta worth landing — never before.
 
 ```bash
-TIMESTAMP=$(date -u +%Y-%m-%d)
-BRANCH="freshness/${TIMESTAMP}"
-git checkout -b "${BRANCH}"
+BRANCH="freshness/current"
 
-# Now advance the snapshot baseline. This rewrites
-# scripts/freshness/snapshot/current.json with the URLs/hashes the
-# delta was computed against — so the next weekly run diffs against
-# this state, not the previous one.
+# Start from the latest main so the standing PR reflects the FULL accumulated
+# delta since the last merge — not a growing stack of daily partials.
+git fetch origin
+git checkout main && git pull --ff-only origin main
+
+# Reset the standing branch onto main. -B discards any prior contents of
+# freshness/current; that's intended — the Step-4 edits are the new full set.
+git checkout -B "${BRANCH}" main
+
+# Advance the snapshot baseline. This rewrites
+# scripts/freshness/snapshot/current.json with the URLs/hashes the delta was
+# computed against — so the next run diffs against this state.
 pnpm tsx scripts/freshness/run.ts --update-snapshot
 
 # Stage only the files you edited PLUS the snapshot
@@ -195,21 +215,41 @@ git add <files-you-edited-or-wrote> scripts/freshness/snapshot/current.json
 git commit -m "$(cat <<'EOF'
 freshness: <one-line summary of what changed>
 
-<optional 1-2 line context — the date of the Anthropic surface read>
+Rolling landing — full accumulated delta since the last merge, as of
+<the date of the Anthropic surface read>.
 EOF
 )"
-git push -u origin "${BRANCH}"
+# force-with-lease because the standing branch is reset each run. Only this
+# routine writes freshness/current, so the lease is safe; if it's ever
+# rejected, a human has touched the branch — stop and report rather than force.
+git push --force-with-lease -u origin "${BRANCH}"
 ```
 
-Stage **only files you edited** plus the snapshot. Never `git add .`. The freshness output files in `scripts/freshness/output/` are gitignored — don't try to add them.
+Stage **only files you edited** plus the snapshot. Never `git add .`. The
+freshness output files in `scripts/freshness/output/` are gitignored — don't try
+to add them.
 
-### Step 6 — Open the PR
+### Step 6 — Update the standing PR (or open it if none exists)
 
 ```bash
-gh pr create \
-  --title "Freshness $(date -u +%Y-%m-%d): <N> updates from Anthropic surface" \
-  --body-file scripts/freshness/output/freshness-pr-body-<ISO-timestamp>.md
+# Reuse the one open PR for freshness/current if it exists — keep the same URL
+# Ondrej is already watching. Only open a new one when there's no open PR.
+PR=$(gh pr list --head freshness/current --state open --json number --jq '.[0].number')
+if [ -n "$PR" ]; then
+  gh pr edit "$PR" \
+    --title "Freshness: <N> updates from Anthropic surface (through $(date -u +%Y-%m-%d))" \
+    --body-file scripts/freshness/output/freshness-pr-body-<ISO-timestamp>.md
+else
+  gh pr create \
+    --title "Freshness: <N> updates from Anthropic surface (through $(date -u +%Y-%m-%d))" \
+    --body-file scripts/freshness/output/freshness-pr-body-<ISO-timestamp>.md
+fi
 ```
+
+**If Ondrej closes the standing PR to reject a run**, the next run's `gh pr list
+--state open` finds nothing and opens a fresh one — that's intended (the branch
+is always meant to have one live PR). To pause the watch entirely, disable the
+routine, don't rely on closing the PR.
 
 Compose the PR body in this shape. **Write it to `scripts/freshness/output/freshness-pr-body-<ISO-timestamp>.md`** (inside the repo, gitignored output dir — never `/tmp`, never anywhere outside the repo):
 
@@ -270,9 +310,12 @@ Items in this run's delta that didn't trigger an edit:
 
 ---
 
-🤖 Auto-proposed by `cc-lab-freshness` skill. Human review is the
-only gate. If the voice or scope is off, close the PR — the skill
-won't open a duplicate.
+🤖 Auto-proposed by `cc-lab-freshness` skill. Human review is the only
+gate. This is the standing freshness PR (branch `freshness/current`) —
+each run refreshes it in place with the full accumulated delta since the
+last merge. Merge it to land; edit down before merging if scope is off.
+To stop the watch, disable the routine (closing the PR just reopens it
+next run).
 ```
 
 After writing the file, the path on disk is what `gh pr create --body-file` will reference. Don't write to `/tmp`; the file must live with the run's other output artifacts so the provenance trail is in one place.
@@ -303,7 +346,7 @@ Print a short summary to the user:
 ## Dry-run mode
 
 If invoked with `--dry-run`, do everything **except**:
-- The `git checkout -b`, `git commit`, `git push`, `gh pr create` steps
+- The `git checkout -B`, `git commit`, `git push`, `gh pr edit`/`gh pr create` steps (leave `freshness/current` and its PR untouched)
 
 Specifically, dry-run **still runs the data plane** (`run.ts` — without `--update-snapshot`, same as Step 1) and **still writes the PR body** to `scripts/freshness/output/freshness-pr-body-<timestamp>.md`. The body file is the artifact under review. Print the absolute path of the body file in your final response so the human can read it directly.
 
@@ -320,7 +363,8 @@ Invocation:
 Before reporting "PR opened", verify:
 
 - The PR body lists every file that was actually edited
-- The branch name follows the `freshness/YYYY-MM-DD` convention
+- The standing branch `freshness/current` was used (reset onto latest `main`), not a new dated branch
+- There is exactly **one** open freshness PR afterward — the run updated the existing one in place rather than opening a second
 - **Every patch has a delta-file source citation** in the PR body — claims without citations cannot ship
 - **Every EN edit has a paired CS edit in the same commit** — no language-mismatched commits
 - Every patch has a recorded provenance + voice verdict from a sub-agent
