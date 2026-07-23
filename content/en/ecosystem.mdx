@@ -46,6 +46,8 @@ Set `disableBundledSkills: true` in `settings.json` (or `CLAUDE_CODE_DISABLE_BUN
 
 **Nested skill directories.** Skills inside nested `.claude/skills/` subdirectories load automatically when Claude works on files in that directory — no extra setup. On a name collision, the nested skill surfaces as `<dir>:<name>` so both versions stay available. Useful for monorepos where different packages need separate skill sets.
 
+**`context: fork` skills go to the background.** Skills declaring `context: fork` now run there by default. Opt a specific skill back into blocking with `background: false` in its frontmatter.
+
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Plugins
@@ -161,7 +163,7 @@ Claude opens the page, inspects, reports back. This is the moment MCPs stop bein
 
 **Portable paths.** MCP stdio servers now receive `CLAUDE_PROJECT_DIR` in their environment — the same variable hooks already use. Plugin configs can reference `${CLAUDE_PROJECT_DIR}` in commands. Write the path binding once; both hooks and MCPs resolve the project root the same way.
 
-**Checking connections.** `/mcp` shows the tool count for each connected server and flags any server that connected with 0 tools — zero tools means the server connected but nothing loaded.
+**Checking connections.** `/mcp` shows the tool count for each connected server and flags any server that connected with 0 tools — zero tools means the server connected but nothing loaded. When a server fails to connect, `/mcp` and `claude mcp list` now show the HTTP status and error text. Both also warn if a config value has hidden leading or trailing whitespace.
 
 **Startup auth notice.** When an MCP server needs authentication, Claude shows a notice at session startup pointing at `/mcp` — auth gaps surface before you're mid-task.
 
