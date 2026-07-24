@@ -61,7 +61,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/skills` | List installed skills. |
 | `/reload-skills` | Re-scan skill directories without restarting the session. |
 | `/review` | Bundled PR-style review skill. |
-| `/code-review [effort]` | Correctness review at a chosen effort level (e.g. `/code-review high`). Pass `--comment` to post findings as inline GitHub PR comments. Pass `--fix` to apply findings to the working tree. Claude no longer runs `/verify` or `/code-review` on its own — invoke them explicitly when you want them. `/simplify` runs a cleanup-only pass — reuse, simplification, efficiency, altitude — not the full bug-hunting review. |
+| `/code-review [effort]` | Correctness review at a chosen effort level (e.g. `/code-review high`). Pass `--comment` to post findings as inline GitHub PR comments. Pass `--fix` to apply findings to the working tree. Runs as a background subagent (2.1.218) — doesn't fill your conversation. Claude no longer runs `/verify` or `/code-review` on its own — invoke them explicitly when you want them. `/simplify` runs a cleanup-only pass — reuse, simplification, efficiency, altitude — not the full bug-hunting review. |
 | `/security-review` | Bundled security review skill. |
 | `/diff` | Show diff since last checkpoint. Scroll the detail view with arrows, `j`/`k`, `PgUp`/`PgDn`, `Space`, `Home`/`End`. |
 
@@ -292,6 +292,7 @@ MCPs that fetch untrusted content (web pages, issues, emails) can inject instruc
 - [Anthropic Privacy Policy](https://www.anthropic.com/legal/privacy)
 - [Anthropic Trust Center](https://trust.anthropic.com) — compliance certifications, data processing addendum, security posture
 - [Claude Code data handling](https://code.claude.com/docs/en/data-handling)
+- [Claude Code security](https://code.claude.com/docs/en/claude-security)
 - [Enterprise plan features](https://www.anthropic.com/enterprise)
 - [Permissions docs](https://code.claude.com/docs/en/settings#permissions)
 

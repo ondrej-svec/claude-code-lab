@@ -46,6 +46,8 @@ Nastav `disableBundledSkills: true` v `settings.json` (nebo `CLAUDE_CODE_DISABLE
 
 **Vnořené adresáře se skilly.** Skilly ve vnořených podadresářích `.claude/skills/` se načítají automaticky, když Claude pracuje se soubory v tom adresáři — žádná extra konfigurace. Při kolizi jmen se vnořený skill zobrazí jako `<dir>:<name>`, takže zůstanou dostupné oba. Hodí se na monorepa, kde různé balíčky potřebují vlastní sady skillů.
 
+Skilly deklarované s `context: fork` teď běží na pozadí ve výchozím stavu. Konkrétní skill necháš blokovat přes `background: false` v jeho frontmatteru.
+
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Pluginy

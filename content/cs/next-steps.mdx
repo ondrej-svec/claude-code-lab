@@ -55,7 +55,7 @@ Agentům nevadí číst tvůj kód. Můžou ho procházet na každém PR, na ka�
 
 ### Claude Code `/code-review`
 
-Součást Claude Code. Spusť `/code-review` na libovolném diffu — vypíše chyby správnosti. Přidej úroveň úsilí (`/code-review high`) pro hlubší průchod. Přidej `--comment` a nálezy se přidají jako inline komentáře na GitHub PR. Přidej `--fix` a Claude nálezy rovnou zapíše do working tree — zjednodušení, znovupoužití, efektivita. `/simplify` je teď alias pro `/code-review --fix`.
+Součást Claude Code. Spusť `/code-review` na libovolném diffu — vypíše chyby správnosti. Přidej úroveň úsilí (`/code-review high`) pro hlubší průchod. Přidej `--comment` a nálezy se přidají jako inline komentáře na GitHub PR. Přidej `--fix` a Claude nálezy rovnou zapíše do working tree — zjednodušení, znovupoužití, efektivita. `/simplify` je teď alias pro `/code-review --fix`. `/code-review` teď běží jako subagent na pozadí (2.1.218) — review ti nezaplaví konverzaci a jako svůj cíl bere naskládané slash příkazy.
 
 Jiný job než `/security-review`: code-review hledá chyby správnosti, security-review hledá zranitelnosti. Na PR, které na tom záleží, spusť oboje.
 

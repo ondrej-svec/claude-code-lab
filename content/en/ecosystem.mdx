@@ -46,6 +46,8 @@ Set `disableBundledSkills: true` in `settings.json` (or `CLAUDE_CODE_DISABLE_BUN
 
 **Nested skill directories.** Skills inside nested `.claude/skills/` subdirectories load automatically when Claude works on files in that directory — no extra setup. On a name collision, the nested skill surfaces as `<dir>:<name>` so both versions stay available. Useful for monorepos where different packages need separate skill sets.
 
+Skills declared with `context: fork` now run in the background by default. Opt one out with `background: false` in its frontmatter if it should still block.
+
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Plugins
