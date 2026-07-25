@@ -161,7 +161,7 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 
 **Přenositelné cesty.** MCP stdio servery teď dostávají `CLAUDE_PROJECT_DIR` v prostředí — stejnou proměnnou, kterou už mají hooky. Plugin konfigurace může v příkazech odkazovat na `${CLAUDE_PROJECT_DIR}`. Vazbu na cestu napíšeš jednou; hooky i MCP ji rozloží stejně.
 
-**Kontrola připojení.** `/mcp` ukazuje počet nástrojů každého připojeného serveru a označí servery, které se připojily s 0 nástroji — nula nástrojů znamená, že server navázal spojení, ale nic se nenačetlo.
+**Kontrola připojení.** `/mcp` ukazuje počet nástrojů každého připojeného serveru a označí servery, které se připojily s 0 nástroji — nula nástrojů znamená, že server navázal spojení, ale nic se nenačetlo. Když se server nepřipojí, `claude mcp list` i&nbsp;`/mcp` teď ukážou HTTP status a&nbsp;text chyby — nemusíš hádat, proč server nenaběhl.
 
 **Upozornění na auth při startu.** Potřebuje-li MCP server ověření, Claude zobrazí oznámení při startu session s odkazem na `/mcp` — auth mezera se ukáže hned, ne uprostřed práce.
 
@@ -211,7 +211,7 @@ Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu 
 
 **Na pozadí ve výchozím stavu.** Subagenti teď automaticky běží na pozadí — Claude pokračuje v práci, zatímco jedou, a dostane upozornění, až skončí, místo aby na každého čekal.
 
-**Vnoření.** Subagenti si ve výchozím stavu už nespouští vlastní subagenty — nastav `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH`, jestli chceš povolit hlubší vnoření. Fan-out, který se dřív řetězil sám od prvního subagenta, teď potřebuje tenhle opt-in.
+**Vnoření.** Subagenti si teď ve výchozím stavu spouští vlastní subagenty až do hloubky 3 (dřív to byla 1) — nastav `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1`, jestli chceš zpátky starý default bez vnoření. Fan-out, který dřív potřeboval ruční opt-in, se teď do téhle hloubky řetězí sám.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 

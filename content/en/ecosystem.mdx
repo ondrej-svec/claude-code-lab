@@ -161,7 +161,7 @@ Claude opens the page, inspects, reports back. This is the moment MCPs stop bein
 
 **Portable paths.** MCP stdio servers now receive `CLAUDE_PROJECT_DIR` in their environment — the same variable hooks already use. Plugin configs can reference `${CLAUDE_PROJECT_DIR}` in commands. Write the path binding once; both hooks and MCPs resolve the project root the same way.
 
-**Checking connections.** `/mcp` shows the tool count for each connected server and flags any server that connected with 0 tools — zero tools means the server connected but nothing loaded.
+**Checking connections.** `/mcp` shows the tool count for each connected server and flags any server that connected with 0 tools — zero tools means the server connected but nothing loaded. When a server fails to connect, both `claude mcp list` and `/mcp` now show the HTTP status and error text — no more guessing why a server won't come up.
 
 **Startup auth notice.** When an MCP server needs authentication, Claude shows a notice at session startup pointing at `/mcp` — auth gaps surface before you're mid-task.
 
@@ -211,7 +211,7 @@ Choose Library → Create new agent → let Claude generate the definition. Scop
 
 **Background by default.** Subagents now run in the background by default — Claude keeps working while they run and gets notified when they finish, instead of blocking on each one.
 
-**Nesting.** Sub-agents no longer spawn their own sub-agents by default — set `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to allow deeper nesting. Fan-out that used to chain automatically from the first sub-agent now needs that opt-in.
+**Nesting.** Sub-agents can now spawn their own sub-agents up to depth 3 by default (it was 1) — set `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` to go back to the old no-nesting default. Fan-out that used to need a manual opt-in now chains automatically up to that depth.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 
