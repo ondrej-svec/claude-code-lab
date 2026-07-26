@@ -55,7 +55,7 @@ Agentům nevadí číst tvůj kód. Můžou ho procházet na každém PR, na ka�
 
 ### Claude Code `/code-review`
 
-Součást Claude Code. Spusť `/code-review` na libovolném diffu — vypíše chyby správnosti. Přidej úroveň úsilí (`/code-review high`) pro hlubší průchod. Přidej `--comment` a nálezy se přidají jako inline komentáře na GitHub PR. Přidej `--fix` a Claude nálezy rovnou zapíše do working tree — zjednodušení, znovupoužití, efektivita. `/simplify` je teď alias pro `/code-review --fix`.
+Součást Claude Code. Spusť `/code-review` na libovolném diffu — vypíše chyby správnosti. Teď běží jako background subagent, takže review nezaplní hlavní konverzaci. Přidej úroveň úsilí (`/code-review high`) pro hlubší průchod. Přidej `--comment` a nálezy se přidají jako inline komentáře na GitHub PR. Přidej `--fix` a Claude nálezy rovnou zapíše do working tree — zjednodušení, znovupoužití, efektivita. `/simplify` je teď alias pro `/code-review --fix`.
 
 Jiný job než `/security-review`: code-review hledá chyby správnosti, security-review hledá zranitelnosti. Na PR, které na tom záleží, spusť oboje.
 
@@ -151,6 +151,7 @@ Sandboxing je **nezávislý na režimech oprávnění z kapitoly 4**. Auto-allow
 - `sandbox.failIfUnavailable: true` — Claude Code odmítne běžet, když sandbox nestartuje. Žádný tichý fallback.
 - `allowUnsandboxedCommands: false` — vypne escape hatch, přes který by jinak Claude znovu spustil padající příkaz mimo sandbox.
 - `sandbox.network.allowManagedDomainsOnly: true` — na síť se dostanou jen admin-schválené domény; uživatelé můžou allowlist rozšiřovat, ale admin restrikce neodstraní.
+- `sandbox.network.strictAllowlist: true` — nepovolené hosty pro sandboxované příkazy rovnou zablokuje, bez promptu.
 
 Dohromady to ze sandboxu udělá bezpečnostní gate, ne jen rozumný default.
 
