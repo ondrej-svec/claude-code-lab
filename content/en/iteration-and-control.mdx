@@ -150,6 +150,8 @@ Two hook additions worth building into your harness.
 
 **Hyphenated hook matchers.** Matchers for tools with hyphens in the identifier — e.g. `code-reviewer` or `mcp__brave-search` — now exact-match the tool name. Previously they substring-matched, so a matcher could accidentally fire on unrelated tools. If you want to catch all tools from a hyphenated MCP server, update the matcher to `mcp__brave-search__.*`.
 
+**`DirectoryAdded`.** Fires after `/add-dir` — or the SDK's `register_repo_root` control request — registers a new working directory mid-session. Wire a hook here to re-scan the new directory's `CLAUDE.md` the moment it lands, instead of waiting for the next session.
+
 ## The recommended flow, when you're ready
 
 This chapter is the daily habits. [Chapter 7](/en/lab/compound-engineering) is the **practice** that bundles them into a repeatable loop: brainstorm → plan → work → review → compound. Install the Compound Engineering plugin when you're ready — it's the shortest path from *"I iterate one prompt at a time"* to *"I have a practice that produces reliably good work."*
