@@ -151,6 +151,7 @@ Sandboxing is **orthogonal to Ch 4's permission modes**. Auto-allow sandbox can 
 - `sandbox.failIfUnavailable: true` — Claude Code refuses to run if the sandbox can't start. No silent fallback.
 - `allowUnsandboxedCommands: false` — disables the escape hatch that lets Claude re-run a failing command unsandboxed.
 - `sandbox.network.allowManagedDomainsOnly: true` — only admin-approved domains reach the network; users can extend the path allowlist but can't remove admin restrictions.
+- `sandbox.network.strictAllowlist: true` — denies non-allowlisted hosts for sandboxed commands without prompting.
 
 Together these turn sandboxing from a nice default into a security gate.
 

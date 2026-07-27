@@ -213,7 +213,7 @@ Choose Library → Create new agent → let Claude generate the definition. Scop
 
 **Background by default.** Subagents now run in the background by default — Claude keeps working while they run and gets notified when they finish, instead of blocking on each one.
 
-**Nesting.** Sub-agents no longer spawn their own sub-agents by default — set `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to allow deeper nesting. Fan-out that used to chain automatically from the first sub-agent now needs that opt-in.
+**Nesting.** Subagents can spawn nested subagents up to depth 3 by default — set `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` if you want the older, flatter behavior back.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 
