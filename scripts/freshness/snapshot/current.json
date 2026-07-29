@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-07-27T16:18:59.821Z",
+  "fetchedAt": "2026-07-29T16:16:29.334Z",
   "sources": {
     "claude-code-changelog": {
       "url": "https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md",
@@ -387,8 +387,8 @@
       "url": "https://code.claude.com/sitemap.xml",
       "label": "code.claude.com docs (EN)",
       "kind": "xml-sitemap",
-      "hash": "b325ee1a6798fc10dd872847b913a07b9b69b8ea88ff209681a4d9b42d51e789",
-      "length": 256981,
+      "hash": "6194496434b394df0797624f47227cb3c53eaaa6bb2e921ece2babdae88cda89",
+      "length": 257253,
       "index": [
         "https://code.claude.com/docs/en/accessibility",
         "https://code.claude.com/docs/en/admin-setup",
@@ -441,6 +441,7 @@
         "https://code.claude.com/docs/en/claude-apps-gateway",
         "https://code.claude.com/docs/en/claude-apps-gateway-config",
         "https://code.claude.com/docs/en/claude-apps-gateway-deploy",
+        "https://code.claude.com/docs/en/claude-apps-gateway-on-aws",
         "https://code.claude.com/docs/en/claude-apps-gateway-on-gcp",
         "https://code.claude.com/docs/en/claude-apps-gateway-spend-limits",
         "https://code.claude.com/docs/en/claude-code-on-the-web",
@@ -448,6 +449,7 @@
         "https://code.claude.com/docs/en/claude-platform-on-aws",
         "https://code.claude.com/docs/en/claude-security",
         "https://code.claude.com/docs/en/cli-reference",
+        "https://code.claude.com/docs/en/cloud-environments",
         "https://code.claude.com/docs/en/code-review",
         "https://code.claude.com/docs/en/commands",
         "https://code.claude.com/docs/en/common-workflows",
