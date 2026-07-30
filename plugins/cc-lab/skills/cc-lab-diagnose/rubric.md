@@ -621,6 +621,41 @@ Quote the hook entry + the missing script path or project path.
 
 ---
 
+## B5a — User permissions
+
+What the lab teaches: permissions are the one layer that is **enforced**
+rather than merely followed. `CLAUDE.md` shapes behaviour; `permissions.deny`
+holds regardless of what the model decides. A user-scope allow list is where
+that enforcement quietly rots, because entries accrete one approval at a time
+and nothing ever removes them.
+
+Part A checks project permissions (A5a, A5b). Part B had no equivalent, so a
+personal harness could carry a plaintext credential in an allow rule and this
+rubric would report nothing. That gap was found in a real audit.
+
+### Heuristics
+
+Read `~/.claude/settings.json` `permissions`.
+
+| Check | Signal | Confidence |
+|---|---|---|
+| A rule embeds a credential value (`PGPASSWORD=`, `_TOKEN=`, `_PASSWORD=`, a key file path) | "secret in a permission rule — it is echoed into every transcript and hook log; grant the binary, keep the secret in the environment" | high |
+| `allow` > 150 entries | "allow-list sprawl — rules keyed to one past invocation instead of a binary; most match nothing now" | medium |
+| `deny` empty or < 5 entries while `allow` > 50 | "accelerator with no brake — no destructive-command or secret-read denies" | high |
+| `ask` absent entirely | "no middle tier — every irreversible action is either silent or blocked" | medium |
+| A cwd-relative path rule (`Read(../**)`, `Write(../**)`) | "cwd-relative grant — resolves against wherever the session started; from `~/.claude` this covers the whole home directory" | high |
+| A `deny` rule containing a pipe, or a pattern continuing after `:*` | "unreachable matcher — Bash matchers are prefix-based, so the CLI drops this rule silently and the protection does not exist" | high |
+| An `mcp__*` grant to a production or destructive tool (`*_prod__*`, `hard_delete_*`, `*_drop_*`) | "standing grant to a destructive production surface" | high |
+| A grant naming a former employer's org, a departed project, or an unreachable remote | "stale grant — scope outlived its context" | medium |
+
+### Evidence requirement
+
+Quote the offending rule verbatim, and for sprawl give the allow/deny/ask
+counts. Never quote a secret **value** — name the rule and the variable, and
+say the value is redacted.
+
+---
+
 ## B6 — Auto-memory state
 
 What the lab teaches: auto-memory's `MEMORY.md` index loads in every
@@ -705,16 +740,24 @@ The diagnostic links only to slugs that exist in the lab. As of
 | `before-we-start` | Before we start | — |
 | `first-task` | Your first task | — |
 | `teach-claude-your-project` | Teach Claude your project | A1, B1 |
-| `iteration-and-control` | Iteration and control | A5b (permission modes), A9, A10 (workflow shape, retry patterns) |
+| `iteration-and-control` | Iteration and control | A5a, A5b (permission modes and rules), A9, A10 (workflow shape, retry patterns), B5a |
 | `voice-and-interaction` | Voice and modalities | — |
-| `ecosystem` | The ecosystem | A2, A3, A4, A5a, A7, A10 (dead skills/agents/commands, hook errors, permission gaps), B2, B3, B4, B5 |
+| `ecosystem` | The ecosystem | A2, A4, A7 (skills, agents, MCPs, plugin declarations), B2, B3, B4 |
 | `compound-engineering` | Compound engineering | A8, B6 |
-| `next-steps` | Where to go next | — |
-| `reference` | Reference | — |
+| `next-steps` | Where to go next | A3, B5 (hooks) |
+| `reference` | Reference | A3, A6, B5 (hook events and config surface) |
 | `behind-the-scenes` | Behind the scenes | — |
 
 Link format: `https://cc-lab.ondrejsvec.com/en/<slug>` for EN,
 `https://cc-lab.ondrejsvec.com/cs/<slug>` for CS.
+
+**Before quoting a chapter, confirm it actually covers the category.** This
+manifest previously routed A3, A5a, A6 and A7 all to `ecosystem`, which
+contains one mention of hooks and none of gitignore — so the judge was told to
+"quote a sharper point from the chapter" for categories the chapter never
+discusses. The instruction silently produced nothing. If a category's mapped
+chapter turns out not to cover it, say so in the observation and cite the
+config evidence alone rather than inventing chapter support.
 
 ---
 
