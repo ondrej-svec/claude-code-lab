@@ -62,3 +62,6 @@ scripts/freshness/output/
 # OBS scene collection bakes absolute file:// URLs; Stream Deck icons are
 # deterministic from streamdeck-spec.ts. Reproduce, don't commit.
 scripts/streaming/dist/
+
+# /cc-lab-diagnose HTML artifacts — regenerate by rerunning the skill
+cc-lab-diagnosis-*.html
