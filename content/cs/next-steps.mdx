@@ -151,6 +151,7 @@ Sandboxing je **nezávislý na režimech oprávnění z kapitoly 4**. Auto-allow
 - `sandbox.failIfUnavailable: true` — Claude Code odmítne běžet, když sandbox nestartuje. Žádný tichý fallback.
 - `allowUnsandboxedCommands: false` — vypne escape hatch, přes který by jinak Claude znovu spustil padající příkaz mimo sandbox.
 - `sandbox.network.allowManagedDomainsOnly: true` — na síť se dostanou jen admin-schválené domény; uživatelé můžou allowlist rozšiřovat, ale admin restrikce neodstraní.
+- `sandbox.network.strictAllowlist: true` — nepovolené hosty pro sandboxované příkazy rovnou zamítne, bez ptaní.
 
 Dohromady to ze sandboxu udělá bezpečnostní gate, ne jen rozumný default.
 

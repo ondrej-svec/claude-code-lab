@@ -27,8 +27,8 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/init` | Scan the repo and propose a starting `CLAUDE.md`. Set `CLAUDE_CODE_NEW_INIT=1` for the new multi-phase interactive flow. |
 | `/memory` | View or edit CLAUDE.md files and loaded memory. |
 | `/permissions` | Manage tool allow/deny rules. |
-| `/model` | Switch model for the current session (e.g., Opus → Sonnet). **Sonnet 5 is now the default model** — native 1M-token context window, promotional pricing of $2/$10 per Mtok through August 31. Requires v2.1.197+. Selecting a model now saves it as the default for new sessions. Press `s` in the picker to switch for the current session only. Set `fallbackModel` in `settings.json` to chain up to three fallback models tried in order when the primary is overloaded or unavailable. `--fallback-model` also applies to interactive sessions. |
-| `/fast` | Toggle fast mode. Default is now Opus 4.8 — 2× the standard rate for 2.5× the speed. |
+| `/model` | Switch model for the current session (e.g., Opus → Sonnet). **Sonnet 5 is now the default model** — native 1M-token context window, promotional pricing of $2/$10 per Mtok through August 31. Requires v2.1.197+. Selecting a model now saves it as the default for new sessions. Press `s` in the picker to switch for the current session only. Set `fallbackModel` in `settings.json` to chain up to three fallback models tried in order when the primary is overloaded or unavailable. `--fallback-model` also applies to interactive sessions. Within the Opus family, Opus 5 (`claude-opus-5`) is now the default model — 1M context, fast mode priced at $10/$50 per Mtok. |
+| `/fast` | Toggle fast mode. Default is now Opus 4.8 — 2× the standard rate for 2.5× the speed. Opus 4.7 is no longer eligible; `/fast` now applies to Opus 5 and Opus 4.8. |
 | `/effort` | Per-session effort override. |
 | `/advisor [model]` | Pair the session with an advisor — a stronger model Claude calls at decision points (before committing to an approach, when stuck on a recurring error, before declaring done). Shorthand: `opus`, `sonnet`, `fable`. Requires v2.1.98+. Fable 5 as advisor requires v2.1.170+. `/advisor off` to clear. |
 | `/keybindings` | Open `~/.claude/keybindings.json`. |
@@ -61,7 +61,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/skills` | List installed skills. |
 | `/reload-skills` | Re-scan skill directories without restarting the session. |
 | `/review` | Bundled PR-style review skill. |
-| `/code-review [effort]` | Correctness review at a chosen effort level (e.g. `/code-review high`). Pass `--comment` to post findings as inline GitHub PR comments. Pass `--fix` to apply findings to the working tree. Claude no longer runs `/verify` or `/code-review` on its own — invoke them explicitly when you want them. `/simplify` runs a cleanup-only pass — reuse, simplification, efficiency, altitude — not the full bug-hunting review. |
+| `/code-review [effort]` | Correctness review at a chosen effort level (e.g. `/code-review high`). Pass `--comment` to post findings as inline GitHub PR comments. Pass `--fix` to apply findings to the working tree. Claude no longer runs `/verify` or `/code-review` on its own — invoke them explicitly when you want them. `/simplify` runs a cleanup-only pass — reuse, simplification, efficiency, altitude — not the full bug-hunting review. `/code-review` now runs as a background subagent — review no longer fills your conversation, and stacked slash commands are its review target. |
 | `/security-review` | Bundled security review skill. |
 | `/diff` | Show diff since last checkpoint. Scroll the detail view with arrows, `j`/`k`, `PgUp`/`PgDn`, `Space`, `Home`/`End`. |
 
@@ -357,6 +357,7 @@ Every official link referenced across this guide, in one place.
 - [Deep links](https://code.claude.com/docs/en/deep-links)
 - [Workflows](https://code.claude.com/docs/en/workflows)
 - [LLM gateway](https://code.claude.com/docs/en/llm-gateway-connect)
+- [Claude security](https://code.claude.com/docs/en/claude-security)
 
 ### Standards + reference repos
 

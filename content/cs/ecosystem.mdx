@@ -46,6 +46,8 @@ Nastav `disableBundledSkills: true` v `settings.json` (nebo `CLAUDE_CODE_DISABLE
 
 **Vnořené adresáře se skilly.** Skilly ve vnořených podadresářích `.claude/skills/` se načítají automaticky, když Claude pracuje se soubory v tom adresáři — žádná extra konfigurace. Při kolizi jmen se vnořený skill zobrazí jako `<dir>:<name>`, takže zůstanou dostupné oba. Hodí se na monorepa, kde různé balíčky potřebují vlastní sady skillů.
 
+**Skilly `context: fork` běží na pozadí.** Skilly, které mají `context: fork`, tam teď běží ve výchozím stavu. Opt-out pro konkrétní skill je `background: false` ve frontmatteru.
+
 → [Skills docs](https://code.claude.com/docs/en/skills)
 
 ## Pluginy
@@ -161,7 +163,7 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 
 **Přenositelné cesty.** MCP stdio servery teď dostávají `CLAUDE_PROJECT_DIR` v prostředí — stejnou proměnnou, kterou už mají hooky. Plugin konfigurace může v příkazech odkazovat na `${CLAUDE_PROJECT_DIR}`. Vazbu na cestu napíšeš jednou; hooky i MCP ji rozloží stejně.
 
-**Kontrola připojení.** `/mcp` ukazuje počet nástrojů každého připojeného serveru a označí servery, které se připojily s 0 nástroji — nula nástrojů znamená, že server navázal spojení, ale nic se nenačetlo.
+**Kontrola připojení.** `/mcp` ukazuje počet nástrojů každého připojeného serveru a označí servery, které se připojily s 0 nástroji — nula nástrojů znamená, že server navázal spojení, ale nic se nenačetlo. Když se server nepřipojí, `/mcp` a&nbsp;`claude mcp list` teď ukážou HTTP status a&nbsp;text chyby. Oboje taky upozorní, jestli má hodnota v&nbsp;konfiguraci skryté mezery na začátku nebo na konci.
 
 **Upozornění na auth při startu.** Potřebuje-li MCP server ověření, Claude zobrazí oznámení při startu session s odkazem na `/mcp` — auth mezera se ukáže hned, ne uprostřed práce.
 
@@ -211,7 +213,7 @@ Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu 
 
 **Na pozadí ve výchozím stavu.** Subagenti teď automaticky běží na pozadí — Claude pokračuje v práci, zatímco jedou, a dostane upozornění, až skončí, místo aby na každého čekal.
 
-**Vnoření.** Subagenti si ve výchozím stavu už nespouští vlastní subagenty — nastav `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH`, jestli chceš povolit hlubší vnoření. Fan-out, který se dřív řetězil sám od prvního subagenta, teď potřebuje tenhle opt-in.
+**Vnoření.** Subagenti teď defaultně spouští vlastní subagenty až do hloubky 3 — nastav `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1`, jestli chceš zpátky starší, plošší chování.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 
