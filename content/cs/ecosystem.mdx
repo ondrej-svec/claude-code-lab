@@ -28,6 +28,8 @@ Připni session klávesou `Ctrl+T` v `claude agents` — připnuté session pře
 
 V pohledu agentů spustí `! <příkaz>` shell příkaz jako novou background session — takovou, ke které se můžeš připojit a zase odpojit. Totéž z terminálu: `claude --bg --exec '<příkaz>'`.
 
+**Background session teď hlídají vlastní práci.** Automaticky commitují a pushují, aby se práce neztratila, draft PR otevřou jen když si to úkol žádá, a řídí se git konvencemi z tvého `CLAUDE.md`. Každý běh na konci nahlásí přesně, kde práce skončila.
+
 ## Skilly
 
 **Skill** je balík instrukcí + volitelných skriptů, které si Claude načte podle potřeby. Doménový playbook — bydlí v `~/.claude/skills/`, aktivuje se sám, když situace sedí.
@@ -66,12 +68,13 @@ Přejmenování pluginů se teď řeší samo: jakmile se marketplace záznam p�
 
 Pluginy v adresářích `.claude/skills/` se teď načítají automaticky — bez marketplace. Rychlý start: `claude plugin init <jméno>` zapíše skelet pluginu přímo do `.claude/skills/<jméno>/`.
 
-Jeden oficiální plugin od Anthropicu, který má smysl přidat brzo: **`security-guidance`**. Průběžně kontroluje změny kódu na zranitelnosti ve stejné session — rychlá kontrola vzorů při každé editaci, model review na konci každého kola, hlubší agentní review při commitu nebo pushi. Nainstaluj z oficiálního marketplace a obnov:
+Jeden oficiální plugin od Anthropicu, který má smysl přidat brzo: **`security-guidance`**. Průběžně kontroluje změny kódu na zranitelnosti ve stejné session — rychlá kontrola vzorů při každé editaci, model review na konci každého kola, hlubší agentní review při commitu nebo pushi. Nainstaluj z oficiálního marketplace — pluginy se teď aktivují hned, jakmile je to bezpečné, ne pokaždé až po reloadu:
 
 ```text
 /plugin install security-guidance@claude-plugins-official
-/reload-plugins
 ```
+
+Nenaskočí hned? `/reload-plugins` zůstává jako záloha.
 
 Vlastní pravidla pro projekt dej do `.claude/claude-security-guidance.md`.
 

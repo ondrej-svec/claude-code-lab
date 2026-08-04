@@ -16,7 +16,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/resume` | Pick up a previous conversation. Background sessions (started with `--bg`) now appear here too, marked with `bg`. |
 | `/rewind` | Checkpoint menu — restore code, conversation, or both to an earlier state, **including before a `/clear`**. Same as double-Esc. |
 | `/branch` | Fork the conversation from a given point. |
-| `/fork` | Copy the conversation into a new background session — its own row in `claude agents` — while you keep working in this one. |
+| `/fork` | Copy the conversation into a new background session — its own row in `claude agents`, in its own git worktree — while you keep working in this one. |
 | `/subtask` | Launch the in-session subagent `/fork` used to spawn. |
 | `/exit` | Quit Claude Code (or `Ctrl+D`). |
 
@@ -279,6 +279,7 @@ Use it for secrets, customer data, internal docs — whatever your compliance po
 | `sandbox.network.allowManagedDomainsOnly: true` | Only admin-approved domains reach the network. |
 | `sandbox.filesystem.allowWrite` | Paths outside CWD where subprocesses may write. Merges across settings scopes. |
 | `sandbox.credentials: false` | Block sandboxed commands from reading credential files and secret environment variables. |
+| `mode: "mask"` (credential files) | Sandboxed commands read a sentinel copy of the file instead of the real value — the whole file, or just what an `extract` regex captures. The sandbox proxy substitutes the real value only on egress. Linux/WSL only; macOS falls back to `deny`. |
 
 → [Sandboxing docs](https://code.claude.com/docs/en/sandboxing)
 
