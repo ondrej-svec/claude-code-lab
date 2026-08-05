@@ -28,6 +28,8 @@ Pin a session with `Ctrl+T` inside the `claude agents` view — pinned sessions 
 
 Inside the agents view, `! <command>` starts a shell command as a new background session — one you can attach to and detach from on your schedule. Same move from the terminal: `claude --bg --exec '<command>'`.
 
+Background sessions now commit and push to preserve work on their own, opening a draft PR only when the task actually calls for one — following your `CLAUDE.md` git instructions the same way an interactive session would. Every background run ends by reporting where the work landed, so you're not left guessing which branch to check.
+
 ## Skills
 
 A **skill** is a bundle of instructions + optional scripts that Claude loads on demand. A domain-specific playbook — lives in `~/.claude/skills/`, activates automatically when the situation matches.
@@ -66,12 +68,13 @@ Plugin auto-rename is now automatic: when a marketplace entry is renamed, Claude
 
 Plugins in `.claude/skills/` directories auto-load — no marketplace registration needed. Scaffold one with `claude plugin init <name>`, which writes the plugin skeleton into `.claude/skills/<name>/`.
 
-One official Anthropic plugin worth adding early: **`security-guidance`**. It reviews code changes for vulnerabilities in the same session — fast pattern check on each edit, model review at each turn end, deeper agentic review on commit or push. Install from the official marketplace and reload:
+One official Anthropic plugin worth adding early: **`security-guidance`**. It reviews code changes for vulnerabilities in the same session — fast pattern check on each edit, model review at each turn end, deeper agentic review on commit or push. Install from the official marketplace:
 
 ```text
 /plugin install security-guidance@claude-plugins-official
-/reload-plugins
 ```
+
+Plugins installed from `/plugin` now activate immediately when safe, instead of always requiring `/reload-plugins` — keep the command around for the cases that still need it.
 
 Add project-specific rules in `.claude/claude-security-guidance.md`.
 
