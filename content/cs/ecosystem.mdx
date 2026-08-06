@@ -28,7 +28,7 @@ Připni session klávesou `Ctrl+T` v `claude agents` — připnuté session pře
 
 V pohledu agentů spustí `! <příkaz>` shell příkaz jako novou background session — takovou, ke které se můžeš připojit a zase odpojit. Totéž z terminálu: `claude --bg --exec '<příkaz>'`.
 
-Background session teď svou práci samy commitují a pushují, aby se neztratila, a draft PR otevřou jen tehdy, když si to úkol fakticky žádá — řídí se přitom tvými git instrukcemi z `CLAUDE.md` stejně jako interaktivní session. Každý běh na pozadí na konci nahlásí, kde práce přistála, takže nehádáš, na jaké větvi hledat.
+**Background session teď hlídají vlastní práci.** Automaticky commitují a pushují, aby se práce neztratila, draft PR otevřou jen když si to úkol žádá, a řídí se git konvencemi z tvého `CLAUDE.md`. Každý běh na konci nahlásí přesně, kde práce skončila.
 
 ## Skilly
 
@@ -68,13 +68,13 @@ Přejmenování pluginů se teď řeší samo: jakmile se marketplace záznam p�
 
 Pluginy v adresářích `.claude/skills/` se teď načítají automaticky — bez marketplace. Rychlý start: `claude plugin init <jméno>` zapíše skelet pluginu přímo do `.claude/skills/<jméno>/`.
 
-Jeden oficiální plugin od Anthropicu, který má smysl přidat brzo: **`security-guidance`**. Průběžně kontroluje změny kódu na zranitelnosti ve stejné session — rychlá kontrola vzorů při každé editaci, model review na konci každého kola, hlubší agentní review při commitu nebo pushi. Nainstaluj z oficiálního marketplace:
+Jeden oficiální plugin od Anthropicu, který má smysl přidat brzo: **`security-guidance`**. Průběžně kontroluje změny kódu na zranitelnosti ve stejné session — rychlá kontrola vzorů při každé editaci, model review na konci každého kola, hlubší agentní review při commitu nebo pushi. Nainstaluj z oficiálního marketplace — pluginy se teď aktivují hned, jakmile je to bezpečné, ne pokaždé až po reloadu:
 
 ```text
 /plugin install security-guidance@claude-plugins-official
 ```
 
-Pluginy nainstalované přes `/plugin` se teď aktivují hned, jakmile je to bezpečné — `/reload-plugins` už není potřeba pokaždé. Příkaz si nech v záloze pro případy, kdy ho ještě potřebuješ.
+Nenaskočí hned? `/reload-plugins` zůstává jako záloha.
 
 Vlastní pravidla pro projekt dej do `.claude/claude-security-guidance.md`.
 

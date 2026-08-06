@@ -16,7 +16,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/resume` | Navázat na předchozí konverzaci. Session na pozadí (spuštěné přes `--bg`) se tu teď taky zobrazují, označené jako `bg`. |
 | `/rewind` | Checkpoint menu — obnoví kód, konverzaci nebo obojí do dřívějšího stavu, **i před `/clear`**. Stejné jako dvojité Esc. |
 | `/branch` | Větvení konverzace od zadaného bodu. |
-| `/fork` | Zkopíruje konverzaci do nové session na pozadí — dostane vlastní řádek v `claude agents` i vlastní git worktree — zatímco ty pokračuješ v týhle. |
+| `/fork` | Zkopíruje konverzaci do nové session na pozadí — dostane vlastní řádek v `claude agents`, ve vlastním git worktree — zatímco ty pokračuješ v týhle. |
 | `/subtask` | Spustí in-session subagenta, kterého dřív spouštěl `/fork`. |
 | `/exit` | Ukončí Claude Code (nebo `Ctrl+D`). |
 
@@ -279,7 +279,7 @@ Používej pro tajné klíče, zákaznická data, interní dokumenty — co ti d
 | `sandbox.network.allowManagedDomainsOnly: true` | Na síť jen admin-schválené domény. |
 | `sandbox.filesystem.allowWrite` | Cesty mimo CWD, kam můžou subprocesy zapisovat. Slučují se napříč scopy nastavení. |
 | `sandbox.credentials: false` | Blokuje čtení credential souborů a tajných proměnných prostředí ze sandboxovaných příkazů. |
-| `mode: "mask"` (credential soubory, Linux/WSL) | Sandboxovaný příkaz čte místo credential souboru sentinelovou kopii — celý soubor, nebo jen úseky, které zachytí `extract` regex — a sandbox proxy při odchozím requestu dosadí skutečnou hodnotu. Na macOS maskování spadne zpátky na `deny`. |
+| `mode: "mask"` (credential soubory) | Sandboxované příkazy čtou místo reálné hodnoty sentinel kopii souboru — celý soubor, nebo jen to, co zachytí `extract` regex. Reálná hodnota se doplní až při odchozím síťovém provozu přes sandbox proxy. Jen Linux/WSL; na macOS to spadne zpátky na `deny`. |
 
 → [Sandboxing docs](https://code.claude.com/docs/en/sandboxing)
 
