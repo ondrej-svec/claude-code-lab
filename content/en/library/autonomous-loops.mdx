@@ -72,7 +72,7 @@ The tell that you're in a Ralph loop: each iteration looks more polished than th
 Before you walk away from a loop, four checks. Cheap to run, expensive to skip.
 
 1. **Is success mechanical?** Can Claude check "done" without your judgment? If "done" needs a human to taste it, the loop will loop forever.
-2. **Is the scope bounded?** A file glob, a branch, a max-iteration count, a time cap. Pick at least two. Claude Code also caps fan-out itself now — 20 concurrent subagents by default (`CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`), 200 subagent spawns per session (`CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION`), and 200 WebSearch calls per session (`CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION`). A backstop, not a substitute for your own bound.
+2. **Is the scope bounded?** A file glob, a branch, a max-iteration count, a time cap. Pick at least two. Claude Code still caps concurrent fan-out — 20 concurrent subagents by default (`CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`) and 200 WebSearch calls per session (`CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION`) — but the per-session spawn cap is gone: a long-running session no longer refuses new agents once it's spawned 200. A backstop, not a substitute for your own bound.
 3. **Is the harness on?** Tests, lint, types running automatically on every change. Without it, autonomy is hope. The harness is what catches a Ralph loop in iteration 2 instead of iteration 30.
 4. **Can you stop without losing state?** Checkpoint commits, persistable progress, an interrupt that doesn't kill the conversation. If stopping means re-deriving everything, you'll let the loop run too long out of sunk-cost.
 
