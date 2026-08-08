@@ -73,7 +73,7 @@ Příznak, že jsi v Ralph smyčce: každá iterace vypadá uhlazeněji než ta
 Než od smyčky odejdeš, čtyři kontroly. Levné spustit, drahé přeskočit.
 
 1. **Je úspěch mechanický?** Umí Claude ověřit „done“ bez tvého úsudku? Pokud „done“ potřebuje, aby to ochutnal člověk, smyčka pojede do nekonečna.
-2. **Je rozsah ohraničený?** Glob souborů, větev, max počet iterací, časový limit. Vyber si aspoň dvě. Claude Code teď fan-out omezuje i sám — defaultně 20 souběžných subagentů (`CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`), 200 spuštění subagentů za session (`CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION`) a 200 volání WebSearch za session (`CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION`). Záchranná síť, ne náhrada za tvůj vlastní limit.
+2. **Je rozsah ohraničený?** Glob souborů, větev, max počet iterací, časový limit. Vyber si aspoň dvě. Claude Code pořád omezuje *souběžný* fan-out — defaultně 20 subagentů najednou (`CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`) — a 200 volání WebSearch za session (`CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION`), ale starý limit na 200 spuštění subagentů za session zmizel: dlouhoběžící session už po 200 spuštěných agentech neodmítají další (limity na souběžnost a hloubku pořád platí). Záchranná síť, ne náhrada za tvůj vlastní limit.
 3. **Je harness v provozu?** Testy, lint, typy běží automaticky na každé změně. Bez toho je autonomie jen naděje. Harness je to, co chytí Ralph smyčku v iteraci 2 místo v iteraci 30.
 4. **Můžeš zastavit, aniž bys ztratil stav?** Checkpoint commity, uložitelný progres, interrupt, který nezabije konverzaci. Pokud zastavit znamená všechno znovu odvodit, necháš smyčku jet moc dlouho ze zoufalství nad utopenými náklady.
 
