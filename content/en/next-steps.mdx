@@ -57,6 +57,8 @@ Agents don't mind reading your code. They can run it on every PR, on every commi
 
 Ships with Claude Code. Run `/code-review` on any diff to surface correctness bugs — logic errors, edge cases, missing branches. Pass an effort level (`/code-review high`) to go deeper. Pass `--comment` and findings post as inline GitHub PR comments. Pass `--fix` and Claude applies the findings directly to your working tree — reuse, simplification, and efficiency improvements included. `/simplify` is now an alias for `/code-review --fix`.
 
+`/review` is now an alias — same command. Point `/code-review` at a specific pull request with `/code-review <level> <pr#>` instead of reviewing your working diff, or reach for `/code-review ultra` when the change is high-stakes enough to justify a deep cloud review.
+
 Different job from `/security-review`: code-review targets correctness; security-review targets vulnerabilities. Run both on a PR that matters.
 
 ### Claude Code `/security-review`

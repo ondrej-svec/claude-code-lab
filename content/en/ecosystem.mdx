@@ -30,6 +30,8 @@ Inside the agents view, `! <command>` starts a shell command as a new background
 
 **Background sessions now protect their own work.** They commit and push automatically to preserve progress, open a draft PR only when the task actually calls for one, and follow whatever git conventions your `CLAUDE.md` sets. Every run ends by reporting exactly where the work landed.
 
+Sessions can talk to each other now, too — on any of your machines, on macOS and Linux. `ListAgents` lists what's reachable; `SendMessage` sends a message straight to one of them. That now reaches further: `SendMessage` can start a conversation with a Remote Control session on another machine by name, instead of only replying once it's messaged you first. `ListAgents` shows that session as `name [ref]`. Handy when a background session on your laptop finds something the one on your desktop needs to know before you're back at either keyboard.
+
 ## Skills
 
 A **skill** is a bundle of instructions + optional scripts that Claude loads on demand. A domain-specific playbook — lives in `~/.claude/skills/`, activates automatically when the situation matches.
@@ -61,6 +63,8 @@ Chapter 7 walks through installing and using the [Compound Engineering plugin](h
 As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) is a small collection of skills I bundled for my daily work (visualize is one of them). Not something to install now — an example of what emerges once you've written three or four skills you don't want to lose. You'll build one of your own.
 
 Need a plugin for one session without installing it? Pass `--plugin-url <url>` to `claude` and it loads the `.zip` archive from that URL for the current session only.
+
+No git or npm access to the plugin's source? The `archive` plugin source installs straight from a zip over HTTPS, with optional SHA-256 pinning so you know exactly what you're running.
 
 Plugin dependencies are now enforced. `claude plugin disable` refuses if another enabled plugin depends on the target, and prints the chain you need to disable first. `claude plugin enable` goes the other direction: it force-enables any transitive dependencies automatically.
 
