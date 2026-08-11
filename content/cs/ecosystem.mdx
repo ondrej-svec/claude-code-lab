@@ -18,7 +18,7 @@ Všechno, o čem bude řeč — skilly, pluginy, MCP, subagenti — běží uvni
   caption="Sidebar drží víc session najednou. Přepínej, aniž bys ztratil kontext."
 />
 
-Jakmile session rozseješ po repech i strojích, `claude agents` je jeden seznam — co běží, co čeká na tebe, co je hotové. Přidej `--json` a výstup je strojově čitelný: každá live session jako JSON pole — připravené pro tmux-resurrect, stavové lišty, session pickery nebo libovolný skript, který potřebuje vědět, co právě běží. Blokované session teď mají pole `waitingFor` — říká, na co session čeká (například na nevyřízené oprávnění). Na monorepu `claude agents --cwd <cesta>` omezí výpis jen na session zasazené do toho adresáře. Flagy pro dispatch ti dovolí nakonfigurovat session na pozadí ještě než startuje: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir` a `--dangerously-skip-permissions`. Nastav model, úroveň úsilí, oprávnění, MCP servery — a odejdi od klávesnice.
+Jakmile session rozseješ po repech i strojích, `claude agents` je jeden seznam — co běží, co čeká na tebe, co je hotové. Přidej `--json` a výstup je strojově čitelný: každá live session jako JSON pole — připravené pro tmux-resurrect, stavové lišty, session pickery nebo libovolný skript, který potřebuje vědět, co právě běží. Blokované session teď mají pole `waitingFor` — říká, na co session čeká (například na nevyřízené oprávnění). Na monorepu `claude agents --cwd <cesta>` omezí výpis jen na session zasazené do toho adresáře. Flagy pro dispatch ti dovolí nakonfigurovat session na pozadí ještě než startuje: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir` a `--dangerously-skip-permissions`. Nastav model, úroveň úsilí, oprávnění, MCP servery — a odejdi od klávesnice. Namiř ho na adresář, kterému ještě nedůvěřuješ, a nejdřív se zeptá — stejná kontrola, jakou už dělá `claude` sám.
 
 Nové flagy teď rozšiřují, co se dá z dashboardu nastavit. `--add-dir`, `--settings`, `--mcp-config` a `--plugin-dir` platí pro samotný dashboard i pro session, které z něj spouštíš v pozadí. `--permission-mode`, `--model`, `--effort` a `--dangerously-skip-permissions` nastavují výchozí hodnoty pro session, které dashboard spouští.
 
@@ -61,6 +61,8 @@ Sedmá kapitola provází instalací a používáním [Compound Engineering plu
 Jako reference: [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) je malá kolekce skillů, které jsem si zabalil pro svoji každodenní práci (`visualize` je jeden z nich). Ne něco, co bys teď potřeboval instalovat — příklad toho, co vznikne, jakmile napíšeš tři čtyři skilly, o které nechceš přijít. Jeden takový si postavíš sám.
 
 Potřebuješ plugin jen na jednu session bez trvalé instalace? Dej `claude --plugin-url <url>` a `.zip` archiv se načte jen pro tuhle session.
+
+Nemáš na stroji git ani npm? Zdroj pluginů `archive` nainstaluje rovnou ze zipu přes HTTPS — s volitelným SHA-256 pinováním, když chceš zamknout přesný soubor.
 
 Závislosti mezi pluginy se teď hlídají. `claude plugin disable` odmítne zakázat plugin, na kterém závisí jiný aktivní plugin — a ukáže, co musíš nejdřív zakázat. `claude plugin enable` jde opačně: tranzitivní závislosti zapne sám automaticky.
 
@@ -220,9 +222,15 @@ Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu 
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 
+## Zprávy mezi sessions
+
+Claude Code session si teď můžou psát napřímo — na libovolném z tvých strojů, macOS i Linux. `ListAgents` ukáže, co je dosažitelné — tvoje Remote Control session na jiných strojích, adresovatelné jménem. `SendMessage` doručí zprávu kterékoliv z nich a teď umí konverzaci i sám začít, ne jen odpovídat, až tě někdo osloví první. O bezpečnostní pojistku se starají dvě nastavení dohromady: `crossSessionInbound` a `dialogExpiry` zprávu pozdrží na tvoje schválení, když míří do session s obejitými oprávněními; všechno ostatní doručí rovnou.
+
+→ [Dokumentace ke zprávám mezi sessions](https://code.claude.com/docs/en/cross-session-messaging)
+
 ## Remote a mobil — Claude mimo tvůj stůl
 
-Dva různé produkty, které si lidé pletou. Oba vyžadují plán Pro nebo vyšší — pouhé API klíče jsou mimo hru.
+Tři různé produkty, které si lidé pletou. Remote Control a Claude Code na Webu vyžadují plán Pro nebo vyšší — pouhé API klíče jsou mimo hru. Self-hosted environments jsou jen pro Team a Enterprise.
 
 ### Remote Control — tvoje stanice, tvoje soubory
 
@@ -242,6 +250,12 @@ Teď můžeš session ovládat odkudkoliv. Dlouhé buildy, PR review z meetingu
 Jiný produkt. Session běží na Anthropicem spravovaných VMs, startuje z čerstvého klonu tvého GitHub repa. Žádné lokální soubory, žádné lokální MCPs. Dobré na rychlé GitHub-based úkoly z libovolného zařízení.
 
 Spouštíš z `claude.ai/code` v prohlížeči — vybereš repo, startneš session.
+
+### Self-hosted environments — tvoje vlastní infrastruktura
+
+Třetí možnost, na plánech Team a Enterprise: `claude self-hosted-runner` udělá z tvých vlastních strojů nebo kontejnerů místo, kde běží Claude Code web, mobil i desktop session.
+
+→ [Dokumentace k self-hosted environments](https://code.claude.com/docs/en/self-hosted-environments)
 
 ### Mobilní aplikace
 

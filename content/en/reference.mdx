@@ -60,8 +60,8 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/mcp` | Install or manage MCP servers. |
 | `/skills` | List installed skills. |
 | `/reload-skills` | Re-scan skill directories without restarting the session. |
-| `/review` | Bundled PR-style review skill. |
-| `/code-review [effort]` | Correctness review at a chosen effort level (e.g. `/code-review high`). Pass `--comment` to post findings as inline GitHub PR comments. Pass `--fix` to apply findings to the working tree. Claude no longer runs `/verify` or `/code-review` on its own — invoke them explicitly when you want them. `/simplify` runs a cleanup-only pass — reuse, simplification, efficiency, altitude — not the full bug-hunting review. `/code-review` now runs as a background subagent — review no longer fills your conversation, and stacked slash commands are its review target. |
+| `/review` | Alias of `/code-review` — reviews the current diff, or a specific PR via `/code-review <level> <pr#>`. |
+| `/code-review [effort]` | Correctness review at a chosen effort level (e.g. `/code-review high`). No level given reuses whatever you typed last. `/code-review ultra` runs a deep cloud review. `/code-review <level> <pr#>` reviews a PR instead of the working diff. Pass `--comment` to post findings as inline GitHub PR comments. Pass `--fix` to apply findings to the working tree. Claude no longer runs `/verify` or `/code-review` on its own — invoke them explicitly when you want them. `/simplify` runs a cleanup-only pass — reuse, simplification, efficiency, altitude — not the full bug-hunting review. `/code-review` now runs as a background subagent — review no longer fills your conversation, and stacked slash commands are its review target. |
 | `/security-review` | Bundled security review skill. |
 | `/diff` | Show diff since last checkpoint. Scroll the detail view with arrows, `j`/`k`, `PgUp`/`PgDn`, `Space`, `Home`/`End`. |
 
@@ -280,6 +280,8 @@ Use it for secrets, customer data, internal docs — whatever your compliance po
 | `sandbox.filesystem.allowWrite` | Paths outside CWD where subprocesses may write. Merges across settings scopes. |
 | `sandbox.credentials: false` | Block sandboxed commands from reading credential files and secret environment variables. |
 | `mode: "mask"` (credential files) | Sandboxed commands read a sentinel copy of the file instead of the real value — the whole file, or just what an `extract` regex captures. The sandbox proxy substitutes the real value only on egress. Linux/WSL only; macOS falls back to `deny`. |
+
+Credential masking now covers structured values too. New options: `extract` and `onExtractNoMatch` for structured env values, `decode: "jwt"` with `maskClaims` for JWT-aware masking, and `awsPairs`/`sigv4` for AWS SigV4 re-signing. All three need `network.tlsTerminate` on. They're honored only from user, managed, or `--settings` scope.
 
 → [Sandboxing docs](https://code.claude.com/docs/en/sandboxing)
 

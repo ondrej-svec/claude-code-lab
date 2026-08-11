@@ -18,7 +18,7 @@ Everything we're about to cover — skills, plugins, MCPs, subagents — runs in
   caption="Multiple sessions live in the sidebar. Switch without losing context."
 />
 
-Once sessions spread across repos and machines, `claude agents` is the one-stop list: running, blocked on you, done. Add `--json` and the output is machine-readable: every live session as a JSON array, ready for tmux-resurrect, status bars, session pickers, or any script that needs to know what's running. Blocked sessions now include a `waitingFor` field — shows what the session is stuck on (e.g. a pending permission prompt). On a monorepo, `claude agents --cwd <path>` scopes the list to sessions rooted at that directory. Dispatch flags let you configure a background session before it starts: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir`, and `--dangerously-skip-permissions`. Set the model, the effort level, the permission posture, the MCPs it can reach — then walk away.
+Once sessions spread across repos and machines, `claude agents` is the one-stop list: running, blocked on you, done. Add `--json` and the output is machine-readable: every live session as a JSON array, ready for tmux-resurrect, status bars, session pickers, or any script that needs to know what's running. Blocked sessions now include a `waitingFor` field — shows what the session is stuck on (e.g. a pending permission prompt). On a monorepo, `claude agents --cwd <path>` scopes the list to sessions rooted at that directory. Dispatch flags let you configure a background session before it starts: `--model`, `--effort`, `--permission-mode`, `--settings`, `--mcp-config`, `--plugin-dir`, `--add-dir`, and `--dangerously-skip-permissions`. Set the model, the effort level, the permission posture, the MCPs it can reach — then walk away. Point it at a directory you haven't trusted yet and it now asks first — the same trust prompt `claude` itself already shows.
 
 New flags now extend what you can configure from the dashboard. `--add-dir`, `--settings`, `--mcp-config`, and `--plugin-dir` apply to the dashboard itself and to background sessions it dispatches. `--permission-mode`, `--model`, `--effort`, and `--dangerously-skip-permissions` set defaults for sessions dispatched from the view.
 
@@ -61,6 +61,8 @@ Chapter 7 walks through installing and using the [Compound Engineering plugin](h
 As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) is a small collection of skills I bundled for my daily work (visualize is one of them). Not something to install now — an example of what emerges once you've written three or four skills you don't want to lose. You'll build one of your own.
 
 Need a plugin for one session without installing it? Pass `--plugin-url <url>` to `claude` and it loads the `.zip` archive from that URL for the current session only.
+
+No git or npm on the box? The `archive` plugin source installs straight from a zip over HTTPS instead — optional SHA-256 pinning if you want to lock the exact file.
 
 Plugin dependencies are now enforced. `claude plugin disable` refuses if another enabled plugin depends on the target, and prints the chain you need to disable first. `claude plugin enable` goes the other direction: it force-enables any transitive dependencies automatically.
 
@@ -220,9 +222,15 @@ Choose Library → Create new agent → let Claude generate the definition. Scop
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 
+## Cross-session messaging
+
+Claude Code sessions can now message each other directly, on any of your machines running macOS or Linux. `ListAgents` shows what's reachable — your Remote Control sessions on other machines, addressable by name. `SendMessage` delivers to any of them, and can now start a conversation instead of only replying after being messaged first. Two settings govern the safety net: `crossSessionInbound` and `dialogExpiry` together hold a message for your approval when it targets a session running with bypassed permissions; everything else auto-delivers.
+
+→ [Cross-session messaging docs](https://code.claude.com/docs/en/cross-session-messaging)
+
 ## Remote and mobile — Claude off your desk
 
-Two different products people confuse. Both need a Pro plan or higher — API-key-only setups are locked out.
+Three different products people confuse. Remote Control and Claude Code on the Web both need a Pro plan or higher — API-key-only setups are locked out. Self-hosted environments are Team and Enterprise only.
 
 ### Remote Control — your workstation, your files
 
@@ -242,6 +250,12 @@ You can now drive the session from anywhere. Long-running builds, PR reviews fro
 Different product. Session runs on Anthropic-managed VMs, starting from a fresh clone of your GitHub repo. No local files, no local MCPs. Good for quick GitHub-based tasks from any device.
 
 Start via `claude.ai/code` on the web — pick a repo, start a session.
+
+### Self-hosted environments — your own infrastructure
+
+A third option, on Team and Enterprise plans: `claude self-hosted-runner` turns your own machines or containers into a place Claude Code web, mobile, and desktop sessions can run.
+
+→ [Self-hosted environments docs](https://code.claude.com/docs/en/self-hosted-environments)
 
 ### Mobile app
 
