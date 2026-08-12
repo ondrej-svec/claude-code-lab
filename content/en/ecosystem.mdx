@@ -30,6 +30,8 @@ Inside the agents view, `! <command>` starts a shell command as a new background
 
 **Background sessions now protect their own work.** They commit and push automatically to preserve progress, open a draft PR only when the task actually calls for one, and follow whatever git conventions your `CLAUDE.md` sets. Every run ends by reporting exactly where the work landed.
 
+**Sessions can now talk to each other, across machines.** `SendMessage` reaches another Claude Code session by name — on macOS and Linux, that includes sessions running on a different machine, not just ones in the same `claude agents` list. `ListAgents` marks a cross-machine session as `name [ref]` so you don't confuse it with a same-named local one. A session can now open the conversation itself instead of only replying once someone messages it first. Two new settings, `crossSessionInbound` and `dialogExpiry`, shape how much a bypassed-permissions session trusts what comes in: messages sent to it are held for your approval, while messages to sessions on normal permissions still auto-deliver.
+
 ## Skills
 
 A **skill** is a bundle of instructions + optional scripts that Claude loads on demand. A domain-specific playbook — lives in `~/.claude/skills/`, activates automatically when the situation matches.
@@ -61,6 +63,8 @@ Chapter 7 walks through installing and using the [Compound Engineering plugin](h
 As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) is a small collection of skills I bundled for my daily work (visualize is one of them). Not something to install now — an example of what emerges once you've written three or four skills you don't want to lose. You'll build one of your own.
 
 Need a plugin for one session without installing it? Pass `--plugin-url <url>` to `claude` and it loads the `.zip` archive from that URL for the current session only.
+
+Installing from a zip is now a permanent plugin source too, not just a one-session flag. The `archive` source installs a plugin straight from a `.zip` over HTTPS — no git, no npm — with optional SHA-256 pinning for supply-chain trust.
 
 Plugin dependencies are now enforced. `claude plugin disable` refuses if another enabled plugin depends on the target, and prints the chain you need to disable first. `claude plugin enable` goes the other direction: it force-enables any transitive dependencies automatically.
 
@@ -242,6 +246,10 @@ You can now drive the session from anywhere. Long-running builds, PR reviews fro
 Different product. Session runs on Anthropic-managed VMs, starting from a fresh clone of your GitHub repo. No local files, no local MCPs. Good for quick GitHub-based tasks from any device.
 
 Start via `claude.ai/code` on the web — pick a repo, start a session.
+
+### Self-hosted environments — your infrastructure, Team and Enterprise
+
+A third option, for orgs that need it. `claude self-hosted-runner` turns your own machines or containers into a place Claude Code web, mobile, and desktop sessions can run. Available on Team and Enterprise plans.
 
 ### Mobile app
 
