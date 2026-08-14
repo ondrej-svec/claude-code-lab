@@ -66,8 +66,6 @@ Potřebuješ plugin jen na jednu session bez trvalé instalace? Dej `claude --p
 
 Instalace ze zipu je teď i trvalý zdroj pluginu, ne jen flag na jednu session. Zdroj `archive` nainstaluje plugin rovnou ze `.zip` přes HTTPS — bez gitu, bez npm — s&nbsp;volitelným SHA-256 pinováním pro důvěru v&nbsp;dodavatelský řetězec.
 
-Zdroj marketplace může být i&nbsp;lokální příkaz. Zdroj `command` — třeba ten, co ti vypíše IDE — přeřeší adresář pluginu znovu každou session a&nbsp;použije ho bez restartu; `mode: "link"` použije ten adresář přímo.
-
 Marketplace fungují i&nbsp;z&nbsp;GitLabu, ne jen z&nbsp;GitHubu. Holá URL na `gitlab.com` repo — i&nbsp;s&nbsp;vnořenými podskupinami — se klonuje stejně jako `github.com` URL, a&nbsp;když se klonování nepovede kvůli chybě přihlášení, chybová hláška teď pojmenuje tvůj skutečný git host místo automatického předpokladu GitHubu.
 
 Závislosti mezi pluginy se teď hlídají. `claude plugin disable` odmítne zakázat plugin, na kterém závisí jiný aktivní plugin — a ukáže, co musíš nejdřív zakázat. `claude plugin enable` jde opačně: tranzitivní závislosti zapne sám automaticky.
@@ -246,8 +244,6 @@ Setup — čtyři kroky:
 4. V terminálu zmáčkni `spacebar` → QR kód. Naskenuj Claude mobilní aplikací ([iOS](https://apps.apple.com/app/claude), [Android](https://play.google.com/store/apps/details?id=com.anthropic.claude)) nebo otevři `claude.ai/code` v prohlížeči.
 
 Teď můžeš session ovládat odkudkoliv. Dlouhé buildy, PR review z meetingu, „zkontroluj deploy" z telefonu.
-
-`claude remote-control --continue` obnoví tu poslední Remote Control session.
 
 ### Claude Code na Webu — cloud, efemérní
 
