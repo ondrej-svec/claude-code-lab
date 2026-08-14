@@ -30,7 +30,7 @@ Inside the agents view, `! <command>` starts a shell command as a new background
 
 **Background sessions now protect their own work.** They commit and push automatically to preserve progress, open a draft PR only when the task actually calls for one, and follow whatever git conventions your `CLAUDE.md` sets. Every run ends by reporting exactly where the work landed.
 
-**Sessions can now talk to each other, across machines.** `SendMessage` reaches another Claude Code session by name — on macOS and Linux, that includes sessions running on a different machine, not just ones in the same `claude agents` list. `ListAgents` marks a cross-machine session as `name [ref]` so you don't confuse it with a same-named local one. A session can now open the conversation itself instead of only replying once someone messages it first. Two new settings, `crossSessionInbound` and `dialogExpiry`, shape how much a bypassed-permissions session trusts what comes in: messages sent to it are held for your approval, while messages to sessions on normal permissions still auto-deliver.
+**Sessions can now talk to each other, across machines.** Type `@` followed by a session's name in the prompt and Claude reaches for `SendMessage` on your behalf — you don't have to invoke the tool yourself. `SendMessage` reaches another Claude Code session by name — on macOS and Linux, that includes sessions running on a different machine, not just ones in the same `claude agents` list. `ListAgents` marks a cross-machine session as `name [ref]` so you don't confuse it with a same-named local one. A session can now open the conversation itself instead of only replying once someone messages it first. Two new settings, `crossSessionInbound` and `dialogExpiry`, shape how much a bypassed-permissions session trusts what comes in: messages sent to it are held for your approval, while messages to sessions on normal permissions still auto-deliver.
 
 ## Skills
 
@@ -65,6 +65,10 @@ As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec
 Need a plugin for one session without installing it? Pass `--plugin-url <url>` to `claude` and it loads the `.zip` archive from that URL for the current session only.
 
 Installing from a zip is now a permanent plugin source too, not just a one-session flag. The `archive` source installs a plugin straight from a `.zip` over HTTPS — no git, no npm — with optional SHA-256 pinning for supply-chain trust.
+
+A marketplace source can be a local command, too. A `command` source — say, one your IDE prints — resolves the plugin directory fresh every session and applies it without a restart; `mode: "link"` uses that directory in place.
+
+Plugin marketplaces work on GitLab now, not just GitHub. A bare `gitlab.com` repo URL — nested subgroups included — clones the same way a `github.com` URL does, and a failed clone's auth-error hint names your actual git host instead of assuming GitHub.
 
 Plugin dependencies are now enforced. `claude plugin disable` refuses if another enabled plugin depends on the target, and prints the chain you need to disable first. `claude plugin enable` goes the other direction: it force-enables any transitive dependencies automatically.
 
@@ -220,6 +224,8 @@ Choose Library → Create new agent → let Claude generate the definition. Scop
 
 **Background by default.** Subagents now run in the background by default — Claude keeps working while they run and gets notified when they finish, instead of blocking on each one.
 
+**Forking inherits everything.** A subagent spawned with `subagent_type: "fork"` — forking is on by default — inherits the full conversation and prompt cache instead of starting cold. Reach for it when the subagent needs everything already in your context, not a clean read.
+
 **Nesting.** Subagents can spawn nested subagents up to depth 3 by default — set `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` if you want the older, flatter behavior back.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
@@ -240,6 +246,8 @@ Setup — four steps:
 4. Press `spacebar` at the terminal → QR code. Scan with the Claude mobile app ([iOS](https://apps.apple.com/app/claude), [Android](https://play.google.com/store/apps/details?id=com.anthropic.claude)) or open `claude.ai/code` in a browser.
 
 You can now drive the session from anywhere. Long-running builds, PR reviews from a meeting, "check the deploy" from your phone.
+
+`claude remote-control --continue` resumes the most recent Remote Control session.
 
 ### Claude Code on the Web — cloud-hosted, ephemeral
 
