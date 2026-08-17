@@ -66,6 +66,8 @@ Need a plugin for one session without installing it? Pass `--plugin-url <url>` t
 
 Installing from a zip is now a permanent plugin source too, not just a one-session flag. The `archive` source installs a plugin straight from a `.zip` over HTTPS — no git, no npm — with optional SHA-256 pinning for supply-chain trust.
 
+**GitLab marketplaces work too.** A bare `gitlab.com` repo URL — including nested subgroups — now clones the same way a `github.com` one does. If the clone fails, the auth-failure hint names your actual git host instead of assuming GitHub.
+
 Plugin dependencies are now enforced. `claude plugin disable` refuses if another enabled plugin depends on the target, and prints the chain you need to disable first. `claude plugin enable` goes the other direction: it force-enables any transitive dependencies automatically.
 
 Plugin auto-rename is now automatic: when a marketplace entry is renamed, Claude Code follows the `renames` map and updates your `settings.json` to the new name on next load — you don't have to track renames manually.

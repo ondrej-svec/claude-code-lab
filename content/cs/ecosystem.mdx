@@ -66,6 +66,8 @@ Potřebuješ plugin jen na jednu session bez trvalé instalace? Dej `claude --p
 
 Instalace ze zipu je teď i trvalý zdroj pluginu, ne jen flag na jednu session. Zdroj `archive` nainstaluje plugin rovnou ze `.zip` přes HTTPS — bez gitu, bez npm — s&nbsp;volitelným SHA-256 pinováním pro důvěru v&nbsp;dodavatelský řetězec.
 
+**GitLab marketplace funguje taky.** Holá URL repa na `gitlab.com` — včetně vnořených subgroups — se teď klonuje stejně jako `github.com` URL; když se klonování nepovede, chybová hláška pojmenuje tvůj skutečný git host, ne rovnou GitHub.
+
 Závislosti mezi pluginy se teď hlídají. `claude plugin disable` odmítne zakázat plugin, na kterém závisí jiný aktivní plugin — a ukáže, co musíš nejdřív zakázat. `claude plugin enable` jde opačně: tranzitivní závislosti zapne sám automaticky.
 
 Přejmenování pluginů se teď řeší samo: jakmile se marketplace záznam přejmenuje, Claude Code sleduje `renames` mapu a aktualizuje `settings.json` na nový název při dalším načtení — ruční sledování přejmenování není potřeba.

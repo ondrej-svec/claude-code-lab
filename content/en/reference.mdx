@@ -67,6 +67,8 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 
 Dynamic workflow runs trigger on explicit phrases like `workflow:` or `run a workflow` — not on any mention of the word. The keyword highlights with a purple shimmer in the input line.
 
+**Task tracking is opt-in on current models.** TaskCreate/TaskGet/TaskUpdate/TaskList and TodoWrite — the tools behind the visible todo list mid-session — are no longer available by default on Opus 4.8, Sonnet 5, Fable 5, Mythos 5, and newer models. Set `CLAUDE_CODE_ENABLE_TODO_TOOLS=1` if you rely on the task list and notice it's gone.
+
 ### Remote
 
 | Command | What it does |
@@ -139,7 +141,7 @@ Claude Code's input line reads the first character as a mode signal:
 |---|---|
 | `/` | Slash command — runs a command, not a prompt. |
 | `!` | Bash passthrough — runs shell, result enters your context; `!` commands now trigger Claude to respond to the output automatically. Set `"respondToBashCommands": false` in `settings.json` to keep the previous context-only behavior. File paths autocomplete as you type. |
-| `@` | File mention — `@path/to/file` attaches a file; `@Explore` mentions a subagent. |
+| `@` | File mention — `@path/to/file` attaches a file; `@Explore` mentions a subagent; `@<session-name>` mentions another Claude session by name — Claude uses `SendMessage` to reach it directly. |
 | `#` | Memory add — the text after `#` gets appended to the right `CLAUDE.md`. Claude picks the scope (project / user / local). |
 | Anything else | Normal prompt. |
 

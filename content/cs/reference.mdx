@@ -67,6 +67,8 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 
 Dynamická workflow se spouštějí explicitními frázemi — `workflow:` nebo třeba `run a workflow`. Klíčové slovo se ve vstupním řádku zvýrazní fialovým zábleskem. Pouhá zmínka slova `workflow` v konverzaci to nespustí.
 
+**Sledování úkolů je teď opt-in.** Nástroje TaskCreate/TaskGet/TaskUpdate/TaskList a TodoWrite — ty, co stojí za viditelným seznamem úkolů uprostřed session — už ve výchozím stavu neběží na Opus 4.8, Sonnet 5, Fable 5, Mythos 5 a novějších modelech. Jestli se na seznam úkolů spoléháš a zmizel ti, nastav `CLAUDE_CODE_ENABLE_TODO_TOOLS=1`.
+
 ### Remote
 
 | Příkaz | Co dělá |
@@ -139,7 +141,7 @@ Claude Code čte první znak řádku jako signál režimu:
 |---|---|
 | `/` | Slash příkaz — spustí příkaz, ne prompt. |
 | `!` | Bash passthrough — pustí shell, výsledek se dostane do tvého kontextu; `!` příkazy teď automaticky spouštějí Claude k odpovědi na výstup. Nastav `"respondToBashCommands": false` v `settings.json`, jestli chceš zůstat u původního chování — jen kontext, bez automatické odpovědi. Cesty k souborům se doplňují, jak píšeš. |
-| `@` | Zmínka souboru — `@path/to/file` připojí soubor; `@Explore` zmíní subagenta. |
+| `@` | Zmínka souboru — `@path/to/file` připojí soubor; `@Explore` zmíní subagenta; `@<název-session>` zmíní jinou session Clauda podle jména — Claude na ni sáhne přes `SendMessage`. |
 | `#` | Memory add — text za `#` se připojí do správného `CLAUDE.md`. Claude vybere rozsah (projekt / uživatel / lokální). |
 | Cokoliv jiného | Normální prompt. |
 
