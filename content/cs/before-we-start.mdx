@@ -68,7 +68,7 @@ Každý prompt posílá:
 - Soubory mimo adresář projektu
 - Nic v `.gitignore` ani `.claudeignore`
 
-**E-mail slouží jen k identifikaci.** Claude Code používá e-mail tvého účtu, aby věděl, kdo jsi — dál ho neposílá do jiných služeb, jestli si to sám nevyžádáš.
+**E-mail tě identifikuje a může skončit v telemetrii.** Claude Code používá e-mail tvého účtu, aby věděl, kdo jsi. Pokud firma běží OpenTelemetry, `user.email` je součástí toho, co se exportuje — kamkoliv ukazuje nastavený OTLP endpoint, což nemusí být Anthropic. Mimo to se nikam jinam neposílá, jestli si to sám nevyžádáš.
 
 ### Retence, stručně
 

@@ -68,7 +68,7 @@ It does **not** send:
 - Files outside the project directory
 - Anything in `.gitignore` or `.claudeignore`
 
-**Your email, used only to identify you.** Claude Code uses your account email to know who you are — it doesn't send it on to unrelated services unless you ask it to.
+**Your email identifies you — and can end up in telemetry.** Claude Code uses your account email to know who you are. If your org has OpenTelemetry configured, `user.email` is included in what Claude Code exports — routed wherever the org's OTLP endpoint points, which doesn't have to be Anthropic. Outside of that, it isn't sent to unrelated services unless you ask.
 
 ### Retention, briefly
 
