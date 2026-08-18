@@ -67,6 +67,8 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 
 Dynamická workflow se spouštějí explicitními frázemi — `workflow:` nebo třeba `run a workflow`. Klíčové slovo se ve vstupním řádku zvýrazní fialovým zábleskem. Pouhá zmínka slova `workflow` v konverzaci to nespustí.
 
+**Nástroje pro todo/úkoly jsou u&nbsp;novějších modelů ve výchozím stavu vypnuté.** `TaskCreate`/`TaskGet`/`TaskUpdate`/`TaskList` a&nbsp;`TodoWrite` se u&nbsp;Opus 4.8, Sonnet 5, Fable 5, Mythos 5 a&nbsp;novějších modelů defaultně nenačítají. Jestli se spoléháš na viditelný seznam úkolů, nastav `CLAUDE_CODE_ENABLE_TODO_TOOLS=1`.
+
 ### Remote
 
 | Příkaz | Co dělá |
