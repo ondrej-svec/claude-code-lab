@@ -20,6 +20,8 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/subtask` | Spustí in-session subagenta, kterého dřív spouštěl `/fork`. |
 | `/exit` | Ukončí Claude Code (nebo `Ctrl+D`). |
 
+**Automatické pokračování po resetu limitu.** Claude Code teď po resetu limitu na claude.ai session sám rozjede dál. Vypneš to v `/config` → „Continue automatically at usage limit“.
+
 ### Konfigurace
 
 | Příkaz | Co dělá |
@@ -139,7 +141,7 @@ Claude Code čte první znak řádku jako signál režimu:
 |---|---|
 | `/` | Slash příkaz — spustí příkaz, ne prompt. |
 | `!` | Bash passthrough — pustí shell, výsledek se dostane do tvého kontextu; `!` příkazy teď automaticky spouštějí Claude k odpovědi na výstup. Nastav `"respondToBashCommands": false` v `settings.json`, jestli chceš zůstat u původního chování — jen kontext, bez automatické odpovědi. Cesty k souborům se doplňují, jak píšeš. |
-| `@` | Zmínka souboru — `@path/to/file` připojí soubor; `@Explore` zmíní subagenta. |
+| `@` | Zmínka souboru — `@path/to/file` připojí soubor; `@Explore` zmíní subagenta; `@<jméno-session>` zmíní jinou Claude session podle jména, Claude ji pak osloví přes `SendMessage`. |
 | `#` | Memory add — text za `#` se připojí do správného `CLAUDE.md`. Claude vybere rozsah (projekt / uživatel / lokální). |
 | Cokoliv jiného | Normální prompt. |
 
