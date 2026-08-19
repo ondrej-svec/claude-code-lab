@@ -220,6 +220,8 @@ Choose Library → Create new agent → let Claude generate the definition. Scop
 
 **Background by default.** Subagents now run in the background by default — Claude keeps working while they run and gets notified when they finish, instead of blocking on each one.
 
+**Forking inherits everything.** A `subagent_type: "fork"` subagent — on by default now — inherits the full conversation and prompt cache instead of starting cold. Reach for it when the subagent needs everything you've already discussed, not a scoped brief.
+
 **Nesting.** Subagents can spawn nested subagents up to depth 3 by default — set `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` if you want the older, flatter behavior back.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
