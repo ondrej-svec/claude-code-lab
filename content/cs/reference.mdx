@@ -20,6 +20,8 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/subtask` | Spustí in-session subagenta, kterého dřív spouštěl `/fork`. |
 | `/exit` | Ukončí Claude Code (nebo `Ctrl+D`). |
 
+**Automatické pokračování po resetu limitu.** Claude Code teď po resetu limitu na claude.ai session sám rozjede dál. Vypneš to v `/config` → „Continue automatically at usage limit“.
+
 ### Konfigurace
 
 | Příkaz | Co dělá |
@@ -27,7 +29,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/init` | Prohlédne repo a navrhne startovní `CLAUDE.md`. Nastav `CLAUDE_CODE_NEW_INIT=1` pro nový interaktivní multi-fázový flow. |
 | `/memory` | Prohlédni nebo uprav CLAUDE.md soubory a načtenou paměť. |
 | `/permissions` | Spravuj allow/deny pravidla pro nástroje. |
-| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). **Výchozím modelem je teď Sonnet 5** — nativní 1M-tokenové kontextové okno, promo cena $2/$10 za Mtok do 31. srpna. Vyžaduje v2.1.197+. Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený nebo nedostupný. `--fallback-model` platí i pro interaktivní session. V rámci Opus modelů je teď výchozí Opus 5 (`claude-opus-5`) — 1M kontext, fast mode za $10/$50 na Mtok. |
+| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). **Výchozím modelem je teď Sonnet 5** — nativní 1M-tokenové kontextové okno, promo cena $2/$10 za Mtok do 31. srpna. Vyžaduje v2.1.197+. Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený nebo nedostupný. `--fallback-model` platí i pro interaktivní session. V rámci Opus modelů je teď výchozí Opus 5 (`claude-opus-5`) — 1M kontext, fast mode za $10/$50 na Mtok. `ANTHROPIC_DEFAULT_MODEL` (v2.1.236+) nastaví z&nbsp;prostředí model, na kterém nové session startují — uplatní se, jen když model neurčuje nic jiného. Volba uložená přes `/model` ho přebije a&nbsp;přežije restart; `--model` a&nbsp;`ANTHROPIC_MODEL` přebijí i&nbsp;uloženou volbu `/model` pro session, kterou spustí. |
 | `/fast` | Přepne fast mode. Výchozí je teď Opus 4.8 — 2× standardní cena, 2,5× rychlost. Opus 4.7 už fast mode nepodporuje; `/fast` teď platí pro Opus 5 a Opus 4.8. |
 | `/effort` | Per-session override effortu. |
 | `/advisor [model]` | Přiřadí session poradní model — silnější model, který Claude volá v klíčových momentech (před volbou přístupu, při opakující se chybě, než ohlásí hotovo). Zkratky: `opus`, `sonnet`, `fable`. Vyžaduje v2.1.98+. Fable 5 jako poradce vyžaduje v2.1.170+. `/advisor off` odstraní. |
@@ -139,7 +141,7 @@ Claude Code čte první znak řádku jako signál režimu:
 |---|---|
 | `/` | Slash příkaz — spustí příkaz, ne prompt. |
 | `!` | Bash passthrough — pustí shell, výsledek se dostane do tvého kontextu; `!` příkazy teď automaticky spouštějí Claude k odpovědi na výstup. Nastav `"respondToBashCommands": false` v `settings.json`, jestli chceš zůstat u původního chování — jen kontext, bez automatické odpovědi. Cesty k souborům se doplňují, jak píšeš. |
-| `@` | Zmínka souboru — `@path/to/file` připojí soubor; `@Explore` zmíní subagenta. |
+| `@` | Zmínka souboru — `@path/to/file` připojí soubor; `@Explore` zmíní subagenta; `@<jméno-session>` zmíní jinou Claude session podle jména, Claude ji pak osloví přes `SendMessage`. |
 | `#` | Memory add — text za `#` se připojí do správného `CLAUDE.md`. Claude vybere rozsah (projekt / uživatel / lokální). |
 | Cokoliv jiného | Normální prompt. |
 
