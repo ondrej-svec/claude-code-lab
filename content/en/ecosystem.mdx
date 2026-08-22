@@ -32,6 +32,8 @@ Inside the agents view, `! <command>` starts a shell command as a new background
 
 **Sessions can now talk to each other, across machines.** `SendMessage` reaches another Claude Code session by name — on macOS and Linux, that includes sessions running on a different machine, not just ones in the same `claude agents` list. `ListAgents` marks a cross-machine session as `name [ref]` so you don't confuse it with a same-named local one. A session can now open the conversation itself instead of only replying once someone messages it first. Two new settings, `crossSessionInbound` and `dialogExpiry`, shape how much a bypassed-permissions session trusts what comes in: messages sent to it are held for your approval, while messages to sessions on normal permissions still auto-deliver.
 
+**@-mention a session.** Type `@` followed by a session's name in the prompt and Claude uses `SendMessage` to reach it directly — no need to spell out the tool call yourself.
+
 ## Skills
 
 A **skill** is a bundle of instructions + optional scripts that Claude loads on demand. A domain-specific playbook — lives in `~/.claude/skills/`, activates automatically when the situation matches.
@@ -221,6 +223,8 @@ Choose Library → Create new agent → let Claude generate the definition. Scop
 **Background by default.** Subagents now run in the background by default — Claude keeps working while they run and gets notified when they finish, instead of blocking on each one.
 
 **Nesting.** Subagents can spawn nested subagents up to depth 3 by default — set `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` if you want the older, flatter behavior back.
+
+**Forking.** Spawn a subagent with `subagent_type: "fork"` and it inherits the full conversation and prompt cache instead of starting cold — useful when the subagent needs everything you already established, not just a summary.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 

@@ -38,6 +38,10 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 
 **Session language.** Set the `language` setting in `settings.json` to pin the language used for session-title generation. Default auto-detects from your conversation.
 
+**Concise output style.** A built-in "Concise" output style skips preamble and narration and leads with results, without cutting corners on the work itself. Pick it under Output style in `/config`.
+
+**Pin the default model.** Set `ANTHROPIC_DEFAULT_MODEL` to fix which model every new session starts on. `/model` still overrides it — and unlike `ANTHROPIC_MODEL`, that override persists across restarts.
+
 ### Info
 
 | Command | What it does |
@@ -118,6 +122,10 @@ CLI shortcuts are context-specific. Full list at [code.claude.com/docs/en/keybin
 | `Cmd+P` / `Meta+P` | Model picker. |
 | `Cmd+T` / `Meta+T` | Toggle extended thinking. |
 | `Shift+Enter` or `\+Enter` | Multi-line entry. Native in iTerm2, WezTerm, Ghostty, Kitty, Warp, Apple Terminal. Elsewhere: `/terminal-setup`. |
+
+**`keybindingFlavor: "readline"`.** Set this in `settings.json` for Bash-style word navigation in the prompt: `Ctrl+W` deletes back to the previous whitespace, `Alt+F`/`Ctrl+→`/`Option+→` stop at the end of a word, `Alt+D` deletes to it (`Ctrl+Y` pastes it back), and punctuation counts as a word boundary. Default (`"classic"`) is unchanged.
+
+**Todo tools are opt-in on newer models.** The task-list machinery behind `Ctrl+T` (`TaskCreate`, `TaskGet`, `TaskUpdate`, `TaskList`, `TodoWrite`) is no longer available by default on Opus 4.8, Sonnet 5, Fable 5, Mythos 5, and newer models. Set `CLAUDE_CODE_ENABLE_TODO_TOOLS=1` to bring it back.
 
 ### Gotcha
 

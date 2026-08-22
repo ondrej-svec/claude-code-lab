@@ -38,6 +38,10 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 
 **Jazyk session.** V `settings.json` nastav `language` a session tituly se budou generovat v tom jazyce. Bez nastavení se jazyk detekuje z konverzace automaticky.
 
+**Styl výstupu Concise.** Vestavěný styl výstupu „Concise" přeskočí preambuli a&nbsp;komentování průběhu a&nbsp;jde rovnou k&nbsp;výsledkům — aniž by práci odbyl. Vyber ho pod Output style v&nbsp;`/config`.
+
+**Připni výchozí model.** `ANTHROPIC_DEFAULT_MODEL` určí, na jakém modelu začíná každá nová session. `/model` ho pořád může přebít — a&nbsp;na rozdíl od `ANTHROPIC_MODEL` ta volba přežije i&nbsp;restart.
+
 ### Info
 
 | Příkaz | Co dělá |
@@ -118,6 +122,10 @@ Zkratky v CLI jsou kontextové. Kompletní seznam je na [code.claude.com/docs/e
 | `Cmd+P` / `Meta+P` | Výběr modelu. |
 | `Cmd+T` / `Meta+T` | Přepne rozšířené myšlení. |
 | `Shift+Enter` nebo `\+Enter` | Víceřádkový vstup. Nativně v iTerm2, WezTerm, Ghostty, Kitty, Warp, Apple Terminal. Jinde: `/terminal-setup`. |
+
+**`keybindingFlavor: "readline"`.** Nastav v&nbsp;`settings.json` pro navigaci po slovech ve stylu Bashe v&nbsp;promptu: `Ctrl+W` smaže zpátky k&nbsp;předchozí mezeře, `Alt+F`/`Ctrl+→`/`Option+→` se zastaví na konci slova, `Alt+D` smaže k&nbsp;němu (`Ctrl+Y` ho vrátí zpět) a&nbsp;interpunkce se počítá jako hranice slova. Default (`"classic"`) zůstává beze změny.
+
+**Todo nástroje jsou na novějších modelech opt-in.** Mašinerie seznamu úkolů za `Ctrl+T` (`TaskCreate`, `TaskGet`, `TaskUpdate`, `TaskList`, `TodoWrite`) už ve výchozím stavu neběží na Opus 4.8, Sonnet 5, Fable 5, Mythos 5 a&nbsp;novějších modelech. Vrať ji nastavením `CLAUDE_CODE_ENABLE_TODO_TOOLS=1`.
 
 ### Gotcha
 
