@@ -27,13 +27,13 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/init` | Prohlédne repo a navrhne startovní `CLAUDE.md`. Nastav `CLAUDE_CODE_NEW_INIT=1` pro nový interaktivní multi-fázový flow. |
 | `/memory` | Prohlédni nebo uprav CLAUDE.md soubory a načtenou paměť. |
 | `/permissions` | Spravuj allow/deny pravidla pro nástroje. |
-| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). **Výchozím modelem je teď Sonnet 5** — nativní 1M-tokenové kontextové okno, promo cena $2/$10 za Mtok do 31. srpna. Vyžaduje v2.1.197+. Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený nebo nedostupný. `--fallback-model` platí i pro interaktivní session. V rámci Opus modelů je teď výchozí Opus 5 (`claude-opus-5`) — 1M kontext, fast mode za $10/$50 na Mtok. |
+| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). **Výchozím modelem je teď Sonnet 5** — nativní 1M-tokenové kontextové okno, promo cena $2/$10 za Mtok do 31. srpna. Vyžaduje v2.1.197+. Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený nebo nedostupný. `--fallback-model` platí i pro interaktivní session. V rámci Opus modelů je teď výchozí Opus 5 (`claude-opus-5`) — 1M kontext, fast mode za $10/$50 na Mtok. Proměnná `ANTHROPIC_DEFAULT_MODEL` určí, na čem nové session startují — na rozdíl od `ANTHROPIC_MODEL` ji `/model` výběr pořád přebije a ten výběr přežije i restart. |
 | `/fast` | Přepne fast mode. Výchozí je teď Opus 4.8 — 2× standardní cena, 2,5× rychlost. Opus 4.7 už fast mode nepodporuje; `/fast` teď platí pro Opus 5 a Opus 4.8. |
 | `/effort` | Per-session override effortu. |
 | `/advisor [model]` | Přiřadí session poradní model — silnější model, který Claude volá v klíčových momentech (před volbou přístupu, při opakující se chybě, než ohlásí hotovo). Zkratky: `opus`, `sonnet`, `fable`. Vyžaduje v2.1.98+. Fable 5 jako poradce vyžaduje v2.1.170+. `/advisor off` odstraní. |
 | `/keybindings` | Otevře `~/.claude/keybindings.json`. |
 | `/hooks` | Konfigurace lifecycle hooků. |
-| `/config` | Otevře nastavení. `/config key=value` nastaví libovolné nastavení přímo z promptu — třeba `/config thinking=false`. `/config --help` vypíše dostupné zkratky. |
+| `/config` | Otevře nastavení. `/config key=value` nastaví libovolné nastavení přímo z promptu — třeba `/config thinking=false`. `/config --help` vypíše dostupné zkratky. Vestavěný styl výstupu „Concise" — rovnou výsledek, bez omáček, stejná důkladnost — najdeš pod Output style v `/config`. |
 | `/theme` | Přepni téma terminálu. |
 
 **Jazyk session.** V `settings.json` nastav `language` a session tituly se budou generovat v tom jazyce. Bez nastavení se jazyk detekuje z konverzace automaticky.
@@ -124,6 +124,10 @@ Zkratky v CLI jsou kontextové. Kompletní seznam je na [code.claude.com/docs/e
 Option-klávesové zkratky na macOS tiše selhávají, dokud si v terminálu nenastavíš **Left/Right Option = Esc+** (iTerm2 atd.). Pokud `Alt+M` nedělá pro cyklení režimů nic, je to tohle — použij `Shift+Tab`.
 
 Zkratky desktop aplikace Anthropic oficiálně nedokumentuje — to, co tady vidíš, je CLI.
+
+### `keybindingFlavor`
+
+Nastav `keybindingFlavor: "readline"` v `settings.json` a `Ctrl+W` v promptu bude mazat zpátky k předchozí mezeře, stylem Bashe, místo klasického výchozího chování. Stejné klávesy pro práci se slovy se teď v promptu chovají stylem readline/Bash: `Alt+F` a `Ctrl`/`Option+→` se zastaví na konci slova, `Alt+D` k němu smaže (`Ctrl+Y` ho vrátí zpět) a interpunkce se počítá jako hranice slova.
 
 ## 8.3 Vstupní prefixy
 
