@@ -39,6 +39,8 @@ Conversation context is one layer. There are two more, and they cost less.
 
 **Active context** is what's in the current conversation. Token-heavy, expensive to keep, perfectly fresh. Every turn lives here.
 
+**API-key and cloud-provider users get a lever here too.** `promptCacheTtl` keeps the main conversation's prompt cache alive for an hour instead of the default five minutes; `subagentPromptCacheTtl` controls the same thing for subagent calls, which stay at five minutes by default. A longer TTL on active context means fewer full-price re-reads when you step away and come back — direct savings on the layer that costs the most.
+
 **Summarized context** is what `/compact` produces — a Claude-written précis of the turns so far. Cheaper than verbatim, lossy by design. Useful as long as the summary still describes the work accurately.
 
 **Externalized context** lives outside the conversation entirely. `CLAUDE.md`, plan docs, brainstorm files, scratchpads. Token-zero in the active window — Claude reads them on demand. They don't decay when you `/clear`.

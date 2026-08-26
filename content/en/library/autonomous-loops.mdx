@@ -78,6 +78,8 @@ Before you walk away from a loop, four checks. Cheap to run, expensive to skip.
 
 If any of the four is missing, you're not running a loop — you're running a dice roll.
 
+**Checking the cost after the fact.** `/usage` now breaks down loops separately — run count, total tokens, tokens per run, and when each last ran. A `/loop` task quietly chewing through tokens on iteration 40 shows up there before it shows up in your bill.
+
 **Pinned sessions and check 4.** In `claude agents`, `Ctrl+T` on a background session pins it. Pinned sessions stay alive when idle, restart in place when Claude Code updates, and are shed under memory pressure only after non-pinned ones. Pin the session your loop is running in.
 
 <Screenshot

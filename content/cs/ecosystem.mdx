@@ -220,6 +220,8 @@ Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu 
 
 **Na pozadí ve výchozím stavu.** Subagenti teď automaticky běží na pozadí — Claude pokračuje v práci, zatímco jedou, a dostane upozornění, až skončí, místo aby na každého čekal.
 
+**Forking běží ve výchozím stavu.** Subagent spuštěný s `subagent_type: "fork"` zdědí celou konverzaci i&nbsp;prompt cache místo studeného startu — hodí se, když subagent potřebuje všechno, co už máš rozjednané, ne jen ohraničenou instrukci.
+
 **Vnoření.** Subagenti teď defaultně spouští vlastní subagenty až do hloubky 3 — nastav `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1`, jestli chceš zpátky starší, plošší chování.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
