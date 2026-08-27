@@ -19,7 +19,7 @@ Dovednost je vědět, ve které situaci jsi, *předtím* než odejdeš od kláve
 Můžeš agentovi pustit otěže čtyřmi způsoby.
 
 - **Smyčka.** Stejný úkol, spuštěný v intervalu nebo self-paced, dokud nesedne podmínka. `/loop 5m /check-deploy` znovu spouští každých pět minut. `/loop /fix-typecheck` nechá Claude jet vlastním tempem k podmínce „testy projdou“. Konverzace pokračuje; každé kolo ví, co dělalo to předchozí.
-- **Goal mode.** `/goal <podmínka>` nastaví cíl a Claude pracuje přes kola, dokud ho nesplní — funguje v interaktivním režimu, v `-p` i přes Remote Control. Živý overlay ukazuje, kolik času, kol a tokenů uteklo. Popisuješ výsledek; Claude sám pozná, kdy je hotovo. Hodí se, když je cílová čára jasná, ale počet kroků není.
+- **Goal mode.** `/goal <podmínka>` nastaví cíl a Claude pracuje přes kola, dokud ho nesplní — funguje v interaktivním režimu, v `-p` i přes Remote Control. Živý overlay ukazuje, kolik času, kol a tokenů uteklo. Popisuješ výsledek; Claude sám pozná, kdy je hotovo. Hodí se, když je cílová čára jasná, ale počet kroků není. Když úlohy na pozadí drží cíl čekající 30+ minut, Claude se teď sám ozve místo toho, aby čekal donekonečna — vypneš to přes `CLAUDE_CODE_GOAL_CHECKIN_MINUTES=0`.
 - **Auto mode.** Postoj v oprávněních (popsaný v [kapitole 4](/cs/lab/iteration-and-control)), který Claudovi dovoluje udělat hodně malých akcí bez schvalování každé jedné. Jiný tvar než smyčka — stejná konverzace, žádný plánovaný re-entry, ale Claude se uvnitř může agresivně rozjet. Paralelní volání nástrojů jsou teď odolnější: selhání jednoho bash příkazu neruší ostatní volání ve stejné dávce — každé vrátí svůj výsledek samostatně.
 
 - **Dynamická workflow.** Použij explicitní frázi — `workflow:` nebo třeba „run a workflow“ — zvýrazněnou fialovým zábleskem — a Claude orchestruje práci napříč desítkami až stovkami agentů na pozadí, fan-out, na který ostatní tři tvary nestačí. Samotná zmínka slova nestačí; explicitní fráze je nutná. `/workflows` ukáže tvé běhy. Dynamická workflow teď defaultně mají střední size guideline (míň než 15 agentů) — změníš to, dáš neomezeno, nebo nastavíš `workflowSizeGuideline` přímo v settings přes Dynamic workflow size v `/config`.
@@ -78,6 +78,8 @@ Než od smyčky odejdeš, čtyři kontroly. Levné spustit, drahé přeskočit.
 4. **Můžeš zastavit, aniž bys ztratil stav?** Checkpoint commity, uložitelný progres, interrupt, který nezabije konverzaci. Pokud zastavit znamená všechno znovu odvodit, necháš smyčku jet moc dlouho ze zoufalství nad utopenými náklady.
 
 Pokud kterákoliv ze čtyř chybí, neběží ti smyčka — házíš kostkou.
+
+**Kontrola nákladů zpětně.** `/usage` teď smyčky rozepisuje zvlášť — počet běhů, celkové tokeny, tokeny na běh a&nbsp;kdy naposledy jely. `/loop` úkol, co si potichu žere tokeny v&nbsp;iteraci 40, se tam objeví dřív, než se objeví na faktuře.
 
 **Pinnované session a bod 4.** V `claude agents` pinnuješ session stiskem `Ctrl+T`. Pinnované session zůstávají naživu i v nečinnosti, restartují se samy při aktualizaci Claude Code a vzdávají místo pod tlakem paměti teprve po nepinnovaných. Pinnuj session, ve které smyčka běží.
 

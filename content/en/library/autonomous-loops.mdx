@@ -19,7 +19,7 @@ The skill is knowing which situation you're in *before* you walk away from the k
 You can hand the agent more rope four ways.
 
 - **The loop.** Same task, run on an interval or self-paced until a condition is met. `/loop 5m /check-deploy` reruns every five minutes. `/loop /fix-typecheck` lets Claude self-pace toward a tests-pass condition. The conversation persists; each turn knows what the previous turn did.
-- **Goal mode.** `/goal <condition>` sets a completion condition and Claude keeps working across turns until it's met — in interactive, `-p`, and Remote Control. A live overlay tracks elapsed time, turn count, and token spend. You state the outcome; Claude decides when it's done. Useful when the finish line is clear but the path length isn't.
+- **Goal mode.** `/goal <condition>` sets a completion condition and Claude keeps working across turns until it's met — in interactive, `-p`, and Remote Control. A live overlay tracks elapsed time, turn count, and token spend. You state the outcome; Claude decides when it's done. Useful when the finish line is clear but the path length isn't. When background tasks keep a goal waiting for 30+ minutes, Claude now checks in on them instead of waiting indefinitely — set `CLAUDE_CODE_GOAL_CHECKIN_MINUTES=0` to opt out.
 - **Auto mode.** A permission posture (covered in [chapter 4](/en/lab/iteration-and-control)) that lets Claude take many small actions without per-action approval. Different shape from the loop — same conversation, no scheduled re-entry, but Claude is allowed to fan out aggressively inside it. Parallel tool calls are now more resilient here: a failed Bash command no longer cancels other calls in the same batch — each returns its result independently.
 - **Dynamic workflows.** Use an explicit phrase like `workflow:` or "run a workflow" — highlighted in purple shimmer — and Claude orchestrates work across tens to hundreds of agents in the background, fan-out at a scale the other three shapes can't reach. A bare mention of the word alone won't trigger it; explicit phrasing is required. Run `/workflows` to view your runs. Dynamic workflows now default to a medium size guideline (fewer than 15 agents) — change it, go unrestricted, or set `workflowSizeGuideline` in any settings file via Dynamic workflow size in `/config`.
 
@@ -77,6 +77,8 @@ Before you walk away from a loop, four checks. Cheap to run, expensive to skip.
 4. **Can you stop without losing state?** Checkpoint commits, persistable progress, an interrupt that doesn't kill the conversation. If stopping means re-deriving everything, you'll let the loop run too long out of sunk-cost.
 
 If any of the four is missing, you're not running a loop — you're running a dice roll.
+
+**Checking the cost after the fact.** `/usage` now breaks down loops separately — run count, total tokens, tokens per run, and when each last ran. A `/loop` task quietly chewing through tokens on iteration 40 shows up there before it shows up in your bill.
 
 **Pinned sessions and check 4.** In `claude agents`, `Ctrl+T` on a background session pins it. Pinned sessions stay alive when idle, restart in place when Claude Code updates, and are shed under memory pressure only after non-pinned ones. Pin the session your loop is running in.
 
