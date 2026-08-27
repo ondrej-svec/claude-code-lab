@@ -131,6 +131,8 @@ Option-key shortcuts on macOS silently fail until you set **Left/Right Option = 
 
 The desktop app's shortcuts are not officially documented by Anthropic — what you see here is the CLI.
 
+**Bash-style word deletion.** Set `keybindingFlavor: "readline"` in `settings.json` and `Ctrl+W` in the prompt deletes back to the previous whitespace, the way it does in Bash, instead of the classic word-boundary behavior. A later release extended the same flavor to `Alt+F` / `Ctrl+→` (stop at the end of a word) and `Alt+D` (delete forward to it), with punctuation counted as a word boundary too.
+
 ## 8.3 Input prefixes
 
 Claude Code's input line reads the first character as a mode signal:
