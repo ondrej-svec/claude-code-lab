@@ -38,6 +38,8 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 
 **Session language.** Set the `language` setting in `settings.json` to pin the language used for session-title generation. Default auto-detects from your conversation.
 
+**Output style.** Claude Code ships a built-in "Concise" style — Claude leads with results and skips preamble and narration, without cutting corners on the work itself. Switch to it under Output style in `/config` when you want less narration between prompts.
+
 ### Info
 
 | Command | What it does |
@@ -124,6 +126,8 @@ CLI shortcuts are context-specific. Full list at [code.claude.com/docs/en/keybin
 Option-key shortcuts on macOS silently fail until you set **Left/Right Option = Esc+** in your terminal profile (iTerm2, etc.). If `Alt+M` does nothing for mode cycling, that's why — use `Shift+Tab` instead.
 
 The desktop app's shortcuts are not officially documented by Anthropic — what you see here is the CLI.
+
+**Bash-style word deletion.** Set `keybindingFlavor: "readline"` in `settings.json` and `Ctrl+W` in the prompt deletes back to the previous whitespace, the way it does in Bash, instead of the classic word-boundary behavior. A later release extended the same flavor to `Alt+F` / `Ctrl+→` (stop at the end of a word) and `Alt+D` (delete forward to it), with punctuation counted as a word boundary too.
 
 ## 8.3 Input prefixes
 
