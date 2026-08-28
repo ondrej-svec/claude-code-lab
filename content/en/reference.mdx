@@ -20,8 +20,6 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/subtask` | Launch the in-session subagent `/fork` used to spawn. |
 | `/exit` | Quit Claude Code (or `Ctrl+D`). |
 
-**Usage-limit auto-resume.** Claude Code now continues your session automatically once a claude.ai usage limit resets. Turn it off in `/config` → "Continue automatically at usage limit".
-
 ### Configuration
 
 | Command | What it does |
@@ -29,7 +27,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/init` | Scan the repo and propose a starting `CLAUDE.md`. Set `CLAUDE_CODE_NEW_INIT=1` for the new multi-phase interactive flow. |
 | `/memory` | View or edit CLAUDE.md files and loaded memory. |
 | `/permissions` | Manage tool allow/deny rules. |
-| `/model` | Switch model for the current session (e.g., Opus → Sonnet). **Sonnet 5 is now the default model** — native 1M-token context window, promotional pricing of $2/$10 per Mtok through August 31. Requires v2.1.197+. Selecting a model now saves it as the default for new sessions. Press `s` in the picker to switch for the current session only. Set `fallbackModel` in `settings.json` to chain up to three fallback models tried in order when the primary is overloaded or unavailable. `--fallback-model` also applies to interactive sessions. Within the Opus family, Opus 5 (`claude-opus-5`) is now the default model — 1M context, fast mode priced at $10/$50 per Mtok. Set `ANTHROPIC_DEFAULT_MODEL` (v2.1.236+) to pick the model new sessions start on from the environment — it only applies when nothing else selects a model. A saved `/model` choice overrides it and persists across restarts; `--model` and `ANTHROPIC_MODEL` override even a saved `/model` choice for the session they launch. |
+| `/model` | Switch model for the current session (e.g., Opus → Sonnet). **Sonnet 5 is now the default model** — native 1M-token context window, promotional pricing of $2/$10 per Mtok through August 31. Requires v2.1.197+. Selecting a model now saves it as the default for new sessions. Press `s` in the picker to switch for the current session only. Set `fallbackModel` in `settings.json` to chain up to three fallback models tried in order when the primary is overloaded or unavailable. `--fallback-model` also applies to interactive sessions. Within the Opus family, Opus 5 (`claude-opus-5`) is now the default model — 1M context, fast mode priced at $10/$50 per Mtok. |
 | `/fast` | Toggle fast mode. Default is now Opus 4.8 — 2× the standard rate for 2.5× the speed. Opus 4.7 is no longer eligible; `/fast` now applies to Opus 5 and Opus 4.8. |
 | `/effort` | Per-session effort override. |
 | `/advisor [model]` | Pair the session with an advisor — a stronger model Claude calls at decision points (before committing to an approach, when stuck on a recurring error, before declaring done). Shorthand: `opus`, `sonnet`, `fable`. Requires v2.1.98+. Fable 5 as advisor requires v2.1.170+. `/advisor off` to clear. |
@@ -39,10 +37,6 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/theme` | Switch terminal theme. |
 
 **Session language.** Set the `language` setting in `settings.json` to pin the language used for session-title generation. Default auto-detects from your conversation.
-
-**Output style.** A built-in "Concise" style skips preamble and narration and leads with results, without cutting corners on the work itself. Pick it under Output style in `/config`.
-
-**Curating the model picker.** `modelPicker` lets you curate the `/model` picker with your own ordered, labeled list of models — append to the built-in lineup or replace it outright.
 
 ### Info
 
@@ -125,13 +119,13 @@ CLI shortcuts are context-specific. Full list at [code.claude.com/docs/en/keybin
 | `Cmd+T` / `Meta+T` | Toggle extended thinking. |
 | `Shift+Enter` or `\+Enter` | Multi-line entry. Native in iTerm2, WezTerm, Ghostty, Kitty, Warp, Apple Terminal. Elsewhere: `/terminal-setup`. |
 
+**Bash-style word editing.** Set `keybindingFlavor: "readline"` in `settings.json` and the prompt's word keys match Bash: `Ctrl+W` deletes back to the previous whitespace, `Alt+F` and `Ctrl`/`Option`+`→` jump to the end of a word, `Alt+D` deletes forward to one (`Ctrl+Y` pastes it back). The default (`"classic"`) is unchanged.
+
 ### Gotcha
 
 Option-key shortcuts on macOS silently fail until you set **Left/Right Option = Esc+** in your terminal profile (iTerm2, etc.). If `Alt+M` does nothing for mode cycling, that's why — use `Shift+Tab` instead.
 
 The desktop app's shortcuts are not officially documented by Anthropic — what you see here is the CLI.
-
-**Bash-style word deletion.** Set `keybindingFlavor: "readline"` in `settings.json` and `Ctrl+W` in the prompt deletes back to the previous whitespace, the way it does in Bash, instead of the classic word-boundary behavior. A later release extended the same flavor to `Alt+F` / `Ctrl+→` (stop at the end of a word) and `Alt+D` (delete forward to it), with punctuation counted as a word boundary too.
 
 ## 8.3 Input prefixes
 
@@ -147,7 +141,7 @@ Claude Code's input line reads the first character as a mode signal:
 |---|---|
 | `/` | Slash command — runs a command, not a prompt. |
 | `!` | Bash passthrough — runs shell, result enters your context; `!` commands now trigger Claude to respond to the output automatically. Set `"respondToBashCommands": false` in `settings.json` to keep the previous context-only behavior. File paths autocomplete as you type. |
-| `@` | File mention — `@path/to/file` attaches a file; `@Explore` mentions a subagent; `@<session-name>` mentions another Claude session by name, and Claude reaches it with `SendMessage`. |
+| `@` | File mention — `@path/to/file` attaches a file; `@Explore` mentions a subagent. |
 | `#` | Memory add — the text after `#` gets appended to the right `CLAUDE.md`. Claude picks the scope (project / user / local). |
 | Anything else | Normal prompt. |
 
