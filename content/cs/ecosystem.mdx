@@ -30,7 +30,7 @@ V pohledu agentů spustí `! <příkaz>` shell příkaz jako novou background se
 
 **Background session teď hlídají vlastní práci.** Automaticky commitují a pushují, aby se práce neztratila, draft PR otevřou jen když si to úkol žádá, a řídí se git konvencemi z tvého `CLAUDE.md`. Každý běh na konci nahlásí přesně, kde práce skončila.
 
-**Session si teď píšou mezi sebou, i&nbsp;napříč stroji.** `SendMessage` najde jinou session Claude Code podle jména — na macOS a&nbsp;Linuxu i&nbsp;session běžící na jiném stroji, ne jen ty ve stejném seznamu `claude agents`. `ListAgents` označí session z&nbsp;jiného stroje jako `name [ref]`, takže se ti nesplete se stejnojmennou lokální. Session teď může konverzaci začít sama, ne jen odpovídat, až se jí někdo ozve první. Dvě nová nastavení, `crossSessionInbound` a&nbsp;`dialogExpiry`, určují, jak moc session s&nbsp;obejitými oprávněními věří příchozí zprávě: zprávy, které jí přijdou, se drží na schválení, zatímco zprávy do session s&nbsp;běžnými oprávněními se doručí rovnou.
+**Session si teď píšou mezi sebou, i&nbsp;napříč stroji.** `SendMessage` najde jinou session Claude Code podle jména — na macOS a&nbsp;Linuxu i&nbsp;session běžící na jiném stroji, ne jen ty ve stejném seznamu `claude agents`. `ListAgents` označí session z&nbsp;jiného stroje jako `name [ref]`, takže se ti nesplete se stejnojmennou lokální. Session teď může konverzaci začít sama, ne jen odpovídat, až se jí někdo ozve první. Dvě nová nastavení, `crossSessionInbound` a&nbsp;`dialogExpiry`, určují, jak moc session s&nbsp;obejitými oprávněními věří příchozí zprávě: zprávy, které jí přijdou, se drží na schválení, zatímco zprávy do session s&nbsp;běžnými oprávněními se doručí rovnou. Napiš do promptu `@` a&nbsp;jméno session a&nbsp;Claude ji rovnou osloví přes `SendMessage`.
 
 ## Skilly
 
@@ -220,9 +220,9 @@ Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu 
 
 **Na pozadí ve výchozím stavu.** Subagenti teď automaticky běží na pozadí — Claude pokračuje v práci, zatímco jedou, a dostane upozornění, až skončí, místo aby na každého čekal.
 
-**Forkování je ve výchozím stavu zapnuté.** Subagent s `subagent_type: "fork"` teď zdědí celou konverzaci i prompt cache místo studeného startu. Levnější kontext, rychlejší rozjezd — pro subagenta, který má navázat přesně tam, kde jsi skončil.
-
 **Vnoření.** Subagenti teď defaultně spouští vlastní subagenty až do hloubky 3 — nastav `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1`, jestli chceš zpátky starší, plošší chování.
+
+**Forkování zdědí všechno.** Subagent s `subagent_type: "fork"` teď běží ve výchozím stavu — zdědí celou konverzaci i prompt cache místo studeného startu. Sáhni po něm, když subagent potřebuje všechno, o čem jste se už bavili, ne jen shrnutí úkolu; vestavěný Explore agent výše je opačný případ — záměrně studený a levný.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 
