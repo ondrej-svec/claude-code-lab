@@ -4,7 +4,7 @@ Tuhle kapitolu si ulož. Je to lookup stránka — ne tutoriál. Když zapomene�
 
 ## 8.1 Slash příkazy
 
-V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam filtrovaný podle tvého plánu, platformy a nainstalovaných pluginů. Tohle jsou vestavěné příkazy, které má smysl znát.
+V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam filtrovaný podle tvého plánu, platformy a nainstalovaných pluginů. Tohle jsou vestavěné příkazy, které má smysl znát.
 
 ### Session
 
@@ -12,22 +12,24 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam fi
 |---|---|
 | `/clear` | Nová konverzace. Stará se archivuje — obnovíš ji přes `/resume`. |
 | `/cd` | Přesune session do jiného pracovního adresáře, aniž by přerušil prompt cache uprostřed session. |
-| `/compact [focus]` | Konverzace zůstává, Claude shrne historii a uvolní kontext. Volitelný focus zúží, co zachovat. |
+| `/compact [focus]` | Konverzace zůstává, Claude shrne historii a uvolní kontext. Volitelný focus zúží, co zachovat. |
 | `/resume` | Navázat na předchozí konverzaci. Session na pozadí (spuštěné přes `--bg`) se tu teď taky zobrazují, označené jako `bg`. |
-| `/rewind` | Checkpoint menu — obnoví kód, konverzaci nebo obojí do dřívějšího stavu, **i před `/clear`**. Stejné jako dvojité Esc. |
+| `/rewind` | Checkpoint menu — obnoví kód, konverzaci nebo obojí do dřívějšího stavu, **i před `/clear`**. Stejné jako dvojité Esc. |
 | `/branch` | Větvení konverzace od zadaného bodu. |
-| `/fork` | Zkopíruje konverzaci do nové session na pozadí — dostane vlastní řádek v `claude agents`, ve vlastním git worktree — zatímco ty pokračuješ v týhle. |
+| `/fork` | Zkopíruje konverzaci do nové session na pozadí — dostane vlastní řádek v `claude agents`, ve vlastním git worktree — zatímco ty pokračuješ v týhle. |
 | `/subtask` | Spustí in-session subagenta, kterého dřív spouštěl `/fork`. |
 | `/exit` | Ukončí Claude Code (nebo `Ctrl+D`). |
+
+**Automatické pokračování po resetu limitu.** Claude Code teď po resetu limitu na claude.ai session sám rozjede dál. Vypneš to v `/config` → „Continue automatically at usage limit“.
 
 ### Konfigurace
 
 | Příkaz | Co dělá |
 |---|---|
-| `/init` | Prohlédne repo a navrhne startovní `CLAUDE.md`. Nastav `CLAUDE_CODE_NEW_INIT=1` pro nový interaktivní multi-fázový flow. |
-| `/memory` | Prohlédni nebo uprav CLAUDE.md soubory a načtenou paměť. |
+| `/init` | Prohlédne repo a navrhne startovní `CLAUDE.md`. Nastav `CLAUDE_CODE_NEW_INIT=1` pro nový interaktivní multi-fázový flow. |
+| `/memory` | Prohlédni nebo uprav CLAUDE.md soubory a načtenou paměť. |
 | `/permissions` | Spravuj allow/deny pravidla pro nástroje. |
-| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). **Výchozím modelem je teď Sonnet 5** — nativní 1M-tokenové kontextové okno, promo cena $2/$10 za Mtok do 31. srpna. Vyžaduje v2.1.197+. Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený nebo nedostupný. `--fallback-model` platí i pro interaktivní session. V rámci Opus modelů je teď výchozí Opus 5 (`claude-opus-5`) — 1M kontext, fast mode za $10/$50 na Mtok. |
+| `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). **Výchozím modelem je teď Sonnet 5** — nativní 1M-tokenové kontextové okno, promo cena $2/$10 za Mtok do 31. srpna. Vyžaduje v2.1.197+. Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený nebo nedostupný. `--fallback-model` platí i pro interaktivní session. V rámci Opus modelů je teď výchozí Opus 5 (`claude-opus-5`) — 1M kontext, fast mode za $10/$50 na Mtok. `ANTHROPIC_DEFAULT_MODEL` (v2.1.236+) nastaví z&nbsp;prostředí model, na kterém nové session startují — uplatní se, jen když model neurčuje nic jiného. Volba uložená přes `/model` ho přebije a&nbsp;přežije restart; `--model` a&nbsp;`ANTHROPIC_MODEL` přebijí i&nbsp;uloženou volbu `/model` pro session, kterou spustí. |
 | `/fast` | Přepne fast mode. Výchozí je teď Opus 4.8 — 2× standardní cena, 2,5× rychlost. Opus 4.7 už fast mode nepodporuje; `/fast` teď platí pro Opus 5 a Opus 4.8. |
 | `/effort` | Per-session override effortu. |
 | `/advisor [model]` | Přiřadí session poradní model — silnější model, který Claude volá v klíčových momentech (před volbou přístupu, při opakující se chybě, než ohlásí hotovo). Zkratky: `opus`, `sonnet`, `fable`. Vyžaduje v2.1.98+. Fable 5 jako poradce vyžaduje v2.1.170+. `/advisor off` odstraní. |
@@ -38,16 +40,20 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam fi
 
 **Jazyk session.** V `settings.json` nastav `language` a session tituly se budou generovat v tom jazyce. Bez nastavení se jazyk detekuje z konverzace automaticky.
 
+**Output style.** Vestavěný styl „Concise" přeskočí úvody a&nbsp;komentování a&nbsp;jde rovnou k&nbsp;výsledku, aniž by ubral na kvalitě samotné práce. Vyber ho pod Output style v&nbsp;`/config`.
+
+**Úprava model pickeru.** `modelPicker` ti dovolí sestavit vlastní seřazený, popsaný seznam modelů pro `/model` picker — buď ho připojíš k&nbsp;vestavěné nabídce, nebo ji úplně nahradíš.
+
 ### Info
 
 | Příkaz | Co dělá |
 |---|---|
 | `/help` | Seznam příkazů. |
 | `/powerup` | Interaktivní onboarding — deset animovaných průchodů po funkcích, které většina lidí přehlédne. |
-| `/context` | Vizualizace využití kontextového okna s tipy na optimalizaci. |
+| `/context` | Vizualizace využití kontextového okna s tipy na optimalizaci. |
 | `/cost` | Dosavadní cena session. |
 | `/usage`, `/stats` | Metriky využití. `/usage` teď zobrazí rozpad podle kategorií — skills, subagenty, pluginy a náklady per MCP server. |
-| `/doctor` | Diagnostika — vypíše konflikty v konfiguraci, chybějící nastavení. |
+| `/doctor` | Diagnostika — vypíše konflikty v konfiguraci, chybějící nastavení. |
 
 ### Workflow
 
@@ -56,8 +62,8 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam fi
 | `/agents` | Interaktivní průvodce zmizel — subagenty si nech vytvořit a spravovat od Clauda, nebo uprav `.claude/agents/` přímo. |
 | `/tasks` | Správa úkolů na pozadí — rozjet dlouhý běh, výsledek vyzvednout později. |
 | `/workflows` | Přehled tvých dynamických workflow. |
-| `/plugin` | Instalace a správa pluginů. `/plugin list` vypíše nainstalované; `--enabled`/`--disabled` filtruje. |
-| `/mcp` | Instalace a správa MCP serverů. |
+| `/plugin` | Instalace a správa pluginů. `/plugin list` vypíše nainstalované; `--enabled`/`--disabled` filtruje. |
+| `/mcp` | Instalace a správa MCP serverů. |
 | `/skills` | Seznam nainstalovaných skillů. |
 | `/reload-skills` | Znovu projde adresáře se skilly bez restartu session. |
 | `/review` | Alias pro `/code-review`. |
@@ -71,8 +77,8 @@ Dynamická workflow se spouštějí explicitními frázemi — `workflow:` nebo 
 
 | Příkaz | Co dělá |
 |---|---|
-| `/remote-control` (alias `/rc`) | Zpřístupní aktuální session z telefonu nebo prohlížeče. |
-| `/mobile` | QR kód pro otevření session v Claude mobilní aplikaci. |
+| `/remote-control` (alias `/rc`) | Zpřístupní aktuální session z telefonu nebo prohlížeče. |
+| `/mobile` | QR kód pro otevření session v Claude mobilní aplikaci. |
 | `/teleport` (alias `/tp`) | Přetáhne Claude-Code-on-Web session do tvého terminálu. |
 | `/web-setup` | Nastaví Claude Code na Webu pro aktuální repo. |
 
@@ -98,7 +104,7 @@ Spouštíš v terminálu jako `claude <subcommand>`, ne uvnitř session.
 
 ## 8.2 Klávesové zkratky
 
-Zkratky v CLI jsou kontextové. Kompletní seznam je na [code.claude.com/docs/en/keybindings](https://code.claude.com/docs/en/keybindings). Vlastní si uprav v `~/.claude/keybindings.json` přes `/keybindings`.
+Zkratky v CLI jsou kontextové. Kompletní seznam je na [code.claude.com/docs/en/keybindings](https://code.claude.com/docs/en/keybindings). Vlastní si uprav v `~/.claude/keybindings.json` přes `/keybindings`.
 
 ### Musíš znát
 
@@ -111,21 +117,21 @@ Zkratky v CLI jsou kontextové. Kompletní seznam je na [code.claude.com/docs/en
 | `Ctrl+R` | Reverse-search v historii — standardně prohledává všechny projekty. `Ctrl+S` zúží hledání na aktuální projekt nebo session. |
 | `Ctrl+O` | Přepíná podrobný transkript (rozbalí zkrácené tool volání). |
 | `Ctrl+T` | Přepíná seznam úkolů. |
-| `Ctrl+B` | Úkol na pozadí. (Konfliktuje s tmux prefixem — zmáčkni dvakrát.) |
+| `Ctrl+B` | Úkol na pozadí. (Konfliktuje s tmux prefixem — zmáčkni dvakrát.) |
 | `Ctrl+J` | Nový řádek bez odeslání. |
 | `Ctrl+G` nebo `Ctrl+X Ctrl+E` | Otevře aktuální prompt v `$EDITOR`. |
-| `Ctrl+V` (`Cmd+V` v iTerm2) | Vloží obrázek ze schránky jako `[Image #N]`. |
+| `Ctrl+V` (`Cmd+V` v iTerm2) | Vloží obrázek ze schránky jako `[Image #N]`. |
 | `Cmd+P` / `Meta+P` | Výběr modelu. |
 | `Cmd+T` / `Meta+T` | Přepne rozšířené myšlení. |
-| `Shift+Enter` nebo `\+Enter` | Víceřádkový vstup. Nativně v iTerm2, WezTerm, Ghostty, Kitty, Warp, Apple Terminal. Jinde: `/terminal-setup`. |
-
-**Editace slov jako v Bashi.** Nastav `keybindingFlavor: "readline"` v&nbsp;`settings.json` a&nbsp;klávesy pro slova v&nbsp;promptu budou jako v&nbsp;Bashi: `Ctrl+W` smaže zpátky k&nbsp;předchozí mezere, `Alt+F` a&nbsp;`Ctrl`/`Option`+`→` skočí na konec slova, `Alt+D` smaže dopředu k&nbsp;dalšímu (`Ctrl+Y` ho vrátí zpátky). Výchozí hodnota (`"classic"`) se nemění.
+| `Shift+Enter` nebo `\+Enter` | Víceřádkový vstup. Nativně v iTerm2, WezTerm, Ghostty, Kitty, Warp, Apple Terminal. Jinde: `/terminal-setup`. |
 
 ### Gotcha
 
-Option-klávesové zkratky na macOS tiše selávají, dokud si v terminálu nenastavíš **Left/Right Option = Esc+** (iTerm2 atd.). Pokud `Alt+M` nedělá pro cyklení režimů nic, je to tohle — použij `Shift+Tab`.
+Option-klávesové zkratky na macOS tiše selhávají, dokud si v terminálu nenastavíš **Left/Right Option = Esc+** (iTerm2 atd.). Pokud `Alt+M` nedělá pro cyklení režimů nic, je to tohle — použij `Shift+Tab`.
 
 Zkratky desktop aplikace Anthropic oficiálně nedokumentuje — to, co tady vidíš, je CLI.
+
+**Mazání slov po bashovsku.** Nastav `keybindingFlavor: "readline"` v&nbsp;`settings.json` a&nbsp;`Ctrl+W` v&nbsp;promptu smaže zpátky k&nbsp;předchozí mezeře, stejně jako v&nbsp;Bashi, místo klasického mazání po slovních hranicích. Pozdější verze stejný režim rozšířila i&nbsp;na `Alt+F` / `Ctrl+→` (zastaví na konci slova) a&nbsp;`Alt+D` (smaže dopředu k&nbsp;němu), s&nbsp;interpunkcí počítanou jako hranice slova.
 
 ## 8.3 Vstupní prefixy
 
@@ -140,8 +146,8 @@ Claude Code čte první znak řádku jako signál režimu:
 | První znak | Režim |
 |---|---|
 | `/` | Slash příkaz — spustí příkaz, ne prompt. |
-| `!` | Bash passthrough — pustí shell, výsledek se dostane do tvého kontextu; `!` příkazy teď automaticky spouštějí Claude k odpovědi na výstup. Nastav `"respondToBashCommands": false` v `settings.json`, jestli chceš zůstat u původního chování — jen kontext, bez automatické odpovědi. Cesty k souborům se doplňují, jak pišeš. |
-| `@` | Zmínka souboru — `@path/to/file` připojí soubor; `@Explore` zmíní subagenta. |
+| `!` | Bash passthrough — pustí shell, výsledek se dostane do tvého kontextu; `!` příkazy teď automaticky spouštějí Claude k odpovědi na výstup. Nastav `"respondToBashCommands": false` v `settings.json`, jestli chceš zůstat u původního chování — jen kontext, bez automatické odpovědi. Cesty k souborům se doplňují, jak píšeš. |
+| `@` | Zmínka souboru — `@path/to/file` připojí soubor; `@Explore` zmíní subagenta; `@<jméno-session>` zmíní jinou Claude session podle jména, Claude ji pak osloví přes `SendMessage`. |
 | `#` | Memory add — text za `#` se připojí do správného `CLAUDE.md`. Claude vybere rozsah (projekt / uživatel / lokální). |
 | Cokoliv jiného | Normální prompt. |
 
@@ -153,7 +159,7 @@ Kanonická dokumentace paměti žije na [code.claude.com/docs/en/memory](https:/
 
 ### Cílová délka
 
-**Pod 200 řádků na soubor.** Oficiální doporučení. Za tím bobtná spotřeba kontextu a Claude se pravidel drží méně spolehlivě. Komunitní konsenzus jde ještě dál — dobré CLAUDE.md soubory mají často pod 80 řádků.
+**Pod 200 řádků na soubor.** Oficiální doporučení. Za tím bobtná spotřeba kontextu a Claude se pravidel drží méně spolehlivě. Komunitní konsenzus jde ještě dál — dobré CLAUDE.md soubory mají často pod 80 řádků.
 
 ### Co patří dovnitř
 
@@ -165,14 +171,14 @@ Multi-krokové postupy dej do skillů, ne do CLAUDE.md. Pravidla specifická pro
 
 ### Hierarchie rozsahů
 
-Všechny `CLAUDE.md` soubory z aktuálního adresáře směrem k rootu se při startu session zřetězí. Priorita (pozdější vítězí při konfliktu):
+Všechny `CLAUDE.md` soubory z aktuálního adresáře směrem k rootu se při startu session zřetězí. Priorita (pozdější vítězí při konfliktu):
 
 1. **Managed** — politika od enterprise adminu (pokud existuje)
-2. **User** — `~/.claude/CLAUDE.md` (o tobě, načítá se všude)
-3. **Project** — `./CLAUDE.md` nebo `./.claude/CLAUDE.md` (o codebase, commitnuté)
-4. **Local** — `./CLAUDE.local.md` (o tobě v tomto projektu, gitignorované)
+2. **User** — `~/.claude/CLAUDE.md` (o tobě, načítá se všude)
+3. **Project** — `./CLAUDE.md` nebo `./.claude/CLAUDE.md` (o codebase, commitnuté)
+4. **Local** — `./CLAUDE.local.md` (o tobě v tomto projektu, gitignorované)
 
-`CLAUDE.md` v podadresářích se načítají líně, když Claude sáhne do souboru uvnitř. Užitečné pro monorepa.
+`CLAUDE.md` v podadresářích se načítají líně, když Claude sáhne do souboru uvnitř. Užitečné pro monorepa.
 
 ### Tři šablony
 
@@ -189,7 +195,7 @@ Interní onboarding nástroj. Postgres + Node, deploy na Vercel.
 - Migrace: číslované SQL soubory v `db/migrations/`.
 
 ## Ne
-- Neinstaluj npm balíčky bez ptání.
+- Neinstaluj npm balíčky bez ptaní.
 - Nesahej do `app/legacy/`.
 
 ## Příkazy
@@ -217,7 +223,7 @@ WIP branch: `wip/2026-04-refactor-auth`
 
 ### Importy
 
-`@path/to/file.md` se rozbalí inline — užitečné, ale **importovaný soubor pořád čerpá z kontextu**, načítá se při startu session. Max hloubka 5 skoků. Nepoužívej importy na „úsporu kontextu" — neušetří.
+`@path/to/file.md` se rozbalí inline — užitečné, ale **importovaný soubor pořád čerpá z kontextu**, načítá se při startu session. Max hloubka 5 skoků. Nepoužívej importy na „úsporu kontextu" — neušetří.
 
 ### Co jde špatně
 
@@ -226,13 +232,13 @@ WIP branch: `wip/2026-04-refactor-auth`
 - **Konfliktní pravidla ve vnořených souborech** — Claude si vybere jedno libovolně
 - **Použité jako linter** — nech lintery lintovat; CLAUDE.md nastavuje záměr
 
-## 8.5 Privacy, bezpečnost a plány
+## 8.5 Privacy, bezpečnost a plány
 
-Odlehčený přehled. Aktuální privacy a trust stránky Anthropicu jsou zdrojem pravdy, odkazy jsou níže.
+Odlehčený přehled. Aktuální privacy a trust stránky Anthropicu jsou zdrojem pravdy, odkazy jsou níže.
 
 ### Co opustí tvůj stroj
 
-Každý prompt posílá: tvoji zprávu, soubory, které jsi explicitně sdílel (přes `@`, tool use, nebo které si Claude přečetl, aby odpověděl), a historii konverzace v aktuálním kontextovém okně.
+Každý prompt posílá: tvoji zprávu, soubory, které jsi explicitně sdílel (přes `@`, tool use, nebo které si Claude přečetl, aby odpověděl), a historii konverzace v aktuálním kontextovém okně.
 
 **Neposílá:** celý filesystem, soubory mimo projekt, nic, co sedí na `.gitignore` nebo `.claudeignore`.
 
@@ -242,19 +248,19 @@ Každý prompt posílá: tvoji zprávu, soubory, které jsi explicitně sdílel 
   caption="Hranice není uzavřená brána — je to filtr. Prompt a soubory, které zmíníš, projdou; .env a cokoliv na .claudeignore nebo .gitignore ne."
 />
 
-### Plány a retence
+### Plány a retence
 
-| Plán | Pro koho | Jak je na tom s retencí |
+| Plán | Pro koho | Jak je na tom s retencí |
 |---|---|---|
-| **Pro** | Jednotlivec | Standardní retence; používá se k vylepšování služby; opt-out v nastavení konzole. |
+| **Pro** | Jednotlivec | Standardní retence; používá se k vylepšování služby; opt-out v nastavení konzole. |
 | **Max** | Intenzivní jednotlivec | Stejné jako Pro. |
 | **Team** | Malé organizace (5–200 seats) | Nastavitelné adminem. Přísnější defaulty než Pro. |
-| **Enterprise** | Velké organizace | Zero retention k dispozici. Admin řídí politiku. SSO, SOC 2, DPA. |
-| **API přímo** | Vývojáři, některé funkce blokované | Retenci si nastavuješ sám v API konzoli; Remote Control, mobilní aplikace a týmové funkce jsou obvykle mimo hru. |
+| **Enterprise** | Velké organizace | Zero retention k dispozici. Admin řídí politiku. SSO, SOC 2, DPA. |
+| **API přímo** | Vývojáři, některé funkce blokované | Retenci si nastavuješ sám v API konzoli; Remote Control, mobilní aplikace a týmové funkce jsou obvykle mimo hru. |
 
-Pokud má tvoje firma Team nebo Enterprise seat, **použij ho**. Rozdíly v retenci a admin politice jsou pro firemní použití důležité.
+Pokud má tvoje firma Team nebo Enterprise seat, **použij ho**. Rozdíly v retenci a admin politice jsou pro firemní použití důležité.
 
-**Vynucení modelu.** Managed settings přidávají druhou vrstvu. Nastav `enforceAvailableModels: true` v managed konfiguraci a `availableModels` allowlist začne platit i pro výchozí model — výchozí model, který by se přeložil na zakázaný, se přepne na první povolený, a uživatelé ho nemůzou rozšiřovat přes vlastní projekt nebo user settings.
+**Vynucení modelu.** Managed settings přidávají druhou vrstvu. Nastav `enforceAvailableModels: true` v managed konfiguraci a `availableModels` allowlist začne platit i pro výchozí model — výchozí model, který by se přeložil na zakázaný, se přepne na první povolený, a uživatelé ho nemůžou rozšiřovat přes vlastní projekt nebo user settings.
 
 ### `.claudeignore`
 
@@ -279,7 +285,7 @@ Používej pro tajné klíče, zákaznická data, interní dokumenty — co ti d
 | `sandbox.failIfUnavailable: true` | Tvrdý fail, když sandbox nestartuje. Žádný tichý fallback. |
 | `allowUnsandboxedCommands: false` | Vypne escape hatch, přes který by jinak příkazy běžely mimo sandbox. |
 | `sandbox.network.allowManagedDomainsOnly: true` | Na síť jen admin-schválené domény. |
-| `sandbox.filesystem.allowWrite` | Cesty mimo CWD, kam můzou subprocesy zapisovat. Slučují se napříč scopy nastavení. |
+| `sandbox.filesystem.allowWrite` | Cesty mimo CWD, kam můžou subprocesy zapisovat. Slučují se napříč scopy nastavení. |
 | `sandbox.credentials: false` | Blokuje čtení credential souborů a tajných proměnných prostředí ze sandboxovaných příkazů. |
 | `mode: "mask"` (credential soubory) | Sandboxované příkazy čtou místo reálné hodnoty sentinel kopii souboru — celý soubor, nebo jen to, co zachytí `extract` regex. Reálná hodnota se doplní až při odchozím síťovém provozu přes sandbox proxy. Jen Linux/WSL; na macOS to spadne zpátky na `deny`. |
 | `decode: "jwt"` + `maskClaims` | JWT-aware maskování — maskuje konkrétní claims uvnitř tokenu místo celého souboru s přihlašovacími údaji. AWS nasazení navíc dostanou přepodepisování `awsPairs`/`sigv4`. Vyžaduje `network.tlsTerminate`; funguje jen z user, managed nebo `--settings` nastavení. |
@@ -289,7 +295,7 @@ Používej pro tajné klíče, zákaznická data, interní dokumenty — co ti d
 
 ### MCP bezpečnost
 
-MCPs, které načítají nedůvěryhodný obsah (webové stránky, issues, maily), do tvé session můžou injektovat instrukce. Postoj Anthropicu: **třetí strany na vlastní riziko**. Před instalací MCP si zkontroluj, co dělá. Upřednostňuj first-party MCPs od organizací `anthropics/`, když jsou k dispozici.
+MCPs, které načítají nedůvěryhodný obsah (webové stránky, issues, maily), do tvé session můžou injektovat instrukce. Postoj Anthropicu: **třetí strany na vlastní riziko**. Před instalací MCP si zkontroluj, co dělá. Upřednostňuj first-party MCPs od organizací `anthropics/`, když jsou k dispozici.
 
 ### Kanonické odkazy
 
@@ -299,13 +305,13 @@ MCPs, které načítají nedůvěryhodný obsah (webové stránky, issues, maily
 - [Enterprise plan](https://www.anthropic.com/enterprise)
 - [Permissions docs](https://code.claude.com/docs/en/settings#permissions)
 
-Pokud si nejsi jistý, co tvoje firma dovoluje, porad se s adminem před tím, než sáhneš na produkční kód s Claudem.
+Pokud si nejsi jistý, co tvoje firma dovoluje, poraď se s adminem před tím, než sáhneš na produkční kód s Claudem.
 
 ## 8.6 Jak Claude rozšiřovat
 
 ### Skilly
 
-Agent Skills otevřený formát — specifikace a referenční implementace:
+Agent Skills otevřený formát — specifikace a referenční implementace:
 
 - [agentskills.io](https://agentskills.io) — otevřený standard
 - [github.com/anthropics/skills](https://github.com/anthropics/skills) — 17 oficiálních skillů + meta-skilly `skill-creator` a `mcp-builder`
@@ -323,7 +329,7 @@ Formát plugin manifestu, submission marketplace, rozdíl plugin vs. skill:
 
 ### Hooky
 
-Shell příkazy, HTTP endpointy nebo LLM prompty spouštěné na konkrétních lifecycle událostech. Události zahrnují `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, `MessageDisplay` (transformuje nebo schová text asistenta při zobrazení) a řadu dalších.
+Shell příkazy, HTTP endpointy nebo LLM prompty spouštěné na konkrétních lifecycle událostech. Události zahrnují `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, `MessageDisplay` (transformuje nebo schová text asistenta při zobrazení) a řadu dalších.
 
 - [Hooks docs](https://code.claude.com/docs/en/hooks)
 - Konfigurace v `.claude/settings.json` pod `"hooks"`, nebo v `hooks/hooks.json` pluginu
@@ -331,7 +337,7 @@ Shell příkazy, HTTP endpointy nebo LLM prompty spouštěné na konkrétních l
 
 ### MCPs
 
-Postav si vlastní MCP server s MCP SDK (Python nebo TypeScript):
+Postav si vlastní MCP server s MCP SDK (Python nebo TypeScript):
 
 - [Model Context Protocol](https://modelcontextprotocol.io) — otevřený standard
 - Skill `mcp-builder` v `anthropics/skills` ti postaví základ
@@ -339,7 +345,7 @@ Postav si vlastní MCP server s MCP SDK (Python nebo TypeScript):
 
 ## 8.7 Kanonické zdroje
 
-Každý oficiální odkaz použitý v průvodci, všechno na jednom místě.
+Každý oficiální odkaz použitý v průvodci, všechno na jednom místě.
 
 ### Anthropic — Claude Code
 
