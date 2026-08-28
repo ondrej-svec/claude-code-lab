@@ -1,54 +1,54 @@
-# Iterace a kontrola
+# Iterace a kontrola
 
 První prompt nikdy není poslední. Hodnota Claude Code není výstup — je to smyčka, která tě dovede ke správnému výstupu za tři čtyři kola místo jednoho frustrovaného přepisu.
 
-V čase se cíl posouvá. Na začátku čteš každý diff, kontroluješ každou změnu, držíš všechno v ruce. Později si kolem agenta postavíš **harness**, který dělá jeho práci ověřitelnou bez toho, aby tvoje oči byly na každém řádku. Tahle kapitola je obě poloviny — denní návyky iterace a postoj, díky kterému fungují ve velkém.
+V čase se cíl posouvá. Na začátku čteš každý diff, kontroluješ každou změnu, držíš všechno v ruce. Později si kolem agenta postaříš **harness**, který dělá jeho práci ověřitelnou bez toho, aby tvoje oči byly na každém řádku. Tahle kapitola je obě poloviny — denní návyky iterace a postoj, díky kterému fungují ve velkém.
 
 ## Rewind
 
-Dvakrát **Esc** v Claude okně. Jsi o zprávu zpět. Změny v souborech jsou rollbacknuté. Konverzace se větví. Stejný efekt jako `/rewind`, jenom rychlejší.
+Dvakrát **Esc** v Claude okně. Jsi o zprávu zpět. Změny v souborech jsou rollbacknuté. Konverzace se větví. Stejný efekt jako `/rewind`, jenom rychlejší.
 
 <Screenshot
   src="/screenshots/ch4-rewind-menu.png"
-  alt="Menu Rewind se seznamem posledních promptů s časovými razítky; nejnovější prompt je vybraný"
+  alt="Menu Rewind se seznamem posledních promptů s časovými razitky; nejnovější prompt je vybraný"
   caption="Dvakrát Esc. Vyber prompt, ke kterému se chceš vrátit. Odtud se větví."
 />
 
-Tohle je nejužitečnější klávesová zkratka v celém nástroji. Používej ji, kdykoliv:
+Tohle je nejúžitečnější klávesová zkratka v celém nástroji. Používej ji, kdykoliv:
 
-- Claude šel špatným směrem a chceš prompt zkusit znovu
+- Claude šel špatným směrem a chceš prompt zkusit znovu
 - Uprostřed promptu jsi si uvědomil lepší formulaci
-- Chceš vyzkoušet experiment, aniž by ses k němu zavázal
-- Diff tě překvapil a radši bys ho neměl
+- Chceš vyzkoušet experiment, aniž by ses k němu zavázal
+- Diff tě překvapil a radiš bys ho neměl
 
 Rewind je levný. Nový prompt od začátku je drahý.
 
-V menu přetáčení přibyla volba **Summarize up to here** — zkomprimuje starší historii a nechá nedávná kola nedotčená. Použij ji, když chceš uvolnit kontext v konkrétním místě konverzace bez toho, abys začínal od nuly.
+V menu přetáčení přibyla volba **Summarize up to here** — zkomprimuje starší historii a nechá nedávná kola nedotknutá. Použij ji, když chceš uvolnit kontext v konkrétním místě konverzace bez toho, abys začínal od nuly.
 
 `/rewind` teď přechází i&nbsp;přes **hranice `/clear`** — checkpoint menu ukazuje i&nbsp;session, které jsi clearnul. Větvit se před clearem je stejný pohyb jako větvit se od posledního promptu.
 
 ## Zúžit scope
 
-Nejrychlejší cesta ke špatnému výstupu je prompt, který chce moc věcí naráz.
+Nejrychlejší cesta ke špatnému výstupu je prompt, který chce moc věcí naraz.
 
 **Široký:**
-> Zrefaktoruj tenhle soubor na dependency injection, přidej testy a převeď ho na TypeScript strict mode.
+> Zrefaktoruj tenhle soubor na dependency injection, přidej testy a převeď ho na TypeScript strict mode.
 
 **Úzký, tři prompty:**
 
-<Prompt>Zrefaktoruj tenhle soubor na dependency injection. Testy a typy zatím nech.</Prompt>
+<Prompt>Zrefaktoruj tenhle soubor na dependency injection. Testy a typy zatím nech.</Prompt>
 
 <Prompt>Teď přidej testy pro zrefaktorované rozhraní.</Prompt>
 
-<Prompt>Teď zapni strict mode a oprav, co se rozbije.</Prompt>
+<Prompt>Teď zapni strict mode a oprav, co se rozbije.</Prompt>
 
 Tři úzké prompty dopadnou třikrát rychleji než jeden široký. Každý dostane čistý review.
 
 ## „To není úplně ono"
 
-Když Claude udělá něco blízkého, ale vedle, nepodléhej nutkání to přepsat od začátku. Popiš mezeru:
+Když Claude udělá něco blízkého, ale vedle, nepodléhej nutkaní to přepsat od začátku. Popiš mezeru:
 
-> Helper funkce je v pořádku, ale přesuň ji do `utils/time.ts` — tam držíme časové helpery.
+> Helper funkce je v pořádku, ale přesuň ji do `utils/time.ts` — tam držíme časové helpery.
 
 Claude ji přesune. Struktura drží. Nemusel jsi vysvětlovat celý úkol znovu.
 
@@ -56,22 +56,22 @@ Claude ji přesune. Struktura drží. Nemusel jsi vysvětlovat celý úkol znovu
 
 Kontextová okna jsou velká, ale nejsou nekonečná. Dva příkazy, dva nástroje:
 
-- **`/compact [focus]`** — stejná konverzace, Claude si shrne dosavadní historii a zahodí surové zprávy. Použij, když jsi uprostřed úkolu a potřebuješ si odlehčit.
-- **`/clear`** — nová konverzace, ta stará se zaarchivuje (dá se obnovit přes `/resume` nebo `/rewind`). Použij, když přehodíš do jiné části codebase nebo konverzace má 30+ kol a driftuje.
+- **`/compact [focus]`** — stejná konverzace, Claude si shrne dosavadní historii a zahodí surové zprávy. Použij, když jsi uprostřed úkolu a potřebuješ si odlehčit.
+- **`/clear`** — nová konverzace, ta stará se zaarchivuje (dá se obnovit přes `/resume` nebo `/rewind`). Použij, když přehodíš do jiné části codebase nebo konverzace má 30+ kol a driftuje.
 
-Čistá konverzace s dobrým `CLAUDE.md` je skoro vždycky rychlejší než dlouhá.
+Čistá konverzace s dobrým `CLAUDE.md` je skoro vždycky rychlejší než dlouhá.
 
-**Pro tip pro Compound Engineering smyčku** (kapitola 7): dělej `/clear` mezi fázemi. `/clear` před `/plan` znamená, že brainstormingové kolo nezaneřádí plánování. `/clear` před `/work` znamená, že debatování nad plánem neobarví implementaci. Každá fáze dostane ostrý kontext; `/compound` na konci má čistý materiál k shrnutí.
+**Pro tip pro Compound Engineering smyčku** (kapitola 7): dělej `/clear` mezi fázemi. `/clear` před `/plan` znamená, že brainstormingové kolo nezařeádí plánování. `/clear` před `/work` znamená, že debatování nad plánem neobarví implementaci. Každá fáze dostane ostrý kontext; `/compound` na konci má čistý materiál k shrnutí.
 
-## Posun: od kontroly k harnessu, kterému věříš
+## Posun: od kontroly k harnessu, kterému věříš
 
 Na začátku agentní práce je rada jednoduchá: čti každý diff, kontroluj každou změnu, nevěř agentovi. To je kontrolní reflex. Vybuduje dovednost.
 
-Jakmile s Claude Code pracuješ denně, tenhle postoj se stává úzkým hrdlem. Nemůžeš číst padesát diffů za hodinu. Nemůžeš zároveň držet plán + diff + codebase v hlavě. Čím déle vysedáváš v režimu kontroly, tím méně tě agent ve skutečnosti dokáže zrychlit.
+Jakmile s Claude Code pracuješ denně, tenhle postoj se stává úzkým hrdlem. Nemůžeš číst padesát diffů za hodinu. Nemůžeš zároveň držet plán + diff + codebase v hlavě. Čím déle vysedáváš v režimu kontroly, tím méně tě agent ve skutečnosti dokáže zrychlit.
 
-Lepší cesta: **postav si kolem Claude Code harness, který dělá jeho práci ověřitelnou bez toho, aby tvé oči byly na každém řádku.** Tvoje role se posune z reviewera na architekta harnessu.
+Lepší cesta: **postav si kolem Claude Code harness, který dělá jeho práci ověřitelnou bez toho, aby tvé oči byly na každém řádku.** Tvoje role se posune z reviewera na architekta harnessu.
 
-Jak ten harness v praxi vypadá: testovací disciplína (tracer bullets, TDD, mutační kontroly), review vedené agentem (`/security-review`, `claude-code-action`, Semgrep nebo Snyk v CI), bezpečnostní postoj proti lethal trifectě a automatizace (hooky, Playwright, benchmark asserce). [Kapitola 8](/cs/lab/next-steps) je místo, kde je tohle rozvedené — vyber jednu věc, přečti si odkazy, zkus ji na skutečném úkolu.
+Jak ten harness v praxi vypadá: testovací disciplina (tracer bullets, TDD, mutační kontroly), review vedené agentem (`/security-review`, `claude-code-action`, Semgrep nebo Snyk v CI), bezpečnostní postoj proti lethal trifectě a automatizace (hooky, Playwright, benchmark asserce). [Kapitola 8](/cs/lab/next-steps) je místo, kde je tohle rozvedené — vyber jednu věc, přečti si odkazy, zkus ji na skutečném úkolu.
 
 <Screenshot
   src="/screenshots/ch4-control-to-harness.png"
@@ -79,54 +79,56 @@ Jak ten harness v praxi vypadá: testovací disciplína (tracer bullets, TDD, m
   caption="Vlevo: každý diff, každý řádek. Vpravo: souhrny — harness chyby chytil za tebe. Stejná práce, jiný postoj."
 />
 
-S harnessem na místě se otázka mění z *„udělal Claude v tomhle diffu chybu?“* na *„chytil by to harness, kdyby ano?“* Čtení diffu se stává spot-checkem, ne povinností. Ty jsi rychlejší. Agent získává důvěru. Oboje roste společně.
+S harnessem na místě se otázka mění z *„udělal Claude v tomhle diffu chybu?“* na *„chytil by to harness, kdyby ano?“* Čtení diffu se stává spot-checkem, ne povinností. Ty jsi rychlejší. Agent získává důvěru. Oboje roste společně.
 
-Jestli teprve začínáš: čti diffy pečlivě a vybuduj si reflexy. Jak harness kolem tebe roste, čti jich míň. Ta progrese je pointa.
+Jestli teprve začínáš: čti diffy pečlivě a vybuduj si reflexy. Jak harness kolem tebe roste, čti jich mín. Ta progrese je pointa.
 
 ## Režimy oprávnění
 
 Claude Code má pět režimů oprávnění. Aktivní řídí, co může Claude dělat bez ptání.
 
-1. **Manual** — Claude se ptá před každou editací nebo spuštěním nástroje. Výchozí. V CLI, `--help`, VS Code i JetBrains se tenhle režim teď jmenuje Manual (`--permission-mode manual` / `"defaultMode": "manual"` — stará hodnota `default` pořád funguje). V patičce se v tomhle režimu zobrazuje šedý odznak ⏸. Dialogy `AskUserQuestion` už samy od sebe nepokračují — idle timeout zapneš přes `/config`.
+1. **Manual** — Claude se ptá před každou editací nebo spuštěním nástroje. Výchozí. V CLI, `--help`, VS Code i JetBrains se tenhle režim teď jmenuje Manual (`--permission-mode manual` / `"defaultMode": "manual"` — stará hodnota `default` pořád funguje). V patičce se v tomhle režimu zobrazuje šedý odznak ⏸. Dialogy `AskUserQuestion` už sami od sebe nepokračují — idle timeout zapneš přes `/config`.
 2. **Accept edits** — Claude edituje volně, diff si prohlédneš až po. U konfiguračních souborů nástrojů pro build, které mohou udělit spouštění kódu (`.npmrc`, `.yarnrc*`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, `.devcontainer/` apod.), se pořád zeptá.
-3. **Plan mode** — Claude může číst, přemýšlet a navrhovat, ale **nic nemůže editovat ani spouštět**, dokud plan mode neopustíš.
-4. **Bypass permissions** — Claude edituje a spouští bez ptání. Stejný stav jako při spuštění s `--dangerously-skip-permissions`. V desktopové aplikaci ho nejdřív musíš povolit v nastavení, než se v menu objeví. Bypass se nově vztahuje i na zápisy do `.claude/`, `.git/`, `.vscode/` a konfiguračních souborů shellu — cesty, které dřív vyžadovaly potvrzení i v bypass módu. Destruktivní příkazy se pořád ptají jako záchranná síť. Používej jen v izolovaném prostředí.
-5. **Auto mode** — rychlý režim poháněný klasifikátorem, který se učí, co je bezpečné, a ptá se jen na hraniční případy. Teď dostupný i na **Pro plánu** — klasifikátor u externích session standardně jede na Sonnet 5 a drží se ho po zbytek session. **Když chceš rychlost, dej přednost Auto před Bypass** — Auto drží zábrany, Bypass je odstraňuje. Přesné chování klasifikátoru uprav přes `settings.autoMode.hard_deny` — pravidla tam blokují bezpodmínečně, nevadí, co uživatel chce ani jestli máš v `allow` výjimky. `autoMode.classifyAllShell: true` pošle přes klasifikátor všechny Bash a PowerShell příkazy — nejen ty označené jako arbitrary code execution. Důvody zamítnutí jsou teď vidět v přepisu, v zamítacím toastu i pod `/permissions` — Recent denials — snadno zjistíš, co zablokování spustilo, a klasifikátor doladíš. Záložka Auto mode v&nbsp;`/permissions` teď rovnou ukazuje i&nbsp;pravidla klasifikátoru — prohlídneš i&nbsp;upravíš je bez toho, abys menu opouštěl. Spouštění subagentů teď klasifikátor vyhodnocuje ještě před startem — subagent nemůže bez předchozí kontroly žádat o blokovanou akci. Zprávy do jiných agentních session přes `SendMessage` procházejí stejnou kontrolou klasifikátoru, než se odešlou. Auto mode nepotlačuje `AskUserQuestion`, jestli na něm závisíš ty nebo skill. Destruktivní git příkazy (`git reset --hard`, `git checkout -- .`, `git clean -fd`, `git stash drop`) se teď blokují, jestli jsi nepoprosil o zahození lokální práce. `git commit --amend` se zablokuje, jestli ten commit neudělal agent v aktuální session. `terraform destroy`, `pulumi destroy` a `cdk destroy` se taky blokují, jestli jsi nespecifikoval konkrétní stack. Kontroly na nebezpečné `rm`, `&` na pozadí a&nbsp;podezřelé Windows cesty už samy neotvírají dialog s&nbsp;oprávněním — posuzuje je klasifikátor. V plan módu s&nbsp;auto teď stejný klasifikátor rozhoduje i&nbsp;o&nbsp;Bash příkazech, u&nbsp;kterých statická analýza nedokáže dokázat, že jsou jen ke čtení — místo aby se pokaždé ptal. Klasifikátor jen rozhoduje, jestli je příkaz povolený; spustí se až po opuštění plan módu.
+3. **Plan mode** — Claude může číst, přemýšlet a navrhovat, ale **nic nemůže editovat ani spouštět**, dokud plan mode neopustíš.
+4. **Bypass permissions** — Claude edituje a spouští bez ptání. Stejný stav jako při spuštění s `--dangerously-skip-permissions`. V desktopové aplikaci ho nejdřív musíš povolit v nastavení, než se v menu objeví. Bypass se nově vztahuje i na zápisy do `.claude/`, `.git/`, `.vscode/` a konfiguračních souborů shellu — cesty, které dřív vyžadovaly potvrzení i v bypass módu. Destruktivní příkazy se pořád ptájí jako záchranná síť. Používej jen v izolovaném prostředí.
+5. **Auto mode** — rychlý režim poháněný klasifikátorem, který se učí, co je bezpečné, a ptá se jen na hraniční případy. Teď dostupný i na **Pro plánu** — klasifikátor u externích session standardně jede na Sonnet 5 a drží se ho po zbytek session. **Když chceš rychlost, dej přednost Auto před Bypass** — Auto drží zábrany, Bypass je odstraňuje. Přesné chování klasifikátoru uprav přes `settings.autoMode.hard_deny` — pravidla tam blokují bezpodmínečně, nevadí, co uživatel chce ani jestli máš v `allow` výjimky. `autoMode.classifyAllShell: true` pošle přes klasifikátor všechny Bash a PowerShell příkazy — nejen ty označené jako arbitrary code execution. Důvody zamítnutí jsou teď vidět v přepisu, v zamítacím toastu i pod `/permissions` — Recent denials — snadno zjistíš, co zablokování spustilo, a klasifikátor doladíš. Spouštění subagentů teď klasifikátor vyhodnocuje ještě před startem — subagent nemůže bez předchozí kontroly žádat o blokovanou akci. Zprávy do jiných agentních session přes `SendMessage` procházejí stejnou kontrolou klasifikátoru, než se odešlou. Auto mode nepotlačuje `AskUserQuestion`, jestli na něm závisíš ty nebo skill. Destruktivní git příkazy (`git reset --hard`, `git checkout -- .`, `git clean -fd`, `git stash drop`) se teď blokují, jestli jsi nepoprosil o zahození lokální práce. `git commit --amend` se zablokuje, jestli ten commit neudělal agent v aktuální session. `terraform destroy`, `pulumi destroy` a `cdk destroy` se taky blokují, jestli jsi nespecifikoval konkrétní stack. Kontroly na nebezpečné `rm`, `&` na pozadí a&nbsp;podezřelé Windows cesty už sami neotvírají dialog s&nbsp;oprávněním — posuzuje je klasifikátor. V plan módu s&nbsp;auto teď stejný klasifikátor rozhoduje i&nbsp;o&nbsp;Bash příkazech, u&nbsp;kterých statická analýza nedokáže dokázat, že jsou jen ke čtení — místo aby se pokaždé ptal. Klasifikátor jen rozhoduje, jestli je příkaz povolený; spustí se až po opuštění plan módu. V `/permissions` teď najdeš záložku Auto mode, kde ta pravidla klasifikátoru rovnou vidíš i&nbsp;upravuješ.
 
-**Jemná pravidla oprávnění.** Záznamy `allow` a `deny` v `settings.json` přijímají syntaxi `Tool(param:value)` — porovnávají se skutečné parametry, se kterými byl nástroj zavolán, ne jen jeho název. Wildcard `*` funguje. Příklad: `Agent(model:opus)` v pravidle `deny` zablokuje spouštění Opus subagentů a nechá ostatní volání `Agent` projít. Hodí se na setup s auto módem — rychle, ale Opus ne na každého subagenta.
+**Jemná pravidla oprávnění.** Záznamy `allow` a `deny` v `settings.json` přijímají syntaxi `Tool(param:value)` — porovnávají se skutečné parametry, se kterými byl nástroj zavolán, ne jen jeho název. Wildcard `*` funguje. Příklad: `Agent(model:opus)` v pravidle `deny` zablokuje spouštění Opus subagentů a nechá ostatní volání `Agent` projit. Hodí se na setup s auto módem — rychle, ale Opus ne na každého subagenta.
 
-**Syntaxe pravidel oprávnění.** Systém oprávnění zná pravidla ve formátu `Tool(param:value)`, která odpovídají parametrům vstupu nástroje — s `*` jako wildcard. `Agent(model:opus)` v `disallowedTools` třeba zablokuje jakéhokoliv subagenta spouštěného s Opusem.
+**Syntaxe pravidel oprávnění.** Systém oprávnění zná pravidla ve formátu `Tool(param:value)`, která odpovídají parametrům vstupu nástroje — s `*` jako wildcard. `Agent(model:opus)` v `disallowedTools` třeba zablokuje jakoukoliv subagenta spouštěného s Opusem.
+
+**Zamčení pro omezená prostředí.** `--restricted` (nebo `CLAUDE_CODE_RESTRICTED=1`) vypne nástroje, co spouští příkazy nebo kód, a&nbsp;k&nbsp;tomu `WebFetch`, pokud ho výslovně nejmenuješ v&nbsp;`--tools`. Souborové nástroje zůstanou uvnitř pracovního adresáře, `bypassPermissions` se rovnou odmítne a&nbsp;uživatelské, projektové i&nbsp;lokální settings soubory se ignorují — nic lokálního to nerozvolní.
 
 **Zamčení pro omezená prostředí.** `--restricted` (nebo `CLAUDE_CODE_RESTRICTED=1`) vypne nástroje, co spouští příkazy nebo kód, a&nbsp;k&nbsp;tomu `WebFetch`, pokud ho výslovně nejmenuješ v `--tools`. Souborové nástroje zůstanou uvnitř pracovního adresáře, `bypassPermissions` se rovnou odmítne a&nbsp;uživatelské, projektové i&nbsp;lokální settings soubory se ignorují — nic lokálního to nerozvolní.
 
 **Jak přepínat:**
 
-- **Desktopová aplikace**: zmáčkni `M` a pak číslo `1`–`5`. Režimy, které potřebují povolit v nastavení, jsou do té doby zašedlé.
-- **CLI**: `Shift+Tab` cyklí dostupnými režimy. Nebo rovnou startuj v konkrétním režimu přes `--permission-mode <mode>` (například `--permission-mode auto`).
+- **Desktopová aplikace**: zmáčkni `M` a pak číslo `1`–`5`. Režimy, které potřebují povolit v nastavení, jsou do té doby zašedé.
+- **CLI**: `Shift+Tab` cyklí dostupnými režimy. Nebo rovnou startuj v konkrétním režimu přes `--permission-mode <mode>` (například `--permission-mode auto`).
 
 <Screenshot
   src="/screenshots/ch4-permission-modes.png"
-  alt="Menu výběru režimu v Claude Code — pět režimů, Bypass permissions je zašedlé jako volitelné v nastavení"
-  caption="Desktopové menu Mode. Bypass je zašedlé, dokud ho nepovolíš v nastavení."
+  alt="Menu výběru režimu v Claude Code — pět režimů, Bypass permissions je zašedé jako volitelné v nastavení"
+  caption="Desktopové menu Mode. Bypass je zašedé, dokud ho nepovolíš v nastavení."
 />
 
-Plan mode je ten, který má smysl znát nejvíc v každodenní práci. Claude v něm může přemýšlet tak tvrdě, jak chce, aniž by udělal cokoliv destruktivního — ty vidíš jeho úvahy, potvrdíš nebo přesměruješ, a pak plan mode opustíš, ať to provede. Auto mode je ten, kterému má smysl se naučit věřit, až budeš mít v repu testy a harness, které chyby chytí. Bypass je pro izolované prostředí — nedělej z něj návyk.
+Plan mode je ten, který má smysl znát nejvíc v každodenní práci. Claude v něm může přemýšlet tak tvrdě, jak chce, aniž by udělal cokoliv destruktivního — ty vidíš jeho úvahy, potvrdíš nebo přesměruš, a pak plan mode opustíš, ať to provede. Auto mode je ten, kterému má smysl se naučit věřit, až budeš mít v repu testy a harness, které chyby chytí. Bypass je pro izolované prostředí — nedělej z něj návyk.
 
 <Screenshot
   src="/screenshots/ch4-plan-mode.png"
-  alt="Claude Code v plan módu s indikátorem ve spodním řádku"
-  caption="Plan mode. Indikátor dole říká, že editace a spouštění jsou vypnuté."
+  alt="Claude Code v plan módu s indikátorem ve spodním řádku"
+  caption="Plan mode. Indikátor dole říká, že editace a spouštění jsou vypnuté."
 />
 
-**Plan mode plán nikam neukládá.** Plán žije v konverzaci a s `/clear` zmizí. Pokud chceš plány zapsané na disk — abys je mohl později zkontrolovat, sdílet s kolegou nebo aby proti nim běžel `/work` — přesně to dělá skill `/plan` z Compound Engineeringu (kapitola 7). Je to doporučený flow, jakmile máš reálnou víc-krokovou práci.
+**Plan mode plán nikam neukladá.** Plán žije v konverzaci a s `/clear` zmizí. Pokud chceš plány zapsáné na disk — abys je mohl později zkontrolovat, sdílet s kolegou nebo aby proti nim běžel `/work` — přesně to dělá skill `/plan` z Compound Engineeringu (kapitola 7). Je to doporučený flow, jakmile máš reálnou víc-krokovou práci.
 
-Kdy se plan mode vyplatí:
+Kdy se plan mode vyplátí:
 
 - Změny napříč soubory, kde chceš vidět tvar, než se commitne
-- Cokoliv s destruktivním krokem (migrace, delete, rewrite)
+- Cokoliv s destruktivním krokem (migrace, delete, rewrite)
 - Úkoly, kde „co“ je stejně důležité jako „jak“
 
-Kdy se nevyplatí:
+Kdy se nevyplátí:
 
 - Opravy jednoho řádku
 - Refactor jedné funkce
@@ -136,13 +138,13 @@ Ještě jedna dimenze, kterou stojí za to znát: **`/sandbox`**. Je to samostat
 
 **Troubleshooting přes `--safe-mode`.** Chová se Claude jinak, než bys čekal — hook se zasekl, MCP server zasahuje do session, skill přepisuje něco, co nechceš? Spusť session s `--safe-mode` nebo nastav `CLAUDE_CODE_SAFE_MODE=1`. Zakáže všechna přizpůsobení: soubory CLAUDE.md, pluginy, skilly, hooky i MCP servery. Pokud problém zmizí, bylo to v konfiguraci. Přidávej věci zpátky jednu po druhé, dokud ho nenajdeš.
 
-## Hooky: exec form a pokračování po zamítnutí
+## Hooky: exec form a pokračování po zamítnutí
 
 Dvě přidané možnosti hookování, které stojí za zabudování do harnessu.
 
 **`args: string[]` (exec form)** přeskočí shell úplně. Pole jde přímo do procesu — path placeholdery nepotřebují uvozovky, žádná shell expanze, žádná překvapení. Přepni na exec form tehdy, když má příkaz dynamické argumenty, které by shell pobral špatně.
 
-**`continueOnBlock: true`** na `PostToolUse` hooku mění, co zamítnutí znamená. Standardně zamítnutí ukončí kolo. S `continueOnBlock` jde důvod zamítnutí zpět Claudovi a konverzace pokračuje. Claude vidí, co porušil, a může se přizpůsobit bez toho, aby ses musel znovu promptit. Hodí se pro výukové hooky — ty, co vynucují konvence místo přímého odmítání.
+**`continueOnBlock: true`** na `PostToolUse` hooku mění, co zamítnutí znamená. Standardně zamítnutí ukončí kolo. S `continueOnBlock` jde důvod zamítnutí zpět Claudovi a konverzace pokračuje. Claude vidí, co porušil, a může se přizpůsobit bez toho, aby ses musel znovu promptit. Hodí se pro výukové hooky — ty, co vynucují konvence místo přímého odmítání.
 
 **`terminalSequence`** v JSON výstupu hooku: hook teď může posílat desktopové notifikace, měnit titulek okna nebo zazvonit zápisem do tohohle pole — bez kontrolního terminálu. Šikovné pro `PostToolUse` hooky, co tě upozorní, když se dokončí dlouhý build a ty jsi mezitím od klávesnice odešel.
 
@@ -156,14 +158,14 @@ Dvě přidané možnosti hookování, které stojí za zabudování do harnessu.
 
 ## Doporučený flow, až budeš připravený
 
-Tahle kapitola je o denních návycích. [Kapitola 7](/cs/lab/compound-engineering) je **praxe**, která je balí do opakovatelné smyčky: brainstorm → plan → work → review → compound. Compound Engineering plugin si nainstaluj, až budeš připravený — je to nejkratší cesta z *„iteruju po jednom promptu“* k *„mám praxi, která vyrábí spolehlivě dobrou práci.“*
+Tahle kapitola je o denních návycích. [Kapitola 7](/cs/lab/compound-engineering) je **praxe**, která je balí do opakovatelné smyčky: brainstorm → plan → work → review → compound. Compound Engineering plugin si nainstaluj, až budeš připravený — je to nejkratší cesta z *„iteruju po jednom promptu“* k *„mám praxi, která vyrábí spolehlivě dobrou práci.“*
 
 ## Praxe: pokračuj se svou ukázkou
 
-Procházíš lab popořadě? Vezmi, co tě tahle kapitola naučila, k ukázce, se kterou jsi začal v kapitole 2 — nebo rovnou ke svému vlastnímu codebase, kde to sedne hlouběji.
+Procházíš lab popořadě? Vezmi, co tě tahle kapitola naučila, k ukázce, se kterou jsi začal v kapitole 2 — nebo rovnou ke svému vlastnímu codebase, kde to sedne hlouběji.
 
-1. Ve složce projektu požádej Claude, ať přidá druhý, read-only endpoint — na ukázkách třeba `GET /version` vracející `{ "version": "1.0.0" }`. Na vlastním repu malý route s reálnými daty z tvojí domény. Než prompt pustíš, zmáčkni `Shift+Tab`, dokud nejsi v **plan módu** — Claude bude plánovat, ale needituje.
-2. Přečti si plán. Pokud je tvar špatně — moc souborů, špatné místo, minutá konvence — neopravuj to uprostřed plánu. Dvakrát `Esc` a udělej **rewind**, pak znovu promptni s užším popisem. Lepší plán porazí opravený diff.
-3. Vyskoč z plan módu (Shift+Tab znovu) a potvrď. Claude zapíše kód, ukáže diff, ty spustíš a commitneš, když to funguje.
+1. Ve složce projektu požádej Claude, ať přidá druhý, read-only endpoint — na ukázkách třeba `GET /version` vracející `{ "version": "1.0.0" }`. Na vlastním repu malý route s reálnými daty z tvoji domény. Než prompt pustíš, zmáčkni `Shift+Tab`, dokud nejsi v **plan módu** — Claude bude plánovat, ale needituje.
+2. Přečti si plán. Pokud je tvar špatně — moc souborů, špatné místo, minutá konvence — neopravuj to uprostřed plánu. Dvakrát `Esc` a udělej **rewind**, pak znovu promptni s užším popisem. Lepší plán porazit opravený diff.
+3. Vyskoč z plan módu (Shift+Tab znovu) a potvrď. Claude zapíše kód, ukáže diff, ty spustíš a commitneš, když to funguje.
 
-Když to funguje: tvoje ukázka má dva endpointy a ty sis sáhl na plan mode i rewind na reálném úkolu — dva pohyby, které budeš ve zbytku labu používat nejčastěji. Praxe v další kapitole tě nechá postavit malý skill, který takové route generuje sám.
+Když to funguje: tvoje ukázka má dva endpointy a ty sis sáhl na plan mode i rewind na reálném úkolu — dva pohyby, které budeš ve zbytku labu používat nejčastěji. Praxe v další kapitole tě nechá postavit malý skill, který takové route generuje sám.
