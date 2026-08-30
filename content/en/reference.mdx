@@ -323,7 +323,7 @@ Plugin manifest format, marketplace submission, plugin-vs-skill distinction:
 
 ### Hooks
 
-Shell commands, HTTP endpoints, or LLM prompts fired at specific lifecycle events. Events include `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, `MessageDisplay` (transform or hide assistant message text as it is displayed), `PreModelSwitch` and `PostModelSwitch` (block, confirm, or annotate a model switch), and many more.
+Shell commands, HTTP endpoints, or LLM prompts fired at specific lifecycle events. Events include `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, `MessageDisplay` (transform or hide assistant message text as it is displayed), `PreModelSwitch` (block or confirm a model switch before it happens) and `PostModelSwitch` (annotate it afterward — it can't block), and many more.
 
 - [Hooks docs](https://code.claude.com/docs/en/hooks)
 - Configure in `.claude/settings.json` under `"hooks"`, or in a plugin's `hooks/hooks.json`

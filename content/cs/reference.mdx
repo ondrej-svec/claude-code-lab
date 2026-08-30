@@ -323,7 +323,7 @@ Formát plugin manifestu, submission marketplace, rozdíl plugin vs. skill:
 
 ### Hooky
 
-Shell příkazy, HTTP endpointy nebo LLM prompty spouštěné na konkrétních lifecycle událostech. Události zahrnují `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, `MessageDisplay` (transformuje nebo schová text asistenta při zobrazení), `PreModelSwitch` a `PostModelSwitch` (zablokuje, potvrdí nebo okomentuje přepnutí modelu), a řadu dalších.
+Shell příkazy, HTTP endpointy nebo LLM prompty spouštěné na konkrétních lifecycle událostech. Události zahrnují `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, `MessageDisplay` (transformuje nebo schová text asistenta při zobrazení), `PreModelSwitch` (zablokuje nebo potvrdí přepnutí modelu, než k němu dojde) a `PostModelSwitch` (okomentuje ho až potom — zablokovat už nejde), a řadu dalších.
 
 - [Hooks docs](https://code.claude.com/docs/en/hooks)
 - Konfigurace v `.claude/settings.json` pod `"hooks"`, nebo v `hooks/hooks.json` pluginu
