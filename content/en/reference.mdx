@@ -29,11 +29,11 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/permissions` | Manage tool allow/deny rules. |
 | `/model` | Switch model for the current session (e.g., Opus → Sonnet). **Sonnet 5 is now the default model** — native 1M-token context window, promotional pricing of $2/$10 per Mtok through August 31. Requires v2.1.197+. Selecting a model now saves it as the default for new sessions. Press `s` in the picker to switch for the current session only. Set `fallbackModel` in `settings.json` to chain up to three fallback models tried in order when the primary is overloaded or unavailable. `--fallback-model` also applies to interactive sessions. Within the Opus family, Opus 5 (`claude-opus-5`) is now the default model — 1M context, fast mode priced at $10/$50 per Mtok. |
 | `/fast` | Toggle fast mode. Default is now Opus 4.8 — 2× the standard rate for 2.5× the speed. Opus 4.7 is no longer eligible; `/fast` now applies to Opus 5 and Opus 4.8. |
-| `/effort` | Per-session effort override. |
+| `/effort` | Per-session effort override — now saves your default effort level per model, so switching models keeps each one's own setting. |
 | `/advisor [model]` | Pair the session with an advisor — a stronger model Claude calls at decision points (before committing to an approach, when stuck on a recurring error, before declaring done). Shorthand: `opus`, `sonnet`, `fable`. Requires v2.1.98+. Fable 5 as advisor requires v2.1.170+. `/advisor off` to clear. |
 | `/keybindings` | Open `~/.claude/keybindings.json`. |
 | `/hooks` | Configure lifecycle hooks. |
-| `/config` | Open the settings UI. `/config key=value` sets any setting from the prompt — e.g. `/config thinking=false`. `/config --help` lists all shorthand keys. |
+| `/config` | Open the settings UI. `/config key=value` sets any setting from the prompt — e.g. `/config thinking=false`. `/config --help` lists all shorthand keys. Output style is set here too — the built-in **Concise** style leads with results and skips preamble and narration, without losing thoroughness. |
 | `/theme` | Switch terminal theme. |
 
 **Session language.** Set the `language` setting in `settings.json` to pin the language used for session-title generation. Default auto-detects from your conversation.
@@ -46,7 +46,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/powerup` | Interactive onboarding — ten animated walkthroughs of features most people miss. |
 | `/context` | Visualise current context-window usage with optimisation hints. |
 | `/cost` | Session cost so far. |
-| `/usage`, `/stats` | Usage metrics. `/usage` breaks down by category — skills, subagents, plugins, per-MCP-server cost. |
+| `/usage`, `/stats` | Usage metrics. `/usage` breaks down by category — skills, subagents, plugins, per-MCP-server cost — plus a Loops breakdown (run count, total tokens, tokens per run, last run) for spotting a runaway or chatty `/loop` task. |
 | `/doctor` | Diagnostics — surfaces config conflicts, missing setup. |
 
 ### Workflow
@@ -254,6 +254,8 @@ If your company has a Team or Enterprise seat, **use it**. The retention and adm
 
 **Model enforcement.** Managed settings add a second layer. Set `enforceAvailableModels: true` in your managed config and the `availableModels` allowlist also constrains the Default model — a Default that would resolve to a disallowed model falls back to the first allowed model, and users can't widen the list via their own project or user settings.
 
+**Locked-down sessions.** Launch with `--restricted` (or set `CLAUDE_CODE_RESTRICTED=1`) and Claude Code strips out the tools that run commands or code and `WebFetch` unless you name them explicitly in `--tools`. It also confines file tools to the working directory, refuses `bypassPermissions`, and ignores user, project, and local settings files. Reach for it when you want a session that can only read and edit inside a known boundary — a review pass on an untrusted repo, a CI step you don't want reaching the network.
+
 ### `.claudeignore`
 
 The simplest defence regardless of plan. Next to `.gitignore`, lists files or paths Claude never sees:
@@ -321,7 +323,7 @@ Plugin manifest format, marketplace submission, plugin-vs-skill distinction:
 
 ### Hooks
 
-Shell commands, HTTP endpoints, or LLM prompts fired at specific lifecycle events. Events include `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, `MessageDisplay` (transform or hide assistant message text as it is displayed), and many more.
+Shell commands, HTTP endpoints, or LLM prompts fired at specific lifecycle events. Events include `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, `MessageDisplay` (transform or hide assistant message text as it is displayed), `PreModelSwitch` and `PostModelSwitch` (block, confirm, or annotate a model switch), and many more.
 
 - [Hooks docs](https://code.claude.com/docs/en/hooks)
 - Configure in `.claude/settings.json` under `"hooks"`, or in a plugin's `hooks/hooks.json`

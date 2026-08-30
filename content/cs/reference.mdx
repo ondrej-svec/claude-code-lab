@@ -29,11 +29,11 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/permissions` | Spravuj allow/deny pravidla pro nástroje. |
 | `/model` | Přepne model pro aktuální session (např. Opus → Sonnet). **Výchozím modelem je teď Sonnet 5** — nativní 1M-tokenové kontextové okno, promo cena $2/$10 za Mtok do 31. srpna. Vyžaduje v2.1.197+. Výběr modelu se teď automaticky ukládá jako výchozí pro nové session. Stiskni `s` v pickeru, jestli chceš přepnout jen pro tuhle session. `fallbackModel` v `settings.json` nastaví řetěz až tří záložních modelů, které se vyzkouší postupně, pokud je primární přetížený nebo nedostupný. `--fallback-model` platí i pro interaktivní session. V rámci Opus modelů je teď výchozí Opus 5 (`claude-opus-5`) — 1M kontext, fast mode za $10/$50 na Mtok. |
 | `/fast` | Přepne fast mode. Výchozí je teď Opus 4.8 — 2× standardní cena, 2,5× rychlost. Opus 4.7 už fast mode nepodporuje; `/fast` teď platí pro Opus 5 a Opus 4.8. |
-| `/effort` | Per-session override effortu. |
+| `/effort` | Per-session override effortu — teď si pro každý model ukládá vlastní výchozí úroveň, takže se každý model po přepnutí drží svého nastavení. |
 | `/advisor [model]` | Přiřadí session poradní model — silnější model, který Claude volá v klíčových momentech (před volbou přístupu, při opakující se chybě, než ohlásí hotovo). Zkratky: `opus`, `sonnet`, `fable`. Vyžaduje v2.1.98+. Fable 5 jako poradce vyžaduje v2.1.170+. `/advisor off` odstraní. |
 | `/keybindings` | Otevře `~/.claude/keybindings.json`. |
 | `/hooks` | Konfigurace lifecycle hooků. |
-| `/config` | Otevře nastavení. `/config key=value` nastaví libovolné nastavení přímo z promptu — třeba `/config thinking=false`. `/config --help` vypíše dostupné zkratky. |
+| `/config` | Otevře nastavení. `/config key=value` nastaví libovolné nastavení přímo z promptu — třeba `/config thinking=false`. `/config --help` vypíše dostupné zkratky. Output style se nastavuje taky tady — vestavěný styl **Concise** jde rovnou k výsledku a přeskočí preambuli a vyprávění, bez ztráty důkladnosti. |
 | `/theme` | Přepni téma terminálu. |
 
 **Jazyk session.** V `settings.json` nastav `language` a session tituly se budou generovat v tom jazyce. Bez nastavení se jazyk detekuje z konverzace automaticky.
@@ -46,7 +46,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/powerup` | Interaktivní onboarding — deset animovaných průchodů po funkcích, které většina lidí přehlédne. |
 | `/context` | Vizualizace využití kontextového okna s tipy na optimalizaci. |
 | `/cost` | Dosavadní cena session. |
-| `/usage`, `/stats` | Metriky využití. `/usage` teď zobrazí rozpad podle kategorií — skills, subagenty, pluginy a náklady per MCP server. |
+| `/usage`, `/stats` | Metriky využití. `/usage` teď zobrazí rozpad podle kategorií — skills, subagenty, pluginy, náklady per MCP server — a taky rozpad smyček (počet běhů, tokeny celkem, tokeny na běh, poslední běh), kterým poznáš utíkající nebo ukecaný `/loop` úkol. |
 | `/doctor` | Diagnostika — vypíše konflikty v konfiguraci, chybějící nastavení. |
 
 ### Workflow
@@ -254,6 +254,8 @@ Pokud má tvoje firma Team nebo Enterprise seat, **použij ho**. Rozdíly v ret
 
 **Vynucení modelu.** Managed settings přidávají druhou vrstvu. Nastav `enforceAvailableModels: true` v managed konfiguraci a `availableModels` allowlist začne platit i pro výchozí model — výchozí model, který by se přeložil na zakázaný, se přepne na první povolený, a uživatelé ho nemůžou rozšiřovat přes vlastní projekt nebo user settings.
 
+**Uzamčené session.** Spusť s `--restricted` (nebo nastav `CLAUDE_CODE_RESTRICTED=1`) a Claude Code vyhodí nástroje, co spouštějí příkazy nebo kód, a `WebFetch` — pokud je výslovně nejmenuješ v `--tools`. Nástroje na soubory navíc omezí na pracovní adresář, odmítne `bypassPermissions` a ignoruje user, project i local nastavení. Sáhni po tom, když chceš session, co umí jen číst a editovat uvnitř známé hranice — review na nedůvěryhodném repu, CI krok, co nemá sahat na síť.
+
 ### `.claudeignore`
 
 Nejjednodušší obrana bez ohledu na plán. Vedle `.gitignore`, vypisuje soubory nebo cesty, které Claude nikdy nevidí:
@@ -321,7 +323,7 @@ Formát plugin manifestu, submission marketplace, rozdíl plugin vs. skill:
 
 ### Hooky
 
-Shell příkazy, HTTP endpointy nebo LLM prompty spouštěné na konkrétních lifecycle událostech. Události zahrnují `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, `MessageDisplay` (transformuje nebo schová text asistenta při zobrazení) a řadu dalších.
+Shell příkazy, HTTP endpointy nebo LLM prompty spouštěné na konkrétních lifecycle událostech. Události zahrnují `SessionStart`, `PreToolUse`, `PostToolUse`, `FileChanged`, `Stop`, `PreCompact`, `MessageDisplay` (transformuje nebo schová text asistenta při zobrazení), `PreModelSwitch` a `PostModelSwitch` (zablokuje, potvrdí nebo okomentuje přepnutí modelu), a řadu dalších.
 
 - [Hooks docs](https://code.claude.com/docs/en/hooks)
 - Konfigurace v `.claude/settings.json` pod `"hooks"`, nebo v `hooks/hooks.json` pluginu
