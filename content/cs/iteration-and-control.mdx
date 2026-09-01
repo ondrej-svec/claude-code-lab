@@ -44,6 +44,12 @@ Nejrychlejší cesta ke špatnému výstupu je prompt, který chce moc věcí na
 
 Tři úzké prompty dopadnou třikrát rychleji než jeden široký. Každý dostane čistý review.
 
+## Ořízni komentář
+
+Výchozí výstupní styl Claude vysvětluje sám sebe — rámování plánu, „takhle jsem to udělal", průběžný komentář. Užitečné na začátku, dokud ověřuješ každý krok. Jakmile smyčce věříš, je tohle rámování něco, co při každém čtení jen přeskakuješ.
+
+Přepni na **Concise** pod Output style v&nbsp;`/config`. Claude jde rovnou k&nbsp;výsledku a přeskočí preambuli — stejná práce, stejná důkladnost, míň čtení, než se dostaneš k&nbsp;diffu.
+
 ## „To není úplně ono"
 
 Když Claude udělá něco blízkého, ale vedle, nepodléhej nutkání to přepsat od začátku. Popiš mezeru:
@@ -92,6 +98,8 @@ Claude Code má pět režimů oprávnění. Aktivní řídí, co může Claude d
 3. **Plan mode** — Claude může číst, přemýšlet a navrhovat, ale **nic nemůže editovat ani spouštět**, dokud plan mode neopustíš.
 4. **Bypass permissions** — Claude edituje a spouští bez ptání. Stejný stav jako při spuštění s `--dangerously-skip-permissions`. V desktopové aplikaci ho nejdřív musíš povolit v nastavení, než se v menu objeví. Bypass se nově vztahuje i na zápisy do `.claude/`, `.git/`, `.vscode/` a konfiguračních souborů shellu — cesty, které dřív vyžadovaly potvrzení i v bypass módu. Destruktivní příkazy se pořád ptají jako záchranná síť. Používej jen v izolovaném prostředí.
 5. **Auto mode** — rychlý režim poháněný klasifikátorem, který se učí, co je bezpečné, a ptá se jen na hraniční případy. Teď dostupný i na **Pro plánu** — klasifikátor u externích session standardně jede na Sonnet 5 a drží se ho po zbytek session. **Když chceš rychlost, dej přednost Auto před Bypass** — Auto drží zábrany, Bypass je odstraňuje. Přesné chování klasifikátoru uprav přes `settings.autoMode.hard_deny` — pravidla tam blokují bezpodmínečně, nevadí, co uživatel chce ani jestli máš v `allow` výjimky. `autoMode.classifyAllShell: true` pošle přes klasifikátor všechny Bash a PowerShell příkazy — nejen ty označené jako arbitrary code execution. Důvody zamítnutí jsou teď vidět v přepisu, v zamítacím toastu i pod `/permissions` — Recent denials — snadno zjistíš, co zablokování spustilo, a klasifikátor doladíš. Spouštění subagentů teď klasifikátor vyhodnocuje ještě před startem — subagent nemůže bez předchozí kontroly žádat o blokovanou akci. Zprávy do jiných agentních session přes `SendMessage` procházejí stejnou kontrolou klasifikátoru, než se odešlou. Auto mode nepotlačuje `AskUserQuestion`, jestli na něm závisíš ty nebo skill. Destruktivní git příkazy (`git reset --hard`, `git checkout -- .`, `git clean -fd`, `git stash drop`) se teď blokují, jestli jsi nepoprosil o zahození lokální práce. `git commit --amend` se zablokuje, jestli ten commit neudělal agent v aktuální session. `terraform destroy`, `pulumi destroy` a `cdk destroy` se taky blokují, jestli jsi nespecifikoval konkrétní stack. Kontroly na nebezpečné `rm`, `&` na pozadí a&nbsp;podezřelé Windows cesty už samy neotvírají dialog s&nbsp;oprávněním — posuzuje je klasifikátor. V plan módu s&nbsp;auto teď stejný klasifikátor rozhoduje i&nbsp;o&nbsp;Bash příkazech, u&nbsp;kterých statická analýza nedokáže dokázat, že jsou jen ke čtení — místo aby se pokaždé ptal. Klasifikátor jen rozhoduje, jestli je příkaz povolený; spustí se až po opuštění plan módu.
+
+**Session zamknout ještě víc.** `--restricted` (nebo `CLAUDE_CODE_RESTRICTED=1`) jde dál než kterýkoliv z&nbsp;pěti režimů výše — sundá vestavěné nástroje, co spouští příkazy nebo kód, plus `WebFetch` (jestli je nejmenuješ v&nbsp;`--tools`), drží nástroje na soubory jen uvnitř pracovního adresáře, `bypassPermissions` rovnou odmítne a&nbsp;ignoruje uživatelský, projektový i&nbsp;lokální settings soubor. Sáhni po něm, když session předáváš někomu jinému — kolegovi, CI jobu, demu — a&nbsp;chceš ji mít v&nbsp;krabici bez ohledu na to, co říká její konfigurace.
 
 **Jemná pravidla oprávnění.** Záznamy `allow` a `deny` v `settings.json` přijímají syntaxi `Tool(param:value)` — porovnávají se skutečné parametry, se kterými byl nástroj zavolán, ne jen jeho název. Wildcard `*` funguje. Příklad: `Agent(model:opus)` v pravidle `deny` zablokuje spouštění Opus subagentů a nechá ostatní volání `Agent` projít. Hodí se na setup s auto módem — rychle, ale Opus ne na každého subagenta.
 
