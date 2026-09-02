@@ -97,7 +97,7 @@ Claude Code má pět režimů oprávnění. Aktivní řídí, co může Claude d
 
 **Syntaxe pravidel oprávnění.** Systém oprávnění zná pravidla ve formátu `Tool(param:value)`, která odpovídají parametrům vstupu nástroje — s `*` jako wildcard. `Agent(model:opus)` v `disallowedTools` třeba zablokuje jakéhokoliv subagenta spouštěného s Opusem.
 
-**Omezená session.** `--restricted` (nebo `CLAUDE_CODE_RESTRICTED=1`) vypne nástroje, co spouští kód nebo příkazy, a `WebFetch`, pokud je výslovně nejmenuješ v `--tools`; souborové nástroje uzamkne do pracovního adresáře, `bypassPermissions` rovnou odmítne a ignoruje uživatelské, projektové i lokální settings soubory. Sáhni po tom, když pouštíš Claude Code na něco, čemu úplně nevěříš — stažený repo, needitovaný PR checkout — a chceš tvrdý strop, ne mód, ze kterýho se dá omylem přepnout pryč.
+**Omezená session.** `--restricted` (nebo `CLAUDE_CODE_RESTRICTED=1`) vypne nástroje, co spouští kód nebo příkazy, a `WebFetch`, pokud je výslovně nejmenuješ v `--tools`; souborové nástroje uzamkne do pracovního adresáře, `bypassPermissions` rovnou odmítne a ignoruje uživatelské, projektové i lokální settings soubory. Sáhni po tom, když pouštíš Claude Code na něco, čemu úplně nevěříš — stažené repo, nezkontrolovaný PR checkout — a chceš tvrdý strop, ne mód, ze kterýho se dá omylem přepnout pryč.
 
 **Jak přepínat:**
 
