@@ -49,6 +49,14 @@ Dovednost je posunout věc o vrstvu níž, než tě začne stát.
 
 Tenhle tah promění čtyřicet kol konverzace v soubor, který si Claude přečte v jednom. Implementační konverzace začíná s nulovou cenou kontextu a plnou informační hodnotou. To je celá hra.
 
+## Cache, kterou nevidíš
+
+Compact, clear a resume jsou tahy, co děláš sám. Prompt cache běží pod kapotou při každém kole, ať o tom přemýšlíš nebo ne — a teď si můžeš nastavit, jak dlouho vydrží.
+
+`promptCacheTtl` a `subagentPromptCacheTtl` dovolí session s API klíčem nebo na cloud providerech držet hodinovou cache na hlavní konverzaci, zatímco subagenti zůstanou na pěti minutách. `experimental.cacheTtl` (`"5m"` nebo `"1h"`) ve frontmatteru agenta přepíše TTL jen pro toho jednoho agenta, pokud není nic nastavené na úrovni subagenta.
+
+Delší TTL se hodí na session s dlouhými pauzami mezi koly — čekáš na build, sedíš nad rozhodnutím — kde by krátké okno cache jinak vynutilo při dalším promptu drahé znovunačtení celého kontextu.
+
 ## Recepty pro `/compact`
 
 `/compact` bez argumentu drží vyvážené shrnutí. S focus argumentem si nechá to podstatné a zbytek zapomene.
