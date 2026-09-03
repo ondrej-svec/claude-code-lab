@@ -66,6 +66,8 @@ Need a plugin for one session without installing it? Pass `--plugin-url <url>` t
 
 Installing from a zip is now a permanent plugin source too, not just a one-session flag. The `archive` source installs a plugin straight from a `.zip` over HTTPS — no git, no npm — with optional SHA-256 pinning for supply-chain trust.
 
+**A marketplace source can be a `command` too.** A local command — an IDE, say — prints the plugin directory itself; Claude Code re-resolves it every session and applies changes without a restart. Set `mode: "link"` to use that directory in place instead of copying it.
+
 Plugin dependencies are now enforced. `claude plugin disable` refuses if another enabled plugin depends on the target, and prints the chain you need to disable first. `claude plugin enable` goes the other direction: it force-enables any transitive dependencies automatically.
 
 Plugin auto-rename is now automatic: when a marketplace entry is renamed, Claude Code follows the `renames` map and updates your `settings.json` to the new name on next load — you don't have to track renames manually.
@@ -219,6 +221,8 @@ Choose Library → Create new agent → let Claude generate the definition. Scop
 **Note.** In Claude Code v2.1.63+, the internal `Task` tool was renamed to `Agent`. Older tutorials calling it Task still work — same thing.
 
 **Background by default.** Subagents now run in the background by default — Claude keeps working while they run and gets notified when they finish, instead of blocking on each one.
+
+**Forking inherits by default.** A `subagent_type: "fork"` subagent now inherits the whole conversation and prompt cache on by default, instead of starting cold — the fastest handoff when the subagent needs everything you already have loaded.
 
 **Nesting.** Subagents can spawn nested subagents up to depth 3 by default — set `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` if you want the older, flatter behavior back.
 
