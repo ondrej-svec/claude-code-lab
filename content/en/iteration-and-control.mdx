@@ -134,7 +134,7 @@ One more dimension worth knowing: **`/sandbox`**. It's a separate toggle from th
 
 **`--restricted` — for handing an agent less trust, not more.** Strips the built-in tools that run commands or code plus `WebFetch` (unless you name them explicitly in `--tools`), keeps file tools inside the working directory, refuses `bypassPermissions` outright, and ignores your user, project, and local settings files. Reach for it when you're pointing Claude at something outside a narrow lane you don't want it wandering from — a one-off script, a review pass, a demo where surprises aren't welcome.
 
-**Troubleshooting with `--safe-mode`.** If Claude's behaviour surprises you — a hook misfiring, an MCP server interfering, a skill overriding something — start a session with `--safe-mode` or set `CLAUDE_CODE_SAFE_MODE=1`. It disables your own customisations: CLAUDE.md files, plugins, skills, hooks, and MCP servers. Org-managed policy is the exception — policy-configured hooks, status line, and file-suggestion commands still apply; managed plugins, skills, CLAUDE.md, and MCP servers don't. If the problem goes away, it was configuration. Add one thing back at a time to find the culprit.
+**Troubleshooting with `--safe-mode`.** If Claude's behaviour surprises you — a hook misfiring, an MCP server interfering, a skill overriding something — start a session with `--safe-mode` or set `CLAUDE_CODE_SAFE_MODE=1`. It disables all customisations: CLAUDE.md files, plugins, skills, hooks, and MCP servers. If the problem goes away, it was configuration. Add one thing back at a time to find the culprit.
 
 **Headless hosts — `--permission-prompts none`.** For unattended automation — CI, scheduled agents, anything running with nobody watching for a prompt — pass `--permission-prompts none`: anything that would normally ask gets denied automatically, while the active permission mode, auto mode included, still decides everything else.
 
@@ -154,7 +154,7 @@ Two hook additions worth building into your harness.
 
 **Hyphenated hook matchers.** Matchers for tools with hyphens in the identifier — e.g. `code-reviewer` or `mcp__brave-search` — now exact-match the tool name. Previously they substring-matched, so a matcher could accidentally fire on unrelated tools. If you want to catch all tools from a hyphenated MCP server, update the matcher to `mcp__brave-search__.*`.
 
-**`PreModelSwitch` and `PostModelSwitch`.** `PreModelSwitch` fires before a model change and can block or confirm it; `PostModelSwitch` fires after and can only annotate what happened — the switch has already landed. `SessionStart` resume hooks now also see the session's staleness and the estimated cost to re-warm the cache, useful for a hook deciding whether a resume is worth it.
+**`PreModelSwitch` and `PostModelSwitch`.** Hook events that fire around a model change — block it, ask for confirmation, or just annotate what happened. `SessionStart` resume hooks now also see the session's staleness and the estimated cost to re-warm the cache, useful for a hook deciding whether a resume is worth it.
 
 **`DirectoryAdded`.** Fires after `/add-dir` — or the SDK's `register_repo_root` control request — registers a new working directory mid-session. Wire a hook here to re-scan the new directory's `CLAUDE.md` the moment it lands, instead of waiting for the next session.
 
