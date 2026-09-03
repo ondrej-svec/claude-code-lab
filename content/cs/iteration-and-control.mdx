@@ -134,7 +134,7 @@ Ještě jedna dimenze, kterou stojí za to znát: **`/sandbox`**. Je to samostat
 
 **`--restricted` — když chceš agentovi dát míň důvěry, ne víc.** Sundá vestavěné nástroje, co spouští příkazy nebo kód, plus `WebFetch` (pokud je výslovně nejmenuješ v&nbsp;`--tools`), drží souborové nástroje uvnitř pracovního adresáře, rovnou odmítne `bypassPermissions` a&nbsp;ignoruje uživatelské, projektové i&nbsp;lokální settings soubory. Sáhni po něm, když Claude pouštíš na něco mimo úzký pruh, kam nemá zabloudit — jednorázový skript, review kolo, demo, kde nechceš překvapení.
 
-**Troubleshooting přes `--safe-mode`.** Chová se Claude jinak, než bys čekal — hook se zasekl, MCP server zasahuje do session, skill přepisuje něco, co nechceš? Spusť session s `--safe-mode` nebo nastav `CLAUDE_CODE_SAFE_MODE=1`. Zakáže všechna přizpůsobení: soubory CLAUDE.md, pluginy, skilly, hooky i MCP servery. Pokud problém zmizí, bylo to v konfiguraci. Přidávej věci zpátky jednu po druhé, dokud ho nenajdeš.
+**Troubleshooting přes `--safe-mode`.** Chová se Claude jinak, než bys čekal — hook se zasekl, MCP server zasahuje do session, skill přepisuje něco, co nechceš? Spusť session s `--safe-mode` nebo nastav `CLAUDE_CODE_SAFE_MODE=1`. Zakáže tvoje vlastní přizpůsobení: soubory CLAUDE.md, pluginy, skilly, hooky i&nbsp;MCP servery. Výjimka je firemní politika (managed policy) — hooky, status line a&nbsp;file-suggestion příkazy nastavené politikou pořád platí; managed pluginy, skilly, CLAUDE.md a&nbsp;MCP servery ne. Pokud problém zmizí, bylo to v konfiguraci. Přidávej věci zpátky jednu po druhé, dokud ho nenajdeš.
 
 **Bezobslužné hosty — `--permission-prompts none`.** Pro automatizaci bez dozoru — CI, naplánovaní agenti, cokoliv, kde se nikdo nedívá na dotaz — přidej `--permission-prompts none`: cokoliv, co by se normálně zeptalo, se automaticky zamítne, zatímco aktivní režim oprávnění, auto mode nevyjímaje, dál rozhoduje o&nbsp;zbytku.
 
@@ -154,7 +154,7 @@ Dvě přidané možnosti hookování, které stojí za zabudování do harnessu.
 
 **Pomlčky v matcherách hooků.** Matchery pro nástroje s pomlčkami v názvu — třeba `code-reviewer` nebo `mcp__brave-search` — teď odpovídají přesnému názvu nástroje. Dřív šlo o substring matching, takže se mohl matcher spustit i na nesouvisejícím nástroji. Chceš-li chytit všechny nástroje z pomlčkového MCP serveru, uprav matcher na `mcp__brave-search__.*`.
 
-**`PreModelSwitch` a&nbsp;`PostModelSwitch`.** Hooky, které se spustí kolem změny modelu — zablokuješ ji, necháš si ji potvrdit, nebo si ji jen poznamenáš. `SessionStart` resume hooky teď navíc vidí, jak je session zastaralá a&nbsp;kolik by stálo znovu zahřát cache — hodí se pro hook, který rozhoduje, jestli se resume vůbec vyplatí.
+**`PreModelSwitch` a&nbsp;`PostModelSwitch`.** `PreModelSwitch` se spustí před změnou modelu a&nbsp;umí ji zablokovat nebo si vyžádat potvrzení; `PostModelSwitch` se spustí až po ní a&nbsp;jen zaznamená, co se stalo — změna už proběhla. `SessionStart` resume hooky teď navíc vidí, jak je session zastaralá a&nbsp;kolik by stálo znovu zahřát cache — hodí se pro hook, který rozhoduje, jestli se resume vůbec vyplatí.
 
 **`DirectoryAdded`.** Spustí se poté, co `/add-dir` — nebo SDK control request `register_repo_root` — zaregistruje nový pracovní adresář uprostřed session. Zavěs sem hook, ať se hned proskenuje `CLAUDE.md` nového adresáře, místo aby se čekalo na další session.
 
