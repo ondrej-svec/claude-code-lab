@@ -66,8 +66,6 @@ Potřebuješ plugin jen na jednu session bez trvalé instalace? Dej `claude --p
 
 Instalace ze zipu je teď i trvalý zdroj pluginu, ne jen flag na jednu session. Zdroj `archive` nainstaluje plugin rovnou ze `.zip` přes HTTPS — bez gitu, bez npm — s&nbsp;volitelným SHA-256 pinováním pro důvěru v&nbsp;dodavatelský řetězec.
 
-**Zdroj marketplace může být i `command`.** Lokální příkaz — třeba IDE — může sám vypsat cestu k&nbsp;adresáři pluginu; Claude Code ji každou session znovu vyřeší a&nbsp;změny se projeví bez restartu. `mode: "link"` použije ten adresář přímo místo kopírování.
-
 Závislosti mezi pluginy se teď hlídají. `claude plugin disable` odmítne zakázat plugin, na kterém závisí jiný aktivní plugin — a ukáže, co musíš nejdřív zakázat. `claude plugin enable` jde opačně: tranzitivní závislosti zapne sám automaticky.
 
 Přejmenování pluginů se teď řeší samo: jakmile se marketplace záznam přejmenuje, Claude Code sleduje `renames` mapu a aktualizuje `settings.json` na nový název při dalším načtení — ruční sledování přejmenování není potřeba.
@@ -221,8 +219,6 @@ Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu 
 **Poznámka.** V Claude Code v2.1.63+ byl interní nástroj `Task` přejmenovaný na `Agent`. Starší tutoriály, které mu říkají Task, pořád fungují — je to totéž.
 
 **Na pozadí ve výchozím stavu.** Subagenti teď automaticky běží na pozadí — Claude pokračuje v práci, zatímco jedou, a dostane upozornění, až skončí, místo aby na každého čekal.
-
-**Forkování dědí kontext ve výchozím stavu.** Subagent s `subagent_type: "fork"` teď automaticky zdědí celou konverzaci a&nbsp;prompt cache místo studeného startu — nejrychlejší předání práce, kdykoliv subagent potřebuje všechno, co už máš načtené.
 
 **Vnoření.** Subagenti teď defaultně spouští vlastní subagenty až do hloubky 3 — nastav `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1`, jestli chceš zpátky starší, plošší chování.
 
