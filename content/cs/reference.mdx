@@ -69,7 +69,7 @@ V libovolné konverzaci s Claude Code napiš `/` a uvidíš kompletní seznam
 | `/review` | Alias pro `/code-review`. |
 | `/code-review [level] [pr#]` | Kontrola správnosti kódu na zvolené úrovni (např. `/code-review high`), proti aktuálnímu diffu nebo konkrétnímu PR (`/code-review <level> <pr#>`). Bez zadané úrovně použije tu, kterou jsi napsal naposledy — zadej ji výslovně, když ji chceš změnit. Přidej `ultra` pro hloubkový cloudový review. Přidej `--comment` a nálezy se přidají jako inline komentáře na GitHub PR. Přidej `--fix` a nálezy se rovnou aplikují do working tree. Claude `/verify` ani `/code-review` už nespouští sám od sebe — zavolej si je, když je chceš. `/simplify` jede jen úklidové kolo — znovupoužití, zjednodušení, efektivita, výška abstrakce — ne plný lov chyb. `/code-review` teď běží jako subagent na pozadí — review se ti nezaplní do konverzace a jejím cílem jsou navazující (stacked) slash příkazy. |
 | `/security-review` | Vestavěný skill pro security review. |
-| `/diff` | Diff od posledního checkpointu, nebo přepni na postranní panel, který se otevře vedle konverzace ve fullscreen módu a živě se aktualizuje, jak Claude edituje. Detail se dá rolovat klávesnicí — šipky, `j`/`k`, `PgUp`/`PgDn`, `Space`, `Home`/`End`. |
+| `/diff` | Diff od posledního checkpointu, nebo přepni na postranní panel, který se otevře vedle konverzace ve fullscreen módu a živě se aktualizuje, jak Claude edituje. Detail se dá rolovat klávesnicí — šipky, `j`/`k`, `PgUp`/`PgDn`, `Space`, `Home`/`End`. |
 
 Dynamická workflow se spouštějí explicitními frázemi — `workflow:` nebo třeba `run a workflow`. Klíčové slovo se ve vstupním řádku zvýrazní fialovým zábleskem. Pouhá zmínka slova `workflow` v konverzaci to nespustí.
 
