@@ -30,7 +30,7 @@ V pohledu agentů spustí `! <příkaz>` shell příkaz jako novou background se
 
 **Background session teď hlídají vlastní práci.** Automaticky commitují a pushují, aby se práce neztratila, draft PR otevřou jen když si to úkol žádá, a řídí se git konvencemi z tvého `CLAUDE.md`. Každý běh na konci nahlásí přesně, kde práce skončila.
 
-**Session si teď píšou mezi sebou, i&nbsp;napříč stroji.** `SendMessage` najde jinou session Claude Code podle jména — na macOS a&nbsp;Linuxu i&nbsp;session běžící na jiném stroji, ne jen ty ve stejném seznamu `claude agents`. `ListAgents` označí session z&nbsp;jiného stroje jako `name [ref]`, takže se ti nesplete se stejnojmennou lokální. Session teď může konverzaci začít sama, ne jen odpovídat, až se jí někdo ozve první. Dvě nová nastavení, `crossSessionInbound` a&nbsp;`dialogExpiry`, určují, jak moc session s&nbsp;obejitými oprávněními věří příchozí zprávě: zprávy, které jí přijdou, se drží na schválení, zatímco zprávy do session s&nbsp;běžnými oprávněními se doručí rovnou. Napiš do promptu `@` a&nbsp;jméno session a&nbsp;Claude ji rovnou osloví přes `SendMessage`.
+**Session si teď píšou mezi sebou, i napříč stroji.** `SendMessage` najde jinou session Claude Code podle jména — na macOS a Linuxu i session běžící na jiném stroji, ne jen ty ve stejném seznamu `claude agents`. `ListAgents` označí session z jiného stroje jako `name [ref]`, takže se ti nesplete se stejnojmennou lokální. Session teď může konverzaci začít sama, ne jen odpovídat, až se jí někdo ozve první. Dvě nová nastavení, `crossSessionInbound` a `dialogExpiry`, určují, jak moc session s obejitými oprávněními věří příchozí zprávě: zprávy, které jí přijdou, se drží na schválení, zatímco zprávy do session s běžnými oprávněními se doručí rovnou. Napiš do promptu `@` a jméno session a Claude ji rovnou osloví přes `SendMessage`.
 
 ## Skilly
 
@@ -45,6 +45,8 @@ V pohledu agentů spustí `! <příkaz>` shell příkaz jako novou background se
 Níž v téhle kapitole ukážeme, jak si jeden takový necháš Claudem napsat.
 
 Přes `skillOverrides` řídíš, co Claude vidí. Nastav skill na `off` a zmizí z modelu i z `/` autocompleteu. `user-invocable-only` schová skill před modelem, ale lomítkový příkaz zůstane. `name-only` zkolabuje popis na samotný název — hodí se, když ti velká sbírka skillů začne generovat šum.
+
+Než začneš hádat, které skilly ořezat, spusť `/skill-doctor`. Ukáže, které načtené skilly se nepoužívají a kolik tě stojí na kontextu — z toho pak uděláš rozhodnutí pro `skillOverrides`, místo abys ořezával naslepo.
 
 Nastav `disableBundledSkills: true` v `settings.json` (nebo `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS=1`), jestli chceš před modelem úplně schovat všechny vestavěné skilly, workflows a výchozí lomítkové příkazy — model pak vidí jen to, co sis sám nainstaloval.
 
@@ -64,7 +66,7 @@ Jako reference: [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-
 
 Potřebuješ plugin jen na jednu session bez trvalé instalace? Dej `claude --plugin-url <url>` a `.zip` archiv se načte jen pro tuhle session.
 
-Instalace ze zipu je teď i trvalý zdroj pluginu, ne jen flag na jednu session. Zdroj `archive` nainstaluje plugin rovnou ze `.zip` přes HTTPS — bez gitu, bez npm — s&nbsp;volitelným SHA-256 pinováním pro důvěru v&nbsp;dodavatelský řetězec.
+Instalace ze zipu je teď i trvalý zdroj pluginu, ne jen flag na jednu session. Zdroj `archive` nainstaluje plugin rovnou ze `.zip` přes HTTPS — bez gitu, bez npm — s volitelným SHA-256 pinováním pro důvěru v dodavatelský řetězec.
 
 Závislosti mezi pluginy se teď hlídají. `claude plugin disable` odmítne zakázat plugin, na kterém závisí jiný aktivní plugin — a ukáže, co musíš nejdřív zakázat. `claude plugin enable` jde opačně: tranzitivní závislosti zapne sám automaticky.
 
@@ -170,7 +172,7 @@ Claude otevře stránku, prohlédne, nahlásí. Tohle je okamžik, kdy MCPs pře
 
 **Přenositelné cesty.** MCP stdio servery teď dostávají `CLAUDE_PROJECT_DIR` v prostředí — stejnou proměnnou, kterou už mají hooky. Plugin konfigurace může v příkazech odkazovat na `${CLAUDE_PROJECT_DIR}`. Vazbu na cestu napíšeš jednou; hooky i MCP ji rozloží stejně.
 
-**Kontrola připojení.** `/mcp` ukazuje počet nástrojů každého připojeného serveru a označí servery, které se připojily s 0 nástroji — nula nástrojů znamená, že server navázal spojení, ale nic se nenačetlo. Když se server nepřipojí, `/mcp` a&nbsp;`claude mcp list` teď ukážou HTTP status a&nbsp;text chyby. Oboje taky upozorní, jestli má hodnota v&nbsp;konfiguraci skryté mezery na začátku nebo na konci.
+**Kontrola připojení.** `/mcp` ukazuje počet nástrojů každého připojeného serveru a označí servery, které se připojily s 0 nástroji — nula nástrojů znamená, že server navázal spojení, ale nic se nenačetlo. Když se server nepřipojí, `/mcp` a `claude mcp list` teď ukážou HTTP status a text chyby. Oboje taky upozorní, jestli má hodnota v konfiguraci skryté mezery na začátku nebo na konci.
 
 **Upozornění na auth při startu.** Potřebuje-li MCP server ověření, Claude zobrazí oznámení při startu session s odkazem na `/mcp` — auth mezera se ukáže hned, ne uprostřed práce.
 

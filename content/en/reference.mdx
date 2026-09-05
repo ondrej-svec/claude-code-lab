@@ -32,7 +32,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/model` | Switch model for the current session (e.g., Opus → Sonnet). **Sonnet 5 is now the default model** — native 1M-token context window, promotional pricing of $2/$10 per Mtok through August 31. Requires v2.1.197+. Selecting a model now saves it as the default for new sessions. Press `s` in the picker to switch for the current session only. Set `fallbackModel` in `settings.json` to chain up to three fallback models tried in order when the primary is overloaded or unavailable. `--fallback-model` also applies to interactive sessions. Within the Opus family, Opus 5 (`claude-opus-5`) is now the default model — 1M context, fast mode priced at $10/$50 per Mtok. Set `ANTHROPIC_DEFAULT_MODEL` (v2.1.236+) to pick the model new sessions start on from the environment — it only applies when nothing else selects a model. A saved `/model` choice overrides it and persists across restarts; `--model` and `ANTHROPIC_MODEL` override even a saved `/model` choice for the session they launch. |
 | `/fast` | Toggle fast mode. Default is now Opus 4.8 — 2× the standard rate for 2.5× the speed. Opus 4.7 is no longer eligible; `/fast` now applies to Opus 5 and Opus 4.8. |
 | `/effort` | Per-session effort override. |
-| `/advisor [model]` | Pair the session with an advisor — a stronger model Claude calls at decision points (before committing to an approach, when stuck on a recurring error, before declaring done). Shorthand: `opus`, `sonnet`, `fable`. Requires v2.1.98+. Fable 5 as advisor requires v2.1.170+. `/advisor off` to clear. |
+| `/advisor [model]` | Pair the session with an advisor — a stronger model Claude calls at decision points (before committing to an approach, when stuck on a recurring error, before declaring done). Shorthand: `opus`, `sonnet`, `fable`. Requires v2.1.98+. Fable 5 as advisor requires v2.1.170+. Claude Fable 5.1 (`claude-fable-5-1`) is now the default Fable model — 1M context, $10/$50 per Mtok, $0.25/Mtok cache reads. `/advisor off` to clear. |
 | `/keybindings` | Open `~/.claude/keybindings.json`. |
 | `/hooks` | Configure lifecycle hooks. |
 | `/config` | Open the settings UI. `/config key=value` sets any setting from the prompt — e.g. `/config thinking=false`. `/config --help` lists all shorthand keys. |
@@ -69,7 +69,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/review` | Alias of `/code-review`. |
 | `/code-review [level] [pr#]` | Correctness review at a chosen effort level (e.g. `/code-review high`), against the current diff or a specific PR (`/code-review <level> <pr#>`). With no level given, reuses the level you last typed — type one explicitly to change it. Pass `ultra` for a deep cloud review. Pass `--comment` to post findings as inline GitHub PR comments. Pass `--fix` to apply findings to the working tree. Claude no longer runs `/verify` or `/code-review` on its own — invoke them explicitly when you want them. `/simplify` runs a cleanup-only pass — reuse, simplification, efficiency, altitude — not the full bug-hunting review. `/code-review` now runs as a background subagent — review no longer fills your conversation, and stacked slash commands are its review target. |
 | `/security-review` | Bundled security review skill. |
-| `/diff` | Show diff since last checkpoint. Scroll the detail view with arrows, `j`/`k`, `PgUp`/`PgDn`, `Space`, `Home`/`End`. |
+| `/diff` | Show diff since last checkpoint, or toggle a side panel that opens beside the conversation in fullscreen mode and updates live as Claude edits. Scroll the detail view with arrows, `j`/`k`, `PgUp`/`PgDn`, `Space`, `Home`/`End`. |
 
 Dynamic workflow runs trigger on explicit phrases like `workflow:` or `run a workflow` — not on any mention of the word. The keyword highlights with a purple shimmer in the input line.
 
@@ -131,7 +131,7 @@ Option-key shortcuts on macOS silently fail until you set **Left/Right Option = 
 
 The desktop app's shortcuts are not officially documented by Anthropic — what you see here is the CLI.
 
-**Bash-style word deletion.** Set `keybindingFlavor: "readline"` in `settings.json` and `Ctrl+W` in the prompt deletes back to the previous whitespace, the way it does in Bash, instead of the classic word-boundary behavior. A later release extended the same flavor to `Alt+F` / `Ctrl+→` (stop at the end of a word) and `Alt+D` (delete forward to it), with punctuation counted as a word boundary too.
+**Bash-style word editing is now the default.** `Ctrl+W` deletes back to the previous whitespace, `Alt+F` / `Ctrl+→` stop at the end of a word, `Alt+D` deletes forward to it, and punctuation counts as a word boundary — all matching Bash. This used to be opt-in via `keybindingFlavor: "readline"`; that setting no longer has any effect now that the behavior is universal.
 
 ## 8.3 Input prefixes
 

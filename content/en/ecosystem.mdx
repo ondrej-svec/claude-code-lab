@@ -46,6 +46,8 @@ Chapter 7 shows how to have Claude build one of these for you.
 
 Trim what Claude sees with `skillOverrides`. Set a skill to `off` and it vanishes from both the model and `/` autocomplete. `user-invocable-only` keeps the slash command but hides it from the model. `name-only` collapses the description to just the name — useful when a large collection starts generating noise.
 
+Run `/skill-doctor` before you guess which skills to trim. It shows which loaded skills go unused and what they cost you in context — turn that into `skillOverrides` decisions instead of trimming blind.
+
 Set `disableBundledSkills: true` in `settings.json` (or `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS=1`) to hide all bundled skills, built-in workflows, and default slash commands from the model entirely — only what you've installed remains visible.
 
 **Nested skill directories.** Skills inside nested `.claude/skills/` subdirectories load automatically when Claude works on files in that directory — no extra setup. On a name collision, the nested skill surfaces as `<dir>:<name>` so both versions stay available. Useful for monorepos where different packages need separate skill sets.

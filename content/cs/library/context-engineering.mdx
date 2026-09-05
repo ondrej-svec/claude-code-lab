@@ -39,7 +39,7 @@ Kontext konverzace je jedna vrstva. Jsou další dvě a stojí míň.
 
 **Aktivní kontext** je to, co je v aktuální konverzaci. Token-tlustý, drahé to držet, dokonale čerstvé. Každé kolo žije tady.
 
-**Uživatelé API klíčů a&nbsp;cloudových providerů mají na tuhle vrstvu vlastní páku.** `promptCacheTtl` drží prompt cache hlavní konverzace naživu hodinu místo výchozích pěti minut; `subagentPromptCacheTtl` řídí totéž pro volání subagentů, která zůstávají na pěti minutách. Delší TTL na aktivním kontextu znamená míň plnocenných znovunačtení, když se na chvíli odpojíš a&nbsp;vrátíš — přímá úspora na vrstvě, která stojí nejvíc.
+**Uživatelé API klíčů a cloudových providerů mají na tuhle vrstvu vlastní páku.** `promptCacheTtl` drží prompt cache hlavní konverzace naživu hodinu místo výchozích pěti minut; `subagentPromptCacheTtl` řídí totéž pro volání subagentů, která zůstávají na pěti minutách. Delší TTL na aktivním kontextu znamená míň plnocenných znovunačtení, když se na chvíli odpojíš a vrátíš — přímá úspora na vrstvě, která stojí nejvíc.
 
 **Shrnutý kontext** je to, co produkuje `/compact` — Claudem napsaný výtah z dosavadních kol. Levnější než doslova, záměrně ztrátový. Užitečný, dokud ten výtah pořád přesně popisuje práci.
 
