@@ -66,6 +66,7 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/mcp` | Install or manage MCP servers. |
 | `/skills` | List installed skills. |
 | `/reload-skills` | Re-scan skill directories without restarting the session. |
+| `/skill-doctor` | Shows which loaded skills go unused and what they cost in context, so you can prune them. |
 | `/review` | Alias of `/code-review`. |
 | `/code-review [level] [pr#]` | Correctness review at a chosen effort level (e.g. `/code-review high`), against the current diff or a specific PR (`/code-review <level> <pr#>`). With no level given, reuses the level you last typed — type one explicitly to change it. Pass `ultra` for a deep cloud review. Pass `--comment` to post findings as inline GitHub PR comments. Pass `--fix` to apply findings to the working tree. Claude no longer runs `/verify` or `/code-review` on its own — invoke them explicitly when you want them. `/simplify` runs a cleanup-only pass — reuse, simplification, efficiency, altitude — not the full bug-hunting review. `/code-review` now runs as a background subagent — review no longer fills your conversation, and stacked slash commands are its review target. |
 | `/security-review` | Bundled security review skill. |

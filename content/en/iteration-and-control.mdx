@@ -152,6 +152,8 @@ Two hook additions worth building into your harness.
 
 **Hyphenated hook matchers.** Matchers for tools with hyphens in the identifier — e.g. `code-reviewer` or `mcp__brave-search` — now exact-match the tool name. Previously they substring-matched, so a matcher could accidentally fire on unrelated tools. If you want to catch all tools from a hyphenated MCP server, update the matcher to `mcp__brave-search__.*`.
 
+**`PreModelSwitch` and `PostModelSwitch`.** Fire around a model switch — block it, ask for confirmation, or just annotate what changed. Wire one in if your harness enforces a model policy (say, no Opus on subagents past a token budget) instead of trusting `/model` alone. `SessionStart` resume hooks now also receive the session's staleness and the estimated cost of re-warming the prompt cache — useful for a hook that decides whether resuming is worth it.
+
 **`DirectoryAdded`.** Fires after `/add-dir` — or the SDK's `register_repo_root` control request — registers a new working directory mid-session. Wire a hook here to re-scan the new directory's `CLAUDE.md` the moment it lands, instead of waiting for the next session.
 
 ## The recommended flow, when you're ready

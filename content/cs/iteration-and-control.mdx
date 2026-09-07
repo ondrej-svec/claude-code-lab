@@ -152,6 +152,8 @@ Dvě přidané možnosti hookování, které stojí za zabudování do harnessu.
 
 **Pomlčky v matcherách hooků.** Matchery pro nástroje s pomlčkami v názvu — třeba `code-reviewer` nebo `mcp__brave-search` — teď odpovídají přesnému názvu nástroje. Dřív šlo o substring matching, takže se mohl matcher spustit i na nesouvisejícím nástroji. Chceš-li chytit všechny nástroje z pomlčkového MCP serveru, uprav matcher na `mcp__brave-search__.*`.
 
+**`PreModelSwitch` a `PostModelSwitch`.** Spustí se kolem přepnutí modelu — zablokují ho, vyžádají potvrzení, nebo jen zaznamenají, co se změnilo. Zavěs sem hook, pokud harness vynucuje politiku modelů (třeba žádný Opus na subagentech nad určitý token budget) místo spoléhání jen na `/model`. `SessionStart` resume hooky teď navíc dostávají informaci, jak zastaralá session je, a odhadovanou cenu znovu-zahřátí prompt cache — hodí se pro hook, který rozhoduje, jestli se resume vůbec vyplatí.
+
 **`DirectoryAdded`.** Spustí se poté, co `/add-dir` — nebo SDK control request `register_repo_root` — zaregistruje nový pracovní adresář uprostřed session. Zavěs sem hook, ať se hned proskenuje `CLAUDE.md` nového adresáře, místo aby se čekalo na další session.
 
 ## Doporučený flow, až budeš připravený
