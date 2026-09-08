@@ -222,6 +222,8 @@ Choose Library → Create new agent → let Claude generate the definition. Scop
 
 **Nesting.** Subagents can spawn nested subagents up to depth 3 by default — set `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` if you want the older, flatter behavior back.
 
+**Per-agent cache TTL.** Set `experimental.cacheTtl: "5m"` or `"1h"` in an agent's frontmatter to give that agent its own prompt-cache TTL — it applies when no subagent-level TTL setting is already configured. Useful for an agent you dispatch infrequently enough that the default TTL keeps expiring on you.
+
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 
 ## Remote and mobile — Claude off your desk

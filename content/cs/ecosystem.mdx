@@ -222,6 +222,8 @@ Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu 
 
 **Vnoření.** Subagenti teď defaultně spouští vlastní subagenty až do hloubky 3 — nastav `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1`, jestli chceš zpátky starší, plošší chování.
 
+**Cache TTL na agenta.** Nastav `experimental.cacheTtl: "5m"` nebo `"1h"` do frontmatteru agenta a&nbsp;dáš mu vlastní TTL pro prompt cache — platí, když není nastavené TTL na úrovni subagenta. Hodí se pro agenta, kterého spouštíš tak zřídka, že ti výchozí TTL pořád vyprší dřív, než ho znovu použiješ.
+
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 
 ## Remote a mobil — Claude mimo tvůj stůl
