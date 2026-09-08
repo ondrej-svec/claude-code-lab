@@ -226,7 +226,7 @@ Vyber Library → Create new agent → nech Claude vygenerovat definici. Dej mu 
 
 **Forkování zdědí všechno.** Subagent s `subagent_type: "fork"` teď běží ve výchozím stavu — zdědí celou konverzaci i prompt cache místo studeného startu. Sáhni po něm, když subagent potřebuje všechno, o čem jste se už bavili, ne jen shrnutí úkolu; vestavěný Explore agent výše je opačný případ — záměrně studený a levný.
 
-**Cache TTL na agenta.** Nastav `experimental.cacheTtl: "5m"` nebo `"1h"` do frontmatteru agenta a&nbsp;dáš mu vlastní TTL pro prompt cache — platí, když není nastavené TTL na úrovni subagenta. Hodí se pro agenta, kterého spouštíš tak zřídka, že ti výchozí TTL pořád vyprší dřív, než ho znovu použiješ.
+**Cache TTL na agenta.** Nastav `experimental.cacheTtl: "5m"` nebo `"1h"` do frontmatteru agenta a dáš mu vlastní TTL pro prompt cache — platí, když není nastavené TTL na úrovni subagenta. Hodí se pro agenta, kterého spouštíš tak zřídka, že ti výchozí TTL pořád vyprší dřív, než ho znovu použiješ.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 
