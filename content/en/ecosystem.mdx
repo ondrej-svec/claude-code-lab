@@ -66,6 +66,8 @@ As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec
 
 Need a plugin for one session without installing it? Pass `--plugin-url <url>` to `claude` and it loads the `.zip` archive from that URL for the current session only.
 
+**`--plugin-dir` on a folder now works too.** Point it at a directory and every child folder with a manifest loads as its own plugin — add or remove a child folder while the session is running and Claude Code picks up the change.
+
 Installing from a zip is now a permanent plugin source too, not just a one-session flag. The `archive` source installs a plugin straight from a `.zip` over HTTPS — no git, no npm — with optional SHA-256 pinning for supply-chain trust.
 
 Plugin dependencies are now enforced. `claude plugin disable` refuses if another enabled plugin depends on the target, and prints the chain you need to disable first. `claude plugin enable` goes the other direction: it force-enables any transitive dependencies automatically.
