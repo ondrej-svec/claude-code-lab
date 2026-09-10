@@ -49,6 +49,14 @@ The skill is moving things down a layer before they cost you.
 
 That move turns 40 turns of conversation into a file Claude can read in one. The implementation conversation starts at zero context cost and full informational value. That's the whole game.
 
+## The cache you don't see
+
+Compact, clear, and resume are moves you make. Prompt caching happens underneath every turn whether you think about it or not — and now you can tune how long it holds.
+
+`promptCacheTtl` and `subagentPromptCacheTtl` let API-key and cloud-provider sessions keep a 1-hour prompt cache on the main conversation while subagents stay at 5 minutes. Set `experimental.cacheTtl` (`"5m"` or `"1h"`) in an agent's own frontmatter to override the TTL for that one agent when no subagent-level setting applies.
+
+Reach for the longer TTL on sessions with long gaps between turns — a build you're waiting on, a decision you're sitting with — where a short cache window would otherwise force a full, expensive re-read of everything in context the next time you type.
+
 ## `/compact` recipes
 
 `/compact` with no argument keeps a balanced summary. With a focus argument, it keeps what matters and forgets the rest.
