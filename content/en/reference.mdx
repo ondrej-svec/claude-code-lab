@@ -67,6 +67,8 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 
 Dynamic workflow runs trigger on explicit phrases like `workflow:` or `run a workflow` — not on any mention of the word. The keyword highlights with a purple shimmer in the input line.
 
+**Todo/task tools are disabled by default on newer models.** `TaskCreate`/`TaskGet`/`TaskUpdate`/`TaskList` and `TodoWrite` are off by default on Opus 4.8, Sonnet 5, Fable 5, Mythos 5, and newer models. If you rely on watching the visible task list, set `CLAUDE_CODE_ENABLE_TODO_TOOLS=1`.
+
 ### Remote
 
 | Command | What it does |
