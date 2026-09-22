@@ -37,7 +37,7 @@ Kontext konverzace je jedna vrstva. Jsou další dvě a stojí míň.
   caption="Tři vrstvy kontextu. Dovednost je posunout věc o vrstvu níž, než tě začne stát."
 />
 
-**Aktivní kontext** je to, co je v aktuální konverzaci. Token-tlustý, drahé to držet, dokonale čerstvé. Každé kolo žije tady.
+**Aktivní kontext** je to, co je v aktuální konverzaci. Token-tlustý, drahé to držet, dokonale čerstvé. Každé kolo žije tady. Session s API klíčem nebo u cloud providerů si tu vrstvu můžou držet teplou déle: `promptCacheTtl` ji na hlavní konverzaci natáhne až na hodinu, `subagentPromptCacheTtl` na subagenty — výchozně pět minut.
 
 **Shrnutý kontext** je to, co produkuje `/compact` — Claudem napsaný výtah z dosavadních kol. Levnější než doslova, záměrně ztrátový. Užitečný, dokud ten výtah pořád přesně popisuje práci.
 
