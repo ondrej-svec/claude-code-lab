@@ -37,7 +37,7 @@ Conversation context is one layer. There are two more, and they cost less.
   caption="Three layers of context. The skill is moving things down a layer before they cost you."
 />
 
-**Active context** is what's in the current conversation. Token-heavy, expensive to keep, perfectly fresh. Every turn lives here.
+**Active context** is what's in the current conversation. Token-heavy, expensive to keep, perfectly fresh. Every turn lives here. API-key and cloud-provider sessions can keep that layer warm longer: `promptCacheTtl` sets it up to 1 hour for the main conversation, `subagentPromptCacheTtl` up to 5 minutes (the default) for subagents.
 
 **Summarized context** is what `/compact` produces — a Claude-written précis of the turns so far. Cheaper than verbatim, lossy by design. Useful as long as the summary still describes the work accurately.
 
