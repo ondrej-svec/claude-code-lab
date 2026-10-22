@@ -30,7 +30,7 @@ Inside the agents view, `! <command>` starts a shell command as a new background
 
 **Background sessions now protect their own work.** They commit and push automatically to preserve progress, open a draft PR only when the task actually calls for one, and follow whatever git conventions your `CLAUDE.md` sets. Every run ends by reporting exactly where the work landed.
 
-**Sessions can now talk to each other, across machines.** `SendMessage` reaches another Claude Code session by name — on macOS and Linux, that includes sessions running on a different machine, not just ones in the same `claude agents` list. `ListAgents` marks a cross-machine session as `name [ref]` so you don't confuse it with a same-named local one. A session can now open the conversation itself instead of only replying once someone messages it first. Two new settings, `crossSessionInbound` and `dialogExpiry`, shape how much a bypassed-permissions session trusts what comes in: messages sent to it are held for your approval, while messages to sessions on normal permissions still auto-deliver.
+**Sessions can now talk to each other, across machines.** `SendMessage` reaches another Claude Code session by name — on macOS and Linux, that includes sessions running on a different machine, not just ones in the same `claude agents` list. `ListAgents` marks a cross-machine session as `name [ref]` so you don't confuse it with a same-named local one. A session can now open the conversation itself instead of only replying once someone messages it first. Two new settings, `crossSessionInbound` and `dialogExpiry`, shape how much a bypassed-permissions session trusts what comes in: messages sent to it are held for your approval, while messages to sessions on normal permissions still auto-deliver. Type `@` followed by a session's name in your prompt and Claude reaches it with `SendMessage` on your behalf — no need to invoke the tool yourself.
 
 ## Skills
 
@@ -65,6 +65,8 @@ As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec
 Need a plugin for one session without installing it? Pass `--plugin-url <url>` to `claude` and it loads the `.zip` archive from that URL for the current session only.
 
 Installing from a zip is now a permanent plugin source too, not just a one-session flag. The `archive` source installs a plugin straight from a `.zip` over HTTPS — no git, no npm — with optional SHA-256 pinning for supply-chain trust.
+
+Plugin marketplaces aren't GitHub-only anymore. A bare `gitlab.com` repo URL — including nested subgroups — now clones the same way a `github.com` one does. When a clone fails on authentication, the hint names your actual git host instead of assuming GitHub.
 
 Plugin dependencies are now enforced. `claude plugin disable` refuses if another enabled plugin depends on the target, and prints the chain you need to disable first. `claude plugin enable` goes the other direction: it force-enables any transitive dependencies automatically.
 
@@ -221,6 +223,8 @@ Choose Library → Create new agent → let Claude generate the definition. Scop
 **Background by default.** Subagents now run in the background by default — Claude keeps working while they run and gets notified when they finish, instead of blocking on each one.
 
 **Nesting.** Subagents can spawn nested subagents up to depth 3 by default — set `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` if you want the older, flatter behavior back.
+
+**Forking.** A `subagent_type: "fork"` subagent is on by default now — it inherits the full conversation and prompt cache instead of starting cold.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 
