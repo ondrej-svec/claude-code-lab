@@ -44,6 +44,12 @@ The fastest way to bad output is a prompt that asks for too much at once.
 
 Three narrow prompts land three times faster than one wide one. Each one gets a clean review.
 
+## Trim the narration
+
+Claude's default output style explains itself — plan framing, "here's what I did," the running commentary. Useful early, when you're still verifying every step. Once you trust the loop, that framing is something you skim past every time.
+
+Switch to **Concise** under Output style in `/config`. Claude leads with the result and skips the preamble — same work, same thoroughness, less to read before you get to the diff.
+
 ## "That's not quite right"
 
 When Claude does something close but off, resist the urge to rewrite from scratch. Describe the gap:
@@ -92,6 +98,8 @@ Claude Code has five permission modes. The active one controls what Claude can d
 3. **Plan mode** — Claude can read, think, and propose, but **cannot edit or run** until you leave plan mode.
 4. **Bypass permissions** — Claude edits and runs without asking. Same state as launching with `--dangerously-skip-permissions`. Must be enabled in the desktop app settings before it shows up in the menu. Bypass now extends to writes inside `.claude/`, `.git/`, `.vscode/`, and shell config files — paths that still prompted even in bypass mode. Catastrophic removal commands still prompt as a safety net. Use only in sandboxed environments.
 5. **Auto mode** — a classifier-driven "go fast" mode that learns safe operations and asks only on the ambiguous ones. Now available on the **Pro plan**; the permission classifier defaults to Sonnet 5 for external sessions, pinned for the rest of the session. **Prefer Auto over Bypass when you want speed** — Auto keeps guardrails, Bypass removes them. Fine-tune the classifier with `settings.autoMode.hard_deny` — rules there block unconditionally, regardless of user intent or any `allow` exceptions. `autoMode.classifyAllShell: true` routes all Bash and PowerShell commands through the classifier — not just patterns flagged as arbitrary code execution. Denial reasons now appear in the transcript, the denial toast, and `/permissions` → Recent denials, so you can see exactly what triggered each block and tune from there. Subagent spawns are now evaluated by the classifier before launch — a subagent can no longer request a blocked action without review. Messages sent to other agent sessions via `SendMessage` go through the same classifier check before they dispatch. Auto mode doesn't suppress `AskUserQuestion` when you or a skill explicitly relies on it. Destructive git commands (`git reset --hard`, `git checkout -- .`, `git clean -fd`, `git stash drop`) are now blocked when you didn't ask to discard local work. `git commit --amend` is blocked when the commit wasn't made by the agent this session. `terraform destroy`, `pulumi destroy`, and `cdk destroy` are blocked unless you asked for the specific stack. The dangerous-`rm`, background-`&`, and suspicious-Windows-path checks no longer open a permission dialog on their own — the classifier adjudicates them instead. In plan mode with auto, Bash commands the static analyzer can't prove read-only now go through that same classifier rather than triggering a prompt — the classifier only decides whether the command is permitted; execution still waits until you leave plan mode.
+
+**Locking a session down further.** `--restricted` (or `CLAUDE_CODE_RESTRICTED=1`) goes past any of the five modes above — it strips the built-in tools that run commands or code, plus `WebFetch` (unless you name them in `--tools`), keeps file tools inside the working directory, refuses `bypassPermissions` outright, and ignores your user, project, and local settings files. Reach for it when you're handing a session to someone else — a teammate, a CI job, a demo — and want it boxed in no matter what its config says.
 
 **Fine-grained permission rules.** `settings.json` allow/deny entries accept `Tool(param:value)` syntax — matches on a tool's actual input parameters (wildcard `*` works). Example: `Agent(model:opus)` in a `deny` rule blocks Opus subagent spawns while leaving other `Agent` calls through. Right for auto mode setups where you want speed but not Opus on every subagent.
 
