@@ -27,13 +27,13 @@ Type `/` in any Claude Code conversation to see the full list filtered to your p
 | `/init` | Scan the repo and propose a starting `CLAUDE.md`. Set `CLAUDE_CODE_NEW_INIT=1` for the new multi-phase interactive flow. |
 | `/memory` | View or edit CLAUDE.md files and loaded memory. |
 | `/permissions` | Manage tool allow/deny rules. |
-| `/model` | Switch model for the current session (e.g., Opus → Sonnet). **Sonnet 5 is now the default model** — native 1M-token context window, promotional pricing of $2/$10 per Mtok through August 31. Requires v2.1.197+. Selecting a model now saves it as the default for new sessions. Press `s` in the picker to switch for the current session only. Set `fallbackModel` in `settings.json` to chain up to three fallback models tried in order when the primary is overloaded or unavailable. `--fallback-model` also applies to interactive sessions. Within the Opus family, Opus 5 (`claude-opus-5`) is now the default model — 1M context, fast mode priced at $10/$50 per Mtok. |
+| `/model` | Switch model for the current session (e.g., Opus → Sonnet). **Sonnet 5 is now the default model** — native 1M-token context window, promotional pricing of $2/$10 per Mtok through August 31. Requires v2.1.197+. Selecting a model now saves it as the default for new sessions. Press `s` in the picker to switch for the current session only. Set `fallbackModel` in `settings.json` to chain up to three fallback models tried in order when the primary is overloaded or unavailable. `--fallback-model` also applies to interactive sessions. Within the Opus family, Opus 5 (`claude-opus-5`) is now the default model — 1M context, fast mode priced at $10/$50 per Mtok. Set `ANTHROPIC_DEFAULT_MODEL` (v2.1.236+) to pin what new sessions start on — unlike `ANTHROPIC_MODEL`, a `/model` pick still overrides it and the override persists across restarts. |
 | `/fast` | Toggle fast mode. Default is now Opus 4.8 — 2× the standard rate for 2.5× the speed. Opus 4.7 is no longer eligible; `/fast` now applies to Opus 5 and Opus 4.8. |
 | `/effort` | Per-session effort override. |
 | `/advisor [model]` | Pair the session with an advisor — a stronger model Claude calls at decision points (before committing to an approach, when stuck on a recurring error, before declaring done). Shorthand: `opus`, `sonnet`, `fable`. Requires v2.1.98+. Fable 5 as advisor requires v2.1.170+. `/advisor off` to clear. |
 | `/keybindings` | Open `~/.claude/keybindings.json`. |
 | `/hooks` | Configure lifecycle hooks. |
-| `/config` | Open the settings UI. `/config key=value` sets any setting from the prompt — e.g. `/config thinking=false`. `/config --help` lists all shorthand keys. |
+| `/config` | Open the settings UI. `/config key=value` sets any setting from the prompt — e.g. `/config thinking=false`. `/config --help` lists all shorthand keys. A built-in "Concise" output style — results first, no preamble, same thoroughness — lives under Output style in `/config` (v2.1.237+). |
 | `/theme` | Switch terminal theme. |
 
 **Session language.** Set the `language` setting in `settings.json` to pin the language used for session-title generation. Default auto-detects from your conversation.
@@ -124,6 +124,10 @@ CLI shortcuts are context-specific. Full list at [code.claude.com/docs/en/keybin
 Option-key shortcuts on macOS silently fail until you set **Left/Right Option = Esc+** in your terminal profile (iTerm2, etc.). If `Alt+M` does nothing for mode cycling, that's why — use `Shift+Tab` instead.
 
 The desktop app's shortcuts are not officially documented by Anthropic — what you see here is the CLI.
+
+### `keybindingFlavor`
+
+Set `keybindingFlavor: "readline"` in `settings.json` (v2.1.238+) and `Ctrl+W` in the prompt deletes back to the previous whitespace, Bash-style, instead of the classic default. Since v2.1.239, the same word keys behave the readline/Bash way in the prompt itself: `Alt+F` and `Ctrl`/`Option+→` stop at the end of a word, `Alt+D` deletes to it (`Ctrl+Y` pastes it back), and punctuation counts as a word boundary.
 
 ## 8.3 Input prefixes
 
