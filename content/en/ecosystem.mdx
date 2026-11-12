@@ -30,7 +30,7 @@ Inside the agents view, `! <command>` starts a shell command as a new background
 
 **Background sessions now protect their own work.** They commit and push automatically to preserve progress, open a draft PR only when the task actually calls for one, and follow whatever git conventions your `CLAUDE.md` sets. Every run ends by reporting exactly where the work landed.
 
-**Sessions can now talk to each other, across machines.** `SendMessage` reaches another Claude Code session by name — on macOS and Linux, that includes sessions running on a different machine, not just ones in the same `claude agents` list. `ListAgents` marks a cross-machine session as `name [ref]` so you don't confuse it with a same-named local one. A session can now open the conversation itself instead of only replying once someone messages it first. Two new settings, `crossSessionInbound` and `dialogExpiry`, shape how much a bypassed-permissions session trusts what comes in: messages sent to it are held for your approval, while messages to sessions on normal permissions still auto-deliver.
+**Sessions can now talk to each other, across machines.** `SendMessage` reaches another Claude Code session by name — on macOS and Linux, that includes sessions running on a different machine, not just ones in the same `claude agents` list. `ListAgents` marks a cross-machine session as `name [ref]` so you don't confuse it with a same-named local one. A session can now open the conversation itself instead of only replying once someone messages it first. Two new settings, `crossSessionInbound` and `dialogExpiry`, shape how much a bypassed-permissions session trusts what comes in: messages sent to it are held for your approval, while messages to sessions on normal permissions still auto-deliver. Type `@` in the prompt to mention another session by name and Claude reaches it directly via `SendMessage`.
 
 ## Skills
 
@@ -45,6 +45,8 @@ A **skill** is a bundle of instructions + optional scripts that Claude loads on 
 Chapter 7 shows how to have Claude build one of these for you.
 
 Trim what Claude sees with `skillOverrides`. Set a skill to `off` and it vanishes from both the model and `/` autocomplete. `user-invocable-only` keeps the slash command but hides it from the model. `name-only` collapses the description to just the name — useful when a large collection starts generating noise.
+
+Run `/skill-doctor` before you guess which skills to trim. It shows which loaded skills go unused and what they cost you in context — turn that into `skillOverrides` decisions instead of trimming blind.
 
 Set `disableBundledSkills: true` in `settings.json` (or `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS=1`) to hide all bundled skills, built-in workflows, and default slash commands from the model entirely — only what you've installed remains visible.
 
@@ -63,6 +65,8 @@ Chapter 7 walks through installing and using the [Compound Engineering plugin](h
 As a reference point: the [Heart of Gold toolkit](https://github.com/ondrej-svec/heart-of-gold-toolkit) is a small collection of skills I bundled for my daily work (visualize is one of them). Not something to install now — an example of what emerges once you've written three or four skills you don't want to lose. You'll build one of your own.
 
 Need a plugin for one session without installing it? Pass `--plugin-url <url>` to `claude` and it loads the `.zip` archive from that URL for the current session only.
+
+**`--plugin-dir` on a folder now works too.** Point it at a directory and every child folder with a manifest loads as its own plugin — add or remove a child folder while the session is running and Claude Code picks up the change.
 
 Installing from a zip is now a permanent plugin source too, not just a one-session flag. The `archive` source installs a plugin straight from a `.zip` over HTTPS — no git, no npm — with optional SHA-256 pinning for supply-chain trust.
 
@@ -221,6 +225,10 @@ Choose Library → Create new agent → let Claude generate the definition. Scop
 **Background by default.** Subagents now run in the background by default — Claude keeps working while they run and gets notified when they finish, instead of blocking on each one.
 
 **Nesting.** Subagents can spawn nested subagents up to depth 3 by default — set `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` if you want the older, flatter behavior back.
+
+**Forking inherits everything.** A `subagent_type: "fork"` subagent now runs by default — it inherits the full conversation and prompt cache instead of starting cold. Reach for it when the subagent needs everything you've already discussed, not just a task summary; the built-in Explore agent above is the opposite case, deliberately cold and cheap.
+
+**Per-agent cache TTL.** Set `experimental.cacheTtl: "5m"` or `"1h"` in an agent's frontmatter to give that agent its own prompt-cache TTL — it applies when no subagent-level TTL setting is already configured. Useful for an agent you dispatch infrequently enough that the default TTL keeps expiring on you.
 
 → [Subagents docs](https://code.claude.com/docs/en/sub-agents)
 
