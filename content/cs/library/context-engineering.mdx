@@ -27,6 +27,8 @@ Máš čtyři způsoby, jak uvolnit kontext. Každý něco jiného obětuje.
 
 Levný a přepoužívaný tah je `/compact`. Drahý a podceňovaný tah je ten čtvrtý. Vstát od session, která se zvrtla, je skoro vždycky rychlejší než ji zachraňovat.
 
+Jedno číslo, které stojí za znalost, pokud jedeš na Sonnetu 5 s 1M-tokenovým oknem: auto-compact teď čeká zhruba do 967K tokenů místo asi 934K — využívá se celé okno, než se sám spustí. Víc prostoru, než se `/compact` spustí sám od sebe — čtyři tahy výše jsou pořád způsob, jak si to okno naplánovat sám, s předstihem.
+
 ## Tři vrstvy paměti
 
 Kontext konverzace je jedna vrstva. Jsou další dvě a stojí míň.
