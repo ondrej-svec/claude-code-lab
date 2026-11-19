@@ -27,6 +27,8 @@ You have four ways to free context. Each one trades something different.
 
 The cheap-but-overused move is `/compact`. The expensive-but-underused move is the fourth one. Walking away from a session that's gone sideways is almost always faster than rescuing it.
 
+One number worth knowing if you're on Sonnet 5's 1M-token window: auto-compact now waits until roughly 967K tokens instead of about 934K, using the full window before it kicks in. More runway before `/compact` becomes involuntary — the four moves above are still how you get ahead of it on purpose.
+
 ## Three layers of memory
 
 Conversation context is one layer. There are two more, and they cost less.
